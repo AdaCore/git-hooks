@@ -1,0 +1,31 @@
+#! /usr/bin/env bash
+
+# This script is expected to be called with the following arguments:
+#   (1) refname: The name of the reference being updated
+#                (refs/heads/master, for instance).
+#   (2) oldrev: This is the commit that the reference was pointing to
+#               before the update.
+#   (3) newrev: This is the commit that the ref should point to, if
+#               the update is accepted.
+#
+# This script should return 0 if the update should be allowed,
+# and nonzero otherwise.
+
+# The following safety checks verify that the script is being
+# called correctly.  They have been copied directly from the
+# sample "update" script provided by git.
+
+if [ -z "$GIT_DIR" ]; then
+        echo "Don't run this script from the command line." >&2
+        echo " (if you want, you could supply GIT_DIR then run" >&2
+        echo "  $0 <ref> <oldrev> <newrev>)" >&2
+        exit 1
+fi
+
+# The following is AdaCore-specific: It allows us to make sure that
+# we are not running a random version of Python, but rather the
+# baseline version installed in /gnatmail.
+export PATH=/gnatmail/install/bin:$PATH
+
+python `dirname $0`/update.py "$@"
+

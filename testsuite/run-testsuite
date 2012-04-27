@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# This is a wrapper to testsuite.py; it sets the environment before launching
+# it.
+
+root=`dirname $0`
+
+# If "root" is a relative path, then convert it to absolute.
+if [ "`echo ${root} | cut -b1`" != '/' ]; then
+   root="`pwd`/${root}"
+fi
+
+if [ "$OS" = "Windows_NT" ]; then
+   PYTHONPATH="${root}/lib;$PYTHONPATH"
+else
+   PYTHONPATH=${root}/lib:$PYTHONPATH
+fi
+export PYTHONPATH
+
+python ${root}/lib/testsuite.py "$@"
+

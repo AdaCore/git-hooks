@@ -1,0 +1,78 @@
+#!/usr/bin/env python
+"""Usage: run-test [options] test_dir
+
+Run a git-hooks test located in test_dir.
+"""
+
+from gnatpython.fileutils import find, cd, mv, cp
+from gnatpython.main import Main
+from gnatpython.testdriver import TestRunner, add_run_test_options
+
+import os
+from os.path import abspath, dirname
+import sys
+
+class TestGitHooks(TestRunner):
+
+    def prepare_working_space(self):
+        """Prepare the working space.
+        """
+        root_dir = dirname(dirname(abspath(sys.argv[0])))
+        # First, perform the normal preparations (create the working
+        # space, copy the testcase, etc).
+        TestRunner.prepare_working_space(self)
+        src_dir = '%s/src' % self.work_dir
+        # Next, rename the repo/_dot_git directory into repo/.git.
+        # We could do that during the testcase "setUp" phase, but
+        # since we are going to do other git-related setup actions,
+        # might as well do it here.
+        mv('%s/repo/_dot_git' % src_dir, '%s/repo/.git' % src_dir)
+        # And finally, "install" a copy of the git hooks in the bare
+        # repository.  Avoid a copy, and simply create a link, which
+        # is actually what we do in practice for our real repositories.
+        # We have to do this here, because we need to know what the
+        # source directory is (the test script gets run in a temporary
+        # directory, without any information where the sources are).
+        cp('%s/hooks' % root_dir, '%s/bare-repo.git/hooks' % src_dir,
+           recursive=True)
+
+    def apply_output_filter(self, str_list):
+        """The test is succesful iff the output ends with `OK'.
+        """
+        if str_list and str_list[-1] == 'OK':
+            return []
+        return str_list
+
+    def write_results(self):
+        """Keep coverage data if needed.
+        """
+        TestRunner.write_results(self)
+        if 'COVERAGE_DIR' in os.environ:
+            for covf in find(self.work_dir, '.coverage*'):
+                mv(covf, os.environ['COVERAGE_DIR'])
+
+
+def main():
+    """Run a git-hooks test.
+    """
+    m = Main()
+    add_run_test_options(m)
+    m.parse_args()
+    if not m.args:
+        sys.exit("Error: 1 argument expected. See -h")
+
+    if m.options.restricted_discs is not None:
+        m.options.restricted_discs = m.options.restricted_discs.split(',')
+    t = TestGitHooks(m.args[0],
+                     m.options.discs,
+                     m.options.output_dir,
+                     m.options.tmp,
+                     m.options.enable_cleanup,
+                     m.options.restricted_discs,
+                     len(m.args) > 1 and m.args[1:] or None,
+                     m.options.failed_only)
+    t.execute()
+
+
+if __name__ == '__main__':
+    main()

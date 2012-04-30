@@ -47,7 +47,7 @@ def get_object_type(rev):
 def check_unannotated_tag(ref_name, old_rev, new_rev):
     """Do the check_update work for a new un-annotated tag.
     """
-    debug('check_unannotated_tag ()')
+    debug('check_unannotated_tag (%s)' % ref_name)
 
     if git_config('hooks.allowunannotated') == "true":
         return

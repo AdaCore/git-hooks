@@ -60,6 +60,20 @@ def check_unannotated_tag(ref_name, old_rev, new_rev):
         "Use 'git tag [ -a | -s ]' for tags you want to propagate.")
 
 
+def check_tag_deletion(ref_name, old_rev, new_rev):
+    """Do the check_update work for a tag deletion.
+    """
+    debug('check_tag_deletion(%s)' % ref_name)
+
+    if git_config('hooks.allowdeletetag') == "true":
+        return
+
+    # Update not permitted, raise InvalidUpdate.
+    assert ref_name.startswith('refs/tags/')
+    tag_name = ref_name[len('refs/tags/'):]
+    raise InvalidUpdate("Deleting a tag is not allowed in this repository")
+
+
 def check_update(ref_name, old_rev, new_rev):
     """General handler of the given update.
 
@@ -76,6 +90,8 @@ def check_update(ref_name, old_rev, new_rev):
     new_rev_type = get_object_type(new_rev)
     if ref_name.startswith('refs/tags/') and new_rev_type == 'commit':
         check_unannotated_tag(ref_name, old_rev, new_rev)
+    elif ref_name.startswith('refs/tags/') and new_rev_type == 'delete':
+        check_tag_deletion(ref_name, old_rev, new_rev)
     else:
         raise InvalidUpdate(
             "This type of update (%s,%s) is currently unsupported."

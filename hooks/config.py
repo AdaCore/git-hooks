@@ -11,6 +11,7 @@ from git import git, CalledProcessError
 #       x 'default': The default value for this config option.
 
 GIT_CONFIG_OPTS = {
+    'hooks.allowdeletetag'   : { 'type' : 'bool', 'default' : 'false' },
     'hooks.allowunannotated' : { 'type' : 'bool', 'default' : 'false' },
     'hooks.debug'            : { 'type' : 'bool', 'default' : 'false' },
 }

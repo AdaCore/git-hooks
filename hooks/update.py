@@ -92,6 +92,10 @@ def check_update(ref_name, old_rev, new_rev):
         check_unannotated_tag(ref_name, old_rev, new_rev)
     elif ref_name.startswith('refs/tags/') and new_rev_type == 'delete':
         check_tag_deletion(ref_name, old_rev, new_rev)
+    elif ref_name.startswith('refs/tags/') and new_rev_type == 'tag':
+        # Pushing an annotated tag is always allowed.
+        # Do we want to style-check the commits???
+        pass
     else:
         raise InvalidUpdate(
             "This type of update (%s,%s) is currently unsupported."

@@ -9,18 +9,47 @@ class InvalidUpdate(Exception):
     pass
 
 
-def debug(msg):
-    """Print a debug message on stdout if debug traces are turned on.
+def debug(msg, level=1):
+    """Print a debug message on stderr if appropriate.
 
-    To turn debug traces on, set the HOOKS_DEBUG environment variable,
-    or set the hooks.debug config variable to "true".
+    The debug trace is generated if the debug level is greater or
+    equal to the given trace priority.
+
+    The debug level is an integer value which can be changed either
+    by setting the `HOOKS_DEBUG_LEVEL' environment variable, or else
+    by setting the hooks.debuglevel git config value.  The value
+    must be an integer value, or this function raises InvalidUpdate.
+    By default, the debug level is set to zero (no debug traces).
+
 
     PARAMETERS
         msg: The debug message to be printed.  The message will be
-            prefixed with "DEBUG: ".
+            prefixed with "DEBUG: " (an indentation proportional to
+            the level will be used).
+        level: The trace level. The smaller the number, the important
+            the trace message. Traces that are repetitive, or part
+            of a possibly large loop, or less important, should use
+            a value that is higher than 1.
+
+    REMARKS
+        Raising InvalidUpdate for an invalid debug level value is
+        a little abusive.  But it simplifies a bit the update script,
+        which then only has to handle a single exception...
     """
-    if ('HOOKS_DEBUG' in environ or git_config('hooks.debug') == 'true'):
-        warn(msg, prefix='DEBUG:')
+    if 'HOOKS_DEBUG_LEVEL' in environ:
+        debug_level = environ['HOOKS_DEBUG_LEVEL']
+        if not debug_level.isdigit():
+            raise InvalidUpdate('Invalid value for HOOKS_DEBUG_LEVEL: %s '
+                                '(must be integer >= 0)')
+    else:
+        debug_level = git_config('hooks.debuglevel')
+        if not debug_level.isdigit():
+            raise InvalidUpdate('Invalid hooks.debuglevel value: %s '
+                                '(must be integer >= 0)')
+    debug_level = int(debug_level)
+
+    if debug_level >= level:
+        warn(msg, prefix='  ' * (level - 1) + 'DEBUG:')
 
 
 def warn(*args, **kwargs):

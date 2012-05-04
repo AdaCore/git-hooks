@@ -13,7 +13,7 @@ from git import git, CalledProcessError
 GIT_CONFIG_OPTS = {
     'hooks.allowdeletetag'   : { 'type' : 'bool', 'default' : 'false' },
     'hooks.allowunannotated' : { 'type' : 'bool', 'default' : 'false' },
-    'hooks.debug'            : { 'type' : 'bool', 'default' : 'false' },
+    'hooks.debuglevel'       : { 'type' : 'int',  'default' : '0' },
 }
 
 class UnsupportedOptionName(Exception):

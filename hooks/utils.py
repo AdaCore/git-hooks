@@ -1,5 +1,6 @@
 from os import environ
 import sys
+from tempfile import mkdtemp
 
 from config import git_config
 
@@ -8,6 +9,33 @@ class InvalidUpdate(Exception):
     """
     pass
 
+############################################################################
+#
+#  Temporary directory handling.
+#
+############################################################################
+#
+# The idea is to create a temporary directory at the start of the
+# session, and to delete it at the end.
+
+scratch_dir = None
+
+def create_scratch_dir():
+    """Create a temporary directory.
+
+    Set scratch_dir to the name of that new directory.
+    """
+    global scratch_dir
+    if scratch_dir is not None:
+        warn('Unexpected second call to create_scratch_dir')
+    scratch_dir = mkdtemp('', 'git-hooks-tmp-')
+
+
+############################################################################
+#
+# Warning messages, error message, debug traces, etc...
+#
+############################################################################
 
 def debug(msg, level=1):
     """Print a debug message on stderr if appropriate.

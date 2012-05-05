@@ -1,10 +1,12 @@
 from argparse import ArgumentParser
 import re
+from shutil import rmtree
 import sys
 
 from config import git_config
 from git import git
-from utils import InvalidUpdate, debug, warn
+import utils
+from utils import InvalidUpdate, debug, warn, create_scratch_dir
 
 
 def parse_command_line():
@@ -86,6 +88,9 @@ def check_update(ref_name, old_rev, new_rev):
         old_rev: The commit SHA1 of the reference before the update.
         new_rev: The new commit SHA1 that the reference will point to
             if the update is accepted.
+
+    REMARKS
+        This function assumes that utils.scratch_dir has been initialized.
     """
     new_rev_type = get_object_type(new_rev)
     if ref_name.startswith('refs/tags/') and new_rev_type == 'commit':
@@ -105,11 +110,16 @@ def check_update(ref_name, old_rev, new_rev):
 if __name__ == "__main__":
     args = parse_command_line()
     try:
+        create_scratch_dir()
         check_update(args.ref_name, args.old_rev, args.new_rev)
     except InvalidUpdate, E:
         # The update was rejected.  Print the rejection reason, and
         # exit with a nonzero status.
         warn(*E)
         sys.exit(1)
+    finally:
+        # Delete our scratch directory.
+        if utils.scratch_dir is not None:
+            rmtree(utils.scratch_dir)
 
 

@@ -4,7 +4,7 @@
 Run a git-hooks test located in test_dir.
 """
 
-from gnatpython.fileutils import find, cd, mv, cp
+from gnatpython.fileutils import find, cd, mv
 from gnatpython.main import Main
 from gnatpython.testdriver import TestRunner, add_run_test_options
 
@@ -33,8 +33,7 @@ class TestGitHooks(TestRunner):
         # We have to do this here, because we need to know what the
         # source directory is (the test script gets run in a temporary
         # directory, without any information where the sources are).
-        cp('%s/hooks' % root_dir, '%s/bare-repo.git/hooks' % src_dir,
-           recursive=True)
+        os.symlink('%s/hooks' % root_dir, '%s/bare/repo.git/hooks' % src_dir)
 
     def apply_output_filter(self, str_list):
         """The test is succesful iff the output ends with `OK'.

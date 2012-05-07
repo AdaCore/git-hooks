@@ -4,5 +4,5 @@
 	bare = false
 	logallrefupdates = true
 [remote "origin"]
-	url = ../bare-repo.git
+	url = ../bare/repo.git
 	fetch = +refs/heads/*:refs/remotes/origin/*

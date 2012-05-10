@@ -44,7 +44,7 @@ def debug(msg, level=1):
     equal to the given trace priority.
 
     The debug level is an integer value which can be changed either
-    by setting the `HOOKS_DEBUG_LEVEL' environment variable, or else
+    by setting the `GIT_HOOKS_DEBUG_LEVEL' environment variable, or else
     by setting the hooks.debuglevel git config value.  The value
     must be an integer value, or this function raises InvalidUpdate.
     By default, the debug level is set to zero (no debug traces).
@@ -64,10 +64,10 @@ def debug(msg, level=1):
         a little abusive.  But it simplifies a bit the update script,
         which then only has to handle a single exception...
     """
-    if 'HOOKS_DEBUG_LEVEL' in environ:
-        debug_level = environ['HOOKS_DEBUG_LEVEL']
+    if 'GIT_HOOKS_DEBUG_LEVEL' in environ:
+        debug_level = environ['GIT_HOOKS_DEBUG_LEVEL']
         if not debug_level.isdigit():
-            raise InvalidUpdate('Invalid value for HOOKS_DEBUG_LEVEL: %s '
+            raise InvalidUpdate('Invalid value for GIT_HOOKS_DEBUG_LEVEL: %s '
                                 '(must be integer >= 0)')
     else:
         debug_level = git_config('hooks.debuglevel')

@@ -17,6 +17,16 @@ class TestCase(unittest.TestCase):
         # features, such as email, by simple traces.
         os.environ['GIT_HOOKS_TESTSUITE_MODE'] = 'true'
 
+        # Tell the hooks to use a "fake" cvs_check script. Each
+        # testcase will want to have their own, because each testcase
+        # have different requirements regarding how it should behave
+        # for the purpose of the testcase.
+        #
+        # By default, the testcase's cvs_check script is called
+        # cvs_check.py and is located at the root of the testcase
+        # directory.
+        os.environ['GIT_HOOKS_CVS_CHECK'] = '%s/cvs_check.py' % os.getcwd()
+
 
 def runtests():
     """Call unittest.main.

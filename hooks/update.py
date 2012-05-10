@@ -4,7 +4,9 @@ from shutil import rmtree
 import sys
 
 from config import git_config
+from fast_forward import check_fast_forward
 from git import git
+from pre_commit_checks import check_commit
 import utils
 from utils import InvalidUpdate, debug, warn, create_scratch_dir
 
@@ -29,6 +31,12 @@ def parse_command_line():
     return ap.parse_args()
 
 
+def is_null_rev(rev):
+    """Return True iff rev is the a NULL commit SHA1.
+    """
+    return re.match("0+$", rev) is not None
+
+
 def get_object_type(rev):
     """Determine the object type of the given commit.
 
@@ -39,11 +47,44 @@ def get_object_type(rev):
         The string returned by "git cat-file -t REV", or else "delete"
         if REV is a null SHA1 (all zeroes).
     """
-    if re.match("0+", rev):
+    if is_null_rev(rev):
         rev_type = "delete"
     else:
         rev_type = git.cat_file(rev, t=True)
     return rev_type
+
+
+def find_new_branch_parent(new_rev):
+    """Find the nearest commit from an already existing branch.
+
+    The assumption is that new_rev is the commit of a new branch
+    being pushed.  In that case, this function tries to find
+    the commit from one of the existing branches which is nearest
+    to our new_rev.
+
+    RETURN VALUE
+        The SHA1 of that parent (a string).
+    """
+    # For every existing branch, determine the number of commits
+    # between that branch and new_rev.  Select the branch that has
+    # the fewer number of commits.
+    all_branches_revs = git.rev_parse(branches=True, _split_lines=True)
+    (nearest_branch_rev, nearest_dist) = (None, None)
+    for branch_rev in all_branches_revs:
+        dist = len(git.rev_list(new_rev, '^%s' % branch_rev,
+                                _split_lines=True))
+        if nearest_dist is None or dist < nearest_dist:
+            (nearest_branch_rev, nearest_dist) = (branch_rev, dist)
+
+    if nearest_branch_rev is None or is_null_rev(nearest_branch_rev):
+        # We did not find a parent.  This might be a headless branch...
+        # Select the initial/first(=oldest) commit as the parent.
+        nearest_rev = git.rev_list(new_rev, _split_lines=True)[-1]
+    else:
+        # We found the nearest branch.  Now, find the nearest commit.
+        nearest_rev = git.merge_base(nearest_branch_rev, new_rev)
+
+    return nearest_rev
 
 
 def check_unannotated_tag(ref_name, old_rev, new_rev):
@@ -76,6 +117,34 @@ def check_tag_deletion(ref_name, old_rev, new_rev):
     raise InvalidUpdate("Deleting a tag is not allowed in this repository")
 
 
+def check_branch_update(ref_name, old_rev, new_rev):
+    """Do the check_update work for a branch update.
+    """
+    debug('check_branch_update(%s, %s, %s)' % (ref_name, old_rev, new_rev))
+
+    if is_null_rev(old_rev):
+        # A new branch is being pushed.  Determine the commit from
+        # one of the existing branches which is nearest to the new
+        # branch's head.
+        new_branch_p = True
+        old_rev = find_new_branch_parent(new_rev)
+        debug('find_new_branch_parent -> %s' % old_rev)
+    else:
+        check_fast_forward(ref_name, old_rev, new_rev)
+
+    if git_config('hooks.combinedstylechecking') == 'true':
+        # This project prefers to perform the style check on
+        # the cumulated diff, rather than commit-per-commit.
+        debug('(combined style checking)')
+        check_commit(old_rev, new_rev)
+    else:
+        debug('(commit-per-commit style checking)')
+        all_commits = git.rev_list('%s..%s' % (old_rev, new_rev),
+                                   reverse=True, _split_lines=True)
+        for commit_id in all_commits:
+            check_commit('%s^' % commit_id, commit_id)
+
+
 def check_update(ref_name, old_rev, new_rev):
     """General handler of the given update.
 
@@ -92,6 +161,9 @@ def check_update(ref_name, old_rev, new_rev):
     REMARKS
         This function assumes that utils.scratch_dir has been initialized.
     """
+    debug('check_update(ref_name=%s, old_rev=%s, new_rev=%s)'
+          % (ref_name, old_rev, new_rev),
+          level=2)
     new_rev_type = get_object_type(new_rev)
     if ref_name.startswith('refs/tags/') and new_rev_type == 'commit':
         check_unannotated_tag(ref_name, old_rev, new_rev)
@@ -101,6 +173,8 @@ def check_update(ref_name, old_rev, new_rev):
         # Pushing an annotated tag is always allowed.
         # Do we want to style-check the commits???
         pass
+    elif ref_name.startswith('refs/heads/') and new_rev_type == 'commit':
+        check_branch_update(ref_name, old_rev, new_rev)
     else:
         raise InvalidUpdate(
             "This type of update (%s,%s) is currently unsupported."

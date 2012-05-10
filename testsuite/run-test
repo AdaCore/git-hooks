@@ -62,6 +62,14 @@ def main():
 
     if m.options.restricted_discs is not None:
         m.options.restricted_discs = m.options.restricted_discs.split(',')
+
+    # Before running the testcase, unset various environment variables
+    # that the hooks respond to.  We do not want the user environment
+    # to influence the hooks' behavior during testing.
+    for var_name in ('GIT_HOOKS_CVS_CHECK', 'GIT_HOOKS_DEBUG_LEVEL'):
+        if var_name in os.environ:
+            del os.environ[var_name]
+
     t = TestGitHooks(m.args[0],
                      m.options.discs,
                      m.options.output_dir,

@@ -226,3 +226,22 @@ def get_project_description():
         projectdesc = ''
 
     return projectdesc
+
+
+def file_exists(commit_rev, filename):
+    """Return True if a file exists for a given commit.
+
+    PARAMETERS
+        commit_rev: The commit to inspect.
+        filename: The filename to search for in the given commit_rev.
+            The file name must be relative to the repository's root dir.
+
+    RETURN VALUE
+        A boolean.
+    """
+    try:
+        git.cat_file('-e', '%s:%s' % (commit_rev, filename), _quiet=True)
+    except CalledProcessError:
+        # cat-file -e returned non-zero; the file does not exist.
+        return False
+    return True

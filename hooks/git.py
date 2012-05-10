@@ -117,10 +117,25 @@ def git_run(command, *args, **kwargs):
             return output.strip()
 
 # Wrapper to allow us to do git.<command>(...) instead of git_run()
+#
+# One difference: The `_outfile' parameter may be a string, in which
+# case the output is redirected to that file (if the file is already
+# present, it is overwritten).
 class Git:
     def __getattr__(self, command):
         def f(*args, **kwargs):
-            return git_run(command, *args, **kwargs)
+            try:
+                # If a string _outfile parameter was given, turn it
+                # into a file descriptor.
+                tmp_fd = None
+                if ('_outfile' in kwargs
+                    and isinstance(kwargs['_outfile'], basestring)):
+                    tmp_fd = open(kwargs['_outfile'], 'w')
+                    kwargs['_outfile'] = tmp_fd
+                return git_run(command, *args, **kwargs)
+            finally:
+                if tmp_fd is not None:
+                    tmp_fd.close()
         return f
 
 git = Git()

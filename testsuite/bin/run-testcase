@@ -17,7 +17,7 @@ class TestGitHooks(TestRunner):
     def prepare_working_space(self):
         """Prepare the working space.
         """
-        root_dir = dirname(dirname(abspath(sys.argv[0])))
+        root_dir = dirname(dirname(dirname(abspath(sys.argv[0]))))
         # First, perform the normal preparations (create the working
         # space, copy the testcase, etc).
         TestRunner.prepare_working_space(self)

@@ -79,7 +79,7 @@ def main():
 
     collect_result = generate_collect_result(
         m.options.output_dir, m.options.results_file, m.options.view_diffs)
-    run_testcase = generate_run_testcase('run-test', discs, m.options)
+    run_testcase = generate_run_testcase('bin/run-testcase', discs, m.options)
 
     MainLoop(testcases, run_testcase, collect_result, m.options.mainloop_jobs)
 

@@ -1,0 +1,40 @@
+#! /usr/bin/env python
+"""[...]/bin/unpack-test-repos
+
+This script is expected to be called from a testcase directory,
+and unpackes the archive expected to contain the git directories
+used by the testcase.
+"""
+
+from gnatpython.ex import Run
+from os import unlink
+from os.path import exists, isdir
+from sys import exit, stderr
+
+def fatal(msg):
+    print >> stderr, 'ERROR: %s.' % msg
+    print >> stderr, 'Aborting.'
+    exit(1)
+
+# The infrastructure assumes that the repositories are archives
+# inside a tarball called git-repos.tar.gz.
+REPOS_TARBALL='git-repos.tar.bz2'
+
+if not exists(REPOS_TARBALL):
+    fatal("Cannot find repositories' tarball: %s" % REPOS_TARBALL)
+
+r = Run(['tar', 'xvfj', REPOS_TARBALL])
+if r.status != 0:
+    # The packing operation failed. Print an error message, and exit.
+    print >> stderr, 'ERROR: tar failed to unpack repositories:'
+    print >> stderr, r.out
+    exit(r.status)
+
+if not isdir('repo'):
+    fatal('Directory "repo" does not exist')
+if not isdir('repo/.git'):
+    fatal('Directory "repo" does not appear to be a git repository')
+if not isdir('bare/repo.git'):
+    fatal('Directory "bare/repo.git" does not exist')
+
+unlink(REPOS_TARBALL)

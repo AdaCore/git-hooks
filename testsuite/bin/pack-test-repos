@@ -1,0 +1,47 @@
+#! /usr/bin/env python
+"""[...]/bin/pack-test-repos
+
+This script is expected to be called from a testcase directory,
+and creates an archive of the "repo" and "bare" directory (to be
+found in the current directory). Once the archive was succesfully
+created, it deletes the two archives directories.
+
+REMARKS
+
+    Right now, we just use .tar.bz2 tarballs as our archive format.
+    The option of using another format, such as git bundles,  is not
+    excluded. Recent experiments showed that it could be an interesting
+    format, but we couldn't make it work (problem when checking out
+    the sources when cloning the bundle file). But it may be that
+    using tarballs is more convenient anyways.  We can pack everything
+    into a single archive whereas, with bundles, we'd have to recreate
+    the entire infrastructure.
+"""
+
+from gnatpython.ex import Run
+from os.path import isdir
+from shutil import rmtree
+from sys import exit, stderr
+
+def fatal(msg):
+    print >> stderr, 'ERROR: %s.' % msg
+    print >> stderr, 'Aborting.'
+    exit(1)
+
+if not isdir('repo'):
+    fatal('Directory "repo" does not exist')
+if not isdir('repo/.git'):
+    fatal('Directory "repo" does not appear to be a git repository')
+if not isdir('bare/repo.git'):
+    fatal('Directory "bare/repo.git" does not exist')
+
+r = Run('tar cvfj git-repos.tar.bz2 bare/repo.git repo'.split())
+if r.status != 0:
+    # The packing operation failed. Print an error message, and exit.
+    print >> stderr, 'ERROR: tar failed to pack repositories:'
+    print >> stderr, r.out
+    exit(r.status)
+
+rmtree('repo')
+rmtree('bare')
+

@@ -4,6 +4,7 @@
 Run a git-hooks test located in test_dir.
 """
 
+from gnatpython.ex import Run
 from gnatpython.fileutils import find, cd, mv
 from gnatpython.main import Main
 from gnatpython.testdriver import TestRunner, add_run_test_options
@@ -22,11 +23,17 @@ class TestGitHooks(TestRunner):
         # space, copy the testcase, etc).
         TestRunner.prepare_working_space(self)
         src_dir = '%s/src' % self.work_dir
-        # Next, rename the repo/_dot_git directory into repo/.git.
-        # We could do that during the testcase "setUp" phase, but
-        # since we are going to do other git-related setup actions,
-        # might as well do it here.
-        mv('%s/repo/_dot_git' % src_dir, '%s/repo/.git' % src_dir)
+
+        # Next, unpack the git repositories used by this testcase.
+        current_dir = os.getcwd()
+        cd(src_dir)
+        p = Run(['%s/testsuite/bin/unpack-test-repos' % root_dir],
+                parse_shebang=True)
+        if p.status != 0:
+            print >> sys.stderr, p.out
+            sys.exit(p.status)
+        cd(current_dir)
+
         # And finally, "install" a copy of the git hooks in the bare
         # repository.  Avoid a copy, and simply create a link, which
         # is actually what we do in practice for our real repositories.

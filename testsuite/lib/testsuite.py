@@ -75,7 +75,7 @@ def main():
     setup_result_dir(m.options)
 
     # We do not need discriminants in this testsuite at the moment.
-    discs = []
+    discs = None
 
     collect_result = generate_collect_result(options=m.options)
     run_testcase = generate_run_testcase('bin/run-testcase', discs, m.options)

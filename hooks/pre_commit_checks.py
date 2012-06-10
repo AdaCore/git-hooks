@@ -102,10 +102,14 @@ def check_commit (old_rev, new_rev):
 
         if status in ('D'):
             debug('deleted file ignored: %s' % filename, level=2)
-        elif status in ('R'):
-            debug('renamed file ignored: %s' % filename, level=2)
         elif new_mode == '160000':
             debug('subproject entry ignored: %s' % filename, level=2)
         else:
+            # Note: We treat a file rename as the equivalent of the old
+            # file being deleted and the new file being added. This means
+            # that we should run the pre-commit checks if applicable.
+            # This is why we did not tell the `git diff-tree' command
+            # above to detect renames, and why we do not have a special
+            # branch for status values starting with `R'.
             check_file(filename, new_sha1, new_rev)
 

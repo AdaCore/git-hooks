@@ -6,9 +6,14 @@ we take into account a default_attributes file in info/).
 """
 
 import os
-from os.path import dirname
+from os.path import dirname, isfile
+from shutil import copy
 
 from git import git, file_exists
+
+# The name of the default attributes file in the bare repository.
+# This file expected to be relative to the root of the bare repository.
+DEFAULT_ATTRIBUTES_FILE='info/default_attributes'
 
 def get_attribute(filename, attr_name):
     """Read GIT_DIR/info/attributes and return the file's attribute value.
@@ -81,5 +86,12 @@ def git_attribute(commit_rev, filename, attr_name):
             # value, then we're done.
             if attr_value != 'unspecified':
                 break
+
+    # If none of the .gitattributes files in the project provided
+    # an attribute value, then check the `info/default_attributes'
+    # file.
+    if attr_value == 'unspecified' and isfile(DEFAULT_ATTRIBUTES_FILE):
+        copy(DEFAULT_ATTRIBUTES_FILE, 'info/attributes')
+        attr_value = get_attribute(filename, attr_name)
 
     return attr_value

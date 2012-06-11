@@ -11,6 +11,10 @@ from shutil import copy
 
 from git import git, file_exists
 
+# The string printed by git when querying the value of attribute
+# when it is actually unspecified (which is different from unset).
+UNSPECIFIED_ATTR='unspecified'
+
 # The name of the file searched by 'git attributes' when inside
 # a bare repository.
 BARE_REPO_ATTRIBUTES_FILE='info/attributes'
@@ -71,7 +75,7 @@ def git_attribute(commit_rev, filename, attr_name):
         time with GIT_DIR/info/default_attributes (if it exists).
     """
     path = filename
-    attr_value = 'unspecified'
+    attr_value = UNSPECIFIED_ATTR
 
     keep_going = True
     while path:
@@ -88,13 +92,13 @@ def git_attribute(commit_rev, filename, attr_name):
 
             # If this .gitattribute file provided us with an attribute
             # value, then we're done.
-            if attr_value != 'unspecified':
+            if attr_value != UNSPECIFIED_ATTR:
                 break
 
     # If none of the .gitattributes files in the project provided
     # an attribute value, then check the `info/default_attributes'
     # file.
-    if attr_value == 'unspecified' and isfile(DEFAULT_ATTRIBUTES_FILE):
+    if attr_value == UNSPECIFIED_ATTR and isfile(DEFAULT_ATTRIBUTES_FILE):
         copy(DEFAULT_ATTRIBUTES_FILE, BARE_REPO_ATTRIBUTES_FILE)
         attr_value = get_attribute(filename, attr_name)
 

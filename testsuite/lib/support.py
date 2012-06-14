@@ -27,6 +27,11 @@ class TestCase(unittest.TestCase):
         # directory.
         os.environ['GIT_HOOKS_CVS_CHECK'] = '%s/cvs_check.py' % os.getcwd()
 
+    def enable_unit_test(self):
+        """Setup the environment in a way that allows us to perform unit test.
+        """
+        sys.path.insert(0, '%s/bare/repo.git/hooks' % TEST_DIR)
+
 
 def runtests():
     """Call unittest.main.

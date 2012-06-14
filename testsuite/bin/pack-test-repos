@@ -35,7 +35,7 @@ if not isdir('repo/.git'):
 if not isdir('bare/repo.git'):
     fatal('Directory "bare/repo.git" does not exist')
 
-r = Run('tar cvfj git-repos.tar.bz2 bare/repo.git repo'.split())
+r = Run('tar cvfj git-repos.tar.bz2 bare repo'.split())
 if r.status != 0:
     # The packing operation failed. Print an error message, and exit.
     print >> stderr, 'ERROR: tar failed to pack repositories:'

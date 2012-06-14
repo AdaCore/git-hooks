@@ -175,7 +175,7 @@ def check_update(ref_name, old_rev, new_rev):
         pass
     elif ref_name.startswith('refs/heads/') and new_rev_type == 'commit':
         check_branch_update(ref_name, old_rev, new_rev)
-    else:
+    else: # pragma: no cover (should be impossible)
         raise InvalidUpdate(
             "This type of update (%s,%s) is currently unsupported."
             % (ref_name, new_rev_type))

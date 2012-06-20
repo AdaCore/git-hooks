@@ -5,7 +5,7 @@ import sys
 
 from config import git_config
 from fast_forward import check_fast_forward
-from git import git
+from git import git, NULL_REVISION
 from pre_commit_checks import check_commit
 import utils
 from utils import InvalidUpdate, debug, warn, create_scratch_dir
@@ -54,37 +54,65 @@ def get_object_type(rev):
     return rev_type
 
 
-def find_new_branch_parent(new_rev):
-    """Find the nearest commit from an already existing branch.
+def expand_new_commit_to_list(new_rev):
+    """Expand the new commit into a list of commits introduced by the update.
 
-    The assumption is that new_rev is the commit of a new branch
-    being pushed.  In that case, this function tries to find
-    the commit from one of the existing branches which is nearest
-    to our new_rev.
+    This function searches the "nearest" commit from one of the branches
+    that already exist in the repository, and then generates a list of
+    commits, starting with that "nearest" commit.  The list contains
+    all the new commits leading to new_rev, in "chronological" order
+    (parents first).
+
+    If new_rev is a new headless branch with no common ancestor, then
+    there is no "nearest" commit, and the first element of the list
+    is set to None.
+
+    REMARKS
+        We treat branch updates different from new branches (where
+        the old_rev is the null SHA), because branch updates can be
+        non-fast-forward updates.  With such updates, the branch
+        become completely unrelated to the old branch, or even
+        an entirely new and headless branch, not connected to any
+        of the already existing branches.  We could use simplified
+        code for the easy fast-forward update, but that would be
+        extra code to maintain.
 
     RETURN VALUE
-        The SHA1 of that parent (a string).
+        A list of commits.  The list will always contain at least
+        one element, which is the "update base" commit (the commit
+        that is common to an already-existing branch an our new_rev),
+        or None.
     """
+    # Start from the entire list of commits for our new branch, and
+    # see if we can shorten that list a bit by finding an already
+    # existing branch that has commits in common.
+    commit_list = git.rev_list(new_rev, reverse=True, _split_lines=True)
+    nearest_branch_rev = None
+
     # For every existing branch, determine the number of commits
     # between that branch and new_rev.  Select the branch that has
     # the fewer number of commits.
     all_branches_revs = git.rev_parse(branches=True, _split_lines=True)
-    (nearest_branch_rev, nearest_dist) = (None, None)
     for branch_rev in all_branches_revs:
-        dist = len(git.rev_list(new_rev, '^%s' % branch_rev,
-                                _split_lines=True))
-        if nearest_dist is None or dist < nearest_dist:
-            (nearest_branch_rev, nearest_dist) = (branch_rev, dist)
+        rev_list_to_branch = git.rev_list(new_rev, '^%s' % branch_rev,
+                                          reverse=True, _split_lines=True)
+        if len(rev_list_to_branch) < len(commit_list):
+            nearest_branch_rev = branch_rev
+            commit_list = rev_list_to_branch
 
-    if nearest_branch_rev is None or is_null_rev(nearest_branch_rev):
-        # We did not find a parent.  This might be a headless branch...
-        # Select the initial/first(=oldest) commit as the parent.
-        nearest_rev = git.rev_list(new_rev, _split_lines=True)[-1]
+    # If we found an already-existing branch that has common
+    # ancestors with our new branch, then insert that common
+    # commit at the start of our commit list.
+    if nearest_branch_rev is not None:
+        commit_list.insert(0, git.merge_base(nearest_branch_rev, new_rev))
     else:
-        # We found the nearest branch.  Now, find the nearest commit.
-        nearest_rev = git.merge_base(nearest_branch_rev, new_rev)
+        # This is most likely a new headless branch. Use None as
+        # our convention to mean that the oldest commit is a root
+        # commit (it has no parent).
+        commit_list.insert(0, None)
+    debug('update base: %s' % commit_list[0])
 
-    return nearest_rev
+    return commit_list
 
 
 def check_unannotated_tag(ref_name, old_rev, new_rev):
@@ -122,27 +150,32 @@ def check_branch_update(ref_name, old_rev, new_rev):
     """
     debug('check_branch_update(%s, %s, %s)' % (ref_name, old_rev, new_rev))
 
-    if is_null_rev(old_rev):
-        # A new branch is being pushed.  Determine the commit from
-        # one of the existing branches which is nearest to the new
-        # branch's head.
-        new_branch_p = True
-        old_rev = find_new_branch_parent(new_rev)
-        debug('find_new_branch_parent -> %s' % old_rev)
-    else:
+    # Check that this is either a fast-forward update, or else that
+    # forced-updates are allowed for that branch.  If old_rev is
+    # null, then it's a new branch, and so fast-forward checks are
+    # irrelevant.
+    if not is_null_rev(old_rev):
         check_fast_forward(ref_name, old_rev, new_rev)
+
+    all_commits = expand_new_commit_to_list(new_rev)
+    if len(all_commits) < 2:
+        # There are no new commits, so nothing further to check.
+        # Note: We check for len < 2 instead of 1, since the first
+        # element is the "update base" commit (similar to the merge
+        # base, where the commit is the common commit between 2 branches).
+        return
 
     if git_config('hooks.combinedstylechecking') == 'true':
         # This project prefers to perform the style check on
         # the cumulated diff, rather than commit-per-commit.
         debug('(combined style checking)')
-        check_commit(old_rev, new_rev)
+        all_commits = (all_commits[0], all_commits[-1])
     else:
         debug('(commit-per-commit style checking)')
-        all_commits = git.rev_list('%s..%s' % (old_rev, new_rev),
-                                   reverse=True, _split_lines=True)
-        for commit_id in all_commits:
-            check_commit('%s^' % commit_id, commit_id)
+
+    # Iterate over our list of commits in pairs...
+    for (parent_rev, rev) in zip(all_commits[:-1], all_commits[1:]):
+        check_commit(parent_rev, rev)
 
 
 def check_update(ref_name, old_rev, new_rev):

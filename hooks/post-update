@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# Prepare a packed repository for use over dumb transports.
+
+exec git-update-server-info

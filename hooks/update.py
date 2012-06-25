@@ -148,6 +148,18 @@ def check_tag_deletion(ref_name, old_rev, new_rev):
     raise InvalidUpdate("Deleting a tag is not allowed in this repository")
 
 
+def check_tag_update(ref_name, old_rev, new_rev):
+    """Do the check_update work for a tag update (or creation).
+    """
+    # Pushing an annotated tag is always allowed.
+    # Do we want to style-check the commits???
+
+    # If this is a pre-existing tag being updated, there are pitfalls
+    # that the user should be warned about.
+    if not is_null_rev(old_rev) and not is_null_rev(new_rev):
+        warn_about_tag_update(tag_name, old_rev, new_rev)
+
+
 def check_branch_update(ref_name, old_rev, new_rev):
     """Do the check_update work for a branch update.
     """
@@ -206,9 +218,7 @@ def check_update(ref_name, old_rev, new_rev):
     elif ref_name.startswith('refs/tags/') and new_rev_type == 'delete':
         check_tag_deletion(ref_name, old_rev, new_rev)
     elif ref_name.startswith('refs/tags/') and new_rev_type == 'tag':
-        # Pushing an annotated tag is always allowed.
-        # Do we want to style-check the commits???
-        pass
+        check_tag_update(ref_name, old_rev, new_rev)
     elif ref_name.startswith('refs/heads/') and new_rev_type == 'commit':
         check_branch_update(ref_name, old_rev, new_rev)
     else: # pragma: no cover (should be impossible)

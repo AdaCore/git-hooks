@@ -31,6 +31,27 @@ def parse_command_line():
     return ap.parse_args()
 
 
+def warn_about_tag_update(tag_name, old_rev, new_rev):
+    """Emit a warning about tag updates.
+
+    PARAMETER
+        tag_name: The name of the tag being updated.
+        old_rev: The old revision referenced by the tag.
+        new_rev: The new revision referenced by the tag.
+    """
+    warn('---------------------------------------------------------------',
+         '--  IMPORTANT NOTICE:',
+         '--',
+         '--  You just updated the "%s" tag as follow:' % tag_name,
+         '--    old SHA1: %s' % old_rev,
+         '--    new SHA1: %s' % new_rev,
+         '--',
+         '-- Other developers pulling from this repository will not',
+         '-- get the new tag. Assuming this update was deliberate,',
+         '-- notifying all known users of the update is recommended.',
+         '---------------------------------------------------------------')
+
+
 def expand_new_commit_to_list(new_rev):
     """Expand the new commit into a list of commits introduced by the update.
 
@@ -97,15 +118,20 @@ def check_unannotated_tag(ref_name, old_rev, new_rev):
     """
     debug('check_unannotated_tag (%s)' % ref_name)
 
-    if git_config('hooks.allowunannotated') == "true":
-        return
-
-    # Update not permitted, raise InvalidUpdate.
     assert ref_name.startswith('refs/tags/')
     tag_name = ref_name[len('refs/tags/'):]
-    raise InvalidUpdate(
-        "Un-annotated tags (%s) are not allowed in this repository." % tag_name,
-        "Use 'git tag [ -a | -s ]' for tags you want to propagate.")
+
+    # If lightweight tags are not allowed, refuse the update.
+    if git_config('hooks.allowunannotated') != "true":
+        raise InvalidUpdate(
+            "Un-annotated tags (%s) are not allowed in this repository."
+                % tag_name,
+            "Use 'git tag [ -a | -s ]' for tags you want to propagate.")
+
+    # If this is a pre-existing tag being updated, there are pitfalls
+    # that the user should be warned about.
+    if not is_null_rev(old_rev) and not is_null_rev(new_rev):
+        warn_about_tag_update(tag_name, old_rev, new_rev)
 
 
 def check_tag_deletion(ref_name, old_rev, new_rev):

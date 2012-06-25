@@ -189,6 +189,31 @@ It previously pointed to:
                   })
 
 
+class LightweightTagUpdate(AbstractRefChange):
+    """An unannotated tag update...
+    """
+    def get_email_subject(self):
+        """See AbstractRefChange.get_email_subject.
+        """
+        return '[%s] Updated tag %s' % (self.project_name, self.short_ref_name)
+
+    def get_email_body(self):
+        """See AbstractRefChange.get_email_body.
+        """
+        return ("""\
+The lightweight tag '%(short_ref_name)s' was updated to point to:
+
+ %(commit_oneline)s
+
+It previously pointed to:
+
+ %(old_commit_oneline)s"""
+                % {'short_ref_name' : self.short_ref_name,
+                   'commit_oneline' : commit_oneline(self.new_rev),
+                   'old_commit_oneline' : commit_oneline(self.old_rev),
+                  })
+
+
 # The different types of reference updates:
 #    - CREATE: The reference is new and has just been created;
 #    - DELETE: The reference has just been deleted;
@@ -210,6 +235,7 @@ It previously pointed to:
 REF_CHANGE_MAP = {
     ('refs/tags/', CREATE, 'commit') : LightweightTagCreation,
     ('refs/tags/', DELETE, 'commit') : LightweightTagDeletion,
+    ('refs/tags/', UPDATE, 'commit') : LightweightTagUpdate,
 }
 
 

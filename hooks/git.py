@@ -165,6 +165,30 @@ def rev_list_commits(*args, **kwargs):
 
     return result
 
+
+def is_null_rev(rev):
+    """Return True iff rev is the a NULL commit SHA1.
+    """
+    return re.match("0+$", rev) is not None
+
+
+def get_object_type(rev):
+    """Determine the object type of the given commit.
+
+    PARAMETERS
+        rev: The commit SHA1 that we want to inspect.
+
+    RETURN VALUE
+        The string returned by "git cat-file -t REV", or else "delete"
+        if REV is a null SHA1 (all zeroes).
+    """
+    if is_null_rev(rev):
+        rev_type = "delete"
+    else:
+        rev_type = git.cat_file(rev, t=True)
+    return rev_type
+
+
 # Loads a single commit object by ID
 def load_commit(commit_id):
     return rev_list_commits(commit_id + "^!")[0]

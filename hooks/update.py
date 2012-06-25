@@ -5,7 +5,7 @@ import sys
 
 from config import git_config
 from fast_forward import check_fast_forward
-from git import git, NULL_REVISION
+from git import git, is_null_rev, get_object_type
 from pre_commit_checks import check_commit
 import utils
 from utils import InvalidUpdate, debug, warn, create_scratch_dir
@@ -29,29 +29,6 @@ def parse_command_line():
     ap.add_argument('new_rev',
                     help='the new SHA1, if the update is accepted')
     return ap.parse_args()
-
-
-def is_null_rev(rev):
-    """Return True iff rev is the a NULL commit SHA1.
-    """
-    return re.match("0+$", rev) is not None
-
-
-def get_object_type(rev):
-    """Determine the object type of the given commit.
-
-    PARAMETERS
-        rev: The commit SHA1 that we want to inspect.
-
-    RETURN VALUE
-        The string returned by "git cat-file -t REV", or else "delete"
-        if REV is a null SHA1 (all zeroes).
-    """
-    if is_null_rev(rev):
-        rev_type = "delete"
-    else:
-        rev_type = git.cat_file(rev, t=True)
-    return rev_type
 
 
 def expand_new_commit_to_list(new_rev):

@@ -251,6 +251,7 @@ def post_receive_one(ref_name, old_rev, new_rev, project_name,
     if ref_change_klass is None:
         warn("post-receive: Unsupported reference update: %s,%s (ignored)."
              % (ref_name, object_type))
+        return
 
     change = ref_change_klass(ref_name, old_rev, new_rev, project_name,
                               email_from, email_to)

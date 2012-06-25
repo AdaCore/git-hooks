@@ -1,0 +1,18 @@
+#! /usr/bin/env bash
+#
+# The "post-receive" script is run after receive-pack has accepted a pack
+# and the repository has been updated.  It is passed arguments in through
+# stdin in the form:
+#
+#  <oldrev> <newrev> <refname>
+#
+# For example:
+#
+#  aa453216d1b3e49e7f6f98441fa56946ddcd6a20 68f7abf4e6f922807889f52bc043ecd31b79f814 refs/heads/master
+
+# The following is AdaCore-specific: It allows us to make sure that
+# we are not running a random version of Python, but rather the
+# baseline version installed in /gnatmail.
+export PATH=/gnatmail/install/bin:$PATH
+
+python `dirname $0`/post_receive.py

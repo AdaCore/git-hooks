@@ -17,6 +17,9 @@ GIT_CONFIG_OPTS = {
     'hooks.combinedstylechecking' :
                                { 'type' : 'bool', 'default' : 'false' },
     'hooks.debuglevel'       : { 'type' : 'int',  'default' : '0' },
+    'hooks.fromdomain'       : {                  'default' : None},
+    'hooks.mailinglist'      : {                  'default' : None},
+    'hooks.noemails'         : {                  'default' : ''},
 }
 
 class UnsupportedOptionName(Exception):

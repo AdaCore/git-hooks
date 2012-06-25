@@ -1,4 +1,7 @@
 from os import environ
+import os
+import pwd
+import re
 import sys
 from tempfile import mkdtemp
 
@@ -8,6 +11,43 @@ class InvalidUpdate(Exception):
     """An exception raised when the update is not accepted.
     """
     pass
+
+class InvalidUsage(Exception):
+    """An exception raised when a script is not called correctly.
+    """
+    pass
+
+############################################################################
+#
+#  Information related to the environment.
+#
+############################################################################
+
+def get_user_name():
+    """Return the user name (in the Unix sense: The account name).
+    """
+    if 'GIT_HOOKS_USER_NAME' in environ:
+        return environ['GIT_HOOKS_USER_NAME']
+    else:
+        return pwd.getpwuid(os.getuid()).pw_name
+
+
+def get_user_full_name():
+    """Return the user's full name."""
+    if 'GIT_HOOKS_USER_FULL_NAME' in environ:
+        full_name = environ['GIT_HOOKS_USER_FULL_NAME']
+    else:
+        full_name = pwd.getpwuid(os.getuid()).pw_gecos
+
+    # If the fullname contains an email address, or a comma, strip
+    # all that.  This would otherwise cause trouble if we used that
+    # full_name in an email header.
+    m = re.match("([^,<]+)[,<]", full_name)
+    if m:
+        full_name = m.group(1).strip()
+
+    return full_name
+
 
 ############################################################################
 #
@@ -100,4 +140,5 @@ def warn(*args, **kwargs):
     prefix = kwargs['prefix'] if 'prefix' in kwargs else '***'
     for arg in args:
         print >> sys.stderr, prefix , arg
+
 

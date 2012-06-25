@@ -17,6 +17,12 @@ class TestCase(unittest.TestCase):
         # features, such as email, by simple traces.
         os.environ['GIT_HOOKS_TESTSUITE_MODE'] = 'true'
 
+        # Other "parameters" that should normally be taken from the
+        # environment, but which we want to override here.  Pretend
+        # that the hooks are calld by user "Test Suite".
+        os.environ['GIT_HOOKS_USER_NAME'] = 'testsuite'
+        os.environ['GIT_HOOKS_USER_FULL_NAME'] = 'Test Suite'
+
         # Tell the hooks to use a "fake" cvs_check script. Each
         # testcase will want to have their own, because each testcase
         # have different requirements regarding how it should behave

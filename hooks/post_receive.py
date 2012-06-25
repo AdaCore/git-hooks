@@ -59,22 +59,32 @@ class AbstractRefChange(object):
     the deletion of that reference, or the update of that reference.
 
     ATTRIBUTES
-        ref_name
-        old_rev
-        new_rev
-        short_ref_name
-        project_name
-
-        email_from
-        email_to
-        email_subject
-
-    ABSTRACT ATTRIBUTES
-        email_subject:
-        email_body:
+        ref_name: The name of the reference that just got updated.
+        old_rev: The reference's old SHA1.
+        new_rev: The reference's new SHA1.
+        short_ref_name: The name of the reference without the "refs/[...]/"
+            prefix.
+        project_name: The name of the project (usually, the name of
+            the directory holding containing the git repository).
+        email_from: The email address to use in the From: field
+            when sending the email notification.
+        email_to: The email addresses, in RFC 822 format, of the
+            recipients of the email notification.
+        email_subject: The subject of the email notification.
+        email_body: The body of the email notification.
     """
     def __init__(self, ref_name, old_rev, new_rev,
                  project_name, email_from, email_to):
+        """The constructor.
+
+        PARAMETERS
+            ref_name: Same as the attribute.
+            old_rev: Same as the attribute.
+            new_rev: Same as the attribute.
+            project_name: Same as the attribute.
+            email_from: Same as the attribute.
+            email_to: Same as the attribute.
+        """
         self.old_rev = old_rev
         self.new_rev = new_rev
         self.ref_name = ref_name
@@ -114,6 +124,12 @@ class AbstractRefChange(object):
             'Internal error: get_email_subject not implemented')
 
     def send_email(self):
+        """Send the email notification corresponding to this change.
+
+        REMARKS
+            Child classes may override this method if standard
+            behavior is not suitable for their type of change.
+        """
         # Chances are very low that the size of this email would be
         # greater than the maximum email size.  So do not truncate
         # the email body.
@@ -177,6 +193,18 @@ REF_CHANGE_MAP = {
 
 def post_receive_one(ref_name, old_rev, new_rev, project_name,
                      email_from, email_to):
+    """post-receive treatment for one reference.
+
+    PARAMETERS
+        ref_name: The name of the reference.
+        old_rev: The SHA1 of the reference before the update.
+        new_rev: The SHA1 of the reference after the update.
+        project_name: The name of the project.
+        email_from: The email address to use in the From: field
+            of emails to be sent for this change.
+        email_to: The email addresses, in RFC 822 format, to be used
+            for sending emails associated to this change.
+    """
     debug('post_receive_one(ref_name=%s\n'
           '                        old_rev=%s\n'
           '                        new_rev=%s)'
@@ -265,6 +293,9 @@ def post_receive(refs):
 
 def parse_command_line(args):
     """Return a namespace built after parsing the command line.
+
+    PARAMETERS
+        args: A sequence of arguments to be used as the command-line.
     """
     # The command-line interface is very simple, so we could possibly
     # handle it by hand.  But it's nice to have features such as

@@ -86,8 +86,32 @@ class AbstractRefChange(object):
 
         self.email_from = email_from
         self.email_to = email_to
-        self.email_subject = None # To be created by child class.
-        self.email_body = None # To be created by child class.
+        self.email_subject = self.get_email_subject()
+        self.email_body = self.get_email_body()
+
+    def get_email_subject(self):
+        """Return the subject of the email to be sent for this change.
+
+        This method must be overridden by the child class, or else
+        will raise PostReceiveError.
+
+        RETURN VALUE
+            A string containing the email subject.
+        """
+        raise PostReceiveError(
+            'Internal error: get_email_subject not implemented')
+
+    def get_email_body(self):
+        """Return the body of the email to be sent for this change.
+
+        This method must be overridden by the child class, or else
+        will raise PostReceiveError.
+
+        RETURN VALUE
+            A string containing the email subject.
+        """
+        raise PostReceiveError(
+            'Internal error: get_email_subject not implemented')
 
     def send_email(self):
         # Chances are very low that the size of this email would be
@@ -111,20 +135,21 @@ class AbstractRefChange(object):
 class LightweightTagCreation(AbstractRefChange):
     """An unannotated tag creation...
     """
-    def __init__(self, ref_name, old_rev, new_rev,
-                 project_name, email_from, email_to):
-        AbstractRefChange.__init__(self, ref_name, old_rev, new_rev,
-                                   project_name, email_from, email_to)
+    def get_email_subject(self):
+        """See AbstractRefChange.get_email_subject.
+        """
+        return '[%s] Created tag %s' % (self.project_name, self.short_ref_name)
 
-        self.email_subject = '[%s] Created tag %s' % (self.project_name,
-                                                      self.short_ref_name)
-        self.email_body = ("""\
+    def get_email_body(self):
+        """See AbstractRefChange.get_email_body.
+        """
+        return ("""\
 The lightweight tag '%(short_ref_name)s' was created pointing to:
 
  %(commit_oneline)s"""
-                       % {'short_ref_name' : self.short_ref_name,
-                          'commit_oneline' : commit_oneline(self.new_rev),
-                         })
+                % {'short_ref_name' : self.short_ref_name,
+                   'commit_oneline' : commit_oneline(self.new_rev),
+                  })
 
 
 # The different types of reference updates:

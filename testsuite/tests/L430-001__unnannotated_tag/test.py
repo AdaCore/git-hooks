@@ -15,9 +15,22 @@ class TestRun(TestCase):
         # to accept such updates.
         p = Run('git push origin new-tag'.split())
         self.assertEqual(p.status, 0, ex_run_image(p))
-        self.assertTrue(re.match(r'.*\[new tag\]\s+new-tag\s+->\s+new-tag\s*$',
-                                 p.out, re.DOTALL),
+
+        expected_out = (
+            # The email that we expect to be "sent":
+            r".*From: Test Suite <testsuite@example.com>" +
+            r".*To: commits@example.com" +
+            r".*Bcc: file-ci@gnat.com" +
+            r".*Subject: \[repo\] Created tag new-tag" +
+            r".*X-ACT-checkin: repo" +
+            r".*X-Git-Refname: refs/tags/new-tag" +
+            r".*X-Git-Oldrev: 0+" +
+            r".*X-Git-Newrev: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e" +
+            # Confirmation that the new tag was created.
+            r".*\[new tag\]\s+new-tag\s+->\s+new-tag\s*")
+        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
                         ex_run_image(p))
+
 
 if __name__ == '__main__':
     runtests()

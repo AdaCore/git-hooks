@@ -392,7 +392,10 @@ def post_receive_one(ref_name, old_rev, new_rev, project_name,
             ref_change_klass = REF_CHANGE_MAP[key]
             break
 
-    if ref_change_klass is None:
+    if ref_change_klass is None: # pragma: no cover (should be impossible)
+        # We emit a warning, rather than trigger an assertion, because
+        # it gives the script a chance to process any other reference
+        # that was updated, but not processed yet.
         warn("post-receive: Unsupported reference update: %s,%s (ignored)."
              % (ref_name, object_type))
         return

@@ -354,7 +354,7 @@ def post_receive_one(ref_name, old_rev, new_rev, project_name,
           '                        new_rev=%s)'
           % (old_rev, new_rev, ref_name))
 
-    # Check the hooks.noemail configuration parameter.  If it exists,
+    # Check the hooks.noemails configuration parameter.  If it exists,
     # it is a comma-separated list of names of ref names for which commits
     # should not trigger an update email.
     no_emails = git_config("hooks.noemails")

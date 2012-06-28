@@ -150,9 +150,13 @@ def check_tag_deletion(ref_name, old_rev, new_rev):
 
 def check_tag_update(ref_name, old_rev, new_rev):
     """Do the check_update work for a tag update (or creation).
+
+    REMARKS
+        Pushing an annotated tag is always allowed.
+        Do we want to style-check the commits???
     """
-    # Pushing an annotated tag is always allowed.
-    # Do we want to style-check the commits???
+    assert ref_name.startswith('refs/tags/')
+    tag_name = ref_name[len('refs/tags/'):]
 
     # If this is a pre-existing tag being updated, there are pitfalls
     # that the user should be warned about.

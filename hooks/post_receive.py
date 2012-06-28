@@ -16,7 +16,7 @@ import sys
 
 from config import git_config
 from git import (get_module_name, is_null_rev, get_object_type,
-                 commit_oneline)
+                 commit_oneline, parse_tag_object)
 from utils import debug, warn, get_user_name, get_user_full_name
 
 
@@ -214,6 +214,38 @@ It previously pointed to:
                   })
 
 
+class AnnotatedTagCreation(AbstractRefChange):
+    """An annotated tag creation...
+    """
+    def get_email_subject(self):
+        """See AbstractRefChange.get_email_subject.
+        """
+        return '[%s] Created tag %s' % (self.project_name, self.short_ref_name)
+
+    def get_email_body(self):
+        """See AbstractRefChange.get_email_body.
+        """
+        template = """\
+The %(tag_kind)s tag '%(short_ref_name)s' was created pointing to:
+
+ %(commit_oneline)s
+
+Tagger: %(tagger)s
+Date: %(date)s
+
+%(message)s"""
+
+        tag_info = parse_tag_object(self.short_ref_name)
+        # Augment tag_info with some of other elements that will be
+        # provided in the mail body.  This is just to make it easier
+        # to format the message body...
+        tag_info['tag_kind'] = 'signed' if tag_info['signed_p'] else 'unsigned'
+        tag_info['short_ref_name'] = self.short_ref_name
+        tag_info['commit_oneline'] = commit_oneline(self.new_rev)
+
+        return template % tag_info
+
+
 # The different types of reference updates:
 #    - CREATE: The reference is new and has just been created;
 #    - DELETE: The reference has just been deleted;
@@ -236,6 +268,7 @@ REF_CHANGE_MAP = {
     ('refs/tags/', CREATE, 'commit') : LightweightTagCreation,
     ('refs/tags/', DELETE, 'commit') : LightweightTagDeletion,
     ('refs/tags/', UPDATE, 'commit') : LightweightTagUpdate,
+    ('refs/tags/', CREATE, 'tag')    : AnnotatedTagCreation,
 }
 
 

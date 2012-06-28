@@ -269,3 +269,67 @@ def file_exists(commit_rev, filename):
         # cat-file -e returned non-zero; the file does not exist.
         return False
     return True
+
+
+def parse_tag_object(tag_name):
+    """Return a dictionary providing info on an annotated tag.
+
+    The behavior of this function is undefined if tag_name is not
+    a valid annotated tag.
+
+    PARAMETERS
+        tag_name: The name of the tag. It can be the "short" tag name
+            (Eg: "some-tag"), or the reference name (/refs/tags/some-tag,
+            for instance).
+
+    RETURN VALUE
+        A dictionary with the following keys:
+            'tagger': The name of the user who created the tag.
+            'date': The date the tag was created.
+            'message': The revision log used when creating the tag.
+            'signed_p': True if the tag was signed, False otherwise.
+    """
+    # Provide default values for certain fields.
+    result = {'tagger'   : '*** Failed to determine tagger ***',
+              'date'     : '*** Failed to determine tag creation date ***',
+              'signed_p' : False}
+
+    # Use cat-file -p to dump the contents of the tag.  The output
+    # is made of 2 sections, separated by an empty line.
+    #
+    # The first section contains information about the tag, such as
+    # the tag name, type, and tagger.  We're looking for the line
+    # that starts with "tagger", as it contains both the name of
+    # the tagger as well as the date the message was tagged.
+    #
+    # The second section contains the revision history, optionally
+    # followed by the PGP signature (if the tag was signed).
+
+    revision_log = []
+    section_no = 1
+
+    for line in git.cat_file(tag_name, p=True, _split_lines=True):
+        if section_no == 1:
+            if line.strip() == "":
+                # We have reached the end of this section, moving on
+                # to the next.
+                section_no += 1
+                continue
+            # Check if the line is the "tagger line", and extract
+            # the tagger name and tagging time as best we can.
+            m = re.match(r"tagger\s+([^>]*>)\s*(.*)", line)
+            if m:
+                result['tagger'] = m.group(1)
+                result['date'] = m.group(2)
+                continue
+        else:
+            if line.startswith('-----BEGIN PGP SIGNATURE-----'):
+                result['signed_p'] = True
+                # We don't want to include the PGP signature in
+                # the message, and we know there isn't anything else
+                # after the PGP signature, so we're done.
+                break
+            revision_log.append(line)
+    result['message'] = "\n".join(["    " + line for line in revision_log])
+
+    return result

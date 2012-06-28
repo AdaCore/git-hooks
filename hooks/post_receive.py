@@ -363,6 +363,7 @@ def post_receive_one(ref_name, old_rev, new_rev, project_name,
         print "-- The hooks.noemails config parameter contains `%s'." % ref_name
         print "-- Commit emails will therefore not be sent."
         print "---------------------------------------------------------------"
+        return
 
     # Note: The old version of these scripts were canonicalizing
     # old_rev and new_rev using "git rev-parse".  But, not knowing

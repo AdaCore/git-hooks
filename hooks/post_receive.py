@@ -246,6 +246,30 @@ Date: %(date)s
         return template % tag_info
 
 
+class AnnotatedTagDeletion(AbstractRefChange):
+    """An annotated tag deletion...
+    """
+    def get_email_subject(self):
+        """See AbstractRefChange.get_email_subject.
+        """
+        return '[%s] Deleted tag %s' % (self.project_name, self.short_ref_name)
+
+    def get_email_body(self):
+        """See AbstractRefChange.get_email_body.
+        """
+        template = """\
+The annotated tag '%(short_ref_name)s' was deleted.
+It previously pointed to:
+
+ %(commit_oneline)s"""
+
+        template_data = {}
+        template_data['short_ref_name'] = self.short_ref_name
+        template_data['commit_oneline'] = commit_oneline(self.old_rev)
+
+        return template % template_data
+
+
 # The different types of reference updates:
 #    - CREATE: The reference is new and has just been created;
 #    - DELETE: The reference has just been deleted;
@@ -269,6 +293,7 @@ REF_CHANGE_MAP = {
     ('refs/tags/', DELETE, 'commit') : LightweightTagDeletion,
     ('refs/tags/', UPDATE, 'commit') : LightweightTagUpdate,
     ('refs/tags/', CREATE, 'tag')    : AnnotatedTagCreation,
+    ('refs/tags/', DELETE, 'tag')    : AnnotatedTagDeletion,
 }
 
 

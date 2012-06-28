@@ -425,8 +425,11 @@ def post_receive(refs):
         # We should really refuse updates if this config variable is
         # not set.  But since this is too late to refuse the update,
         # at least try to file the commits (after having warned the user).
-        warn('Warning: hooks.mailinglist config variable not set.\n'
-             'sending emails to %s only' % FILER_EMAIL)
+        print "---------------------------------------------------------------"
+        print "-- WARNING:"
+        print "-- The hooks.mailinglist config variable not set."
+        print "-- Commit emails will only be sent to %s." % FILER_EMAIL
+        print "---------------------------------------------------------------"
         email_to=FILER_EMAIL
 
     project_name = get_module_name()

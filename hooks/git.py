@@ -333,3 +333,20 @@ def parse_tag_object(tag_name):
     result['message'] = "\n".join(["    " + line for line in revision_log])
 
     return result
+
+def git_show_ref(ref_name):
+    """Call "git show-ref <ref_name>" and return the result as a list.
+
+    PARAMETERS
+        ref_name: The name of the reference to query.
+
+    RETURN VALUE
+        A list of entries that matched ref_name, each entry being one
+        string (the contents of the string is not split into individual
+        tokens yet).  Returns None if no entry matched.
+    """
+    try:
+        return git.show_ref(ref_name, _split_lines=True)
+    except CalledProcessError:
+        return None
+

@@ -5,7 +5,7 @@ import sys
 
 from config import git_config
 from fast_forward import check_fast_forward
-from git import git, is_null_rev, get_object_type
+from git import git, is_null_rev, get_object_type, git_show_ref
 from pre_commit_checks import check_commit
 import utils
 from utils import InvalidUpdate, debug, warn, create_scratch_dir
@@ -30,6 +30,44 @@ def parse_command_line():
                     help='the new SHA1, if the update is accepted')
     return ap.parse_args()
 
+
+def reject_retired_branch_update(ref_name):
+    """Raise InvalidUpdate if trying to update a retired branch.
+
+    PARAMETERS:
+        ref_name: The name of the branch to be updated.
+
+    REMARKS
+        By convention, retiring a branch means "moving" it to the
+        "retired/" sub-namespace.  Normally, it would make better
+        sense to just use a tag instead of a branch (for the reference
+        in "retired/"), but we allow both.
+    """
+
+    assert ref_name.startswith('refs/heads/')
+    short_name = ref_name[len('refs/heads/'):]
+
+    # If short_name starts with "retired/", then the user is either
+    # trying to create the retired branch (which is allowed), or else
+    # trying to update it (which seems suspicious).  In the latter
+    # case, we could disallow it, but it could also be argued that
+    # updating the retired branch is sometimes useful. Keep it simple
+    # for now, and allow.
+
+    retired_short_name = 'retired/%s' % short_name
+    if git_show_ref('refs/heads/%s' % retired_short_name) is not None:
+        raise InvalidUpdate(
+            "Updates to the %s branch are no longer allowed, because"
+              % short_name,
+            "this branch has been retired (and renamed into `%s')."
+              % retired_short_name)
+    if git_show_ref('refs/tags/%s' % retired_short_name) is not None:
+        raise InvalidUpdate(
+            "Updates to the %s branch are no longer allowed, because"
+              % short_name,
+            "this branch has been retired (a tag called `%s' has been"
+              % retired_short_name,
+            "created in its place).")
 
 def warn_about_tag_update(tag_name, old_rev, new_rev):
     """Emit a warning about tag updates.
@@ -168,6 +206,8 @@ def check_branch_update(ref_name, old_rev, new_rev):
     """Do the check_update work for a branch update.
     """
     debug('check_branch_update(%s, %s, %s)' % (ref_name, old_rev, new_rev))
+
+    reject_retired_branch_update(ref_name)
 
     # Check that this is either a fast-forward update, or else that
     # forced-updates are allowed for that branch.  If old_rev is

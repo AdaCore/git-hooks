@@ -1,6 +1,7 @@
 """The updates root module."""
 
 from git import get_object_type
+import re
 from utils import debug
 
 class AbstractUpdate(object):
@@ -9,10 +10,8 @@ class AbstractUpdate(object):
     ATTRIBUTES
         ref_name: The name of the reference being updated.
         short_ref_name: The reference's short name.  It is obtained by
-            stripping any character up to, and including, the second
-            slash ('/') characater.
-            For example, if ref_name is "refs/heads/master", then
-            short_ref_name is "master".
+            removing the "refs/[...]/" prefix.  For example, if ref_name
+            is "refs/heads/master", then short_ref_name is "master".
         old_rev: The reference's revision (SHA1) prior to the update.
             A null revision means that this is a new reference.
         new_rev: The reference's revision (SHA1) after the update.
@@ -33,11 +32,14 @@ class AbstractUpdate(object):
             old_rev: Same as the attribute.
             new_rev: Same as the attribute.
         """
+        m = re.match(r"refs/[^/]*/(.*)", ref_name)
+
         self.ref_name = ref_name
-        self.short_ref_name = ref_name.split('/', 2)[2]
+        self.short_ref_name = m.group(1) if m else ref_name
         self.old_rev = old_rev
         self.new_rev = new_rev
         self.new_rev_type = get_object_type(self.new_rev)
+
         self.self_sanity_check()
 
     def validate(self):

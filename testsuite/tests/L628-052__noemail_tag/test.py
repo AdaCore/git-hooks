@@ -2,7 +2,7 @@ from support import *
 import re
 
 class TestRun(TestCase):
-    def test_push_unannotated_tag(self):
+    def test_push_annotated_tag(self):
         """Try pushing an anotated tag.
         """
         cd ('%s/repo' % TEST_DIR)

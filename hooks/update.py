@@ -7,7 +7,7 @@ from utils import (InvalidUpdate, debug, warn, scratch_dir,
                    create_scratch_dir)
 
 from updates.tags.atag_update import AnnotatedTagUpdate
-from updates.tags.utag_update import UnannotatedTagUpdate
+from updates.tags.utag_update import LightweightTagUpdate
 from updates.tags.deletion import TagDeletion
 from updates.branches.update import BranchUpdate
 
@@ -56,7 +56,7 @@ def check_update(ref_name, old_rev, new_rev):
     elif ref_name.startswith('refs/tags/') and new_rev_type == 'tag':
         AnnotatedTagUpdate(ref_name, old_rev, new_rev).validate()
     elif ref_name.startswith('refs/tags/') and new_rev_type == 'commit':
-        UnannotatedTagUpdate(ref_name, old_rev, new_rev).validate()
+        LightweightTagUpdate(ref_name, old_rev, new_rev).validate()
     elif ref_name.startswith('refs/tags/') and new_rev_type == 'delete':
         TagDeletion(ref_name, old_rev, new_rev).validate()
     else: # pragma: no cover (should be impossible)

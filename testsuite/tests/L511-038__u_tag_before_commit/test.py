@@ -11,10 +11,10 @@ class TestRun(TestCase):
         os.environ['GIT_HOOKS_DEBUG_LEVEL'] = '1'
 
         # Scenario: The user made some changes, and then committed them
-        # in his repo. Then created an unannotated tag (release-0.1a).
-        # Next, he pushes the unannotated tag before having pushed his
+        # in his repo. Then created a lightweight tag (release-0.1a).
+        # Next, he pushes the lightweight tag before having pushed his
         # new commit.  What the commit hooks should do in this case
-        # is just accept the unannotated tag, but not check the commits
+        # is just accept the lightweight tag, but not check the commits
         # (see later for when these commits should be checked).
         #
         # Note: The remote repository has been configured to allow

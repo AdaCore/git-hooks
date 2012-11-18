@@ -9,7 +9,7 @@ class TagDeletion(AbstractUpdate):
 
     REMARKS
         This class does not make a difference between annotated tags
-        and unannotated tags, and treats them identically.
+        and lightweight tags, and treats them identically.
     """
     def self_sanity_check(self):
         """See AbstractUpdate.self_sanity_check."""

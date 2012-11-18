@@ -2,8 +2,8 @@ from support import *
 import re
 
 class TestRun(TestCase):
-    def test_delete_unannotated_tag(self):
-        """Try deleting an unnanotated tag.
+    def test_delete_lightweight_tag(self):
+        """Try deleting a lightweight tag.
         """
         cd ('%s/repo' % TEST_DIR)
 

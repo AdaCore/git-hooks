@@ -149,7 +149,7 @@ class AbstractRefChange(object):
 
 
 class LightweightTagCreation(AbstractRefChange):
-    """An unannotated tag creation...
+    """An lightweight tag creation...
     """
     def get_email_subject(self):
         """See AbstractRefChange.get_email_subject.
@@ -169,7 +169,7 @@ The lightweight tag '%(short_ref_name)s' was created pointing to:
 
 
 class LightweightTagDeletion(AbstractRefChange):
-    """An unannotated tag deletion...
+    """An lightweight tag deletion...
     """
     def get_email_subject(self):
         """See AbstractRefChange.get_email_subject.
@@ -190,7 +190,7 @@ It previously pointed to:
 
 
 class LightweightTagUpdate(AbstractRefChange):
-    """An unannotated tag update...
+    """An lightweight tag update...
     """
     def get_email_subject(self):
         """See AbstractRefChange.get_email_subject.

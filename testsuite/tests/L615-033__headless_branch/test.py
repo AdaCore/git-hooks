@@ -21,7 +21,7 @@ class TestRun(TestCase):
         self.assertTrue(p.status == 0, ex_run_image(p))
 
         expected_out = (
-            r".*check_branch_update\(refs/heads/headless, 0+, " +
+            r".*validate_ref_update \(refs/heads/headless, 0+, " +
                 "902092ffe1cf61b28e28c86949a447b9fc2591a4\)" +
             r".*update base: None" +
             r".*\(commit-per-commit style checking\)" +
@@ -50,7 +50,7 @@ class TestRun(TestCase):
         self.assertTrue(p.status == 0, ex_run_image(p))
 
         expected_out = (
-            r".*check_branch_update\(refs/heads/one-commit, 0+, " +
+            r".*validate_ref_update \(refs/heads/one-commit, 0+, " +
                 "ef3ab848df2bef804d5bd0880475d40cb6aab0bf\)" +
             r".*update base: None" +
             r".*\(commit-per-commit style checking\)" +

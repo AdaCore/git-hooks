@@ -406,13 +406,14 @@ def post_receive_one(ref_name, old_rev, new_rev, project_name,
     change.send_email()
 
 
-def post_receive(refs):
-    """Implement the post-receive hook for all given refs.
+def post_receive(updated_refs):
+    """Implement the post-receive hook for all given updated_refs.
 
     PARAMETERS
-        refs: An OrderedDict, indexed by the name of the ref being updated,
-            and containing 2-elements tuple.  This tuple contains the
-            previous revision, and the new revision of the reference.
+        updated_refs: An OrderedDict, indexed by the name of the ref
+            being updated, and containing 2-elements tuple.  This tuple
+            contains the previous revision, and the new revision of the
+            reference.
     """
     from_domain = git_config('hooks.fromdomain')
     if not from_domain:
@@ -437,8 +438,8 @@ def post_receive(refs):
                                  get_user_name (),
                                  from_domain)
 
-    for ref_name in refs.keys():
-        (old_rev, new_rev) = refs[ref_name]
+    for ref_name in updated_refs.keys():
+        (old_rev, new_rev) = updated_refs[ref_name]
         post_receive_one(ref_name, old_rev, new_rev, project_name,
                          email_from, email_to)
 

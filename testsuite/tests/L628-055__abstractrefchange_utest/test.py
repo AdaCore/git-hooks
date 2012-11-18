@@ -6,7 +6,8 @@ class TestRun(TestCase):
         """
         self.enable_unit_test()
 
-        from post_receive import AbstractRefChange, PostReceiveError
+        from post_receive import AbstractRefChange
+        from utils import InvalidUpdate
 
         # Define new classes deriving from AbstractRefChange.
         # Normally, that new class is expected to override
@@ -26,7 +27,7 @@ class TestRun(TestCase):
             def get_email_subject(self):
                 return "email subject"
 
-        with self.assertRaises(PostReceiveError):
+        with self.assertRaises(InvalidUpdate):
             NoEmailSubject('refs/heads/master',
                            '6ba296bcb2f1781ba928d5c6ae7ebd5a7edecfd7',
                            '77c28ce7c17177486e768595747d37c786a36521',
@@ -34,7 +35,7 @@ class TestRun(TestCase):
                            'someone@example.com',
                            'somewhere@example.com')
 
-        with self.assertRaises(PostReceiveError):
+        with self.assertRaises(InvalidUpdate):
             NoEmailBody('refs/heads/master',
                         '6ba296bcb2f1781ba928d5c6ae7ebd5a7edecfd7',
                         '77c28ce7c17177486e768595747d37c786a36521',

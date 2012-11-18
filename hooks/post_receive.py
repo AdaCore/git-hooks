@@ -18,12 +18,8 @@ from config import git_config
 from git import (get_module_name, is_null_rev, get_object_type,
                  commit_oneline, parse_tag_object)
 from updates.emails import FILER_EMAIL, send_email
-from utils import debug, warn, get_user_name, get_user_full_name
-
-
-class PostReceiveError(Exception):
-    """A fatal issue during the post-receive hook.
-    """
+from utils import (debug, warn, get_user_name, get_user_full_name,
+                   InvalidUpdate)
 
 
 class AbstractRefChange(object):
@@ -78,24 +74,24 @@ class AbstractRefChange(object):
         """Return the subject of the email to be sent for this change.
 
         This method must be overridden by the child class, or else
-        will raise PostReceiveError.
+        will raise InvalidUpdate.
 
         RETURN VALUE
             A string containing the email subject.
         """
-        raise PostReceiveError(
+        raise InvalidUpdate(
             'Internal error: get_email_subject not implemented')
 
     def get_email_body(self):
         """Return the body of the email to be sent for this change.
 
         This method must be overridden by the child class, or else
-        will raise PostReceiveError.
+        will raise InvalidUpdate.
 
         RETURN VALUE
             A string containing the email subject.
         """
-        raise PostReceiveError(
+        raise InvalidUpdate(
             'Internal error: get_email_subject not implemented')
 
     def send_email(self):
@@ -392,7 +388,7 @@ def post_receive(updated_refs):
     """
     from_domain = git_config('hooks.fromdomain')
     if not from_domain:
-        raise PostReceiveError(
+        raise InvalidUpdate(
             'Error: post-receive: hooks.fromdomain config variable not set.',
             'Cannot send email notifications.')
 
@@ -451,6 +447,6 @@ if __name__ == '__main__':
         refs_data[args.ref_name] = (args.old_rev, args.new_rev)
     try:
         post_receive(refs_data)
-    except PostReceiveError, E:
+    except InvalidUpdate, E:
         warn(*E)
 

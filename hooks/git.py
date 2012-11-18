@@ -334,19 +334,20 @@ def parse_tag_object(tag_name):
 
     return result
 
-def git_show_ref(ref_name):
-    """Call "git show-ref <ref_name>" and return the result as a list.
+def git_show_ref(*args):
+    """Call "git show-ref [args]" and return the result as a list.
 
     PARAMETERS
-        ref_name: The name of the reference to query.
+        *args: Each argument is passed to the "git show-ref"
+            as a pattern.
 
     RETURN VALUE
-        A list of entries that matched ref_name, each entry being one
-        string (the contents of the string is not split into individual
-        tokens yet).  Returns None if no entry matched.
+        A list of entries that matched the given patterns, each entry
+        being one string (the contents of the string is not split
+        into individual tokens yet).  Returns None if no entry matched.
     """
     try:
-        return git.show_ref(ref_name, _split_lines=True)
+        return git.show_ref(*args, _split_lines=True)
     except CalledProcessError:
         return None
 

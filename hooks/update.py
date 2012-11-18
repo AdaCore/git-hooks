@@ -7,7 +7,7 @@ from utils import (InvalidUpdate, debug, warn, scratch_dir,
                    create_scratch_dir)
 
 from updates.tags.atag_update import AnnotatedTagUpdate
-from updates.tags.utag_update import LightweightTagUpdate
+from updates.tags.ltag_update import LightweightTagUpdate
 from updates.tags.deletion import TagDeletion
 from updates.branches.update import BranchUpdate
 

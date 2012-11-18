@@ -17,38 +17,13 @@ import sys
 from config import git_config
 from git import (get_module_name, is_null_rev, get_object_type,
                  commit_oneline, parse_tag_object)
+from updates.emails import FILER_EMAIL, send_email
 from utils import debug, warn, get_user_name, get_user_full_name
 
 
 class PostReceiveError(Exception):
     """A fatal issue during the post-receive hook.
     """
-
-
-# All commit emails should be sent to the following email address
-# for filing/archiving purposes...
-FILER_EMAIL='file-ci@gnat.com'
-
-def send_email(e_msg):
-    """Send the given e_msg.
-
-    PARAMETERS
-        e_msg: An email.message.Message object.
-    """
-    email_from = parseaddr(e_msg.get('From'))
-    email_recipients = [addr[1] for addr
-                        in getaddresses(e_msg.get_all('To', [])
-                                        + e_msg.get_all('Cc', [])
-                                        + e_msg.get_all('Bcc', []))]
-
-    if 'GIT_HOOKS_TESTSUITE_MODE' in os.environ:
-        # Use debug level 0 to make sure that the trace is always
-        # printed.
-        debug(e_msg.as_string(), level=0)
-    else: # pragma: no cover (do not want to send real emails during testing)
-        s = smtplib.SMTP('localhost')
-        s.sendmail(email_from, email_recipients, e_msg.as_string())
-        s.quit()
 
 
 class AbstractRefChange(object):

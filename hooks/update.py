@@ -6,10 +6,7 @@ from git import get_object_type
 from utils import (InvalidUpdate, debug, warn, scratch_dir,
                    create_scratch_dir)
 
-from updates.tags.atag_update import AnnotatedTagUpdate
-from updates.tags.ltag_update import LightweightTagUpdate
-from updates.tags.deletion import TagDeletion
-from updates.branches.update import BranchUpdate
+from updates.factory import new_update
 
 def parse_command_line():
     """Return a namespace built after parsing the command line.
@@ -50,19 +47,12 @@ def check_update(ref_name, old_rev, new_rev):
     debug('check_update(ref_name=%s, old_rev=%s, new_rev=%s)'
           % (ref_name, old_rev, new_rev),
           level=2)
-    new_rev_type = get_object_type(new_rev)
-    if ref_name.startswith('refs/heads/') and new_rev_type == 'commit':
-        BranchUpdate(ref_name, old_rev, new_rev).validate()
-    elif ref_name.startswith('refs/tags/') and new_rev_type == 'tag':
-        AnnotatedTagUpdate(ref_name, old_rev, new_rev).validate()
-    elif ref_name.startswith('refs/tags/') and new_rev_type == 'commit':
-        LightweightTagUpdate(ref_name, old_rev, new_rev).validate()
-    elif ref_name.startswith('refs/tags/') and new_rev_type == 'delete':
-        TagDeletion(ref_name, old_rev, new_rev).validate()
-    else: # pragma: no cover (should be impossible)
+    update_cls = new_update(ref_name, old_rev, new_rev)
+    if update_cls is None: # pragma: no cover (should be impossible)
         raise InvalidUpdate(
             "This type of update (%s,%s) is currently unsupported."
-            % (ref_name, new_rev_type))
+            % (ref_name, get_object_type(new_rev)))
+    update_cls.validate()
 
 
 if __name__ == "__main__":

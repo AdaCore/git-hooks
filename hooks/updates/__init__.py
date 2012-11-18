@@ -64,6 +64,9 @@ class AbstractUpdate(object):
         class.  For instance, a class that handles branch creation only
         should verify that the ref_name starts with 'refs/heads/' and
         that old_rev is null.
+
+        REMARKS
+            This method is abstract and should be overridden.
         """
         assert False
 
@@ -71,7 +74,7 @@ class AbstractUpdate(object):
         """Raise InvalidUpdate if the update is invalid.
 
         REMARKS
-            This method is abstract and should be overloaded.
+            This method is abstract and should be overridden.
         """
         assert False
 

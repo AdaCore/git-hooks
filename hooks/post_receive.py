@@ -8,10 +8,7 @@ refs/heads/master).
 from argparse import ArgumentParser
 from collections import OrderedDict
 from email.mime.text import MIMEText
-from email.utils import parseaddr, getaddresses
-import os
 import re
-import smtplib
 import sys
 
 from config import git_config

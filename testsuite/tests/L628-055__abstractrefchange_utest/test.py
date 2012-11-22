@@ -27,21 +27,29 @@ class TestRun(TestCase):
             def get_email_subject(self):
                 return "email subject"
 
+        # Build a fake EmailInfo object, as the real EmailInfo
+        # class requires a (configured) git repository, which
+        # we do not want to have for this Unit Testing.
+        class FakeEmailInfo(object):
+            def __init__(self, project_name, email_from, email_to):
+                self.project_name = project_name
+                self.email_from = email_from
+                self.email_to = email_to
+        email_info = FakeEmailInfo('repo',
+                                   'someone@example.com',
+                                   'somewhere@example.com')
+
         with self.assertRaises(InvalidUpdate):
             NoEmailSubject('refs/heads/master',
                            '6ba296bcb2f1781ba928d5c6ae7ebd5a7edecfd7',
                            '77c28ce7c17177486e768595747d37c786a36521',
-                           'repo',
-                           'someone@example.com',
-                           'somewhere@example.com')
+                           email_info)
 
         with self.assertRaises(InvalidUpdate):
             NoEmailBody('refs/heads/master',
                         '6ba296bcb2f1781ba928d5c6ae7ebd5a7edecfd7',
                         '77c28ce7c17177486e768595747d37c786a36521',
-                        'repo',
-                        'someone@example.com',
-                        'somewhere@example.com')
+                        email_info)
 
 
 if __name__ == '__main__':

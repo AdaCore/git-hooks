@@ -14,7 +14,7 @@ import sys
 from config import git_config
 from git import (get_module_name, is_null_rev, get_object_type,
                  commit_oneline, parse_tag_object)
-from updates.emails import FILER_EMAIL, send_email
+from updates.emails import FILER_EMAIL, send_email, EmailInfo
 from utils import (debug, warn, get_user_name, get_user_full_name,
                    InvalidUpdate)
 
@@ -32,26 +32,18 @@ class AbstractRefChange(object):
         new_rev: The reference's new SHA1.
         short_ref_name: The name of the reference without the "refs/[...]/"
             prefix.
-        project_name: The name of the project (usually, the name of
-            the directory holding containing the git repository).
-        email_from: The email address to use in the From: field
-            when sending the email notification.
-        email_to: The email addresses, in RFC 822 format, of the
-            recipients of the email notification.
+        email_info: An EmailInfo object.
         email_subject: The subject of the email notification.
         email_body: The body of the email notification.
     """
-    def __init__(self, ref_name, old_rev, new_rev,
-                 project_name, email_from, email_to):
+    def __init__(self, ref_name, old_rev, new_rev, email_info):
         """The constructor.
 
         PARAMETERS
             ref_name: Same as the attribute.
             old_rev: Same as the attribute.
             new_rev: Same as the attribute.
-            project_name: Same as the attribute.
-            email_from: Same as the attribute.
-            email_to: Same as the attribute.
+            email_info: Same as the attribute.
         """
         self.old_rev = old_rev
         self.new_rev = new_rev
@@ -60,10 +52,7 @@ class AbstractRefChange(object):
         m = re.match(r"refs/[^/]*/(.*)", ref_name)
         self.short_ref_name = m.group(1) if m else ref_name
 
-        self.project_name = project_name
-
-        self.email_from = email_from
-        self.email_to = email_to
+        self.email_info = email_info
         self.email_subject = self.get_email_subject()
         self.email_body = self.get_email_body()
 
@@ -104,11 +93,11 @@ class AbstractRefChange(object):
         e_msg = MIMEText(self.email_body)
 
         # Create the e_msg header.
-        e_msg['From'] = self.email_from
-        e_msg['To'] = self.email_to
+        e_msg['From'] = self.email_info.email_from
+        e_msg['To'] = self.email_info.email_to
         e_msg['Bcc'] = FILER_EMAIL
         e_msg['Subject'] = self.email_subject
-        e_msg['X-ACT-checkin'] = self.project_name
+        e_msg['X-ACT-checkin'] = self.email_info.project_name
         e_msg['X-Git-Refname'] = self.ref_name
         e_msg['X-Git-Oldrev'] = self.old_rev
         e_msg['X-Git-Newrev'] = self.new_rev
@@ -122,7 +111,8 @@ class LightweightTagCreation(AbstractRefChange):
     def get_email_subject(self):
         """See AbstractRefChange.get_email_subject.
         """
-        return '[%s] Created tag %s' % (self.project_name, self.short_ref_name)
+        return '[%s] Created tag %s' % (self.email_info.project_name,
+                                        self.short_ref_name)
 
     def get_email_body(self):
         """See AbstractRefChange.get_email_body.
@@ -142,7 +132,8 @@ class LightweightTagDeletion(AbstractRefChange):
     def get_email_subject(self):
         """See AbstractRefChange.get_email_subject.
         """
-        return '[%s] Deleted tag %s' % (self.project_name, self.short_ref_name)
+        return '[%s] Deleted tag %s' % (self.email_info.project_name,
+                                        self.short_ref_name)
 
     def get_email_body(self):
         """See AbstractRefChange.get_email_body.
@@ -163,7 +154,8 @@ class LightweightTagUpdate(AbstractRefChange):
     def get_email_subject(self):
         """See AbstractRefChange.get_email_subject.
         """
-        return '[%s] Updated tag %s' % (self.project_name, self.short_ref_name)
+        return '[%s] Updated tag %s' % (self.email_info.project_name,
+                                        self.short_ref_name)
 
     def get_email_body(self):
         """See AbstractRefChange.get_email_body.
@@ -188,7 +180,8 @@ class AnnotatedTagCreation(AbstractRefChange):
     def get_email_subject(self):
         """See AbstractRefChange.get_email_subject.
         """
-        return '[%s] Created tag %s' % (self.project_name, self.short_ref_name)
+        return '[%s] Created tag %s' % (self.email_info.project_name,
+                                        self.short_ref_name)
 
     def get_email_body(self):
         """See AbstractRefChange.get_email_body.
@@ -220,7 +213,8 @@ class AnnotatedTagDeletion(AbstractRefChange):
     def get_email_subject(self):
         """See AbstractRefChange.get_email_subject.
         """
-        return '[%s] Deleted tag %s' % (self.project_name, self.short_ref_name)
+        return '[%s] Deleted tag %s' % (self.email_info.project_name,
+                                        self.short_ref_name)
 
     def get_email_body(self):
         """See AbstractRefChange.get_email_body.
@@ -244,7 +238,8 @@ class AnnotatedTagUpdate(AbstractRefChange):
     def get_email_subject(self):
         """See AbstractRefChange.get_email_subject.
         """
-        return '[%s] Updated tag %s' % (self.project_name, self.short_ref_name)
+        return '[%s] Updated tag %s' % (self.email_info.project_name,
+                                        self.short_ref_name)
 
     def get_email_body(self):
         """See AbstractRefChange.get_email_body.
@@ -303,19 +298,14 @@ REF_CHANGE_MAP = {
 }
 
 
-def post_receive_one(ref_name, old_rev, new_rev, project_name,
-                     email_from, email_to):
+def post_receive_one(ref_name, old_rev, new_rev, email_info):
     """post-receive treatment for one reference.
 
     PARAMETERS
         ref_name: The name of the reference.
         old_rev: The SHA1 of the reference before the update.
         new_rev: The SHA1 of the reference after the update.
-        project_name: The name of the project.
-        email_from: The email address to use in the From: field
-            of emails to be sent for this change.
-        email_to: The email addresses, in RFC 822 format, to be used
-            for sending emails associated to this change.
+        email_info: An EmailInfo object.
     """
     debug('post_receive_one(ref_name=%s\n'
           '                        old_rev=%s\n'
@@ -369,8 +359,7 @@ def post_receive_one(ref_name, old_rev, new_rev, project_name,
              % (ref_name, object_type))
         return
 
-    change = ref_change_klass(ref_name, old_rev, new_rev, project_name,
-                              email_from, email_to)
+    change = ref_change_klass(ref_name, old_rev, new_rev, email_info)
     change.send_email()
 
 
@@ -383,33 +372,11 @@ def post_receive(updated_refs):
             contains the previous revision, and the new revision of the
             reference.
     """
-    from_domain = git_config('hooks.fromdomain')
-    if not from_domain:
-        raise InvalidUpdate(
-            'Error: post-receive: hooks.fromdomain config variable not set.',
-            'Cannot send email notifications.')
-
-    email_to = git_config('hooks.mailinglist')
-    if not email_to:
-        # We should really refuse updates if this config variable is
-        # not set.  But since this is too late to refuse the update,
-        # at least try to file the commits (after having warned the user).
-        print "---------------------------------------------------------------"
-        print "-- WARNING:"
-        print "-- The hooks.mailinglist config variable not set."
-        print "-- Commit emails will only be sent to %s." % FILER_EMAIL
-        print "---------------------------------------------------------------"
-        email_to=FILER_EMAIL
-
-    project_name = get_module_name()
-    email_from = '%s <%s@%s>' % (get_user_full_name (),
-                                 get_user_name (),
-                                 from_domain)
+    email_info = EmailInfo()
 
     for ref_name in updated_refs.keys():
         (old_rev, new_rev) = updated_refs[ref_name]
-        post_receive_one(ref_name, old_rev, new_rev, project_name,
-                         email_from, email_to)
+        post_receive_one(ref_name, old_rev, new_rev, email_info)
 
 
 def parse_command_line(args):

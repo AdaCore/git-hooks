@@ -225,25 +225,6 @@ def get_module_name():
 
     return projectshort
 
-# Return the project description or '' if it is 'Unnamed repository;'
-def get_project_description():
-    try:
-        git_dir = git.rev_parse(git_dir=True, _quiet=True)
-    except CalledProcessError:
-        die("GIT_DIR not set")
-
-    projectdesc = ''
-    description = os.path.join(git_dir, 'description')
-    if os.path.exists(description):
-        try:
-            projectdesc = open(description).read().strip()
-        except:
-            pass
-    if projectdesc.startswith('Unnamed repository;'):
-        projectdesc = ''
-
-    return projectdesc
-
 
 def file_exists(commit_rev, filename):
     """Return True if a file exists for a given commit.

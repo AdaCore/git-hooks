@@ -24,10 +24,6 @@ import re
 from subprocess import Popen, PIPE
 import sys
 
-def die(message):
-    print >>sys.stderr, message
-    sys.exit(1)
-
 # Clone of subprocess.CalledProcessError (not in Python 2.4)
 class CalledProcessError(Exception):
     def __init__(self, returncode, cmd):
@@ -217,10 +213,7 @@ def commit_oneline(commit):
 # Return the directory name with .git stripped as a short identifier
 # for the module
 def get_module_name():
-    try:
-        git_dir = git.rev_parse(git_dir=True, _quiet=True)
-    except CalledProcessError:
-        die("GIT_DIR not set")
+    git_dir = git.rev_parse(git_dir=True, _quiet=True)
 
     # Use the directory name with .git stripped as a short identifier
     absdir = os.path.abspath(git_dir)

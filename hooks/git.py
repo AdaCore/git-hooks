@@ -147,13 +147,13 @@ def rev_list_commits(*args, **kwargs):
     kwargs_copy['pretty'] = 'format:%s'
     kwargs_copy['_split_lines'] = True
     lines = git.rev_list(*args, **kwargs_copy)
-    if (len(lines) % 2 != 0):
+    if (len(lines) % 2 != 0): # pragma: no cover (should be impossible)
         raise RuntimeException("git rev-list didn't return an even number of lines")
 
     result = []
     for i in xrange(0, len(lines), 2):
         m = re.match("commit\s+([A-Fa-f0-9]+)", lines[i])
-        if not m:
+        if not m: # pragma: no cover (should be impossible)
             raise RuntimeException("Can't parse commit it '%s'", lines[i])
         commit_id = m.group(1)
         subject = lines[i + 1]

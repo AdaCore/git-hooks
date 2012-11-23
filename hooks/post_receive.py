@@ -7,16 +7,14 @@ refs/heads/master).
 """
 from argparse import ArgumentParser
 from collections import OrderedDict
-from email.mime.text import MIMEText
 import re
 import sys
 
 from config import git_config
-from git import (get_module_name, is_null_rev, get_object_type,
+from git import (is_null_rev, get_object_type,
                  commit_oneline, parse_tag_object)
-from updates.emails import FILER_EMAIL, send_email, EmailInfo
-from utils import (debug, warn, get_user_name, get_user_full_name,
-                   InvalidUpdate)
+from updates.emails import EmailInfo, Email
+from utils import (debug, warn, InvalidUpdate)
 
 
 class AbstractRefChange(object):
@@ -87,22 +85,9 @@ class AbstractRefChange(object):
             Child classes may override this method if standard
             behavior is not suitable for their type of change.
         """
-        # Chances are very low that the size of this email would be
-        # greater than the maximum email size.  So do not truncate
-        # the email body.
-        e_msg = MIMEText(self.email_body)
-
-        # Create the e_msg header.
-        e_msg['From'] = self.email_info.email_from
-        e_msg['To'] = self.email_info.email_to
-        e_msg['Bcc'] = FILER_EMAIL
-        e_msg['Subject'] = self.email_subject
-        e_msg['X-ACT-checkin'] = self.email_info.project_name
-        e_msg['X-Git-Refname'] = self.ref_name
-        e_msg['X-Git-Oldrev'] = self.old_rev
-        e_msg['X-Git-Newrev'] = self.new_rev
-
-        send_email(e_msg)
+        email = Email(self.email_info, self.email_subject, self.email_body,
+                      self.ref_name, self.old_rev, self.new_rev)
+        email.send()
 
 
 class LightweightTagCreation(AbstractRefChange):

@@ -33,10 +33,10 @@ def post_receive_one(ref_name, old_rev, new_rev, email_info):
         # We emit a warning, rather than trigger an assertion, because
         # it gives the script a chance to process any other reference
         # that was updated, but not processed yet.
-        warn(("post-receive: Unsupported reference update: %s (ignored)."
-                % ref_name,
-              "              old_rev = %s" % old_rev,
-              "              new_rev = %s" % new_rev))
+        warn("post-receive: Unsupported reference update: %s (ignored)."
+               % ref_name,
+             "              old_rev = %s" % old_rev,
+             "              new_rev = %s" % new_rev)
         return
     update.send_email_notifications(email_info)
 

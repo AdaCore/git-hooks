@@ -1,8 +1,16 @@
 """Handling of lightweight tag deletion."""
 
 from config import git_config
+from git import commit_oneline
 from updates import AbstractUpdate
 from utils import InvalidUpdate
+
+LTAG_DELETION_EMAIL_BODY_TEMPLATE = """\
+The lightweight tag '%(short_ref_name)s' was deleted.
+It previously pointed to:
+
+ %(commit_oneline)s"""
+
 
 class LightweightTagDeletion(AbstractUpdate):
     """Update object for lightweight tag deletion.
@@ -35,3 +43,15 @@ class LightweightTagDeletion(AbstractUpdate):
         if git_config('hooks.allowdeletetag') != "true":
             raise InvalidUpdate(
                 "Deleting a tag is not allowed in this repository")
+
+    def get_update_email_contents(self, email_info):
+        """See AbstractUpdate.get_update_email_contents."""
+        subject = '[%s] Deleted tag %s' % (email_info.project_name,
+                                           self.short_ref_name)
+
+        body = (LTAG_DELETION_EMAIL_BODY_TEMPLATE
+                % {'short_ref_name' : self.short_ref_name,
+                   'commit_oneline' : commit_oneline(self.old_rev),
+                  })
+
+        return (subject, body)

@@ -1,8 +1,11 @@
 """The updates root module."""
 
+from config import git_config
 from git import get_object_type
 import re
+from updates.emails import Email
 from utils import debug
+
 
 class AbstractUpdate(object):
     """An abstract class representing a reference update.
@@ -54,6 +57,25 @@ class AbstractUpdate(object):
               % (self.ref_name, self.old_rev, self.new_rev))
         self.validate_ref_update()
 
+    def send_email_notifications(self, email_info):
+        """Send all email notifications associated to this update.
+        """
+        no_emails_list = git_config("hooks.noemails")
+        if no_emails_list and self.ref_name in no_emails_list.split(","):
+            print '-' * 75
+            print "--  The hooks.noemails config parameter contains `%s'." \
+                    % self.ref_name
+            print "--  Commit emails will therefore not be sent."
+            print '-' * 75
+            return
+
+        update_email_contents = self.get_update_email_contents(email_info)
+        if update_email_contents is not None:
+            (subject, body) = update_email_contents
+            update_email = Email(email_info, subject, body,
+                                 self.ref_name, self.old_rev, self.new_rev)
+            update_email.send()
+
     #------------------------------------------------------------------
     #--  Abstract methods that must be overridden by child classes.  --
     #------------------------------------------------------------------
@@ -80,3 +102,30 @@ class AbstractUpdate(object):
         """
         assert False
 
+    def get_update_email_contents(self, email_info):
+        """Return a (subject, body) tuple describing the update (or None).
+
+        This method should return a 2-element tuple to be used for
+        creating an email describing the reference update, containing
+        the following elements (in that order):
+            - the email subject (a string);
+            - the email body (a string).
+
+        The email is meant to describe the type of update that was
+        made.  For instance, for an annotated tag creation, the email
+        should describe the name of the tag, the commit it points to,
+        and perhaps the revision history associated to this tag.  For
+        a branch update, the email should provide the name of the branch,
+        the new commit it points to, and possibly a list of commits that
+        are introduced by this update.
+
+        This email should NOT, however, be confused with the emails
+        that will be sent for each new commit introduced by this
+        update.  Those emails are going to be taken care of separatly.
+
+        Return None if a "cover" email is not going to be useful.
+        For instance, if a branch update only introduces a few new
+        commits, a branch update summary email is not going to bring
+        much, and thus can be omitted.
+        """
+        assert False

@@ -37,6 +37,9 @@ class TestCase(unittest.TestCase):
         """Setup the environment in a way that allows us to perform unit test.
         """
         sys.path.insert(0, '%s/bare/repo.git/hooks' % TEST_DIR)
+        # Also, we need to cd to the bare repository, as the hooks
+        # assumes we are being called from there.
+        os.chdir('%s/bare/repo.git' % TEST_DIR)
 
 
 def runtests():

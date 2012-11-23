@@ -1,10 +1,20 @@
 """Handling of lightweight tag updates."""
 
 from config import git_config
-from git import is_null_rev
+from git import is_null_rev, commit_oneline
 from updates import AbstractUpdate
 from updates.tags import warn_about_tag_update
 from utils import InvalidUpdate
+
+LTAG_UPDATE_EMAIL_BODY_TEMPLATE = """\
+The lightweight tag '%(short_ref_name)s' was updated to point to:
+
+ %(commit_oneline)s
+
+It previously pointed to:
+
+ %(old_commit_oneline)s"""
+
 
 class LightweightTagUpdate(AbstractUpdate):
     """Update class for Lightweight tag update.
@@ -40,3 +50,16 @@ class LightweightTagUpdate(AbstractUpdate):
         if not is_null_rev(self.old_rev) and not is_null_rev(self.new_rev):
             warn_about_tag_update(self.short_ref_name,
                                   self.old_rev, self.new_rev)
+
+    def get_update_email_contents(self, email_info):
+        """See AbstractUpdate.get_update_email_contents."""
+        subject = '[%s] Updated tag %s' % (email_info.project_name,
+                                           self.short_ref_name)
+
+        body = (LTAG_UPDATE_EMAIL_BODY_TEMPLATE
+                % {'short_ref_name' : self.short_ref_name,
+                   'commit_oneline' : commit_oneline(self.new_rev),
+                   'old_commit_oneline' : commit_oneline(self.old_rev),
+                  })
+
+        return (subject, body)

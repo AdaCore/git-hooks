@@ -3,8 +3,11 @@ from shutil import rmtree
 import sys
 
 from git import get_object_type
-from utils import (InvalidUpdate, debug, warn, scratch_dir,
-                   create_scratch_dir)
+from utils import (InvalidUpdate, debug, warn, create_scratch_dir)
+# We have to import utils, because we cannot import scratch_dir
+# directly into this module.  Otherwise, our scratch_dir seems
+# to not see the update when create_scratch_dir is called.
+import utils
 
 from updates.factory import new_update
 
@@ -67,7 +70,7 @@ if __name__ == "__main__":
         sys.exit(1)
     finally:
         # Delete our scratch directory.
-        if scratch_dir is not None:
-            rmtree(scratch_dir)
+        if utils.scratch_dir is not None:
+            rmtree(utils.scratch_dir)
 
 

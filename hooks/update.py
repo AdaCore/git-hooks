@@ -48,7 +48,7 @@ def check_update(ref_name, old_rev, new_rev):
           % (ref_name, old_rev, new_rev),
           level=2)
     update_cls = new_update(ref_name, old_rev, new_rev)
-    if update_cls is None: # pragma: no cover (should be impossible)
+    if update_cls is None:
         raise InvalidUpdate(
             "This type of update (%s,%s) is currently unsupported."
             % (ref_name, get_object_type(new_rev)))

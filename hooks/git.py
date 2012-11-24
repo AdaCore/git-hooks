@@ -42,7 +42,6 @@ NULL_REVISION = "0000000000000000000000000000000000000000"
 #       <name>='<str>' => --<name>=<str>
 #    Special keyword arguments:
 #       _quiet: Discard all output even if an error occurs
-#       _interactive: Don't capture stdout and stderr
 #       _input=<str>: Feed <str> to stdinin of the command
 #       _outfile=<file): Use <file> as the output file descriptor
 #       _split_lines: Return an array with one string per returned line
@@ -50,17 +49,13 @@ NULL_REVISION = "0000000000000000000000000000000000000000"
 def git_run(command, *args, **kwargs):
     to_run = ['git', command.replace("_", "-")]
 
-    interactive = False
     quiet = False
     input = None
-    interactive = False
     outfile = None
     do_split_lines = False
     for (k,v) in kwargs.iteritems():
         if k == '_quiet':
             quiet = True
-        elif k == '_interactive':
-            interactive = True
         elif k == '_input':
             input = v
         elif k == '_outfile':
@@ -80,15 +75,9 @@ def git_run(command, *args, **kwargs):
     if outfile:
         stdout = outfile
     else:
-        if interactive:
-            stdout = None
-        else:
-            stdout = PIPE
+        stdout = PIPE
 
-    if interactive:
-        stderr = None
-    else:
-        stderr = PIPE
+    stderr = PIPE
 
     if input != None:
         stdin = PIPE
@@ -99,12 +88,12 @@ def git_run(command, *args, **kwargs):
                     stdout=stdout, stderr=stderr, stdin=stdin)
     output, error = process.communicate(input)
     if process.returncode != 0:
-        if not quiet and not interactive:
+        if not quiet:
             print >>sys.stderr, error,
             print output,
         raise CalledProcessError(process.returncode, " ".join(to_run))
 
-    if interactive or outfile:
+    if outfile:
         return None
     else:
         if do_split_lines:

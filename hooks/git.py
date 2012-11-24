@@ -176,20 +176,6 @@ def get_object_type(rev):
 def load_commit(commit_id):
     return rev_list_commits(commit_id + "^!")[0]
 
-# Return True if the commit has multiple parents
-def commit_is_merge(commit):
-    if isinstance(commit, basestring):
-        commit = load_commit(commit)
-
-    parent_count = 0
-    for line in git.cat_file("commit", commit.id, _split_lines=True):
-        if line == "":
-            break
-        if line.startswith("parent "):
-            parent_count += 1
-
-    return parent_count > 1
-
 # Return a short one-line summary of the commit
 def commit_oneline(commit):
     if isinstance(commit, basestring):

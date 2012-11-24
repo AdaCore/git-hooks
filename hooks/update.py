@@ -72,5 +72,3 @@ if __name__ == "__main__":
         # Delete our scratch directory.
         if utils.scratch_dir is not None:
             rmtree(utils.scratch_dir)
-
-

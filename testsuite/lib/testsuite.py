@@ -5,6 +5,7 @@ Driver for the git hooks testsuite.
 """
 
 from gnatpython.env import Env
+from gnatpython.fileutils import rm
 from gnatpython.main import Main
 from gnatpython.mainloop import (MainLoop, add_mainloop_options,
                                  generate_collect_result,
@@ -13,6 +14,7 @@ from gnatpython.mainloop import (MainLoop, add_mainloop_options,
 from gnatpython.testdriver import add_run_test_options
 import os
 
+from tempfile import mkdtemp
 from utils import fatal_error
 
 # The name of the script to execute in order to run a testcase.
@@ -71,16 +73,35 @@ def main():
     m.add_option("--diffs", dest="view_diffs", action="store_true",
                  default=False, help="show diffs on stdout")
     m.parse_args()
-    testcases = get_testcases(m.args)
-    setup_result_dir(m.options)
 
-    # We do not need discriminants in this testsuite at the moment.
-    discs = None
+    # Create a tmp directory for the entire testsuite, to make sure
+    # that, should the git hooks leak any file/directories, we can
+    # (1) detect them, and (2) delete them.
+    #
+    # This requires some extra work to make sure that the scripts
+    # being tested do actually use them, but this needs to be done
+    # by each testcase, because we want each testcase to have its
+    # own tmp directory (allowing for concurrency).  We pass that
+    # information to the testcase through the GIT_HOOKS_TESTSUITE_TMP
+    # environment variable.
+    m.options.tmp = mkdtemp('', 'git-hooks-TS-', m.options.tmp)
+    os.environ['GIT_HOOKS_TESTSUITE_TMP'] = m.options.tmp
 
-    collect_result = generate_collect_result(options=m.options)
-    run_testcase = generate_run_testcase('bin/run-testcase', discs, m.options)
+    try:
+        testcases = get_testcases(m.args)
+        setup_result_dir(m.options)
 
-    MainLoop(testcases, run_testcase, collect_result, m.options.mainloop_jobs)
+        # We do not need discriminants in this testsuite at the moment.
+        discs = None
+
+        collect_result = generate_collect_result(options=m.options)
+        run_testcase = generate_run_testcase('bin/run-testcase',
+                                             discs, m.options)
+
+        MainLoop(testcases, run_testcase, collect_result,
+                 m.options.mainloop_jobs)
+    finally:
+        rm(m.options.tmp, recursive=True)
 
 
 if __name__ == '__main__':

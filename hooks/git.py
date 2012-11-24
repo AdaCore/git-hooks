@@ -136,17 +136,17 @@ class GitCommit:
     """A git commit.
 
     ATTRIBUTES
-        id: The commit's SHA1.
+        rev: The commit's revision (SHA1).
         subject: The subject of the commit.
     """
-    def __init__(self, id, subject):
+    def __init__(self, rev, subject):
         """The constructor.
 
         PARAMETERS
-            id: Same as the attribute.
+            rev: Same as the attribute.
             subject: Same as the attribute.
         """
-        self.id = id
+        self.rev = rev
         self.subject = subject
 
 
@@ -194,9 +194,9 @@ def rev_list_commits(*args, **kwargs):
         m = re.match("commit\s+([A-Fa-f0-9]+)", lines[i])
         if not m: # pragma: no cover (should be impossible)
             raise RuntimeException("Can't parse commit it '%s'", lines[i])
-        commit_id = m.group(1)
+        commit_rev = m.group(1)
         subject = lines[i + 1]
-        result.append(GitCommit(commit_id, subject))
+        result.append(GitCommit(commit_rev, subject))
 
     return result
 
@@ -242,7 +242,7 @@ def commit_oneline(commit):
     """
     if isinstance(commit, basestring):
         commit = load_commit(commit)
-    return commit.id[0:7]+"... " + commit.subject[0:59]
+    return commit.rev[0:7]+"... " + commit.subject[0:59]
 
 
 def get_module_name():

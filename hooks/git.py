@@ -159,6 +159,27 @@ class GitCommit:
         self.subject = subject
 
 
+def get_git_dir():
+    """Return the full path to the repository's .git directory.
+
+    This function is just a convenient short-cut for running
+    "git rev-parse --git-dir", with an abspath call added to make
+    sure that the returned path is always absolute.
+
+    REMARK
+        For bare repositories, there is no .git/ subdirectory.
+        In that case, the function returns the equivalent, which
+        is the path of the repository itself.
+    """
+    # Note: The abspath call seems to be needed when calling
+    # git either from the repository root dir (in which case
+    # it returns either '.' or '.git' depending on whether
+    # this is a bare repository or not), or when calling it
+    # from the .git directory itself (in which case it returns
+    # '.').
+    return os.path.abspath(git.rev_parse(git_dir=True, _quiet=True))
+
+
 def rev_list_commits(*args, **kwargs):
     """Run the "git rev-list" command with the given arguments.
 
@@ -239,10 +260,7 @@ def get_module_name():
     The identifier name is determined using the directory name where
     the git repository is stored, with the .git suffix stripped.
     """
-    git_dir = git.rev_parse(git_dir=True, _quiet=True)
-
-    # Use the directory name with .git stripped as a short identifier
-    absdir = os.path.abspath(git_dir)
+    absdir = get_git_dir()
     if absdir.endswith(os.sep + '.git'):
         absdir = os.path.dirname(absdir)
     projectshort = os.path.basename(absdir)

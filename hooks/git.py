@@ -45,18 +45,20 @@ class CalledProcessError(subprocess.CalledProcessError):
     # module subprocess), make that class an identical child.
     pass
 
-# Run a git command
-#    Non-keyword arguments are passed verbatim as command line arguments
-#    Keyword arguments are turned into command line options
-#       <name>=True => --<name>
-#       <name>='<str>' => --<name>=<str>
-#    Special keyword arguments:
-#       _quiet: Discard all output even if an error occurs
-#       _input=<str>: Feed <str> to stdinin of the command
-#       _outfile=<file): Use <file> as the output file descriptor
-#       _split_lines: Return an array with one string per returned line
-#
 def git_run(command, *args, **kwargs):
+    """Run a git command.
+
+    PARAMETERS
+        Non-keyword arguments are passed verbatim as command line arguments
+        Keyword arguments are turned into command line options
+           <name>=True => --<name>
+           <name>='<str>' => --<name>=<str>
+        Special keyword arguments:
+           _quiet: Discard all output even if an error occurs
+           _input=<str>: Feed <str> to stdinin of the command
+           _outfile=<file): Use <file> as the output file descriptor
+           _split_lines: Return an array with one string per returned line
+    """
     to_run = ['git', command.replace("_", "-")]
 
     quiet = False
@@ -111,12 +113,14 @@ def git_run(command, *args, **kwargs):
         else:
             return output.strip()
 
-# Wrapper to allow us to do git.<command>(...) instead of git_run()
-#
-# One difference: The `_outfile' parameter may be a string, in which
-# case the output is redirected to that file (if the file is already
-# present, it is overwritten).
+
 class Git:
+    """Wrapper to allow us to do git.<command>(...) instead of git_run()
+
+    One difference: The `_outfile' parameter may be a string, in which
+    case the output is redirected to that file (if the file is already
+    present, it is overwritten).
+    """
     def __getattr__(self, command):
         def f(*args, **kwargs):
             try:
@@ -133,15 +137,37 @@ class Git:
                     tmp_fd.close()
         return f
 
+
 git = Git()
 
+
 class GitCommit:
+    """A git commit.
+
+    ATTRIBUTES
+        id: The commit's SHA1.
+        subject: The subject of the commit.
+    """
     def __init__(self, id, subject):
+        """The constructor.
+
+        PARAMETERS
+            id: Same as the attribute.
+            subject: Same as the attribute.
+        """
         self.id = id
         self.subject = subject
 
-# Takes argument like 'git.rev_list()' and returns a list of commit objects
+
 def rev_list_commits(*args, **kwargs):
+    """Run the "git rev-list" command with the given arguments.
+
+    PARAMETERS
+        Same principles as with the git_run function.
+
+    RETURN VALUE
+        A list GitCommit objects.
+    """
     kwargs_copy = dict(kwargs)
     kwargs_copy['pretty'] = 'format:%s'
     kwargs_copy['_split_lines'] = True
@@ -186,20 +212,33 @@ def get_object_type(rev):
     return rev_type
 
 
-# Loads a single commit object by ID
 def load_commit(commit_id):
+    """Return a GitCommit object associated to the given commit_id.
+
+    PARAMETERS
+        commit_id: A commit ID (SHA1).
+    """
     return rev_list_commits(commit_id + "^!")[0]
 
-# Return a short one-line summary of the commit
+
 def commit_oneline(commit):
+    """Return a short one-line summary of the commit.
+
+    PARAMETERS
+        commit: A GitCommit object, or a string providing the commit's
+            ID (sha1).
+    """
     if isinstance(commit, basestring):
         commit = load_commit(commit)
-
     return commit.id[0:7]+"... " + commit.subject[0:59]
 
-# Return the directory name with .git stripped as a short identifier
-# for the module
+
 def get_module_name():
+    """Return a short identifer name for the git repository.
+
+    The identifier name is determined using the directory name where
+    the git repository is stored, with the .git suffix stripped.
+    """
     git_dir = git.rev_parse(git_dir=True, _quiet=True)
 
     # Use the directory name with .git stripped as a short identifier
@@ -295,6 +334,7 @@ def parse_tag_object(tag_name):
 
     return result
 
+
 def git_show_ref(*args):
     """Call "git show-ref [args]" and return the result as a list.
 
@@ -311,4 +351,3 @@ def git_show_ref(*args):
         return git.show_ref(*args, _split_lines=True)
     except CalledProcessError:
         return None
-

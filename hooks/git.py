@@ -146,8 +146,10 @@ def rev_list_commits(*args, **kwargs):
     kwargs_copy['pretty'] = 'format:%s'
     kwargs_copy['_split_lines'] = True
     lines = git.rev_list(*args, **kwargs_copy)
-    if (len(lines) % 2 != 0): # pragma: no cover (should be impossible)
-        raise RuntimeException("git rev-list didn't return an even number of lines")
+
+    # Given the format string we used, there should be an even number
+    # of lines.
+    assert len(lines) % 2 == 0
 
     result = []
     for i in xrange(0, len(lines), 2):

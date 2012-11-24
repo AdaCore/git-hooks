@@ -84,20 +84,11 @@ def git_run(command, *args, **kwargs):
 
     to_run.extend(args)
 
-    if outfile:
-        stdout = outfile
-    else:
-        stdout = PIPE
-
+    stdout = outfile if outfile else PIPE
     stderr = PIPE
+    stdin = None if input is None else PIPE
 
-    if input != None:
-        stdin = PIPE
-    else:
-        stdin = None
-
-    process = Popen(to_run,
-                    stdout=stdout, stderr=stderr, stdin=stdin)
+    process = Popen(to_run, stdout=stdout, stderr=stderr, stdin=stdin)
     output, error = process.communicate(input)
     if process.returncode != 0:
         if not quiet:

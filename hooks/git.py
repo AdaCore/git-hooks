@@ -27,16 +27,23 @@
 import os
 import re
 from subprocess import Popen, PIPE
+import subprocess
 import sys
 
-# Clone of subprocess.CalledProcessError (not in Python 2.4)
-class CalledProcessError(Exception):
-    def __init__(self, returncode, cmd):
-        self.returncode = returncode
-        self.cmd = cmd
 
-    def __str__(self):
-        return "Command '%s' returned non-zero exit status %d" % (self.cmd, self.returncode)
+class CalledProcessError(subprocess.CalledProcessError):
+    """An exception raised in case of failure in this module.
+    """
+    # Initially, defining this exception here was a way to shield
+    # the script from the fact that subprocess.CalledProcessError
+    # is not defined in Python 2.4.  So the exception was simply
+    # a clone of the exception defined in subprocess.
+    #
+    # But we now require Python 2.7 or later, so this exception
+    # is now guarantied to be available.  However, for convenience
+    # of use (users of this module then need not import symbols from
+    # module subprocess), make that class an identical child.
+    pass
 
 # Run a git command
 #    Non-keyword arguments are passed verbatim as command line arguments

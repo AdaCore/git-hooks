@@ -33,8 +33,6 @@ class CalledProcessError(Exception):
     def __str__(self):
         return "Command '%s' returned non-zero exit status %d" % (self.cmd, self.returncode)
 
-NULL_REVISION = "0000000000000000000000000000000000000000"
-
 # Run a git command
 #    Non-keyword arguments are passed verbatim as command line arguments
 #    Keyword arguments are turned into command line options

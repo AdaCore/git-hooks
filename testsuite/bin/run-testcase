@@ -10,7 +10,7 @@ from gnatpython.main import Main
 from gnatpython.testdriver import TestRunner, add_run_test_options
 
 import os
-from os.path import abspath, dirname
+from os.path import abspath, dirname, isdir
 import sys
 
 class TestGitHooks(TestRunner):
@@ -40,7 +40,13 @@ class TestGitHooks(TestRunner):
         # We have to do this here, because we need to know what the
         # source directory is (the test script gets run in a temporary
         # directory, without any information where the sources are).
-        os.symlink('%s/hooks' % root_dir, '%s/bare/repo.git/hooks' % src_dir)
+        git_dir = '%s/bare/repo.git' % src_dir
+        if isdir('%s/.git' % git_dir):
+            # This is a non-bare repository (a bit unusual, but
+            # supported as well).  In that case, the git dir is
+            # that .git/ subdirectory.
+            git_dir = '%s/.git' % git_dir
+        os.symlink('%s/hooks' % root_dir, '%s/hooks' % git_dir)
 
     def apply_output_filter(self, str_list):
         """The test is succesful iff the output ends with `OK'.

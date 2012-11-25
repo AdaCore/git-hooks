@@ -3,7 +3,7 @@
 from fast_forward import check_fast_forward
 from git import is_null_rev, git_show_ref
 from updates import AbstractUpdate
-from utils import InvalidUpdate
+from utils import InvalidUpdate, warn
 
 def reject_retired_branch_update(ref_name, short_ref_name):
     """Raise InvalidUpdate if trying to update a retired branch.
@@ -61,5 +61,8 @@ class BranchUpdate(AbstractUpdate):
         if not is_null_rev(self.old_rev):
             check_fast_forward(self.ref_name, self.old_rev, self.new_rev)
 
-
-
+    def get_update_email_contents(self, email_info):
+        """See AbstractUpdate.get_update_email_contents.
+        """
+        warn('email notification for new commits not implemented yet.')
+        return None

@@ -8,14 +8,14 @@ class TestRun(TestCase):
 
         p = Run('git push origin master'.split())
 
-        self.assertTrue(p.status == 0, ex_run_image(p))
+        self.assertTrue(p.status == 0, p.image)
 
         expected_out = (
             r".*cvs_check: `trunk/repo/pck.ads'" +
             ".*master\s+->\s+master")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
 if __name__ == '__main__':
     runtests()

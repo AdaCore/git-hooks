@@ -12,7 +12,7 @@ class TestRun(TestCase):
 
         p = Run('git push origin master'.split())
 
-        self.assertTrue(p.status == 0, ex_run_image(p))
+        self.assertTrue(p.status == 0, p.image)
 
         expected_out = (
             r".*check_commit.*new_rev=4f0f08f46daf6f5455cf90cdc427443fe3b32fa3" +
@@ -28,8 +28,8 @@ class TestRun(TestCase):
             r".*cvs_check: `trunk/repo/d'" +
             r".*\s+426fba3\.\.dd6165c\s+master\s+->\s+master")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
 if __name__ == '__main__':
     runtests()

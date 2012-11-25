@@ -13,7 +13,7 @@ class TestRun(TestCase):
 
         p = Run('git push origin master'.split())
 
-        self.assertTrue(p.status == 0, ex_run_image(p))
+        self.assertTrue(p.status == 0, p.image)
 
         expected_out = (
             r".*check_commit.*new_rev=0c702ad3051f00b1251bca7a0241a3a9bf19bf0d" +
@@ -21,8 +21,8 @@ class TestRun(TestCase):
             r".*deleted file ignored: b\.adb" +
             r".*\s+f826248\.\.0c702ad\s+master\s+->\s+master")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
 if __name__ == '__main__':
     runtests()

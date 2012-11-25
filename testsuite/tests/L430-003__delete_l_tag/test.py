@@ -8,7 +8,7 @@ class TestRun(TestCase):
         cd ('%s/repo' % TEST_DIR)
 
         p = Run('git push origin :some-tag'.split())
-        self.assertEqual(p.status, 0, ex_run_image(p))
+        self.assertEqual(p.status, 0, p.image)
 
         expected_out = (
             r".*From: Test Suite <testsuite@example.com>" +
@@ -20,8 +20,8 @@ class TestRun(TestCase):
             r".*X-Git-Oldrev: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e" +
             r".*X-Git-Newrev: 0000000000000000000000000000000000000000" +
             r".*-\s+\[deleted\]\s+some-tag")
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
 if __name__ == '__main__':
     runtests()

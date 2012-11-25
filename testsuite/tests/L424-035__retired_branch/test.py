@@ -8,14 +8,14 @@ class TestRun(TestCase):
 
         p = Run('git push origin retired/gdb-5.0'.split())
 
-        self.assertTrue(p.status == 0, ex_run_image(p))
+        self.assertTrue(p.status == 0, p.image)
 
         expected_out = (
             r".*\[new branch\]\s+retired/gdb-5\.0 -> retired/gdb-5\.0" +
             ".*")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
 
     def test_push_retired_branch(self):
@@ -25,7 +25,7 @@ class TestRun(TestCase):
 
         p = Run('git push origin gdb-7.5'.split())
 
-        self.assertTrue(p.status != 0, ex_run_image(p))
+        self.assertTrue(p.status != 0, p.image)
 
         expected_out = (
             r".*Updates to the gdb-7.5 branch are no longer allowed, " +
@@ -34,8 +34,8 @@ class TestRun(TestCase):
             r".*error: hook declined to update refs/heads/gdb-7.5" +
             ".*")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
     def test_force_push_retired_branch(self):
         """Try force-pushing a branch update on a retired branch.
@@ -44,7 +44,7 @@ class TestRun(TestCase):
 
         p = Run('git push -f origin gdb-7.5'.split())
 
-        self.assertTrue(p.status != 0, ex_run_image(p))
+        self.assertTrue(p.status != 0, p.image)
 
         expected_out = (
             r".*Updates to the gdb-7.5 branch are no longer allowed, " +
@@ -53,8 +53,8 @@ class TestRun(TestCase):
             r".*error: hook declined to update refs/heads/gdb-7.5" +
             ".*")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
     def test_push_retired_branch_as_tag(self):
         """Try pushing a branch update on a retired branch...
@@ -66,7 +66,7 @@ class TestRun(TestCase):
 
         p = Run('git push origin gdb-7.6'.split())
 
-        self.assertTrue(p.status != 0, ex_run_image(p))
+        self.assertTrue(p.status != 0, p.image)
 
         expected_out = (
             r".*Updates to the gdb-7.6 branch are no longer allowed, " +
@@ -76,8 +76,8 @@ class TestRun(TestCase):
             r".*error: hook declined to update refs/heads/gdb-7.6" +
             ".*")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
     def test_force_push_retired_branch_as_tag(self):
         """Try force-pushing a branch update on a retired branch...
@@ -89,7 +89,7 @@ class TestRun(TestCase):
 
         p = Run('git push -f origin gdb-7.6'.split())
 
-        self.assertTrue(p.status != 0, ex_run_image(p))
+        self.assertTrue(p.status != 0, p.image)
 
         expected_out = (
             r".*Updates to the gdb-7.6 branch are no longer allowed, " +
@@ -99,8 +99,8 @@ class TestRun(TestCase):
             r".*error: hook declined to update refs/heads/gdb-7.6" +
             ".*")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
 if __name__ == '__main__':
     runtests()

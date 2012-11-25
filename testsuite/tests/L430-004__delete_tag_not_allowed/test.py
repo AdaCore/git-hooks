@@ -9,11 +9,11 @@ class TestRun(TestCase):
 
         # Try deleting full-tag.  The remote is setup to refuse this request.
         p = Run('git push origin :full-tag'.split())
-        self.assertNotEqual(p.status, 0, ex_run_image(p))
+        self.assertNotEqual(p.status, 0, p.image)
         self.assertTrue(re.match('.*Deleting a tag is not allowed in '
                                     'this repository',
-                                 p.out, re.DOTALL),
-                        ex_run_image(p))
+                                 p.cmd_out, re.DOTALL),
+                        p.image)
 
 
 if __name__ == '__main__':

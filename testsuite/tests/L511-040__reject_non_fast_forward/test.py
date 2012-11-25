@@ -8,7 +8,7 @@ class TestRun(TestCase):
 
         p = Run('git push -f origin master'.split())
 
-        self.assertTrue(p.status != 0, ex_run_image(p))
+        self.assertTrue(p.status != 0, p.image)
 
         expected_out = (
             r".*Non-fast-forward updates are not allowed on this branch;" +
@@ -16,8 +16,8 @@ class TestRun(TestCase):
             r".*\[remote rejected\]\s+master\s+->\s+master\s+" +
                 r"\(hook declined\)")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
 if __name__ == '__main__':
     runtests()

@@ -8,7 +8,7 @@ class TestRun(TestCase):
 
         p = Run('git push -f origin topic/new-feature'.split())
 
-        self.assertTrue(p.status != 0, ex_run_image(p))
+        self.assertTrue(p.status != 0, p.image)
 
         expected_out = (
             r".*WARNING: This is \*NOT\* a fast-forward update." +
@@ -21,8 +21,8 @@ class TestRun(TestCase):
             r"topic/new-feature\s+->\s+topic/new-feature\s+" +
                 r"\(hook declined\)")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
 if __name__ == '__main__':
     runtests()

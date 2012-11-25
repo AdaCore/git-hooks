@@ -9,12 +9,12 @@ class TestRun(TestCase):
 
         # Create a tag called 'new-tag'...
         p = Run('git tag new-tag'.split())
-        self.assertEqual(p.status, 0, ex_run_image(p))
+        self.assertEqual(p.status, 0, p.image)
 
         # Try pushing that new-tag.  The repository has been configured
         # to accept such updates.
         p = Run('git push origin new-tag'.split())
-        self.assertEqual(p.status, 0, ex_run_image(p))
+        self.assertEqual(p.status, 0, p.image)
 
         expected_out = (
             # The warning explaining that emails are not going to
@@ -23,14 +23,14 @@ class TestRun(TestCase):
             r".*Commit emails will therefore not be sent"
             # Confirmation that the new tag was created.
             r".*\[new tag\]\s+new-tag\s+->\s+new-tag\s*")
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
         # Make sure that there isn't anything that looks like
         # an email got sent.
-        self.assertFalse('From:' in p.out, ex_run_image(p))
-        self.assertFalse('To:' in p.out, ex_run_image(p))
-        self.assertFalse('Subject:' in p.out, ex_run_image(p))
+        self.assertFalse('From:' in p.cmd_out, p.image)
+        self.assertFalse('To:' in p.cmd_out, p.image)
+        self.assertFalse('Subject:' in p.cmd_out, p.image)
 
 
 if __name__ == '__main__':

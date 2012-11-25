@@ -18,7 +18,7 @@ class TestRun(TestCase):
 
         p = Run('git push origin headless'.split())
 
-        self.assertTrue(p.status == 0, ex_run_image(p))
+        self.assertTrue(p.status == 0, p.image)
 
         expected_out = (
             r".*validate_ref_update \(refs/heads/headless, 0+, " +
@@ -40,14 +40,14 @@ class TestRun(TestCase):
             r".*cvs_check: `trunk/repo/this\.txt'" +
             ".*\[new branch\]\s+headless\s+->\s+headless")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
         # Next, push the one-commit branch.
 
         p = Run('git push origin one-commit'.split())
 
-        self.assertTrue(p.status == 0, ex_run_image(p))
+        self.assertTrue(p.status == 0, p.image)
 
         expected_out = (
             r".*validate_ref_update \(refs/heads/one-commit, 0+, " +
@@ -60,8 +60,8 @@ class TestRun(TestCase):
             r".*cvs_check: `trunk/repo/stuff'" +
             ".*\[new branch\]\s+one-commit\s+->\s+one-commit")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
 if __name__ == '__main__':
     runtests()

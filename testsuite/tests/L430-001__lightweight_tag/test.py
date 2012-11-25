@@ -9,12 +9,12 @@ class TestRun(TestCase):
 
         # Create a tag called 'new-tag'...
         p = Run('git tag new-tag'.split())
-        self.assertEqual(p.status, 0, ex_run_image(p))
+        self.assertEqual(p.status, 0, p.image)
 
         # Try pushing that new-tag.  The repository has been configured
         # to accept such updates.
         p = Run('git push origin new-tag'.split())
-        self.assertEqual(p.status, 0, ex_run_image(p))
+        self.assertEqual(p.status, 0, p.image)
 
         expected_out = (
             # The email that we expect to be "sent":
@@ -28,8 +28,8 @@ class TestRun(TestCase):
             r".*X-Git-Newrev: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e" +
             # Confirmation that the new tag was created.
             r".*\[new tag\]\s+new-tag\s+->\s+new-tag\s*")
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
 
 if __name__ == '__main__':

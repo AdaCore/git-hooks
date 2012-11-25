@@ -16,15 +16,15 @@ class TestRun(TestCase):
         # commit with one file being modified.
         p = Run('git push origin master'.split())
 
-        self.assertTrue(p.status == 0, ex_run_image(p))
+        self.assertTrue(p.status == 0, p.image)
 
         expected_out = (
             r".*DEBUG: deleted file ignored: a" +
             r".*cvs_check: `trunk/repo/b'" +
             ".*master\s+->\s+master")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
 if __name__ == '__main__':
     runtests()

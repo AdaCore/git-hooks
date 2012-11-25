@@ -27,9 +27,9 @@ class TestRun(TestCase):
             )
 
         p = Run('git push origin :full-tag'.split())
-        self.assertEqual(p.status, 0, ex_run_image(p))
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertEqual(p.status, 0, p.image)
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
 
 if __name__ == '__main__':

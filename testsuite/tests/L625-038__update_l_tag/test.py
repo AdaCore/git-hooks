@@ -12,7 +12,7 @@ class TestRun(TestCase):
         self.set_debug_level(1)
 
         p = Run('git push origin some-tag'.split())
-        self.assertEqual(p.status, 0, ex_run_image(p))
+        self.assertEqual(p.status, 0, p.image)
 
         expected_out = (
             # Check that the warning about the pitfalls of changing
@@ -42,8 +42,8 @@ class TestRun(TestCase):
             r".*8b9a0d6\.\.\. New file: a\." +
             # And check git's output confirm that the tag was updated.
             r".*\s+8b9a0d6\.\.8a567a0\s+some-tag\s+->\s+some-tag")
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
 if __name__ == '__main__':
     runtests()

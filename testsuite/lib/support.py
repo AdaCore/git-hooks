@@ -1,4 +1,5 @@
 from gnatpython.env import Env
+import gnatpython.ex
 from gnatpython.fileutils import mkdir, cd
 from gnatpython.internal.excross import PIPE, run_cross
 
@@ -7,6 +8,11 @@ import sys
 import re
 from tempfile import mkdtemp
 import unittest
+
+# The imports below are not necessarily used by this module.
+# They are just being re-exported here for the benefit of
+# the testcases, as they tend to be used often.
+from gnatpython.fileutils import *
 
 TEST_DIR = os.path.dirname(sys.modules['__main__'].__file__)
 TEST_DIR = os.path.abspath(TEST_DIR)
@@ -88,22 +94,29 @@ def runtests():
     unittest.main()
 
 
-def ex_run_image(p):
-    """Return a diagnostic image of the given gnatpython.ex.Run object.
-
-    PARAMETERS
-        p: A gnatpython.ex.Run object.
-
-    LIMITATIONS
-        This function assumes that the process has run until completion.
+class Run(gnatpython.ex.Run):
+    """A gnatpython.ex.Run subclass providing access to a sanitized output.
     """
-    return '%% %s -> %s\n%s' % (p.command_line_image(), p.status, p.out)
+    @property
+    def cmd_out(self):
+        """Same as self.out, except that the output is sanitized.
 
-######################################################################
-#
-#  Some often-used symbols we re-export here, to help writing testcases...
-#
-######################################################################
+        RETURN VALUE
+            A sanitized version of self.out.  For instance, it strips
+            certain terminal control characters out of it before
+            returning it.
+        """
+        out = self.out
+        out = out.replace('\033[K\n', '\n')
+        return out
 
-from gnatpython.fileutils import *
-from gnatpython.ex import Run
+    @property
+    def image(self):
+        """Return an image of the command and its result and output.
+
+        REMARKS
+            This assumes that this command has run to completion.
+        """
+        return '%% %s -> %s\n%s' % (self.command_line_image(),
+                                    self.status,
+                                    self.cmd_out)

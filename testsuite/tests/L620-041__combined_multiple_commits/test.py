@@ -12,7 +12,7 @@ class TestRun(TestCase):
 
         p = Run('git push origin master'.split())
 
-        self.assertTrue(p.status == 0, ex_run_image(p))
+        self.assertTrue(p.status == 0, p.image)
 
         expected_out = (
             r".*\(combined style checking\)" +
@@ -24,13 +24,13 @@ class TestRun(TestCase):
             r".*cvs_check: `trunk/repo/d'" +
             r".*\s+426fba3\.\.dd6165c\s+master\s+->\s+master")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
         # One of the commits being pushed delete file `b', and the file
         # is not being re-created, so verify that it never gets checked.
-        self.assertTrue("cvs_check: `trunk/repo/b'" not in p.out,
-                         ex_run_image(p))
+        self.assertTrue("cvs_check: `trunk/repo/b'" not in p.cmd_out,
+                         p.image)
 
 
 if __name__ == '__main__':

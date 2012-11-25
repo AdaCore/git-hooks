@@ -10,15 +10,15 @@ class TestRun(TestCase):
 
         # First, add the submodule...
         p = Run(['git', 'submodule', 'add', '%s/bare/subm.git' % TEST_DIR])
-        self.assertTrue(p.status == 0, ex_run_image(p))
+        self.assertTrue(p.status == 0, p.image)
 
         # Verify that subm is a directory that exists...
         self.assertTrue(isdir('subm'),
-                        ex_run_image(p) + '\n' + Run(['ls -la'.split()]).out)
+                        p.image + '\n' + Run(['ls -la'.split()]).cmd_out)
 
         # Now that the setup phase is done, commit the change.
         p = Run(['git', 'commit', '-m', 'Add submodule subm'])
-        self.assertTrue(p.status == 0, ex_run_image(p))
+        self.assertTrue(p.status == 0, p.image)
 
         # For coverage purposes, we want to test the calling of
         # the style-check program via the regular method (where
@@ -42,10 +42,10 @@ class TestRun(TestCase):
         # are ignored.
         self.set_debug_level(2)
         p = Run('git push origin master'.split())
-        self.assertTrue(p.status == 0, ex_run_image(p))
+        self.assertTrue(p.status == 0, p.image)
 
-        self.assertTrue('DEBUG: subproject entry ignored: subm' in p.out,
-                        ex_run_image(p))
+        self.assertTrue('DEBUG: subproject entry ignored: subm' in p.cmd_out,
+                        p.image)
 
 if __name__ == '__main__':
     runtests()

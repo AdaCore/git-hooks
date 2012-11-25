@@ -11,7 +11,7 @@ class TestRun(TestCase):
 
         p = Run('git push origin release-0.1-branch'.split())
 
-        self.assertTrue(p.status == 0, ex_run_image(p))
+        self.assertTrue(p.status == 0, p.image)
 
         expected_out = (
             r".*cvs_check: `trunk/repo/b'" +
@@ -20,8 +20,8 @@ class TestRun(TestCase):
             r".*cvs_check: `trunk/repo/d'" +
             r".*\[new branch\]\s+release-0\.1-branch -> release-0\.1-branch")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
         # Verify that the branch has been created in the remote
         # repository and that it points to the expected commit.
@@ -30,12 +30,12 @@ class TestRun(TestCase):
 
         p = Run('git show-ref -s release-0.1-branch'.split())
 
-        self.assertTrue(p.status == 0, ex_run_image(p))
+        self.assertTrue(p.status == 0, p.image)
 
         expected_out = (r"4205e52273adad6b014e19fb1cf1fe1c9b8b4089")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
 if __name__ == '__main__':
     runtests()

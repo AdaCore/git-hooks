@@ -14,30 +14,30 @@ class TestRun(TestCase):
         # Push master to the `origin' remote.
         p = Run('git push origin master'.split())
 
-        self.assertTrue(p.status != 0, ex_run_image(p))
+        self.assertTrue(p.status != 0, p.image)
 
         expected_out = (
             r".*Invalid hooks\.debuglevel value: -1" +
             r".*! \[remote rejected\]\s+master\s+->\s+master\s+" +
                 r"\(hook declined\)")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
         # Same thing, but with an invalid GIT_HOOKS_DEBUG_LEVEL value.
         self.set_debug_level('true')
 
         p = Run('git push origin master'.split())
 
-        self.assertTrue(p.status != 0, ex_run_image(p))
+        self.assertTrue(p.status != 0, p.image)
 
         expected_out = (
             r".*Invalid value for GIT_HOOKS_DEBUG_LEVEL: true" +
             r".*! \[remote rejected\]\s+master\s+->\s+master\s+" +
                 r"\(hook declined\)")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
 
 if __name__ == '__main__':

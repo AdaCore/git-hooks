@@ -22,24 +22,24 @@ class TestRun(TestCase):
 
         p = Run('git push origin version-0.1a'.split())
 
-        self.assertTrue(p.status == 0, ex_run_image(p))
+        self.assertTrue(p.status == 0, p.image)
 
         expected_out = (
             r".*\s+\[new tag\]\s+version-0.1a\s+->\s+version-0.1a")
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
         # Also verify from the output that none of the commits get
         # checked.  For that, rely on the check_commit debug trace.
 
-        self.assertFalse(re.match(r"DEBUG: check_commit\(", p.out, re.DOTALL),
-                         ex_run_image(p))
+        self.assertFalse(re.match(r"DEBUG: check_commit\(", p.cmd_out, re.DOTALL),
+                         p.image)
 
         # Next, push the changes. Make sure that the commit gets checked.
 
         p = Run('git push origin master'.split())
 
-        self.assertTrue(p.status == 0, ex_run_image(p))
+        self.assertTrue(p.status == 0, p.image)
 
         expected_out = (
             r".*check_commit(.*" \
@@ -49,8 +49,8 @@ class TestRun(TestCase):
             r".*cvs_check: `trunk/repo/c'" +
             r".*\s+426fba3\.\.4f0f08f\s+master\s+->\s+master")
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
 if __name__ == '__main__':
     runtests()

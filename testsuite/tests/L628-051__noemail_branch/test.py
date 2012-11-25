@@ -12,7 +12,7 @@ class TestRun(TestCase):
 
         p = Run('git push origin master'.split())
 
-        self.assertTrue(p.status == 0, ex_run_image(p))
+        self.assertTrue(p.status == 0, p.image)
 
         expected_out = (
             # Traces of the cvs_check updates...
@@ -37,14 +37,14 @@ class TestRun(TestCase):
             r".*\s+426fba3\.\.dd6165c\s+master\s+->\s+master"
             )
 
-        self.assertTrue(re.match(expected_out, p.out, re.DOTALL),
-                        ex_run_image(p))
+        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
+                        p.image)
 
         # Just to make sure, verify that we don't have any trace
         # of anything that looks like an email might have been sent.
-        self.assertFalse("From:" in p.out, ex_run_image (p))
-        self.assertFalse("To:" in p.out, ex_run_image (p))
-        self.assertFalse("Subject:" in p.out, ex_run_image (p))
+        self.assertFalse("From:" in p.cmd_out, p.image)
+        self.assertFalse("To:" in p.cmd_out, p.image)
+        self.assertFalse("Subject:" in p.cmd_out, p.image)
 
 
 if __name__ == '__main__':

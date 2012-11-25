@@ -49,7 +49,7 @@ def git_config(option_name):
         kwargs[option_data['type']] = True
 
     try:
-        option_val = git.config(option_name, _quiet=True, **kwargs)
+        option_val = git.config(option_name, **kwargs)
     except CalledProcessError:
         # This option is probably not set in the config file.  Return
         # the default.

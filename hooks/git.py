@@ -26,7 +26,7 @@
 
 import os
 import re
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, STDOUT
 import subprocess
 import sys
 
@@ -54,21 +54,17 @@ def git_run(command, *args, **kwargs):
            <name>=True => --<name>
            <name>='<str>' => --<name>=<str>
         Special keyword arguments:
-           _quiet: Discard all output even if an error occurs
            _input=<str>: Feed <str> to stdinin of the command
            _outfile=<file): Use <file> as the output file descriptor
            _split_lines: Return an array with one string per returned line
     """
     to_run = ['git', command.replace("_", "-")]
 
-    quiet = False
     input = None
     outfile = None
     do_split_lines = False
     for (k,v) in kwargs.iteritems():
-        if k == '_quiet':
-            quiet = True
-        elif k == '_input':
+        if k == '_input':
             input = v
         elif k == '_outfile':
             outfile = v
@@ -85,16 +81,18 @@ def git_run(command, *args, **kwargs):
     to_run.extend(args)
 
     stdout = outfile if outfile else PIPE
-    stderr = PIPE
     stdin = None if input is None else PIPE
 
-    process = Popen(to_run, stdout=stdout, stderr=stderr, stdin=stdin)
+    process = Popen(to_run, stdout=stdout, stderr=STDOUT, stdin=stdin)
     output, error = process.communicate(input)
+    # We redirected stderr to the same fd as stdout, so error should
+    # not contain anything.
+    assert not error
+
     if process.returncode != 0:
-        if not quiet:
-            print >>sys.stderr, error,
-            print output,
-        raise CalledProcessError(process.returncode, " ".join(to_run))
+        raise CalledProcessError(process.returncode,
+                                 " ".join(to_run),
+                                 output)
 
     if outfile:
         return None
@@ -168,7 +166,7 @@ def get_git_dir():
     # this is a bare repository or not), or when calling it
     # from the .git directory itself (in which case it returns
     # '.').
-    return os.path.abspath(git.rev_parse(git_dir=True, _quiet=True))
+    return os.path.abspath(git.rev_parse(git_dir=True))
 
 
 def rev_list_commits(*args, **kwargs):
@@ -273,7 +271,7 @@ def file_exists(commit_rev, filename):
         A boolean.
     """
     try:
-        git.cat_file('-e', '%s:%s' % (commit_rev, filename), _quiet=True)
+        git.cat_file('-e', '%s:%s' % (commit_rev, filename))
     except CalledProcessError:
         # cat-file -e returned non-zero; the file does not exist.
         return False

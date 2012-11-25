@@ -347,6 +347,11 @@ def parse_tag_object(tag_name):
 def git_show_ref(*args):
     """Call "git show-ref [args]" and return the result as a list.
 
+    Each element in the list is a couple containing the following
+    elements:
+        - The revision of the commit the reference points to;
+        - The reference name.
+
     PARAMETERS
         *args: Each argument is passed to the "git show-ref"
             as a pattern.
@@ -357,6 +362,7 @@ def git_show_ref(*args):
         into individual tokens yet).  Returns None if no entry matched.
     """
     try:
-        return git.show_ref(*args, _split_lines=True)
+        return [ref_info.split(None, 2)
+                for ref_info in git.show_ref(*args, _split_lines=True)]
     except CalledProcessError:
         return None

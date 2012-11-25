@@ -8,7 +8,7 @@ class TestRun(TestCase):
 
         # We need some debug traces to be enabled, in order to verify
         # certain assertions.
-        os.environ['GIT_HOOKS_DEBUG_LEVEL'] = '1'
+        self.set_debug_level(1)
 
         # Scenario: The user made some changes, and then committed them
         # in his repo. Then created an annotated tag (release-0.1a).

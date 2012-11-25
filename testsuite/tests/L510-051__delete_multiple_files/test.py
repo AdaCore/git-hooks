@@ -9,7 +9,7 @@ class TestRun(TestCase):
         # Enable debug traces.  We use them to make certain verifications,
         # such as verifying that certain files are not being checked
         # because they are being deleted.
-        os.environ['GIT_HOOKS_DEBUG_LEVEL'] = '2'
+        self.set_debug_level(2)
 
         p = Run('git push origin master'.split())
 

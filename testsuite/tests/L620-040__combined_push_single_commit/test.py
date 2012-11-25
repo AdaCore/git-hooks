@@ -7,7 +7,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        os.environ['GIT_HOOKS_DEBUG_LEVEL'] = '1'
+        self.set_debug_level(1)
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.

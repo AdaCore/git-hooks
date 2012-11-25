@@ -40,7 +40,7 @@ class TestRun(TestCase):
         # For verification purposes, we enable tracing to level 2,
         # in order to get the one that says that submodule entries
         # are ignored.
-        os.environ['GIT_HOOKS_DEBUG_LEVEL'] = '2'
+        self.set_debug_level(2)
         p = Run('git push origin master'.split())
         self.assertTrue(p.status == 0, ex_run_image(p))
 

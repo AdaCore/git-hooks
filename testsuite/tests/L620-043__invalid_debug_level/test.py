@@ -25,7 +25,7 @@ class TestRun(TestCase):
                         ex_run_image(p))
 
         # Same thing, but with an invalid GIT_HOOKS_DEBUG_LEVEL value.
-        os.environ['GIT_HOOKS_DEBUG_LEVEL'] = 'true'
+        self.set_debug_level('true')
 
         p = Run('git push origin master'.split())
 

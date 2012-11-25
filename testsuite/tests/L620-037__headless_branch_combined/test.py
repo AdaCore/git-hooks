@@ -12,7 +12,7 @@ class TestRun(TestCase):
 
         # Enable debugs to verify that the hooks pick the correct
         # commit as the first commit.
-        os.environ['GIT_HOOKS_DEBUG_LEVEL'] = '1'
+        self.set_debug_level(1)
 
         # First, push the headless branch.
 

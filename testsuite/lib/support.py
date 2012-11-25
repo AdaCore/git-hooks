@@ -58,6 +58,21 @@ class TestCase(unittest.TestCase):
         # use this tmp directory during the setUp phase).
         self.assertFalse(os.listdir(self.testcase_tmp_dir))
 
+    def set_debug_level(self, level):
+        """Set the debug level to the given value.
+
+        This is a convenience function that allows testcases to
+        set the debug level without having to know how the git
+        hooks infrastructure implements it.
+
+        PARAMETERS
+            level: Typically, a natural integer.  But it can be any
+                value - this function automatically turns it into
+                a string and uses it as the debug level.  This allows
+                us to set the debug level to an invalid value as well.
+        """
+        os.environ['GIT_HOOKS_DEBUG_LEVEL'] = str(level)
+
     def enable_unit_test(self):
         """Setup the environment in a way that allows us to perform unit test.
         """

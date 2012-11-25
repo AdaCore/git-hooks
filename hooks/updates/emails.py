@@ -111,4 +111,3 @@ class Email(object):
             s = smtplib.SMTP('localhost')
             s.sendmail(email_from, email_recipients, self.e_msg.as_string())
             s.quit()
-        send_email(self.e_msg)

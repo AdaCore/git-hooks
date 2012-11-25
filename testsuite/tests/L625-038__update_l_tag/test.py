@@ -7,6 +7,10 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
+        # Enable debug traces.  We use them to make certain verifications,
+        # such as verifying that each commit gets checked individually.
+        os.environ['GIT_HOOKS_DEBUG_LEVEL'] = '1'
+
         p = Run('git push origin some-tag'.split())
         self.assertEqual(p.status, 0, ex_run_image(p))
 
@@ -18,6 +22,11 @@ class TestRun(TestCase):
             r".*You just updated the \"some-tag\" tag as follow:" +
             r".*old SHA1: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e" +
             r".*new SHA1: 8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5" +
+            # This push introduces a new commit, so verify the associated
+            # cvs_check traces...
+            r".*DEBUG: check_commit\(" +
+                r"old_rev=8b9a0d6bf08d7a983affbee3c187adadaaedec9e, " +
+                r"new_rev=8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5\)" +
             # Check the contents of the email notification.
             r".*From: Test Suite <testsuite@example.com>" +
             r".*To: something-ci@example.com" +

@@ -1,12 +1,9 @@
 """Handling of branch updates."""
 
-from config import git_config
 from fast_forward import check_fast_forward
 from git import is_null_rev, git_show_ref
-from pre_commit_checks import check_commit
 from updates import AbstractUpdate
-from updates.branches import expand_new_commit_to_list
-from utils import InvalidUpdate, debug
+from utils import InvalidUpdate
 
 def reject_retired_branch_update(ref_name, short_ref_name):
     """Raise InvalidUpdate if trying to update a retired branch.
@@ -64,25 +61,5 @@ class BranchUpdate(AbstractUpdate):
         if not is_null_rev(self.old_rev):
             check_fast_forward(self.ref_name, self.old_rev, self.new_rev)
 
-        all_commits = expand_new_commit_to_list(self.new_rev)
-        if len(all_commits) < 2:
-            # There are no new commits, so nothing further to check.
-            # Note: We check for len < 2 instead of 1, since the first
-            # element is the "update base" commit (similar to the merge
-            # base, where the commit is the common commit between the
-            # 2 branches).
-            return
-
-        if git_config('hooks.combinedstylechecking') == 'true':
-            # This project prefers to perform the style check on
-            # the cumulated diff, rather than commit-per-commit.
-            debug('(combined style checking)')
-            all_commits = (all_commits[0], all_commits[-1])
-        else:
-            debug('(commit-per-commit style checking)')
-
-        # Iterate over our list of commits in pairs...
-        for (parent_rev, rev) in zip(all_commits[:-1], all_commits[1:]):
-            check_commit(parent_rev, rev)
 
 

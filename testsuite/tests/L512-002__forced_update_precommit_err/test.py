@@ -7,22 +7,22 @@ class TestRun(TestCase):
         cd ('%s/repo' % TEST_DIR)
 
         p = Run('git push -f origin topic/new-feature'.split())
+        expected_out = """\
+remote: *** !!! WARNING: This is *NOT* a fast-forward update.
+remote: *** !!! WARNING: You may have removed some important commits.
+remote: *** cvs_check: `trunk/repo/a'
+remote: *** pre-commit check failed for file `b' at commit: 14d1fa28493dd548753d11729a117dadaa9905fe
+remote: *** cvs_check: `trunk/repo/b'
+remote: *** ERROR: style-check error detected.
+remote: *** ERROR: Copyright header is missing from this file
+remote: error: hook declined to update refs/heads/topic/new-feature
+To ../bare/repo.git
+ ! [remote rejected] topic/new-feature -> topic/new-feature (hook declined)
+error: failed to push some refs to '../bare/repo.git'
+"""
 
         self.assertTrue(p.status != 0, p.image)
-
-        expected_out = (
-            r".*WARNING: This is \*NOT\* a fast-forward update." +
-            r".*cvs_check: `trunk/repo/a'" +
-            r".*pre-commit check failed for file `b'" +
-            r".*cvs_check: `trunk/repo/b'" +
-            r".*ERROR: style-check error detected" +
-            r".*error: hook declined to update refs/heads/topic/new-feature" +
-            r".*\[remote rejected\]\s+" +
-            r"topic/new-feature\s+->\s+topic/new-feature\s+" +
-                r"\(hook declined\)")
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 if __name__ == '__main__':
     runtests()

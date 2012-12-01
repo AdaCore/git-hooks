@@ -11,15 +11,22 @@ class TestRun(TestCase):
         self.set_debug_level(2)
 
         p = Run('git push origin master'.split())
-
+        expected_out = """\
+remote:   DEBUG: check_update(ref_name=refs/heads/master, old_rev=f82624871b6cfc46d5a7c5be518bc20e8f42be42, new_rev=adb8ffe7b1718f6f8a6ec22f7c0ff06b83f086ec)
+remote: DEBUG: validate_ref_update (refs/heads/master, f82624871b6cfc46d5a7c5be518bc20e8f42be42, adb8ffe7b1718f6f8a6ec22f7c0ff06b83f086ec)
+remote: DEBUG: update base: f82624871b6cfc46d5a7c5be518bc20e8f42be42
+remote: DEBUG: (commit-per-commit style checking)
+remote: DEBUG: check_commit(old_rev=f82624871b6cfc46d5a7c5be518bc20e8f42be42, new_rev=adb8ffe7b1718f6f8a6ec22f7c0ff06b83f086ec)
+remote:   DEBUG: deleted file ignored: foo.c
+remote: DEBUG: post_receive_one(ref_name=f82624871b6cfc46d5a7c5be518bc20e8f42be42
+remote:                         old_rev=adb8ffe7b1718f6f8a6ec22f7c0ff06b83f086ec
+remote:                         new_rev=refs/heads/master)
+remote: *** email notification for new commits not implemented yet.
+To ../bare/repo.git
+   f826248..adb8ffe  master -> master
+"""
         self.assertTrue(p.status == 0, p.image)
-
-        expected_out = (
-            r".*DEBUG: deleted file ignored: foo.c" +
-            r".*\s+f826248\.\.adb8ffe\s+master\s+->\s+master")
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 if __name__ == '__main__':
     runtests()

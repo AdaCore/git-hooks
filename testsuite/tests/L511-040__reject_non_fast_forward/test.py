@@ -7,17 +7,18 @@ class TestRun(TestCase):
         cd ('%s/repo' % TEST_DIR)
 
         p = Run('git push -f origin master'.split())
+        expected_out = """\
+remote: *** Non-fast-forward updates are not allowed on this branch;
+remote: *** Please rebase your changes on top of the latest HEAD,
+remote: *** and then try pushing again.
+remote: error: hook declined to update refs/heads/master
+To ../bare/repo.git
+ ! [remote rejected] master -> master (hook declined)
+error: failed to push some refs to '../bare/repo.git'
+"""
 
         self.assertTrue(p.status != 0, p.image)
-
-        expected_out = (
-            r".*Non-fast-forward updates are not allowed on this branch;" +
-            r".*error: hook declined to update refs/heads/master" +
-            r".*\[remote rejected\]\s+master\s+->\s+master\s+" +
-                r"\(hook declined\)")
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 if __name__ == '__main__':
     runtests()

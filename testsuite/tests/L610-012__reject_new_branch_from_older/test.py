@@ -12,23 +12,21 @@ class TestRun(TestCase):
         cd ('%s/repo' % TEST_DIR)
 
         p = Run('git push origin release-0.1-branch'.split())
+        expected_out = """\
+remote: *** cvs_check: `trunk/repo/b'
+remote: *** cvs_check: `trunk/repo/a'
+remote: *** pre-commit check failed for file `c' at commit: 4205e52273adad6b014e19fb1cf1fe1c9b8b4089
+remote: *** cvs_check: `trunk/repo/c'
+remote: *** ERROR: style-check error detected.
+remote: *** ERROR: Copyright year in header is not up to date
+remote: error: hook declined to update refs/heads/release-0.1-branch
+To ../bare/repo.git
+ ! [remote rejected] release-0.1-branch -> release-0.1-branch (hook declined)
+error: failed to push some refs to '../bare/repo.git'
+"""
 
         self.assertTrue(p.status != 0, p.image)
-
-        expected_out = (
-            r".*cvs_check: `trunk/repo/b'" +
-            r".*cvs_check: `trunk/repo/a'" +
-            r".*pre-commit check failed for file `c' at commit: " +
-                "4205e52273adad6b014e19fb1cf1fe1c9b8b4089" +
-            r".*cvs_check: `trunk/repo/c'" +
-            r".*ERROR: style-check error detected" +
-            r".*ERROR: Copyright year in header is not up to date" +
-            r".*\[remote rejected\]\s+" +
-                r"release-0\.1-branch\s+->\s+release-0\.1-branch\s+" +
-                r"\(hook declined\)")
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
         # Verify that the branch does not exist on the remote...
 

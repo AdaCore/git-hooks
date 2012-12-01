@@ -10,10 +10,16 @@ class TestRun(TestCase):
         # Try deleting full-tag.  The remote is setup to refuse this request.
         p = Run('git push origin :full-tag'.split())
         self.assertNotEqual(p.status, 0, p.image)
-        self.assertTrue(re.match('.*Deleting a tag is not allowed in '
-                                    'this repository',
-                                 p.cmd_out, re.DOTALL),
-                        p.image)
+
+        expected_out = """\
+remote: *** Deleting a tag is not allowed in this repository
+remote: error: hook declined to update refs/tags/full-tag
+To ../bare/repo.git
+ ! [remote rejected] full-tag (hook declined)
+error: failed to push some refs to '../bare/repo.git'
+"""
+
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 
 if __name__ == '__main__':

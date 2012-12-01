@@ -15,21 +15,25 @@ class TestRun(TestCase):
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
         p = Run('git push origin master'.split())
+        expected_out = """\
+remote:   DEBUG: check_update(ref_name=refs/heads/master, old_rev=a60540361d47901d3fe254271779f380d94645f7, new_rev=6a48cdab9b100506a387a8398af4751b33a4bfd0)
+remote: DEBUG: validate_ref_update (refs/heads/master, a60540361d47901d3fe254271779f380d94645f7, 6a48cdab9b100506a387a8398af4751b33a4bfd0)
+remote: DEBUG: update base: a60540361d47901d3fe254271779f380d94645f7
+remote: DEBUG: (commit-per-commit style checking)
+remote: DEBUG: check_commit(old_rev=a60540361d47901d3fe254271779f380d94645f7, new_rev=6a48cdab9b100506a387a8398af4751b33a4bfd0)
+remote:   DEBUG: deleted file ignored: a
+remote: *** pre-commit check failed for file `b' at commit: 6a48cdab9b100506a387a8398af4751b33a4bfd0
+remote: *** cvs_check: `trunk/repo/b'
+remote: *** ERROR: style-check error detected.
+remote: *** ERROR: Copyright year in header is not up to date
+remote: error: hook declined to update refs/heads/master
+To ../bare/repo.git
+ ! [remote rejected] master -> master (hook declined)
+error: failed to push some refs to '../bare/repo.git'
+"""
 
         self.assertTrue(p.status != 0, p.image)
-
-        expected_out = (
-            r".*DEBUG: deleted file ignored: a" +
-            r".*pre-commit check failed for file `b' at commit: " +
-                "6a48cdab9b100506a387a8398af4751b33a4bfd0" +
-            r".*cvs_check: `trunk/repo/b'" +
-            r".*ERROR: style-check error detected\." +
-            r".*ERROR: Copyright year in header is not up to date" +
-            r".*\[remote rejected\]\s+" +
-            r"master\s+->\s+master\s+\(hook declined\)")
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 if __name__ == '__main__':
     runtests()

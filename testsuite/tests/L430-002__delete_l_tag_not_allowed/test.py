@@ -9,10 +9,16 @@ class TestRun(TestCase):
 
         p = Run('git push origin :some-tag'.split())
         self.assertNotEqual(p.status, 0, p.image)
-        self.assertTrue(re.match('.*Deleting a tag is not allowed in '
-                                    'this repository',
-                                 p.cmd_out, re.DOTALL),
-                        p.image)
+
+        expected_out = """\
+remote: *** Deleting a tag is not allowed in this repository
+remote: error: hook declined to update refs/tags/some-tag
+To ../bare/repo.git
+ ! [remote rejected] some-tag (hook declined)
+error: failed to push some refs to '../bare/repo.git'
+"""
+
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 if __name__ == '__main__':
     runtests()

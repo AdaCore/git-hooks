@@ -7,16 +7,18 @@ class TestRun(TestCase):
         cd ('%s/repo' % TEST_DIR)
 
         p = Run('git push origin master'.split())
+        expected_out = """\
+To ../bare/repo.git
+ ! [rejected]        master -> master (non-fast-forward)
+error: failed to push some refs to '../bare/repo.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Merge the remote changes (e.g. 'git pull')
+hint: before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+"""
 
         self.assertTrue(p.status != 0, p.image)
-
-        # Note: git version 1.6.5.rc2, git spells 'non-fast forward',
-        # whereas git version 1.7.1 spells 'non-fast-forward'.
-        expected_out = (
-            r".*\[rejected\]\s+master\s+->\s+master\s+\(non-fast.forward\)")
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 if __name__ == '__main__':
     runtests()

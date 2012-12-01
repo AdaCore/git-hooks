@@ -7,19 +7,17 @@ class TestRun(TestCase):
         cd ('%s/repo' % TEST_DIR)
 
         p = Run('git push origin master'.split())
+        expected_out = """\
+remote: *** cvs_check: `trunk/repo/a'
+remote: *** cvs_check: `trunk/repo/c'
+remote: *** email notification for new commits not implemented yet.
+To ../bare/repo.git
+   9cbe951..e700706  master -> master
+"""
 
         self.assertTrue(p.status == 0, p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
-        expected_out = (
-            r".*cvs_check: `trunk/repo/a'" +
-            r".*cvs_check: `trunk/repo/c'" +
-            r".*\s+9cbe951\.\.e700706\s+master\s+->\s+master")
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
-
-        # Check that cvs_check was NOT called for file `b'.
-        self.assertTrue("cvs_check: `trunk/repo/b'" not in p.cmd_out)
 
 if __name__ == '__main__':
     runtests()

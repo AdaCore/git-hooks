@@ -6,25 +6,23 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin master'.split())
-
         # The push should fail, because the pre-commit checker will
         # refuse one of the updates.
+        p = Run('git push origin master'.split())
+        expected_out = """\
+remote: *** cvs_check: `trunk/repo/a'
+remote: *** pre-commit check failed for file `b' at commit: 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3
+remote: *** cvs_check: `trunk/repo/b'
+remote: *** ERROR: style-check error detected.
+remote: *** ERROR: Copyright year in header is not up to date
+remote: error: hook declined to update refs/heads/master
+To ../bare/repo.git
+ ! [remote rejected] master -> master (hook declined)
+error: failed to push some refs to '../bare/repo.git'
+"""
+
         self.assertTrue(p.status != 0, p.image)
-
-        expected_out = (
-            r".*cvs_check: `trunk/repo/a'" +
-            r".*pre-commit check failed for file `b' at commit: " +
-                "4f0f08f46daf6f5455cf90cdc427443fe3b32fa3" +
-            r".*cvs_check: `trunk/repo/b'" +
-            r".*ERROR: style-check error detected\." +
-            r".*ERROR: Copyright year in header is not up to date" +
-            r".*error: hook declined to update refs/heads/master" +
-            r".*! \[remote rejected\] master -> master \(hook declined\)" +
-            r".*error: failed to push some refs to '\.\./bare/repo.git'")
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 if __name__ == '__main__':
     runtests()

@@ -111,6 +111,10 @@ class Run(gnatpython.ex.Run):
         for line in lines:
             # Remove any clear-end-of-line terminal control sequences...
             line = line.replace('\033[K', '')
+            # git version 1.6.5.rc2 spells 'non-fast forward', whereas
+            # git version 1.7.1 spells 'non-fast-forward'. Unify on
+            # the latest spelling...
+            line = line.replace('non-fast forward', 'non-fast-forward')
             # Lastly, strip any trailing spaces.  We strip them because
             # we do not want to be a the mercy of git's trailing spaces
             # when matching the output of commands, and because they are

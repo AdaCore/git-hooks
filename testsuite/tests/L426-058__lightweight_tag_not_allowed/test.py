@@ -21,8 +21,18 @@ class TestRun(TestCase):
         # Try pushing that new-tag.  The repository has been configured
         # to reject such updates.
         p = Run('git push origin new-tag'.split())
-        self.assertTrue(p.status != 0 and has_rejection(p.cmd_out, 'new-tag'),
-                        p.image)
+        self.assertNotEqual(p.status, 0, p.image)
+
+        expected_out = """\
+remote: *** Lightweight tags (new-tag) are not allowed in this repository.
+remote: *** Use 'git tag [ -a | -s ]' for tags you want to propagate.
+remote: error: hook declined to update refs/tags/new-tag
+To ../bare/repo.git
+ ! [remote rejected] new-tag -> new-tag (hook declined)
+error: failed to push some refs to '../bare/repo.git'
+"""
+
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 if __name__ == '__main__':
     runtests()

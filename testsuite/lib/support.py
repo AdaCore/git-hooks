@@ -106,9 +106,20 @@ class Run(gnatpython.ex.Run):
             certain terminal control characters out of it before
             returning it.
         """
-        out = self.out
-        out = out.replace('\033[K\n', '\n')
-        return out
+        lines = self.out.splitlines()
+        result = []
+        for line in lines:
+            # Remove any clear-end-of-line terminal control sequences...
+            line = line.replace('\033[K', '')
+            # Lastly, strip any trailing spaces.  We strip them because
+            # we do not want to be a the mercy of git's trailing spaces
+            # when matching the output of commands, and because they are
+            # not very important visually for the user.   On the other
+            # hand, we do not want to strip leading spaces, at least
+            # for now, as they do affect the output seen by the user.
+            line = line.rstrip()
+            result.append(line)
+        return '\n'.join(result) + '\n'
 
     @property
     def image(self):

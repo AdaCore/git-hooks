@@ -12,12 +12,14 @@ class TestRun(TestCase):
 
         self.assertTrue(p.status == 0, p.image)
 
-        expected_out = (
-            r".*cvs_check: `trunk/repo/a'" +
-            ".*master\s+->\s+master")
+        expected_out = """\
+remote: *** cvs_check: `trunk/repo/a'
+remote: *** email notification for new commits not implemented yet.
+To ../bare/repo.git
+   d065089..a605403  master -> master
+"""
 
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 if __name__ == '__main__':
     runtests()

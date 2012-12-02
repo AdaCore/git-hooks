@@ -11,26 +11,24 @@ class TestRun(TestCase):
         self.set_debug_level(1)
 
         p = Run('git push origin master'.split())
+        expected_out = """\
+remote: DEBUG: validate_ref_update (refs/heads/master, 426fba3571947f6de7f967e885a3168b9df7004a, dd6165c96db712d3e918fb5c61088b171b5e7cab)
+remote: DEBUG: update base: 426fba3571947f6de7f967e885a3168b9df7004a
+remote: DEBUG: (combined style checking)
+remote: DEBUG: check_commit(old_rev=426fba3571947f6de7f967e885a3168b9df7004a, new_rev=dd6165c96db712d3e918fb5c61088b171b5e7cab)
+remote: *** cvs_check: `trunk/repo/a'
+remote: *** cvs_check: `trunk/repo/c'
+remote: *** cvs_check: `trunk/repo/d'
+remote: DEBUG: post_receive_one(ref_name=426fba3571947f6de7f967e885a3168b9df7004a
+remote:                         old_rev=dd6165c96db712d3e918fb5c61088b171b5e7cab
+remote:                         new_rev=refs/heads/master)
+remote: *** email notification for new commits not implemented yet.
+To ../bare/repo.git
+   426fba3..dd6165c  master -> master
+"""
 
         self.assertTrue(p.status == 0, p.image)
-
-        expected_out = (
-            r".*\(combined style checking\)" +
-            r".*check_commit\(" +
-                r"old_rev=426fba3571947f6de7f967e885a3168b9df7004a, " +
-                r"new_rev=dd6165c96db712d3e918fb5c61088b171b5e7cab\)" +
-            r".*cvs_check: `trunk/repo/a'" +
-            r".*cvs_check: `trunk/repo/c'" +
-            r".*cvs_check: `trunk/repo/d'" +
-            r".*\s+426fba3\.\.dd6165c\s+master\s+->\s+master")
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
-
-        # One of the commits being pushed delete file `b', and the file
-        # is not being re-created, so verify that it never gets checked.
-        self.assertTrue("cvs_check: `trunk/repo/b'" not in p.cmd_out,
-                         p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 
 if __name__ == '__main__':

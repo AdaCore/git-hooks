@@ -7,32 +7,22 @@ class TestRun(TestCase):
         cd ('%s/repo' % TEST_DIR)
 
         p = Run('git push origin master'.split())
+
+        expected_out = """\
+remote: *** cvs_check: `trunk/repo/a'
+remote: *** email notification for new commits not implemented yet.
+remote: ---------------------------------------------------------
+remote: -- WARNING:
+remote: -- The hooks.mailinglist config variable not set.
+remote: -- Commit emails will only be sent to file-ci@gnat.com.
+remote: ---------------------------------------------------------
+To ../bare/repo.git
+   d065089..a605403  master -> master
+"""
+
         self.assertTrue(p.status == 0, p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
-        expected_out = (
-            # Confirmation that the update hooks called cvs_check...
-            r".*cvs_check: `trunk/repo/a'"
-
-            # The warning about the missing configuration variable.
-            r".*The hooks.mailinglist config variable not set"
-            r".*Commit emails will only be sent to"
-
-            # An email should be sent to file-ci...
-            r".*From: Test Suite <testsuite@example.com>" +
-            r".*To: file-ci@gnat.com" +
-            r".*Bcc: file-ci@gnat.com" +
-            r".*Subject: \[repo\] Updated a" +
-            r".*X-ACT-checkin: repo" +
-            r".*X-Git-Refname: refs/heads/master" +
-            r".*X-Git-Oldrev: d065089ff184d97934c010ccd0e7e8ed94cb7165" +
-            r".*X-Git-Newrev: a60540361d47901d3fe254271779f380d94645f7" +
-
-            # Confirmation that the update still went through.
-            ".*master\s+->\s+master"
-            )
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
 
 if __name__ == '__main__':
     runtests()

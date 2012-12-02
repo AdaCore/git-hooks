@@ -13,31 +13,31 @@ class TestRun(TestCase):
 
         # Push master to the `origin' remote.
         p = Run('git push origin master'.split())
+        expected_out = """\
+remote: *** Invalid hooks.debuglevel value: -1 (must be integer >= 0)
+remote: error: hook declined to update refs/heads/master
+To ../bare/repo.git
+ ! [remote rejected] master -> master (hook declined)
+error: failed to push some refs to '../bare/repo.git'
+"""
 
         self.assertTrue(p.status != 0, p.image)
-
-        expected_out = (
-            r".*Invalid hooks\.debuglevel value: -1" +
-            r".*! \[remote rejected\]\s+master\s+->\s+master\s+" +
-                r"\(hook declined\)")
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
         # Same thing, but with an invalid GIT_HOOKS_DEBUG_LEVEL value.
         self.set_debug_level('true')
 
         p = Run('git push origin master'.split())
+        expected_out = """\
+remote: *** Invalid value for GIT_HOOKS_DEBUG_LEVEL: true (must be integer >= 0)
+remote: error: hook declined to update refs/heads/master
+To ../bare/repo.git
+ ! [remote rejected] master -> master (hook declined)
+error: failed to push some refs to '../bare/repo.git'
+"""
 
         self.assertTrue(p.status != 0, p.image)
-
-        expected_out = (
-            r".*Invalid value for GIT_HOOKS_DEBUG_LEVEL: true" +
-            r".*! \[remote rejected\]\s+master\s+->\s+master\s+" +
-                r"\(hook declined\)")
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 
 if __name__ == '__main__':

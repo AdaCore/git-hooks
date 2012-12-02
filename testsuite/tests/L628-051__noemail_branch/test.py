@@ -11,40 +11,34 @@ class TestRun(TestCase):
         self.set_debug_level(1)
 
         p = Run('git push origin master'.split())
+        expected_out = """\
+remote: DEBUG: validate_ref_update (refs/heads/master, 426fba3571947f6de7f967e885a3168b9df7004a, dd6165c96db712d3e918fb5c61088b171b5e7cab)
+remote: DEBUG: update base: 426fba3571947f6de7f967e885a3168b9df7004a
+remote: DEBUG: (commit-per-commit style checking)
+remote: DEBUG: check_commit(old_rev=426fba3571947f6de7f967e885a3168b9df7004a, new_rev=4f0f08f46daf6f5455cf90cdc427443fe3b32fa3)
+remote: *** cvs_check: `trunk/repo/a'
+remote: *** cvs_check: `trunk/repo/b'
+remote: *** cvs_check: `trunk/repo/c'
+remote: DEBUG: check_commit(old_rev=4f0f08f46daf6f5455cf90cdc427443fe3b32fa3, new_rev=4a325b31f594b1dc2c66ac15c4b6b68702bd0cdf)
+remote: *** cvs_check: `trunk/repo/c'
+remote: *** cvs_check: `trunk/repo/d'
+remote: DEBUG: check_commit(old_rev=4a325b31f594b1dc2c66ac15c4b6b68702bd0cdf, new_rev=cc8d2c2637bda27f0bc2125181dd2f8534d16222)
+remote: *** cvs_check: `trunk/repo/c'
+remote: DEBUG: check_commit(old_rev=cc8d2c2637bda27f0bc2125181dd2f8534d16222, new_rev=dd6165c96db712d3e918fb5c61088b171b5e7cab)
+remote: *** cvs_check: `trunk/repo/d'
+remote: DEBUG: post_receive_one(ref_name=426fba3571947f6de7f967e885a3168b9df7004a
+remote:                         old_rev=dd6165c96db712d3e918fb5c61088b171b5e7cab
+remote:                         new_rev=refs/heads/master)
+remote: ---------------------------------------------------------------------------
+remote: --  The hooks.noemails config parameter contains `refs/heads/master'.
+remote: --  Commit emails will therefore not be sent.
+remote: ---------------------------------------------------------------------------
+To ../bare/repo.git
+   426fba3..dd6165c  master -> master
+"""
 
         self.assertTrue(p.status == 0, p.image)
-
-        expected_out = (
-            # Traces of the cvs_check updates...
-            r".*check_commit.*new_rev=4f0f08f46daf6f5455cf90cdc427443fe3b32fa3"
-            r".*cvs_check: `trunk/repo/a'"
-            r".*cvs_check: `trunk/repo/b'"
-            r".*cvs_check: `trunk/repo/c'"
-            r".*check_commit.*new_rev=4a325b31f594b1dc2c66ac15c4b6b68702bd0cdf"
-            r".*cvs_check: `trunk/repo/c'"
-            r".*cvs_check: `trunk/repo/d'"
-            r".*check_commit.*new_rev=cc8d2c2637bda27f0bc2125181dd2f8534d16222"
-            r".*cvs_check: `trunk/repo/c'"
-            r".*check_commit.*new_rev=dd6165c96db712d3e918fb5c61088b171b5e7cab"
-            r".*cvs_check: `trunk/repo/d'"
-
-            # The warning that explains that emails are not going to
-            # be sent.
-            r".*The hooks\.noemails config parameter contains"
-            r".*Commit emails will therefore not be sent\."
-
-            # Proof that the branch was updated as expected.
-            r".*\s+426fba3\.\.dd6165c\s+master\s+->\s+master"
-            )
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
-
-        # Just to make sure, verify that we don't have any trace
-        # of anything that looks like an email might have been sent.
-        self.assertFalse("From:" in p.cmd_out, p.image)
-        self.assertFalse("To:" in p.cmd_out, p.image)
-        self.assertFalse("Subject:" in p.cmd_out, p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 
 if __name__ == '__main__':

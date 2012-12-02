@@ -11,16 +11,22 @@ class TestRun(TestCase):
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
         p = Run('git push origin master'.split())
+        expected_out = """\
+remote: DEBUG: validate_ref_update (refs/heads/master, d065089ff184d97934c010ccd0e7e8ed94cb7165, a60540361d47901d3fe254271779f380d94645f7)
+remote: DEBUG: update base: d065089ff184d97934c010ccd0e7e8ed94cb7165
+remote: DEBUG: (combined style checking)
+remote: DEBUG: check_commit(old_rev=d065089ff184d97934c010ccd0e7e8ed94cb7165, new_rev=a60540361d47901d3fe254271779f380d94645f7)
+remote: *** cvs_check: `trunk/repo/a'
+remote: DEBUG: post_receive_one(ref_name=d065089ff184d97934c010ccd0e7e8ed94cb7165
+remote:                         old_rev=a60540361d47901d3fe254271779f380d94645f7
+remote:                         new_rev=refs/heads/master)
+remote: *** email notification for new commits not implemented yet.
+To ../bare/repo.git
+   d065089..a605403  master -> master
+"""
 
         self.assertTrue(p.status == 0, p.image)
-
-        expected_out = (
-            r".*\(combined style checking\)" +
-            r".*cvs_check: `trunk/repo/a'" +
-            ".*master\s+->\s+master")
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 if __name__ == '__main__':
     runtests()

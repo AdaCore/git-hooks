@@ -16,51 +16,52 @@ class TestRun(TestCase):
         # First, push the headless branch.
 
         p = Run('git push origin headless'.split())
+        expected_out = """\
+remote: DEBUG: validate_ref_update (refs/heads/headless, 0000000000000000000000000000000000000000, 902092ffe1cf61b28e28c86949a447b9fc2591a4)
+remote: DEBUG: update base: None
+remote: DEBUG: (commit-per-commit style checking)
+remote: DEBUG: check_commit(old_rev=None, new_rev=27ebebdd36a485235982f54e8ae68dfea6432c87)
+remote: DEBUG: check_commit: old_rev -> 4b825dc642cb6eb9a060e54bf8d69288fbee4904 (empty tree SHA1)
+remote: *** cvs_check: `trunk/repo/that.txt'
+remote: *** cvs_check: `trunk/repo/this.txt'
+remote: DEBUG: check_commit(old_rev=27ebebdd36a485235982f54e8ae68dfea6432c87, new_rev=6586d1c0db5147a521975c15cc6bfd92d2f66de6)
+remote: *** cvs_check: `trunk/repo/that.txt'
+remote: *** cvs_check: `trunk/repo/there'
+remote: DEBUG: check_commit(old_rev=6586d1c0db5147a521975c15cc6bfd92d2f66de6, new_rev=902092ffe1cf61b28e28c86949a447b9fc2591a4)
+remote: *** cvs_check: `trunk/repo/this.txt'
+remote: DEBUG: post_receive_one(ref_name=0000000000000000000000000000000000000000
+remote:                         old_rev=902092ffe1cf61b28e28c86949a447b9fc2591a4
+remote:                         new_rev=refs/heads/headless)
+remote: *** email notification for new commits not implemented yet.
+To ../bare/repo.git
+ * [new branch]      headless -> headless
+"""
 
         self.assertTrue(p.status == 0, p.image)
-
-        expected_out = (
-            r".*validate_ref_update \(refs/heads/headless, 0+, " +
-                "902092ffe1cf61b28e28c86949a447b9fc2591a4\)" +
-            r".*update base: None" +
-            r".*\(commit-per-commit style checking\)" +
-            r".*check_commit\(old_rev=None, " +
-                "new_rev=27ebebdd36a485235982f54e8ae68dfea6432c87\)" +
-            r".*cvs_check: `trunk/repo/that\.txt'" +
-            r".*cvs_check: `trunk/repo/this\.txt'" +
-            r".*check_commit" +
-                "\(old_rev=27ebebdd36a485235982f54e8ae68dfea6432c87, " +
-                "new_rev=6586d1c0db5147a521975c15cc6bfd92d2f66de6\)" +
-            r".*cvs_check: `trunk/repo/that\.txt'" +
-            r".*cvs_check: `trunk/repo/there'" +
-            r".*check_commit" +
-                "\(old_rev=6586d1c0db5147a521975c15cc6bfd92d2f66de6, " +
-                "new_rev=902092ffe1cf61b28e28c86949a447b9fc2591a4\)" +
-            r".*cvs_check: `trunk/repo/this\.txt'" +
-            ".*\[new branch\]\s+headless\s+->\s+headless")
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
         # Next, push the one-commit branch.
 
         p = Run('git push origin one-commit'.split())
+        expected_out = """\
+remote: DEBUG: validate_ref_update (refs/heads/one-commit, 0000000000000000000000000000000000000000, ef3ab848df2bef804d5bd0880475d40cb6aab0bf)
+remote: DEBUG: update base: None
+remote: DEBUG: (commit-per-commit style checking)
+remote: DEBUG: check_commit(old_rev=None, new_rev=ef3ab848df2bef804d5bd0880475d40cb6aab0bf)
+remote: DEBUG: check_commit: old_rev -> 4b825dc642cb6eb9a060e54bf8d69288fbee4904 (empty tree SHA1)
+remote: *** cvs_check: `trunk/repo/contents.txt'
+remote: *** cvs_check: `trunk/repo/stuff'
+remote: DEBUG: post_receive_one(ref_name=0000000000000000000000000000000000000000
+remote:                         old_rev=ef3ab848df2bef804d5bd0880475d40cb6aab0bf
+remote:                         new_rev=refs/heads/one-commit)
+remote: *** email notification for new commits not implemented yet.
+To ../bare/repo.git
+ * [new branch]      one-commit -> one-commit
+"""
 
         self.assertTrue(p.status == 0, p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
-        expected_out = (
-            r".*validate_ref_update \(refs/heads/one-commit, 0+, " +
-                "ef3ab848df2bef804d5bd0880475d40cb6aab0bf\)" +
-            r".*update base: None" +
-            r".*\(commit-per-commit style checking\)" +
-            r".*check_commit\(old_rev=None, " +
-                "new_rev=ef3ab848df2bef804d5bd0880475d40cb6aab0bf\)" +
-            r".*cvs_check: `trunk/repo/contents\.txt'" +
-            r".*cvs_check: `trunk/repo/stuff'" +
-            ".*\[new branch\]\s+one-commit\s+->\s+one-commit")
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
 
 if __name__ == '__main__':
     runtests()

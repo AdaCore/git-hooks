@@ -7,17 +7,17 @@ class TestRun(TestCase):
         cd ('%s/repo' % TEST_DIR)
 
         p = Run('git push origin master'.split())
+        expected_out = """\
+remote: *** cvs_check: `trunk/repo/a'
+remote: *** cvs_check: `trunk/repo/b'
+remote: *** cvs_check: `trunk/repo/c'
+remote: *** email notification for new commits not implemented yet.
+To ../bare/repo.git
+   426fba3..4f0f08f  master -> master
+"""
 
         self.assertTrue(p.status == 0, p.image)
-
-        expected_out = (
-            r".*cvs_check: `trunk/repo/a'" +
-            r".*cvs_check: `trunk/repo/b'" +
-            r".*cvs_check: `trunk/repo/c'" +
-            r".*\s+426fba3\.\.4f0f08f\s+master\s+->\s+master")
-
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 if __name__ == '__main__':
     runtests()

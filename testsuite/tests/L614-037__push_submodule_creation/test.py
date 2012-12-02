@@ -20,6 +20,12 @@ class TestRun(TestCase):
         p = Run(['git', 'commit', '-m', 'Add submodule subm'])
         self.assertTrue(p.status == 0, p.image)
 
+        # Get the hash of our submodule commit.  We will need it
+        # to match the output of the push command.
+        p = Run(['git rev-parse HEAD'.split()])
+        self.assertTrue(p.status == 0, p.image)
+        subm_rev = p.out.strip()
+
         # For coverage purposes, we want to test the calling of
         # the style-check program via the regular method (where
         # GIT_HOOKS_CVS_CHECK is not defined.  But we still want
@@ -42,10 +48,26 @@ class TestRun(TestCase):
         # are ignored.
         self.set_debug_level(2)
         p = Run('git push origin master'.split())
-        self.assertTrue(p.status == 0, p.image)
+        expected_out = """\
+remote:   DEBUG: check_update(ref_name=refs/heads/master, old_rev=7a373b536b65b600a449b5c739c137301f6fd364, new_rev=%(subm_rev)s)
+remote: DEBUG: validate_ref_update (refs/heads/master, 7a373b536b65b600a449b5c739c137301f6fd364, %(subm_rev)s)
+remote: DEBUG: update base: 7a373b536b65b600a449b5c739c137301f6fd364
+remote: DEBUG: (commit-per-commit style checking)
+remote: DEBUG: check_commit(old_rev=7a373b536b65b600a449b5c739c137301f6fd364, new_rev=%(subm_rev)s)
+remote: *** cvs_check: `trunk/repo/.gitmodules'
+remote:   DEBUG: subproject entry ignored: subm
+remote: DEBUG: post_receive_one(ref_name=7a373b536b65b600a449b5c739c137301f6fd364
+remote:                         old_rev=%(subm_rev)s
+remote:                         new_rev=refs/heads/master)
+remote: *** email notification for new commits not implemented yet.
+To ../bare/repo.git
+   7a373b5..%(short_subm_rev)s  master -> master
+""" % {'subm_rev' : subm_rev,
+       'short_subm_rev' : subm_rev[0:7]}
 
-        self.assertTrue('DEBUG: subproject entry ignored: subm' in p.cmd_out,
-                        p.image)
+        self.assertTrue(p.status == 0, p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
+
 
 if __name__ == '__main__':
     runtests()

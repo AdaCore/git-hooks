@@ -21,15 +21,12 @@ class TestRun(TestCase):
             '0000000000000000000000000000000000000000',
             'd065089ff184d97934c010ccd0e7e8ed94cb7165',
             None)
-        self.assertEqual(
-            sys.stderr.getvalue(),
-            '\n'.join((
-                '*** post-receive: Unsupported reference update:'
-                    ' bogus/heads/master (ignored).',
-                '***               old_rev = '
-                    '0000000000000000000000000000000000000000',
-                '***               new_rev = '
-                    'd065089ff184d97934c010ccd0e7e8ed94cb7165\n')))
+        expected_out = """\
+*** post-receive: Unsupported reference update: bogus/heads/master (ignored).
+***               old_rev = 0000000000000000000000000000000000000000
+***               new_rev = d065089ff184d97934c010ccd0e7e8ed94cb7165
+"""
+        self.assertEqual(sys.stderr.getvalue(), expected_out)
 
         # Restore sys.stderr...
         sys.stderr = old_stderr

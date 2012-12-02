@@ -1,5 +1,4 @@
 from support import *
-import re
 
 class TestRun(TestCase):
     def test_delete_lightweight_tag(self):
@@ -12,38 +11,51 @@ class TestRun(TestCase):
         self.set_debug_level(1)
 
         p = Run('git push origin some-tag'.split())
-        self.assertEqual(p.status, 0, p.image)
+        expected_out = """\
+remote: DEBUG: validate_ref_update (refs/tags/some-tag, 8b9a0d6bf08d7a983affbee3c187adadaaedec9e, 8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5)
+remote: *** ---------------------------------------------------------------
+remote: *** --  IMPORTANT NOTICE:
+remote: *** --
+remote: *** --  You just updated the "some-tag" tag as follow:
+remote: *** --    old SHA1: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e
+remote: *** --    new SHA1: 8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5
+remote: *** --
+remote: *** -- Other developers pulling from this repository will not
+remote: *** -- get the new tag. Assuming this update was deliberate,
+remote: *** -- notifying all known users of the update is recommended.
+remote: *** ---------------------------------------------------------------
+remote: DEBUG: update base: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e
+remote: DEBUG: (commit-per-commit style checking)
+remote: DEBUG: check_commit(old_rev=8b9a0d6bf08d7a983affbee3c187adadaaedec9e, new_rev=8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5)
+remote: *** cvs_check: `trunk/repo/a'
+remote: DEBUG: post_receive_one(ref_name=8b9a0d6bf08d7a983affbee3c187adadaaedec9e
+remote:                         old_rev=8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5
+remote:                         new_rev=refs/tags/some-tag)
+remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: 7bit
+remote: From: Test Suite <testsuite@example.com>
+remote: To: something-ci@example.com
+remote: Bcc: file-ci@gnat.com
+remote: Subject: [repo] Updated tag some-tag
+remote: X-ACT-checkin: repo
+remote: X-Git-Refname: refs/tags/some-tag
+remote: X-Git-Oldrev: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e
+remote: X-Git-Newrev: 8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5
+remote:
+remote: The lightweight tag 'some-tag' was updated to point to:
+remote:
+remote:  8a567a0... Put some contents in file `a'.
+remote:
+remote: It previously pointed to:
+remote:
+remote:  8b9a0d6... New file: a.
+To ../bare/repo.git
+   8b9a0d6..8a567a0  some-tag -> some-tag
+"""
 
-        expected_out = (
-            # Check that the warning about the pitfalls of changing
-            # the value of a tag is emitted and contains the important
-            # information (tag name, old rev, new rev)...
-            r".*IMPORTANT NOTICE:" +
-            r".*You just updated the \"some-tag\" tag as follow:" +
-            r".*old SHA1: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e" +
-            r".*new SHA1: 8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5" +
-            # This push introduces a new commit, so verify the associated
-            # cvs_check traces...
-            r".*DEBUG: check_commit\(" +
-                r"old_rev=8b9a0d6bf08d7a983affbee3c187adadaaedec9e, " +
-                r"new_rev=8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5\)" +
-            # Check the contents of the email notification.
-            r".*From: Test Suite <testsuite@example.com>" +
-            r".*To: something-ci@example.com" +
-            r".*Bcc: file-ci@gnat.com" +
-            r".*Subject: \[repo\] Updated tag some-tag" +
-            r".*X-ACT-checkin: repo" +
-            r".*X-Git-Refname: refs/tags/some-tag" +
-            r".*X-Git-Oldrev: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e" +
-            r".*X-Git-Newrev: 8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5" +
-            r".*The lightweight tag 'some-tag' was updated to point to:" +
-            r".*8a567a0\.\.\. Put some contents in file `a'\." +
-            r".*It previously pointed to:" +
-            r".*8b9a0d6\.\.\. New file: a\." +
-            # And check git's output confirm that the tag was updated.
-            r".*\s+8b9a0d6\.\.8a567a0\s+some-tag\s+->\s+some-tag")
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
+        self.assertEqual(p.status, 0, p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 if __name__ == '__main__':
     runtests()

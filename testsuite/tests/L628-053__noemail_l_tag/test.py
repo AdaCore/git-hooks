@@ -1,5 +1,4 @@
 from support import *
-import re
 
 class TestRun(TestCase):
     def test_push_lightweight_tag(self):
@@ -14,23 +13,17 @@ class TestRun(TestCase):
         # Try pushing that new-tag.  The repository has been configured
         # to accept such updates.
         p = Run('git push origin new-tag'.split())
+        expected_out = """\
+remote: ---------------------------------------------------------------------------
+remote: --  The hooks.noemails config parameter contains `refs/tags/new-tag'.
+remote: --  Commit emails will therefore not be sent.
+remote: ---------------------------------------------------------------------------
+To ../bare/repo.git
+ * [new tag]         new-tag -> new-tag
+"""
+
         self.assertEqual(p.status, 0, p.image)
-
-        expected_out = (
-            # The warning explaining that emails are not going to
-            # be sent.
-            r".*The hooks.noemails config parameter contains"
-            r".*Commit emails will therefore not be sent"
-            # Confirmation that the new tag was created.
-            r".*\[new tag\]\s+new-tag\s+->\s+new-tag\s*")
-        self.assertTrue(re.match(expected_out, p.cmd_out, re.DOTALL),
-                        p.image)
-
-        # Make sure that there isn't anything that looks like
-        # an email got sent.
-        self.assertFalse('From:' in p.cmd_out, p.image)
-        self.assertFalse('To:' in p.cmd_out, p.image)
-        self.assertFalse('Subject:' in p.cmd_out, p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
 
 
 if __name__ == '__main__':

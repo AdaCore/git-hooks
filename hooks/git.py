@@ -343,24 +343,24 @@ def parse_tag_object(tag_name):
 
 
 def git_show_ref(*args):
-    """Call "git show-ref [args]" and return the result as a list.
+    """Call "git show-ref [args]" and return the result as a dictionary.
 
-    Each element in the list is a couple containing the following
-    elements:
-        - The revision of the commit the reference points to;
-        - The reference name.
+    The key of the dictionary is the reference name, and the value
+    is a string containing the reference's rev (SHA1).
 
     PARAMETERS
         *args: Each argument is passed to the "git show-ref"
             as a pattern.
 
     RETURN VALUE
-        A list of entries that matched the given patterns, each entry
-        being one string (the contents of the string is not split
-        into individual tokens yet).  Returns None if no entry matched.
+        A dictionary of references that matched the given patterns.
     """
     try:
-        return [ref_info.split(None, 2)
-                for ref_info in git.show_ref(*args, _split_lines=True)]
+        matching_refs = git.show_ref(*args, _split_lines=True)
+        result = {}
+        for ref_info in matching_refs:
+            rev, ref = ref_info.split(None, 2)
+            result[ref] = rev
+        return result
     except CalledProcessError:
         return None

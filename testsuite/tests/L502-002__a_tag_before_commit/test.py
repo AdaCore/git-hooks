@@ -14,11 +14,8 @@ class TestRun(TestCase):
         # in his repo. Then created an annotated tag (release-0.1a).
         # Next, he pushes the annotated tag before having pushed his
         # new commit.  What the commit hooks should do in this case
-        # is just accept the annotated tag, but not check the commits
-        # (see later for when these commits should be checked).
-
-        # Also verify from the output that none of the commits get
-        # checked.  For that, rely on the check_commit debug trace.
+        # is do the same as in a branch update (pre-commit checks,
+        # commit emails, etc).
 
         p = Run('git push origin version-0.1a'.split())
         expected_out = """\
@@ -61,10 +58,11 @@ To ../bare/repo.git
         self.assertTrue(p.status == 0, p.image)
         self.assertEqual(expected_out, p.cmd_out, p.image)
 
-        # Next, push the changes. Make sure that the commit gets checked.
+        # Next, push the changes.  The commits are no longer "new",
+        # and thus nothing other than the reference change should
+        # be done.
 
         p = Run('git push origin master'.split())
-
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 426fba3571947f6de7f967e885a3168b9df7004a, 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3)
 remote: DEBUG: update base: 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3

@@ -10,6 +10,7 @@ from utils import (InvalidUpdate, debug, warn, create_scratch_dir)
 import utils
 
 from updates.factory import new_update
+from updates.refs import GitReferences
 
 def parse_command_line():
     """Return a namespace built after parsing the command line.
@@ -50,7 +51,7 @@ def check_update(ref_name, old_rev, new_rev):
     debug('check_update(ref_name=%s, old_rev=%s, new_rev=%s)'
           % (ref_name, old_rev, new_rev),
           level=2)
-    update_cls = new_update(ref_name, old_rev, new_rev)
+    update_cls = new_update(ref_name, old_rev, new_rev, GitReferences())
     if update_cls is None:
         raise InvalidUpdate(
             "This type of update (%s,%s) is currently unsupported."

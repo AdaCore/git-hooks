@@ -11,10 +11,11 @@ import sys
 
 from updates.emails import EmailInfo
 from updates.factory import new_update
+from updates.refs import GitReferences
 from utils import (debug, warn, InvalidUpdate)
 
 
-def post_receive_one(ref_name, old_rev, new_rev, email_info):
+def post_receive_one(ref_name, old_rev, new_rev, email_info, refs):
     """post-receive treatment for one reference.
 
     PARAMETERS
@@ -22,13 +23,15 @@ def post_receive_one(ref_name, old_rev, new_rev, email_info):
         old_rev: The SHA1 of the reference before the update.
         new_rev: The SHA1 of the reference after the update.
         email_info: An EmailInfo object.
+        refs: A GitReferences object, expected to contain the value
+            of all references.
     """
     debug('post_receive_one(ref_name=%s\n'
           '                        old_rev=%s\n'
           '                        new_rev=%s)'
           % (ref_name, old_rev, new_rev))
 
-    update = new_update(ref_name, old_rev, new_rev)
+    update = new_update(ref_name, old_rev, new_rev, refs)
     if update is None:
         # We emit a warning, rather than trigger an assertion, because
         # it gives the script a chance to process any other reference
@@ -51,10 +54,20 @@ def post_receive(updated_refs):
             reference.
     """
     email_info = EmailInfo()
+    refs = GitReferences()
+
+    # First, adjust refs to reflect the situation prior to
+    # the push (by "undoing" updated_refs).
+    for ref_name in updated_refs.keys():
+        old_rev, _ = updated_refs[ref_name]
+        refs.update_ref(ref_name, old_rev)
 
     for ref_name in updated_refs.keys():
         (old_rev, new_rev) = updated_refs[ref_name]
-        post_receive_one(ref_name, old_rev, new_rev, email_info)
+        try:
+            post_receive_one(ref_name, old_rev, new_rev, email_info, refs)
+        finally:
+            refs.update_ref(ref_name, new_rev)
 
 
 def parse_command_line(args):

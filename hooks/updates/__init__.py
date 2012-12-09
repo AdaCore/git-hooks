@@ -22,11 +22,14 @@ class AbstractUpdate(object):
             A null revision means that this reference is being deleted.
         new_rev_type: The type of commit that new_rev points to.
             See git.get_object_type for more info.
+        pre_update_refs: A GitReferences class (expected to contain
+            the value of all references prior to the update being
+            applied).
 
     REMARKS
         This class is meant to be abstract and should never be instantiated.
     """
-    def __init__(self, ref_name, old_rev, new_rev):
+    def __init__(self, ref_name, old_rev, new_rev, pre_update_refs):
         """The constructor.
 
         Also calls self.auto_sanity_check() at the end.
@@ -35,6 +38,7 @@ class AbstractUpdate(object):
             ref_name: Same as the attribute.
             old_rev: Same as the attribute.
             new_rev: Same as the attribute.
+            pre_update_refs: Same as the attribute.
         """
         m = re.match(r"refs/[^/]*/(.*)", ref_name)
 
@@ -43,6 +47,7 @@ class AbstractUpdate(object):
         self.old_rev = old_rev
         self.new_rev = new_rev
         self.new_rev_type = get_object_type(self.new_rev)
+        self.pre_update_refs = pre_update_refs
 
         self.self_sanity_check()
 
@@ -91,7 +96,8 @@ class AbstractUpdate(object):
             # new commit.
             return
 
-        all_commits = expand_new_commit_to_list(self.new_rev)
+        all_commits = expand_new_commit_to_list(self.new_rev,
+                                                self.pre_update_refs)
         if len(all_commits) < 2:
             # There are no new commits, so nothing further to check.
             # Note: We check for len < 2 instead of 1, since the first
@@ -167,10 +173,10 @@ class AbstractUpdate(object):
         assert False
 
 
-def expand_new_commit_to_list(new_rev):
+def expand_new_commit_to_list(new_rev, refs):
     """Expand the new commit into a list of commits introduced by the update.
 
-    This function searches the "nearest" commit from one of the branches
+    This function searches the "nearest" commit from one of the references
     that already exist in the repository, and then generates a list of
     commits, starting with that "nearest" commit.  The list contains
     all the new commits leading to new_rev, in "chronological" order
@@ -179,6 +185,11 @@ def expand_new_commit_to_list(new_rev):
     If new_rev is a new headless branch with no common ancestor, then
     there is no "nearest" commit, and the first element of the list
     is set to None.
+
+    PARAMETERS
+        new_rev: The reference's new rev (SHA1).
+        refs: A GitReferences object, expected to contain the value
+            of all references (prior to the update).
 
     REMARKS
         We treat branch updates different from new branches (where
@@ -205,7 +216,7 @@ def expand_new_commit_to_list(new_rev):
     # For every existing reference, determine the number of commits
     # between that reference and new_rev.  Select the reference which
     # has the fewer number of commits.
-    for (rev, _) in git_show_ref():
+    for (_, rev) in refs.refs.items():
         rev_list_to_new_rev = git.rev_list(new_rev, '^%s' % rev,
                                            reverse=True, _split_lines=True)
         if len(rev_list_to_new_rev) < len(commit_list):

@@ -1,7 +1,7 @@
 """The updates root module."""
 
 from config import git_config
-from git import git, get_object_type, is_null_rev, git_show_ref
+from git import git, get_object_type, is_null_rev
 from pre_commit_checks import check_commit
 import re
 from updates.emails import Email
@@ -96,9 +96,8 @@ class AbstractUpdate(object):
             # new commit.
             return
 
-        all_commits = expand_new_commit_to_list(self.new_rev,
-                                                self.pre_update_refs)
-        if len(all_commits) < 2:
+        new_commits = self.pre_update_refs.new_commits(self.new_rev)
+        if len(new_commits) < 2:
             # There are no new commits, so nothing further to check.
             # Note: We check for len < 2 instead of 1, since the first
             # element is the "update base" commit (similar to the merge
@@ -110,12 +109,12 @@ class AbstractUpdate(object):
             # This project prefers to perform the style check on
             # the cumulated diff, rather than commit-per-commit.
             debug('(combined style checking)')
-            all_commits = (all_commits[0], all_commits[-1])
+            new_commits = (new_commits[0], new_commits[-1])
         else:
             debug('(commit-per-commit style checking)')
 
         # Iterate over our list of commits in pairs...
-        for (parent_rev, rev) in zip(all_commits[:-1], all_commits[1:]):
+        for (parent_rev, rev) in zip(new_commits[:-1], new_commits[1:]):
             check_commit(parent_rev, rev)
 
     #------------------------------------------------------------------
@@ -173,66 +172,3 @@ class AbstractUpdate(object):
         assert False
 
 
-def expand_new_commit_to_list(new_rev, refs):
-    """Expand the new commit into a list of commits introduced by the update.
-
-    This function searches the "nearest" commit from one of the references
-    that already exist in the repository, and then generates a list of
-    commits, starting with that "nearest" commit.  The list contains
-    all the new commits leading to new_rev, in "chronological" order
-    (parents first).
-
-    If new_rev is a new headless branch with no common ancestor, then
-    there is no "nearest" commit, and the first element of the list
-    is set to None.
-
-    PARAMETERS
-        new_rev: The reference's new rev (SHA1).
-        refs: A GitReferences object, expected to contain the value
-            of all references (prior to the update).
-
-    REMARKS
-        We treat branch updates different from new branches (where
-        the old_rev is the null SHA), because branch updates can be
-        non-fast-forward updates.  With such updates, the branch
-        become completely unrelated to the old branch, or even
-        an entirely new and headless branch, not connected to any
-        of the already existing branches.  We could use simplified
-        code for the easy fast-forward update, but that would be
-        extra code to maintain.
-
-    RETURN VALUE
-        A list of commits.  The list will always contain at least
-        one element, which is the "update base" commit (the commit
-        that is common to an already-existing branch an our new_rev),
-        or None.
-    """
-    # Start from the entire list of commits for our new branch, and
-    # see if we can shorten that list a bit by finding an already
-    # existing branch that has commits in common.
-    commit_list = git.rev_list(new_rev, reverse=True, _split_lines=True)
-    nearest_rev = None
-
-    # For every existing reference, determine the number of commits
-    # between that reference and new_rev.  Select the reference which
-    # has the fewer number of commits.
-    for (_, rev) in refs.refs.items():
-        rev_list_to_new_rev = git.rev_list(new_rev, '^%s' % rev,
-                                           reverse=True, _split_lines=True)
-        if len(rev_list_to_new_rev) < len(commit_list):
-            nearest_rev = rev
-            commit_list = rev_list_to_new_rev
-
-    # If we found an already-existing reference that has common
-    # ancestors with our new commit, then insert that common
-    # commit at the start of our commit list.
-    if nearest_rev is not None:
-        commit_list.insert(0, git.merge_base(nearest_rev, new_rev))
-    else:
-        # This is most likely a new headless branch. Use None as
-        # our convention to mean that the oldest commit is a root
-        # commit (it has no parent).
-        commit_list.insert(0, None)
-    debug('update base: %s' % commit_list[0])
-
-    return commit_list

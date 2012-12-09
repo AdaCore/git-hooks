@@ -109,7 +109,19 @@ class AbstractUpdate(object):
             print "--  Commit emails will therefore not be sent."
             print '-' * 75
             return
+        self.email_ref_update(email_info)
 
+    def email_ref_update(self, email_info):
+        """Send the email describing to the reference update.
+
+        This email can be seen as a "cover email", or a quick summary
+        of the update that was performed.
+
+        REMARKS
+            The hooks may decide that such an email may not be necessary,
+            and thus send nothing. See self.get_update_email_contents
+            for more details.
+        """
         update_email_contents = self.get_update_email_contents(email_info)
         if update_email_contents is not None:
             (subject, body) = update_email_contents

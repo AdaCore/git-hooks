@@ -1,7 +1,7 @@
 """The updates root module."""
 
 from config import git_config
-from git import git, get_object_type, is_null_rev
+from git import git, get_object_type, is_null_rev, git_show_ref
 from pre_commit_checks import check_commit
 import re
 from updates.emails import Email
@@ -200,24 +200,23 @@ def expand_new_commit_to_list(new_rev):
     # see if we can shorten that list a bit by finding an already
     # existing branch that has commits in common.
     commit_list = git.rev_list(new_rev, reverse=True, _split_lines=True)
-    nearest_branch_rev = None
+    nearest_rev = None
 
-    # For every existing branch, determine the number of commits
-    # between that branch and new_rev.  Select the branch that has
-    # the fewer number of commits.
-    all_branches_revs = git.rev_parse(branches=True, _split_lines=True)
-    for branch_rev in all_branches_revs:
-        rev_list_to_branch = git.rev_list(new_rev, '^%s' % branch_rev,
-                                          reverse=True, _split_lines=True)
-        if len(rev_list_to_branch) < len(commit_list):
-            nearest_branch_rev = branch_rev
-            commit_list = rev_list_to_branch
+    # For every existing reference, determine the number of commits
+    # between that reference and new_rev.  Select the reference which
+    # has the fewer number of commits.
+    for (rev, _) in git_show_ref():
+        rev_list_to_new_rev = git.rev_list(new_rev, '^%s' % rev,
+                                           reverse=True, _split_lines=True)
+        if len(rev_list_to_new_rev) < len(commit_list):
+            nearest_rev = rev
+            commit_list = rev_list_to_new_rev
 
-    # If we found an already-existing branch that has common
-    # ancestors with our new branch, then insert that common
+    # If we found an already-existing reference that has common
+    # ancestors with our new commit, then insert that common
     # commit at the start of our commit list.
-    if nearest_branch_rev is not None:
-        commit_list.insert(0, git.merge_base(nearest_branch_rev, new_rev))
+    if nearest_rev is not None:
+        commit_list.insert(0, git.merge_base(nearest_rev, new_rev))
     else:
         # This is most likely a new headless branch. Use None as
         # our convention to mean that the oldest commit is a root

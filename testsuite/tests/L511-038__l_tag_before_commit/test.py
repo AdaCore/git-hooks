@@ -60,12 +60,7 @@ To ../bare/repo.git
         p = Run('git push origin master'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 426fba3571947f6de7f967e885a3168b9df7004a, 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3)
-remote: DEBUG: update base: 426fba3571947f6de7f967e885a3168b9df7004a
-remote: DEBUG: (commit-per-commit style checking)
-remote: DEBUG: check_commit(old_rev=426fba3571947f6de7f967e885a3168b9df7004a, new_rev=4f0f08f46daf6f5455cf90cdc427443fe3b32fa3)
-remote: *** cvs_check: `trunk/repo/a'
-remote: *** cvs_check: `trunk/repo/b'
-remote: *** cvs_check: `trunk/repo/c'
+remote: DEBUG: update base: 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3
 remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=426fba3571947f6de7f967e885a3168b9df7004a
 remote:                         new_rev=4f0f08f46daf6f5455cf90cdc427443fe3b32fa3)

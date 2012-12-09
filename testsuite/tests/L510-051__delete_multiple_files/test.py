@@ -20,9 +20,9 @@ remote: DEBUG: (commit-per-commit style checking)
 remote: DEBUG: check_commit(old_rev=f82624871b6cfc46d5a7c5be518bc20e8f42be42, new_rev=0c702ad3051f00b1251bca7a0241a3a9bf19bf0d)
 remote:   DEBUG: deleted file ignored: a.adb
 remote:   DEBUG: deleted file ignored: b.adb
-remote: DEBUG: post_receive_one(ref_name=f82624871b6cfc46d5a7c5be518bc20e8f42be42
-remote:                         old_rev=0c702ad3051f00b1251bca7a0241a3a9bf19bf0d
-remote:                         new_rev=refs/heads/master)
+remote: DEBUG: post_receive_one(ref_name=refs/heads/master
+remote:                         old_rev=f82624871b6cfc46d5a7c5be518bc20e8f42be42
+remote:                         new_rev=0c702ad3051f00b1251bca7a0241a3a9bf19bf0d)
 remote: *** email notification for new commits not implemented yet.
 To ../bare/repo.git
    f826248..0c702ad  master -> master

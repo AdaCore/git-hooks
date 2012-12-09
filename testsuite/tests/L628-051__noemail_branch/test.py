@@ -26,9 +26,9 @@ remote: DEBUG: check_commit(old_rev=4a325b31f594b1dc2c66ac15c4b6b68702bd0cdf, ne
 remote: *** cvs_check: `trunk/repo/c'
 remote: DEBUG: check_commit(old_rev=cc8d2c2637bda27f0bc2125181dd2f8534d16222, new_rev=dd6165c96db712d3e918fb5c61088b171b5e7cab)
 remote: *** cvs_check: `trunk/repo/d'
-remote: DEBUG: post_receive_one(ref_name=426fba3571947f6de7f967e885a3168b9df7004a
-remote:                         old_rev=dd6165c96db712d3e918fb5c61088b171b5e7cab
-remote:                         new_rev=refs/heads/master)
+remote: DEBUG: post_receive_one(ref_name=refs/heads/master
+remote:                         old_rev=426fba3571947f6de7f967e885a3168b9df7004a
+remote:                         new_rev=dd6165c96db712d3e918fb5c61088b171b5e7cab)
 remote: ---------------------------------------------------------------------------
 remote: --  The hooks.noemails config parameter contains `refs/heads/master'.
 remote: --  Commit emails will therefore not be sent.

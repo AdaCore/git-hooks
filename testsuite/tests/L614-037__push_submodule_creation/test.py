@@ -56,9 +56,9 @@ remote: DEBUG: (commit-per-commit style checking)
 remote: DEBUG: check_commit(old_rev=7a373b536b65b600a449b5c739c137301f6fd364, new_rev=%(subm_rev)s)
 remote: *** cvs_check: `trunk/repo/.gitmodules'
 remote:   DEBUG: subproject entry ignored: subm
-remote: DEBUG: post_receive_one(ref_name=7a373b536b65b600a449b5c739c137301f6fd364
-remote:                         old_rev=%(subm_rev)s
-remote:                         new_rev=refs/heads/master)
+remote: DEBUG: post_receive_one(ref_name=refs/heads/master
+remote:                         old_rev=7a373b536b65b600a449b5c739c137301f6fd364
+remote:                         new_rev=%(subm_rev)s)
 remote: *** email notification for new commits not implemented yet.
 To ../bare/repo.git
    7a373b5..%(short_subm_rev)s  master -> master

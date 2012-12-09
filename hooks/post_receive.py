@@ -26,7 +26,7 @@ def post_receive_one(ref_name, old_rev, new_rev, email_info):
     debug('post_receive_one(ref_name=%s\n'
           '                        old_rev=%s\n'
           '                        new_rev=%s)'
-          % (old_rev, new_rev, ref_name))
+          % (ref_name, old_rev, new_rev))
 
     update = new_update(ref_name, old_rev, new_rev)
     if update is None:

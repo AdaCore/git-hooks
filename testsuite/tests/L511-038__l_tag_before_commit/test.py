@@ -27,9 +27,9 @@ remote: DEBUG: check_commit(old_rev=426fba3571947f6de7f967e885a3168b9df7004a, ne
 remote: *** cvs_check: `trunk/repo/a'
 remote: *** cvs_check: `trunk/repo/b'
 remote: *** cvs_check: `trunk/repo/c'
-remote: DEBUG: post_receive_one(ref_name=0000000000000000000000000000000000000000
-remote:                         old_rev=4f0f08f46daf6f5455cf90cdc427443fe3b32fa3
-remote:                         new_rev=refs/tags/version-0.1a)
+remote: DEBUG: post_receive_one(ref_name=refs/tags/version-0.1a
+remote:                         old_rev=0000000000000000000000000000000000000000
+remote:                         new_rev=4f0f08f46daf6f5455cf90cdc427443fe3b32fa3)
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -66,9 +66,9 @@ remote: DEBUG: check_commit(old_rev=426fba3571947f6de7f967e885a3168b9df7004a, ne
 remote: *** cvs_check: `trunk/repo/a'
 remote: *** cvs_check: `trunk/repo/b'
 remote: *** cvs_check: `trunk/repo/c'
-remote: DEBUG: post_receive_one(ref_name=426fba3571947f6de7f967e885a3168b9df7004a
-remote:                         old_rev=4f0f08f46daf6f5455cf90cdc427443fe3b32fa3
-remote:                         new_rev=refs/heads/master)
+remote: DEBUG: post_receive_one(ref_name=refs/heads/master
+remote:                         old_rev=426fba3571947f6de7f967e885a3168b9df7004a
+remote:                         new_rev=4f0f08f46daf6f5455cf90cdc427443fe3b32fa3)
 remote: *** email notification for new commits not implemented yet.
 To ../bare/repo.git
    426fba3..4f0f08f  master -> master

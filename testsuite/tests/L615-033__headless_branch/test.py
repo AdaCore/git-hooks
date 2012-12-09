@@ -29,9 +29,9 @@ remote: *** cvs_check: `trunk/repo/that.txt'
 remote: *** cvs_check: `trunk/repo/there'
 remote: DEBUG: check_commit(old_rev=6586d1c0db5147a521975c15cc6bfd92d2f66de6, new_rev=902092ffe1cf61b28e28c86949a447b9fc2591a4)
 remote: *** cvs_check: `trunk/repo/this.txt'
-remote: DEBUG: post_receive_one(ref_name=0000000000000000000000000000000000000000
-remote:                         old_rev=902092ffe1cf61b28e28c86949a447b9fc2591a4
-remote:                         new_rev=refs/heads/headless)
+remote: DEBUG: post_receive_one(ref_name=refs/heads/headless
+remote:                         old_rev=0000000000000000000000000000000000000000
+remote:                         new_rev=902092ffe1cf61b28e28c86949a447b9fc2591a4)
 remote: *** email notification for new commits not implemented yet.
 To ../bare/repo.git
  * [new branch]      headless -> headless
@@ -51,9 +51,9 @@ remote: DEBUG: check_commit(old_rev=None, new_rev=ef3ab848df2bef804d5bd0880475d4
 remote: DEBUG: check_commit: old_rev -> 4b825dc642cb6eb9a060e54bf8d69288fbee4904 (empty tree SHA1)
 remote: *** cvs_check: `trunk/repo/contents.txt'
 remote: *** cvs_check: `trunk/repo/stuff'
-remote: DEBUG: post_receive_one(ref_name=0000000000000000000000000000000000000000
-remote:                         old_rev=ef3ab848df2bef804d5bd0880475d40cb6aab0bf
-remote:                         new_rev=refs/heads/one-commit)
+remote: DEBUG: post_receive_one(ref_name=refs/heads/one-commit
+remote:                         old_rev=0000000000000000000000000000000000000000
+remote:                         new_rev=ef3ab848df2bef804d5bd0880475d40cb6aab0bf)
 remote: *** email notification for new commits not implemented yet.
 To ../bare/repo.git
  * [new branch]      one-commit -> one-commit

@@ -64,25 +64,6 @@ class AbstractUpdate(object):
         self.validate_ref_update()
         self.pre_commit_checks()
 
-    def send_email_notifications(self, email_info):
-        """Send all email notifications associated to this update.
-        """
-        no_emails_list = git_config("hooks.noemails")
-        if no_emails_list and self.ref_name in no_emails_list.split(","):
-            print '-' * 75
-            print "--  The hooks.noemails config parameter contains `%s'." \
-                    % self.ref_name
-            print "--  Commit emails will therefore not be sent."
-            print '-' * 75
-            return
-
-        update_email_contents = self.get_update_email_contents(email_info)
-        if update_email_contents is not None:
-            (subject, body) = update_email_contents
-            update_email = Email(email_info, subject, body,
-                                 self.ref_name, self.old_rev, self.new_rev)
-            update_email.send()
-
     def pre_commit_checks(self):
         """Run the pre-commit checks on this update's new commits.
 
@@ -116,6 +97,25 @@ class AbstractUpdate(object):
         # Iterate over our list of commits in pairs...
         for (parent_rev, rev) in zip(new_commits[:-1], new_commits[1:]):
             check_commit(parent_rev, rev)
+
+    def send_email_notifications(self, email_info):
+        """Send all email notifications associated to this update.
+        """
+        no_emails_list = git_config("hooks.noemails")
+        if no_emails_list and self.ref_name in no_emails_list.split(","):
+            print '-' * 75
+            print "--  The hooks.noemails config parameter contains `%s'." \
+                    % self.ref_name
+            print "--  Commit emails will therefore not be sent."
+            print '-' * 75
+            return
+
+        update_email_contents = self.get_update_email_contents(email_info)
+        if update_email_contents is not None:
+            (subject, body) = update_email_contents
+            update_email = Email(email_info, subject, body,
+                                 self.ref_name, self.old_rev, self.new_rev)
+            update_email.send()
 
     #------------------------------------------------------------------
     #--  Abstract methods that must be overridden by child classes.  --

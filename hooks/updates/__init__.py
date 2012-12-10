@@ -77,8 +77,8 @@ class AbstractUpdate(object):
             # new commit.
             return
 
-        new_commits = self.pre_update_refs.expand(self.old_rev, self.new_rev)
-        if len(new_commits) < 2:
+        commit_list = self.pre_update_refs.expand(self.old_rev, self.new_rev)
+        if len(commit_list) < 2:
             # There are no new commits, so nothing further to check.
             # Note: We check for len < 2 instead of 1, since the first
             # element is the "update base" commit (similar to the merge
@@ -91,7 +91,7 @@ class AbstractUpdate(object):
         # are new for the repository, so we count those.
         if not self.in_no_emails_list():
             max_emails = int(git_config('hooks.maxcommitemails'))
-            nb_emails = len([commit for commit in new_commits[1:]
+            nb_emails = len([commit for commit in commit_list[1:]
                              if commit.new_in_repo])
             if nb_emails > max_emails:
                 raise InvalidUpdate(
@@ -106,12 +106,12 @@ class AbstractUpdate(object):
             # This project prefers to perform the style check on
             # the cumulated diff, rather than commit-per-commit.
             debug('(combined style checking)')
-            new_commits = (new_commits[0], new_commits[-1])
+            commit_list = (commit_list[0], commit_list[-1])
         else:
             debug('(commit-per-commit style checking)')
 
         # Iterate over our list of commits in pairs...
-        for (parent_commit, commit) in zip(new_commits[:-1], new_commits[1:]):
+        for (parent_commit, commit) in zip(commit_list[:-1], commit_list[1:]):
             if commit.new_in_repo:
                 check_commit(parent_commit.rev, commit.rev)
 

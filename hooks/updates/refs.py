@@ -83,7 +83,9 @@ class GitReferences(object):
             if len(new_repo_revs) > 0:
                 # The ref update brings some new commits.  The first
                 # parent of the oldest of those commits, if it exists,
-                # seems like a good candidate.
+                # seems like a good candidate.  If it does not exist,
+                # we are pushing a entirely new headless branch, and
+                # old_rev should remain null.
                 parents = commit_parents(new_repo_revs[0])
                 if parents is not None:
                     old_rev = parents[0]

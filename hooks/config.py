@@ -19,6 +19,7 @@ GIT_CONFIG_OPTS = {
     'hooks.debuglevel'       : { 'type' : 'int',  'default' : '0' },
     'hooks.fromdomain'       : {                  'default' : None},
     'hooks.mailinglist'      : {                  'default' : None},
+    'hooks.maxcommitemails'  : { 'type' : 'int',  'default' : '100' },
     'hooks.noemails'         : {                  'default' : ''},
 }
 

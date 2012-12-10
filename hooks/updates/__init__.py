@@ -5,7 +5,7 @@ from git import git, get_object_type, is_null_rev
 from pre_commit_checks import check_commit
 import re
 from updates.emails import Email
-from utils import debug
+from utils import debug, InvalidUpdate
 
 
 class AbstractUpdate(object):
@@ -86,6 +86,22 @@ class AbstractUpdate(object):
             # 2 branches).
             return
 
+        # Check that the update wouldn't generate too many commit emails.
+        # We know that commit emails would only be sent for commits which
+        # are new for the repository, so we count those.
+        if not self.in_no_emails_list():
+            max_emails = int(git_config('hooks.maxcommitemails'))
+            nb_emails = len([commit for commit in new_commits[1:]
+                             if commit.new_in_repo])
+            if nb_emails > max_emails:
+                raise InvalidUpdate(
+                    "This update introduces too many new commits (%d),"
+                        " which would" % nb_emails,
+                    "trigger as many emails, exceeding the"
+                        " current limit (%d)." % max_emails,
+                    "Contact your repository adminstrator if you really meant",
+                    "to generate this many commit emails.")
+
         if git_config('hooks.combinedstylechecking') == 'true':
             # This project prefers to perform the style check on
             # the cumulated diff, rather than commit-per-commit.
@@ -102,8 +118,7 @@ class AbstractUpdate(object):
     def send_email_notifications(self, email_info):
         """Send all email notifications associated to this update.
         """
-        no_emails_list = git_config("hooks.noemails")
-        if no_emails_list and self.ref_name in no_emails_list.split(","):
+        if self.in_no_emails_list():
             print '-' * 75
             print "--  The hooks.noemails config parameter contains `%s'." \
                     % self.ref_name
@@ -184,4 +199,12 @@ class AbstractUpdate(object):
         """
         assert False
 
+    #-----------------------
+    #--  Useful methods.  --
+    #-----------------------
 
+    def in_no_emails_list(self):
+        """Return True if no emails should be sent for this reference update.
+        """
+        no_emails_list = git_config("hooks.noemails")
+        return no_emails_list and self.ref_name in no_emails_list.split(",")

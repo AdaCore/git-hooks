@@ -77,7 +77,7 @@ class AbstractUpdate(object):
             # new commit.
             return
 
-        new_commits = self.pre_update_refs.new_commits(self.new_rev)
+        new_commits = self.pre_update_refs.expand(self.old_rev, self.new_rev)
         if len(new_commits) < 2:
             # There are no new commits, so nothing further to check.
             # Note: We check for len < 2 instead of 1, since the first
@@ -95,8 +95,9 @@ class AbstractUpdate(object):
             debug('(commit-per-commit style checking)')
 
         # Iterate over our list of commits in pairs...
-        for (parent_rev, rev) in zip(new_commits[:-1], new_commits[1:]):
-            check_commit(parent_rev, rev)
+        for (parent_commit, commit) in zip(new_commits[:-1], new_commits[1:]):
+            if commit.new_in_repo:
+                check_commit(parent_commit.rev, commit.rev)
 
     def send_email_notifications(self, email_info):
         """Send all email notifications associated to this update.

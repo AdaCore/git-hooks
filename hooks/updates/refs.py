@@ -1,6 +1,7 @@
 """Management of git references in a git repository.
 """
-from git import git, git_show_ref, is_null_rev
+from git import (git, git_show_ref, is_null_rev, rev_list_commits,
+                 load_commit, commit_parents, GitCommit)
 from utils import debug
 
 
@@ -33,65 +34,73 @@ class GitReferences(object):
         else:
             self.refs[ref_name] = new_rev
 
-    def new_commits(self, new_rev):
+    def expand(self, old_rev, new_rev):
         """Return a list of new commits introduced by the update.
 
-        This function searches the "nearest" commit from one of
-        the references that already exist in the repository, and
-        then generates a list of commits, starting with that "nearest"
-        commit.  The list contains all the new commits leading to
-        new_rev, in "chronological" order (parents first).
+        This function expands old_rev..new_rev into a list of
+        GitCommit objects, where each GitCommit object has an
+        additional attribute called new_in_repo, set to True
+        iff the commit is new for this repository.
 
-        If new_rev is a new headless branch with no common ancestor,
-        then there is no "nearest" commit, and the first element of
-        the list is set to None.
+        If old_rev is null, then this function tries to compute one
+        by using the nearest commit from one of the references
+        that exist already.  If new_rev is a new headless reference
+        with no common ancestor, then there is no "nearest" commit,
+        and the first element of the list is a GitCommit object
+        whose rev and subject are set to None.
+
+        The list is sorted in chronological order.
 
         PARAMETERS
+            old_rev: The reference's old rev (SHA1).
             new_rev: The reference's new rev (SHA1).
-
-        REMARKS
-            We treat branch updates different from new branches (where
-            the old_rev is the null SHA), because branch updates can be
-            non-fast-forward updates.  With such updates, the branch
-            become completely unrelated to the old branch, or even
-            an entirely new and headless branch, not connected to any
-            of the already existing branches.  We could use simplified
-            code for the easy fast-forward update, but that would be
-            extra code to maintain.
 
         RETURN VALUE
             A list of commits.  The list will always contain at least
             one element, which is the "update base" commit (the commit
-            that is common to an already-existing branch an our new_rev),
-            or None.
+            that is common to an already-existing branch an our new_rev).
+            The revision and subject of the "update base" may be None.
         """
-        # Start from the entire list of commits for our new branch, and
-        # see if we can shorten that list a bit by finding an already
-        # existing branch that has commits in common.
-        commit_list = git.rev_list(new_rev, reverse=True, _split_lines=True)
-        nearest_rev = None
+        exclude = ['^%s' % self.refs[ref_name]
+                   for ref_name in self.refs.keys()]
 
-        # For every existing reference, determine the number of commits
-        # between that reference and new_rev.  Select the reference which
-        # has the fewer number of commits.
-        for (_, rev) in self.refs.items():
-            rev_list_to_new_rev = git.rev_list(new_rev, '^%s' % rev,
-                                               reverse=True,
-                                               _split_lines=True)
-            if len(rev_list_to_new_rev) < len(commit_list):
-                nearest_rev = rev
-                commit_list = rev_list_to_new_rev
+        # Compute the list of commits that are not accessible from
+        # any of the references.  These are the commits which are
+        # new in the repository.
+        #
+        # Note that we do not use the rev_list_commits function for
+        # that, because we only need the commit hashes, and a list
+        # of commit hashes is more convenient for what we want to do
+        # than a list of GitCommit objects.
+        new_repo_revs = git.rev_list(new_rev, *exclude, reverse=True,
+                                     _split_lines=True)
 
-        # If we found an already-existing reference that has common
-        # ancestors with our new commit, then insert that common
-        # commit at the start of our commit list.
-        if nearest_rev is not None:
-            commit_list.insert(0, git.merge_base(nearest_rev, new_rev))
+        # If this is a reference creation (old_rev is null), try to
+        # find a commit which can serve as old_rev.  We try to find
+        # the "nearest branch", and the parent of the oldest commit
+        # in new_repo_revs, if it exists, seems like a good candidate.
+        if is_null_rev(old_rev) and len(new_repo_revs) > 0:
+            parents = commit_parents(new_repo_revs[0])
+            if parents is not None:
+                old_rev = parents[0]
+
+        # Expand old_rev..new_rev to compute the list of commits which
+        # are new for the reference.  If there is no actual old_rev
+        # (Eg. a headless branch), then expand to all commits accessible
+        # from that reference.
+        if not is_null_rev(old_rev):
+            commit_list = rev_list_commits(new_rev, '^%s' % old_rev,
+                                           reverse=True)
+            commit_list.insert(0, load_commit(old_rev))
         else:
-            # This is most likely a new headless branch. Use None as
-            # our convention to mean that the oldest commit is a root
-            # commit (it has no parent).
-            commit_list.insert(0, None)
-        debug('update base: %s' % commit_list[0])
+            commit_list = rev_list_commits(new_rev, reverse=True)
+            commit_list.insert(0, GitCommit(None, None))
+
+        # Iterate over every commit, and mark them as either "new"
+        # for the repo or not.
+        for commit in commit_list:
+            commit.new_in_repo = commit.rev in new_repo_revs
+
+        debug('update base: %s' % commit_list[0].rev)
 
         return commit_list

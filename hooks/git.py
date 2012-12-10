@@ -363,3 +363,19 @@ def git_show_ref(*args):
         return result
     except CalledProcessError:
         return None
+
+def commit_parents(rev):
+    """Return the commit parents.
+
+    PARAMETERS
+        rev: The revision for which the parents need to be computed.
+
+    RETURN VALUE
+        A list of revisions corresponding to each parent, ordered
+        (ie: the first parent is first on the list, etc). If this is
+        a headeless commit, return None.
+    """
+    parents = git.log('-n1', '--pretty=format:%P', rev).strip().split()
+    if not parents:
+        parents = None
+    return parents

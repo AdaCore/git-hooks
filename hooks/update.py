@@ -9,6 +9,7 @@ from utils import (InvalidUpdate, debug, warn, create_scratch_dir)
 # to not see the update when create_scratch_dir is called.
 import utils
 
+from updates.emails import EmailInfo
 from updates.factory import new_update
 from updates.refs import GitReferences
 
@@ -62,6 +63,15 @@ def check_update(ref_name, old_rev, new_rev):
 if __name__ == "__main__":
     args = parse_command_line()
     try:
+        # If the repository's configuration does not provide
+        # the minimum required to email update notifications,
+        # refuse the update.  For this, we rely on the EmailInfo
+        # class instantiation, which performs the checks for us.
+        # Do not print warnings now - they will be printed during
+        # the post-receive phase, after we know that the update
+        # has been accepted.
+        EmailInfo(print_warnings=False)
+
         create_scratch_dir()
         check_update(args.ref_name, args.old_rev, args.new_rev)
     except InvalidUpdate, E:

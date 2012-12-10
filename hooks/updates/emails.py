@@ -28,14 +28,19 @@ class EmailInfo(object):
         is set.  Otherwise, an InvalidUpdate exception is raised when
         the object is initialized.
     """
-    def __init__(self):
+    def __init__(self, print_warnings=True):
+        """The constructor.
+
+        PARAMETERS
+            print_warnings: If True, then print warnings on stdout.
+        """
         self.project_name = get_module_name()
 
         from_domain = git_config('hooks.fromdomain')
         if not from_domain:
             raise InvalidUpdate(
                 'Error: hooks.fromdomain config variable not set.',
-                'Cannot send email notifications.')
+                'Please contact your repository\'s administrator.')
         self.email_from = '%s <%s@%s>' % (get_user_full_name(),
                                           get_user_name(),
                                           from_domain)
@@ -47,12 +52,13 @@ class EmailInfo(object):
             # has already been made, error-ing out would not actually
             # help at all.  Do the best we can, which is trying to file
             # the commits, and also warn the user about it.
-            print "---------------------------------------------------------"
-            print "-- WARNING:"
-            print "-- The hooks.mailinglist config variable not set."
-            print "-- Commit emails will only be sent to %s." % FILER_EMAIL
-            print "---------------------------------------------------------"
             self.email_to=FILER_EMAIL
+            if print_warnings:
+                print '-' * 60
+                print "-- WARNING:"
+                print "-- The hooks.mailinglist config variable not set."
+                print "-- Commit emails will only be sent to %s." % FILER_EMAIL
+                print '-' * 60
 
 
 class Email(object):

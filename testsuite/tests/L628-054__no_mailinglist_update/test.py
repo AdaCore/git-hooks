@@ -11,11 +11,11 @@ class TestRun(TestCase):
         expected_out = """\
 remote: *** cvs_check: `trunk/repo/a'
 remote: *** email notification for new commits not implemented yet.
-remote: ---------------------------------------------------------
+remote: ------------------------------------------------------------
 remote: -- WARNING:
 remote: -- The hooks.mailinglist config variable not set.
 remote: -- Commit emails will only be sent to file-ci@gnat.com.
-remote: ---------------------------------------------------------
+remote: ------------------------------------------------------------
 To ../bare/repo.git
    d065089..a605403  master -> master
 """

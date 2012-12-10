@@ -12,7 +12,7 @@ import sys
 from updates.emails import EmailInfo
 from updates.factory import new_update
 from updates.refs import GitReferences
-from utils import (debug, warn, InvalidUpdate)
+from utils import (debug, warn)
 
 
 def post_receive_one(ref_name, old_rev, new_rev, email_info, refs):
@@ -100,8 +100,4 @@ if __name__ == '__main__':
         stdin_argv = line.strip().split()
         args = parse_command_line(stdin_argv)
         refs_data[args.ref_name] = (args.old_rev, args.new_rev)
-    try:
-        post_receive(refs_data)
-    except InvalidUpdate, E:
-        warn(*E)
-
+    post_receive(refs_data)

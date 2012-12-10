@@ -77,12 +77,22 @@ class GitReferences(object):
 
         # If this is a reference creation (old_rev is null), try to
         # find a commit which can serve as old_rev.  We try to find
-        # the "nearest branch", and the parent of the oldest commit
-        # in new_repo_revs, if it exists, seems like a good candidate.
-        if is_null_rev(old_rev) and len(new_repo_revs) > 0:
-            parents = commit_parents(new_repo_revs[0])
-            if parents is not None:
-                old_rev = parents[0]
+        # a pre-existing commit making the old_rev..new_rev list
+        # as short as possible.
+        if is_null_rev(old_rev):
+            if len(new_repo_revs) > 0:
+                # The ref update brings some new commits.  The first
+                # parent of the oldest of those commits, if it exists,
+                # seems like a good candidate.
+                parents = commit_parents(new_repo_revs[0])
+                if parents is not None:
+                    old_rev = parents[0]
+            else:
+                # This reference update does not bring any new commits
+                # at all. This means new_rev is already accessible
+                # through one of the references, thus making it a good
+                # old_rev as well.
+                old_rev = new_rev
 
         # Expand old_rev..new_rev to compute the list of commits which
         # are new for the reference.  If there is no actual old_rev

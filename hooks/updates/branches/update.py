@@ -71,10 +71,11 @@ class BranchUpdate(AbstractUpdate):
         if not is_null_rev(self.old_rev):
             check_fast_forward(self.ref_name, self.old_rev, self.new_rev)
 
-    def get_update_email_contents(self, email_info, commit_list):
+    def get_update_email_contents(self, email_info, added_commits,
+                                  lost_commits):
         """See AbstractUpdate.get_update_email_contents.
         """
-        if not self.__update_email_needed(commit_list):
+        if not self.__update_email_needed(added_commits, lost_commits):
             return None
 
         old_commit = load_commit(self.old_rev)
@@ -91,8 +92,8 @@ class BranchUpdate(AbstractUpdate):
                       }
         if self.short_ref_name == 'master':
             update_info['branch'] = ''
-        if len(commit_list) > 1:
-            update_info['n_commits'] = ' (%d commits)' % len(commit_list)
+        if len(added_commits) > 1:
+            update_info['n_commits'] = ' (%d commits)' % len(added_commits)
 
         subject = "[%(repo)s%(branch)s]%(n_commits)s %(subject)s" % update_info
 
@@ -101,12 +102,19 @@ class BranchUpdate(AbstractUpdate):
         return (subject, body)
 
 
-    def __update_email_needed(self, commit_list):
+    def __update_email_needed(self, added_commits, lost_commits):
         """Return True iff the update email is needed.
         """
-        # Send email if there are some merge commits. ???
-        # Send email if there are some commits have have been deleted. ???
-        for commit in commit_list:
-            if not commit.new_in_repo:
+        # If some commits are no longer accessible from the new
+        # revision (must be a non-fast-forward update), definitely
+        # send an update email.
+        if lost_commits:
+            return True
+        # If this update introduces some pre-existing commits (for
+        # which individual emails are not going to be sent), send
+        # the update email.
+        for commit in added_commits:
+            if commit.pre_existing_p:
                 return True
+        # Send email if there are some merge commits. ???
         return False

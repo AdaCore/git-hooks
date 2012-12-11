@@ -1,12 +1,13 @@
 """The updates root module."""
 
 from config import git_config
-from git import git, get_object_type, is_null_rev
+from git import (git, get_object_type, is_null_rev, load_commit,
+                 commit_parents)
 from pre_commit_checks import check_commit
 import re
+from updates.commits import commit_info_list
 from updates.emails import Email
 from utils import debug, InvalidUpdate
-
 
 class AbstractUpdate(object):
     """An abstract class representing a reference update.
@@ -77,13 +78,9 @@ class AbstractUpdate(object):
             # new commit.
             return
 
-        commit_list = self.pre_update_refs.expand(self.old_rev, self.new_rev)
-        if len(commit_list) < 2:
+        added = self.__added_commits()
+        if not added:
             # There are no new commits, so nothing further to check.
-            # Note: We check for len < 2 instead of 1, since the first
-            # element is the "update base" commit (similar to the merge
-            # base, where the commit is the common commit between the
-            # 2 branches).
             return
 
         # Check that the update wouldn't generate too many commit emails.
@@ -91,8 +88,8 @@ class AbstractUpdate(object):
         # are new for the repository, so we count those.
         if not self.in_no_emails_list():
             max_emails = int(git_config('hooks.maxcommitemails'))
-            nb_emails = len([commit for commit in commit_list[1:]
-                             if commit.new_in_repo])
+            nb_emails = len([commit for commit in added
+                             if not commit.pre_existing_p])
             if nb_emails > max_emails:
                 raise InvalidUpdate(
                     "This update introduces too many new commits (%d),"
@@ -106,14 +103,16 @@ class AbstractUpdate(object):
             # This project prefers to perform the style check on
             # the cumulated diff, rather than commit-per-commit.
             debug('(combined style checking)')
-            commit_list = (commit_list[0], commit_list[-1])
+            combined_commit = added[-1]
+            combined_commit.base_rev = added[0].base_rev
+            added = [combined_commit,]
         else:
             debug('(commit-per-commit style checking)')
 
         # Iterate over our list of commits in pairs...
-        for (parent_commit, commit) in zip(commit_list[:-1], commit_list[1:]):
-            if commit.new_in_repo:
-                check_commit(parent_commit.rev, commit.rev)
+        for commit in added:
+            if not commit.pre_existing_p:
+                check_commit(commit.base_rev, commit.rev)
 
     def send_email_notifications(self, email_info):
         """Send all email notifications associated to this update.
@@ -128,11 +127,11 @@ class AbstractUpdate(object):
             print "--  Commit emails will therefore not be sent."
             print '-' * 75
             return
-        commit_list = \
-            self.pre_update_refs.expand(self.old_rev, self.new_rev)[1:]
-        self.email_ref_update(email_info, commit_list)
+        added = self.__added_commits()
+        lost = self.__lost_commits()
+        self.email_ref_update(email_info, added, lost)
 
-    def email_ref_update(self, email_info, commit_list):
+    def email_ref_update(self, email_info, added_commits, lost_commits):
         """Send the email describing to the reference update.
 
         This email can be seen as a "cover email", or a quick summary
@@ -140,10 +139,10 @@ class AbstractUpdate(object):
 
         PARAMETERS
             email_info: An EmailInfo object.
-            commit_list: A list of GitCommit objects.  Each object
-                should have an extra attribute named "new_in_repo"
-                which should be True if the commit is new for the
-                repository.
+            added_commits: A list of CommitInfo objects, corresponding
+                to the commits added by this update.
+            lost_commits: A list of CommitInfo objects, corresponding
+                to the commits lost after this update.
 
         REMARKS
             The hooks may decide that such an email may not be necessary,
@@ -151,7 +150,8 @@ class AbstractUpdate(object):
             for more details.
         """
         update_email_contents = \
-            self.get_update_email_contents(email_info, commit_list)
+            self.get_update_email_contents(email_info, added_commits,
+                                           lost_commits)
         if update_email_contents is not None:
             (subject, body) = update_email_contents
             update_email = Email(email_info, subject, body,
@@ -184,7 +184,8 @@ class AbstractUpdate(object):
         """
         assert False
 
-    def get_update_email_contents(self, email_info, commit_list):
+    def get_update_email_contents(self, email_info, added_commits,
+                                  lost_commits):
         """Return a (subject, body) tuple describing the update (or None).
 
         This method should return a 2-element tuple to be used for
@@ -212,10 +213,10 @@ class AbstractUpdate(object):
 
         PARAMETERS
             email_info: An EmailInfo object.
-            commit_list: A list of GitCommit objects.  Each object
-                should have an extra attribute named "new_in_repo"
-                which should be True if the commit is new for the
-                repository.
+            added_commits: A list of CommitInfo objects, corresponding
+                to the commits added by this update.
+            lost_commits: A list of CommitInfo objects, corresponding
+                to the commits lost after this update.
         """
         assert False
 
@@ -228,3 +229,84 @@ class AbstractUpdate(object):
         """
         no_emails_list = git_config("hooks.noemails")
         return no_emails_list and self.ref_name in no_emails_list.split(",")
+
+    #------------------------
+    #--  Private methods.  --
+    #------------------------
+
+    def __added_commits(self):
+        """Return a list of CommitInfo objects added by our update.
+
+        RETURN VALUE
+            A list of CommitInfo objects, or the empty list if
+            the update did not introduce any new commit.
+        """
+        if is_null_rev(self.new_rev):
+            return []
+
+        exclude = ['^%s' % self.pre_update_refs.refs[ref_name]
+                   for ref_name in self.pre_update_refs.refs.keys()]
+        base_rev = self.old_rev
+
+        # Compute the list of commits that are not accessible from
+        # any of the references.  These are the commits which are
+        # new in the repository.
+        #
+        # Note that we do not use the commit_info_list function for
+        # that, because we only need the commit hashes, and a list
+        # of commit hashes is more convenient for what we want to do
+        # than a list of CommitInfo objects.
+        new_repo_revs = git.rev_list(self.new_rev, *exclude, reverse=True,
+                                     _split_lines=True)
+
+        # If this is a reference creation (base_rev is null), try to
+        # find a commit which can serve as base_rev.  We try to find
+        # a pre-existing commit making the base_rev..new_rev list
+        # as short as possible.
+        if is_null_rev(base_rev):
+            if len(new_repo_revs) > 0:
+                # The ref update brings some new commits.  The first
+                # parent of the oldest of those commits, if it exists,
+                # seems like a good candidate.  If it does not exist,
+                # we are pushing a entirely new headless branch, and
+                # base_rev should remain null.
+                parents = commit_parents(new_repo_revs[0])
+                if parents is not None:
+                    base_rev = parents[0]
+            else:
+                # This reference update does not bring any new commits
+                # at all. This means new_rev is already accessible
+                # through one of the references, thus making it a good
+                # base_rev as well.
+                base_rev = self.new_rev
+
+        # Expand base_rev..new_rev to compute the list of commits which
+        # are new for the reference.  If there is no actual base_rev
+        # (Eg. a headless branch), then expand to all commits accessible
+        # from that reference.
+        if not is_null_rev(base_rev):
+            commit_list = commit_info_list(self.new_rev, '^%s' % base_rev)
+            base_rev = load_commit(base_rev).rev
+        else:
+            commit_list = commit_info_list(self.new_rev)
+            base_rev = None
+        if commit_list:
+            commit_list[0].base_rev = base_rev
+
+        # Iterate over every commit, and set their pre_existing_p attribute.
+        for commit in commit_list:
+            commit.pre_existing_p = commit.rev not in new_repo_revs
+
+        debug('update base: %s' % base_rev)
+
+        return commit_list
+
+    def __lost_commits(self):
+        """Return a list of CommitInfo objects lost after our update.
+
+        RETURN VALUE
+            A list of CommitInfo objects, or the empty list if
+            the update did not cause any commit to be lost.
+        """
+        # ??? Not implemented yet.
+        return []

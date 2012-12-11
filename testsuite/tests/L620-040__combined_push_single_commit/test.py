@@ -20,7 +20,7 @@ remote: *** cvs_check: `trunk/repo/a'
 remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote:                         new_rev=a60540361d47901d3fe254271779f380d94645f7)
-remote: *** email notification for new commits not implemented yet.
+remote: DEBUG: update base: d065089ff184d97934c010ccd0e7e8ed94cb7165
 To ../bare/repo.git
    d065089..a605403  master -> master
 """

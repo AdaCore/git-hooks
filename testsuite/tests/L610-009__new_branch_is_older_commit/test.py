@@ -11,7 +11,22 @@ class TestRun(TestCase):
 
         p = Run('git push origin release-0.1-branch'.split())
         expected_out = """\
-remote: *** email notification for new commits not implemented yet.
+remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: 7bit
+remote: From: Test Suite <testsuite@adacore.com>
+remote: To: git-hooks-ci@example.com
+remote: Bcc: file-ci@gnat.com
+remote: Subject: [repo] Created branch release-0.1-branch
+remote: X-ACT-checkin: repo
+remote: X-Git-Refname: refs/heads/release-0.1-branch
+remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
+remote: X-Git-Newrev: 4a325b31f594b1dc2c66ac15c4b6b68702bd0cdf
+remote:
+remote: The branch 'release-0.1-branch' was created pointing to:
+remote:
+remote:  4a325b3... 1 modified file, 1 new file.
+remote:
 To ../bare/repo.git
  * [new branch]      release-0.1-branch -> release-0.1-branch
 """

@@ -61,6 +61,9 @@ class GitReferences(object):
             that is common to an already-existing branch an our new_rev).
             The revision and subject of the "update base" may be None.
         """
+        if is_null_rev(new_rev):
+            return [None]
+
         exclude = ['^%s' % self.refs[ref_name]
                    for ref_name in self.refs.keys()]
 

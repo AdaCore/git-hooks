@@ -49,7 +49,7 @@ class AnnotatedTagUpdate(AbstractUpdate):
             warn_about_tag_update(self.short_ref_name,
                                   self.old_rev, self.new_rev)
 
-    def get_update_email_contents(self, email_info):
+    def get_update_email_contents(self, email_info, commit_list):
         """See AbstractUpdate.get_update_email_contents."""
         subject = '[%s] Updated tag %s' % (email_info.project_name,
                                            self.short_ref_name)

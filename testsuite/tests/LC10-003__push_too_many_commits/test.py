@@ -28,7 +28,6 @@ error: failed to push some refs to '../bare/repo.git'
         # thus be accepted.
         p = Run('git push origin master~:master'.split())
         expected_out = """\
-remote: *** email notification for new commits not implemented yet.
 To ../bare/repo.git
    d065089..c32bed0  master~ -> master
 """
@@ -40,7 +39,6 @@ To ../bare/repo.git
         # new commit left to push...
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** email notification for new commits not implemented yet.
 To ../bare/repo.git
    c32bed0..4ca9852  master -> master
 """

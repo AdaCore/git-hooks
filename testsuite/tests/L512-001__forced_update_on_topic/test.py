@@ -12,7 +12,6 @@ remote: *** !!! WARNING: This is *NOT* a fast-forward update.
 remote: *** !!! WARNING: You may have removed some important commits.
 remote: *** cvs_check: `trunk/repo/a'
 remote: *** cvs_check: `trunk/repo/b'
-remote: *** email notification for new commits not implemented yet.
 To ../bare/repo.git
  + a605403...14d1fa2 topic/new-feature -> topic/new-feature (forced update)
 """

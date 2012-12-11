@@ -44,7 +44,7 @@ class LightweightTagDeletion(AbstractUpdate):
             raise InvalidUpdate(
                 "Deleting a tag is not allowed in this repository")
 
-    def get_update_email_contents(self, email_info):
+    def get_update_email_contents(self, email_info, commit_list):
         """See AbstractUpdate.get_update_email_contents."""
         subject = '[%s] Deleted tag %s' % (email_info.project_name,
                                            self.short_ref_name)

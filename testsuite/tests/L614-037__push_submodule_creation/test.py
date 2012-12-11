@@ -59,7 +59,7 @@ remote:   DEBUG: subproject entry ignored: subm
 remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=7a373b536b65b600a449b5c739c137301f6fd364
 remote:                         new_rev=%(subm_rev)s)
-remote: *** email notification for new commits not implemented yet.
+remote: DEBUG: update base: 7a373b536b65b600a449b5c739c137301f6fd364
 To ../bare/repo.git
    7a373b5..%(short_subm_rev)s  master -> master
 """ % {'subm_rev' : subm_rev,

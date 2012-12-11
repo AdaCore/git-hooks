@@ -9,7 +9,6 @@ class TestRun(TestCase):
         p = Run('git push origin master'.split())
         expected_out = """\
 remote: *** cvs_check: `trunk/repo/pck.ads'
-remote: *** email notification for new commits not implemented yet.
 To ../bare/repo.git
    f826248..52f1517  master -> master
 """

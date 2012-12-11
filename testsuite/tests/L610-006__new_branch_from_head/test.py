@@ -17,7 +17,22 @@ remote: *** cvs_check: `trunk/repo/a'
 remote: *** cvs_check: `trunk/repo/d'
 remote: *** cvs_check: `trunk/repo/a'
 remote: *** cvs_check: `trunk/repo/b'
-remote: *** email notification for new commits not implemented yet.
+remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: 7bit
+remote: From: Test Suite <testsuite@adacore.com>
+remote: To: git-hooks-ci@example.com
+remote: Bcc: file-ci@gnat.com
+remote: Subject: [repo] Created branch release-0.1-branch
+remote: X-ACT-checkin: repo
+remote: X-Git-Refname: refs/heads/release-0.1-branch
+remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
+remote: X-Git-Newrev: dcc477c258baf8cf59db378fcc344dc962ad9a29
+remote:
+remote: The branch 'release-0.1-branch' was created pointing to:
+remote:
+remote:  dcc477c... New file b, add reference to it from file a.
+remote:
 To ../bare/repo.git
  * [new branch]      release-0.1-branch -> release-0.1-branch
 """

@@ -10,7 +10,6 @@ class TestRun(TestCase):
         expected_out = """\
 remote: *** cvs_check: `trunk/repo/a'
 remote: *** cvs_check: `trunk/repo/c'
-remote: *** email notification for new commits not implemented yet.
 To ../bare/repo.git
    9cbe951..e700706  master -> master
 """

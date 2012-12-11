@@ -29,7 +29,23 @@ remote: *** cvs_check: `trunk/repo/this.txt'
 remote: DEBUG: post_receive_one(ref_name=refs/heads/headless
 remote:                         old_rev=0000000000000000000000000000000000000000
 remote:                         new_rev=902092ffe1cf61b28e28c86949a447b9fc2591a4)
-remote: *** email notification for new commits not implemented yet.
+remote: DEBUG: update base: None
+remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: 7bit
+remote: From: Test Suite <testsuite@adacore.com>
+remote: To: git-hooks-ci@example.com
+remote: Bcc: file-ci@gnat.com
+remote: Subject: [repo] Created branch headless
+remote: X-ACT-checkin: repo
+remote: X-Git-Refname: refs/heads/headless
+remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
+remote: X-Git-Newrev: 902092ffe1cf61b28e28c86949a447b9fc2591a4
+remote:
+remote: The branch 'headless' was created pointing to:
+remote:
+remote:  902092f... Forgot to update this.txt in the previous commit.
+remote:
 To ../bare/repo.git
  * [new branch]      headless -> headless
 """
@@ -51,7 +67,23 @@ remote: *** cvs_check: `trunk/repo/stuff'
 remote: DEBUG: post_receive_one(ref_name=refs/heads/one-commit
 remote:                         old_rev=0000000000000000000000000000000000000000
 remote:                         new_rev=ef3ab848df2bef804d5bd0880475d40cb6aab0bf)
-remote: *** email notification for new commits not implemented yet.
+remote: DEBUG: update base: None
+remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: 7bit
+remote: From: Test Suite <testsuite@adacore.com>
+remote: To: git-hooks-ci@example.com
+remote: Bcc: file-ci@gnat.com
+remote: Subject: [repo] Created branch one-commit
+remote: X-ACT-checkin: repo
+remote: X-Git-Refname: refs/heads/one-commit
+remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
+remote: X-Git-Newrev: ef3ab848df2bef804d5bd0880475d40cb6aab0bf
+remote:
+remote: The branch 'one-commit' was created pointing to:
+remote:
+remote:  ef3ab84... Initial commit.
+remote:
 To ../bare/repo.git
  * [new branch]      one-commit -> one-commit
 """

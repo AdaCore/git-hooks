@@ -31,6 +31,7 @@ remote: *** cvs_check: `trunk/repo/a'
 remote: DEBUG: post_receive_one(ref_name=refs/tags/some-tag
 remote:                         old_rev=8b9a0d6bf08d7a983affbee3c187adadaaedec9e
 remote:                         new_rev=8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5)
+remote: DEBUG: update base: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

@@ -117,6 +117,9 @@ class AbstractUpdate(object):
 
     def send_email_notifications(self, email_info):
         """Send all email notifications associated to this update.
+
+        PARAMETERS
+            email_info: An EmailInfo object.
         """
         if self.in_no_emails_list():
             print '-' * 75
@@ -125,20 +128,30 @@ class AbstractUpdate(object):
             print "--  Commit emails will therefore not be sent."
             print '-' * 75
             return
-        self.email_ref_update(email_info)
+        commit_list = \
+            self.pre_update_refs.expand(self.old_rev, self.new_rev)[1:]
+        self.email_ref_update(email_info, commit_list)
 
-    def email_ref_update(self, email_info):
+    def email_ref_update(self, email_info, commit_list):
         """Send the email describing to the reference update.
 
         This email can be seen as a "cover email", or a quick summary
         of the update that was performed.
+
+        PARAMETERS
+            email_info: An EmailInfo object.
+            commit_list: A list of GitCommit objects.  Each object
+                should have an extra attribute named "new_in_repo"
+                which should be True if the commit is new for the
+                repository.
 
         REMARKS
             The hooks may decide that such an email may not be necessary,
             and thus send nothing. See self.get_update_email_contents
             for more details.
         """
-        update_email_contents = self.get_update_email_contents(email_info)
+        update_email_contents = \
+            self.get_update_email_contents(email_info, commit_list)
         if update_email_contents is not None:
             (subject, body) = update_email_contents
             update_email = Email(email_info, subject, body,
@@ -171,7 +184,7 @@ class AbstractUpdate(object):
         """
         assert False
 
-    def get_update_email_contents(self, email_info):
+    def get_update_email_contents(self, email_info, commit_list):
         """Return a (subject, body) tuple describing the update (or None).
 
         This method should return a 2-element tuple to be used for
@@ -196,6 +209,13 @@ class AbstractUpdate(object):
         For instance, if a branch update only introduces a few new
         commits, a branch update summary email is not going to bring
         much, and thus can be omitted.
+
+        PARAMETERS
+            email_info: An EmailInfo object.
+            commit_list: A list of GitCommit objects.  Each object
+                should have an extra attribute named "new_in_repo"
+                which should be True if the commit is new for the
+                repository.
         """
         assert False
 

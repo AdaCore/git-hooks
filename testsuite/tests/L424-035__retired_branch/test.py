@@ -12,7 +12,22 @@ class TestRun(TestCase):
 
         expected_out = """\
 remote: *** cvs_check: `trunk/repo/a'
-remote: *** email notification for new commits not implemented yet.
+remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: 7bit
+remote: From: Test Suite <testsuite@adacore.com>
+remote: To: git-hooks-ci@example.com
+remote: Bcc: file-ci@gnat.com
+remote: Subject: [repo] Created branch retired/gdb-5.0
+remote: X-ACT-checkin: repo
+remote: X-Git-Refname: refs/heads/retired/gdb-5.0
+remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
+remote: X-Git-Newrev: a60540361d47901d3fe254271779f380d94645f7
+remote:
+remote: The branch 'retired/gdb-5.0' was created pointing to:
+remote:
+remote:  a605403... Updated a.
+remote:
 To ../bare/repo.git
  * [new branch]      retired/gdb-5.0 -> retired/gdb-5.0
 """

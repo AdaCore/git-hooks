@@ -21,7 +21,7 @@ remote:   DEBUG: deleted file ignored: foo.c
 remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=f82624871b6cfc46d5a7c5be518bc20e8f42be42
 remote:                         new_rev=adb8ffe7b1718f6f8a6ec22f7c0ff06b83f086ec)
-remote: *** email notification for new commits not implemented yet.
+remote: DEBUG: update base: f82624871b6cfc46d5a7c5be518bc20e8f42be42
 To ../bare/repo.git
    f826248..adb8ffe  master -> master
 """

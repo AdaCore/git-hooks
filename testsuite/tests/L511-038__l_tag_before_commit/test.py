@@ -30,6 +30,7 @@ remote: *** cvs_check: `trunk/repo/c'
 remote: DEBUG: post_receive_one(ref_name=refs/tags/version-0.1a
 remote:                         old_rev=0000000000000000000000000000000000000000
 remote:                         new_rev=4f0f08f46daf6f5455cf90cdc427443fe3b32fa3)
+remote: DEBUG: update base: 426fba3571947f6de7f967e885a3168b9df7004a
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -65,7 +66,27 @@ remote: DEBUG: (commit-per-commit style checking)
 remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=426fba3571947f6de7f967e885a3168b9df7004a
 remote:                         new_rev=4f0f08f46daf6f5455cf90cdc427443fe3b32fa3)
-remote: *** email notification for new commits not implemented yet.
+remote: DEBUG: update base: 426fba3571947f6de7f967e885a3168b9df7004a
+remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: 7bit
+remote: From: Test Suite <testsuite@adacore.com>
+remote: To: git-hooks-ci@example.com
+remote: Bcc: file-ci@gnat.com
+remote: Subject: [repo] Minor modifications.
+remote: X-ACT-checkin: repo
+remote: X-Git-Refname: refs/heads/master
+remote: X-Git-Oldrev: 426fba3571947f6de7f967e885a3168b9df7004a
+remote: X-Git-Newrev: 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3
+remote:
+remote: The branch 'master' was updated to point to:
+remote:
+remote:  4f0f08f... Minor modifications.
+remote:
+remote: It previously pointed to:
+remote:
+remote:  426fba3... Initial commit.
+remote:
 To ../bare/repo.git
    426fba3..4f0f08f  master -> master
 """

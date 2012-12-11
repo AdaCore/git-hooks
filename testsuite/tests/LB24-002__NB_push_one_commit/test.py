@@ -11,7 +11,6 @@ class TestRun(TestCase):
 remote: *** cvs_check: `trunk/repo/a'
 remote: *** cvs_check: `trunk/repo/b'
 remote: *** cvs_check: `trunk/repo/c'
-remote: *** email notification for new commits not implemented yet.
 To ../bare/repo.git
    426fba3..4f0f08f  master -> master
 """

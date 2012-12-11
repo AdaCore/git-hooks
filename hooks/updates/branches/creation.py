@@ -1,6 +1,13 @@
 """Handling of branch creation."""
 
+from git import commit_oneline
 from updates.branches.update import BranchUpdate
+
+BRANCH_CREATION_EMAIL_BODY_TEMPLATE = """\
+The branch '%(short_ref_name)s' was created pointing to:
+
+ %(commit_oneline)s
+"""
 
 class BranchCreation(BranchUpdate):
     """Update class for branch creation.
@@ -10,5 +17,15 @@ class BranchCreation(BranchUpdate):
         some of the abstract methods would be identical.  So inherit
         from BranchUpdate.
     """
-    # For now, nothing different.
-    pass
+    def get_update_email_contents(self, email_info, commit_list):
+        """See AbstractUpdate.get_update_email_contents.
+        """
+        subject = "[%s] Created branch %s" % (email_info.project_name,
+                                              self.short_ref_name)
+
+        update_info = {'short_ref_name' : self.short_ref_name,
+                       'commit_oneline' : commit_oneline(self.new_rev),
+                      }
+        body = BRANCH_CREATION_EMAIL_BODY_TEMPLATE % update_info
+
+        return (subject, body)

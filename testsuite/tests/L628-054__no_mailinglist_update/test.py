@@ -10,7 +10,6 @@ class TestRun(TestCase):
 
         expected_out = """\
 remote: *** cvs_check: `trunk/repo/a'
-remote: *** email notification for new commits not implemented yet.
 remote: ------------------------------------------------------------
 remote: -- WARNING:
 remote: -- The hooks.mailinglist config variable not set.

@@ -2,6 +2,7 @@
 
 from git import is_null_rev, get_object_type
 from updates.branches.creation import BranchCreation
+from updates.branches.deletion import BranchDeletion
 from updates.branches.update import BranchUpdate
 from updates.tags.atag_creation import AnnotatedTagCreation
 from updates.tags.atag_update import AnnotatedTagUpdate
@@ -20,6 +21,7 @@ from updates.tags.ltag_deletion import LightweightTagDeletion
 
 REF_CHANGE_MAP = {
     ('refs/heads/', CREATE, 'commit') : BranchCreation,
+    ('refs/heads/', DELETE, 'commit') : BranchDeletion,
     ('refs/heads/', UPDATE, 'commit') : BranchUpdate,
     ('refs/tags/' , CREATE, 'tag')    : AnnotatedTagCreation,
     ('refs/tags/' , DELETE, 'tag')    : AnnotatedTagDeletion,

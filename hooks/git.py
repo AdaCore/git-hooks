@@ -130,24 +130,6 @@ class Git:
 git = Git()
 
 
-class GitCommit:
-    """A git commit.
-
-    ATTRIBUTES
-        rev: The commit's revision (SHA1).
-        subject: The subject of the commit.
-    """
-    def __init__(self, rev, subject):
-        """The constructor.
-
-        PARAMETERS
-            rev: Same as the attribute.
-            subject: Same as the attribute.
-        """
-        self.rev = rev
-        self.subject = subject
-
-
 def get_git_dir():
     """Return the full path to the repository's .git directory.
 
@@ -167,35 +149,6 @@ def get_git_dir():
     # from the .git directory itself (in which case it returns
     # '.').
     return os.path.abspath(git.rev_parse(git_dir=True))
-
-
-def rev_list_commits(*args, **kwargs):
-    """Run the "git rev-list" command with the given arguments.
-
-    The --oneline and --no-abbrev-commit arguments are passed
-    implicitly.  Also, no need to pass _split_lines=True, this
-    routine takes care of this.
-
-    PARAMETERS
-        Same principles as with the git_run function.
-
-    RETURN VALUE
-        A list GitCommit objects.
-    """
-    # In the following call to "git.rev_list", we list the --oneline
-    # and --no-abbrev-commit arguments explicitly instead of using
-    # the usual named arguments, because the order between named
-    # arguments is not guaranteed to be preserved.  In this case,
-    # the order between the oneline and no-abbrev-commit switches
-    # is very important to make sure we get non-abbreviated commit revs.
-    all_revs = git.rev_list('--oneline', '--no-abbrev-commit', *args,
-                            _split_lines=True, **kwargs)
-
-    result = []
-    for rev_info in all_revs:
-        rev, subject = rev_info.split(None, 1)
-        result.append(GitCommit(rev, subject))
-    return result
 
 
 def is_null_rev(rev):
@@ -221,25 +174,28 @@ def get_object_type(rev):
     return rev_type
 
 
-def load_commit(commit_id):
-    """Return a GitCommit object associated to the given commit_id.
+def commit_rev(rev):
+    """Resolve rev into a commit revision (SHA1).
+
+    For commit revs, this is a no-op.  But of other types of revisions
+    (such as a tag, for instance), this resolves the tag into the actual
+    object it points to.
 
     PARAMETERS
-        commit_id: A commit ID (SHA1).
+        rev: A revision.
     """
-    return rev_list_commits(commit_id + "^!")[0]
+    return git.rev_list(rev, _split_lines=True)[0]
 
 
-def commit_oneline(commit):
+def commit_oneline(rev):
     """Return a short one-line summary of the commit.
 
     PARAMETERS
-        commit: A GitCommit object, or a string providing the commit's
-            ID (sha1).
+        rev: A commit revision (SHA1).
     """
-    if isinstance(commit, basestring):
-        commit = load_commit(commit)
-    return commit.rev[0:7]+"... " + commit.subject[0:59]
+    info = git.rev_list(rev, oneline=True, _split_lines=True)[0]
+    (short_rev, subject) = info.split(None, 1)
+    return "%s... %s" % (short_rev, subject[0:59])
 
 
 def get_module_name():
@@ -364,6 +320,7 @@ def git_show_ref(*args):
     except CalledProcessError:
         return None
 
+
 def commit_parents(rev):
     """Return the commit parents.
 
@@ -379,3 +336,13 @@ def commit_parents(rev):
     if not parents:
         parents = None
     return parents
+
+
+def commit_subject(rev):
+    """Return the commit's subject.
+    PARAMETERS
+        rev: A commit revision.
+    """
+    info = git.rev_list(rev, oneline=True, _split_lines=True)[0]
+    _, subject = info.split(None, 1)
+    return subject

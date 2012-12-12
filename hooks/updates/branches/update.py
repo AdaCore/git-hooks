@@ -1,7 +1,8 @@
 """Handling of branch updates."""
 
 from fast_forward import check_fast_forward
-from git import is_null_rev, git_show_ref, load_commit, commit_oneline
+from git import (is_null_rev, git_show_ref, commit_oneline,
+                 commit_subject)
 from updates import AbstractUpdate
 from utils import InvalidUpdate, warn
 
@@ -78,17 +79,14 @@ class BranchUpdate(AbstractUpdate):
         if not self.__update_email_needed(added_commits, lost_commits):
             return None
 
-        old_commit = load_commit(self.old_rev)
-        new_commit = load_commit(self.new_rev)
-
         # Compute the subject.
         update_info = {'repo' : email_info.project_name,
                        'short_ref_name' : self.short_ref_name,
                        'branch' : '/%s' % self.short_ref_name,
                        'n_commits' : '',
-                       'subject' : new_commit.subject[:59],
-                       'old_commit_oneline' : commit_oneline(old_commit),
-                       'commit_oneline' : commit_oneline(new_commit),
+                       'subject' : commit_subject(self.new_rev)[:59],
+                       'old_commit_oneline' : commit_oneline(self.old_rev),
+                       'commit_oneline' : commit_oneline(self.new_rev),
                       }
         if self.short_ref_name == 'master':
             update_info['branch'] = ''

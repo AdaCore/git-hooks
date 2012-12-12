@@ -1,8 +1,8 @@
 """The updates root module."""
 
 from config import git_config
-from git import (git, get_object_type, is_null_rev, load_commit,
-                 commit_parents)
+from git import (git, get_object_type, is_null_rev, commit_parents,
+                 commit_rev)
 from pre_commit_checks import check_commit
 import re
 from updates.commits import commit_info_list
@@ -286,7 +286,7 @@ class AbstractUpdate(object):
         # from that reference.
         if not is_null_rev(base_rev):
             commit_list = commit_info_list(self.new_rev, '^%s' % base_rev)
-            base_rev = load_commit(base_rev).rev
+            base_rev = commit_rev(base_rev)
         else:
             commit_list = commit_info_list(self.new_rev)
             base_rev = None

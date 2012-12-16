@@ -27,7 +27,6 @@ remote:
 remote: The branch 'retired/gdb-5.0' was created pointing to:
 remote:
 remote:  a605403... Updated a.
-remote:
 To ../bare/repo.git
  * [new branch]      retired/gdb-5.0 -> retired/gdb-5.0
 """

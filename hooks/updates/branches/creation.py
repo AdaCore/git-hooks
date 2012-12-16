@@ -6,8 +6,7 @@ from updates.branches.update import BranchUpdate
 BRANCH_CREATION_EMAIL_BODY_TEMPLATE = """\
 The branch '%(short_ref_name)s' was created pointing to:
 
- %(commit_oneline)s
-"""
+ %(commit_oneline)s"""
 
 class BranchCreation(BranchUpdate):
     """Update class for branch creation.

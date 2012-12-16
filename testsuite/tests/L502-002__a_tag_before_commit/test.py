@@ -91,7 +91,6 @@ remote:
 remote: It previously pointed to:
 remote:
 remote:  426fba3... Initial commit.
-remote:
 To ../bare/repo.git
    426fba3..4f0f08f  master -> master
 """

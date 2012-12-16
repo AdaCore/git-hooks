@@ -30,7 +30,6 @@ remote:
 remote: The branch 'release-0.1-branch' was created pointing to:
 remote:
 remote:  4205e52... Generate update.
-remote:
 To ../bare/repo.git
  * [new branch]      release-0.1-branch -> release-0.1-branch
 """

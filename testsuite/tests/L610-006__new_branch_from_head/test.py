@@ -32,7 +32,6 @@ remote:
 remote: The branch 'release-0.1-branch' was created pointing to:
 remote:
 remote:  dcc477c... New file b, add reference to it from file a.
-remote:
 To ../bare/repo.git
  * [new branch]      release-0.1-branch -> release-0.1-branch
 """

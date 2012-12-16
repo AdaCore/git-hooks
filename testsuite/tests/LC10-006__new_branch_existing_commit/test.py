@@ -25,7 +25,6 @@ remote:
 remote: The branch 'my-topic' was created pointing to:
 remote:
 remote:  d065089... New file: a.
-remote:
 To ../bare/repo.git
  * [new branch]      my-topic -> my-topic
 """

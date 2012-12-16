@@ -13,8 +13,7 @@ The branch '%(short_ref_name)s' was updated to point to:
 
 It previously pointed to:
 
- %(old_commit_oneline)s
-"""
+ %(old_commit_oneline)s"""
 
 def reject_retired_branch_update(ref_name, short_ref_name):
     """Raise InvalidUpdate if trying to update a retired branch.

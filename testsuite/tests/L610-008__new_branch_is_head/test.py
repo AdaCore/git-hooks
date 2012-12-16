@@ -26,7 +26,6 @@ remote:
 remote: The branch 'release-0.1-branch' was created pointing to:
 remote:
 remote:  dd6165c... Modify file `d' alone.
-remote:
 To ../bare/repo.git
  * [new branch]      release-0.1-branch -> release-0.1-branch
 """

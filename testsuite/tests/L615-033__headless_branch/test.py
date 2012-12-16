@@ -48,7 +48,6 @@ remote:
 remote: The branch 'headless' was created pointing to:
 remote:
 remote:  902092f... Forgot to update this.txt in the previous commit.
-remote:
 To ../bare/repo.git
  * [new branch]      headless -> headless
 """
@@ -86,7 +85,6 @@ remote:
 remote: The branch 'one-commit' was created pointing to:
 remote:
 remote:  ef3ab84... Initial commit.
-remote:
 To ../bare/repo.git
  * [new branch]      one-commit -> one-commit
 """

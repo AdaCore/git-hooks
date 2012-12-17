@@ -95,6 +95,7 @@ class BranchUpdate(AbstractUpdate):
         subject = "[%(repo)s%(branch)s]%(n_commits)s %(subject)s" % update_info
 
         body = BRANCH_UPDATE_EMAIL_BODY_TEMPLATE % update_info
+        body += self.summary_of_changes(added_commits, lost_commits)
 
         return (subject, body)
 

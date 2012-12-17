@@ -25,6 +25,11 @@ class CommitInfo(object):
         self.pre_existing_p = None
         self.base_rev = base_rev
 
+    def oneline_str(self):
+        """A one-line string description of the commit.
+        """
+        return '%s... %s' % (self.rev[:7], self.subject[:59])
+
 
 def commit_info_list(*args):
     """Return a list of CommitInfo objects in chronological order.

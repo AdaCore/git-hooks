@@ -86,6 +86,14 @@ remote:
 remote: It previously pointed to:
 remote:
 remote:  426fba3... Initial commit.
+remote:
+remote: Summary of changes (added commits):
+remote: -----------------------------------
+remote:
+remote:   4f0f08f... Minor modifications. (*)
+remote:
+remote: (*) This commit already existed in another branch/reference.
+remote:      No separate email sent.
 To ../bare/repo.git
    426fba3..4f0f08f  master -> master
 """

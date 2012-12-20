@@ -9,9 +9,6 @@ class TestRun(TestCase):
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
         p = Run('git push origin master'.split())
-
-        self.assertTrue(p.status == 0, p.image)
-
         expected_out = """\
 remote: *** cvs_check: `trunk/repo/a'
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
@@ -55,6 +52,7 @@ To ../bare/repo.git
    d065089..a605403  master -> master
 """
 
+        self.assertTrue(p.status == 0, p.image)
         self.assertEqual(expected_out, p.cmd_out, p.image)
 
 if __name__ == '__main__':

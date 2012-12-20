@@ -75,7 +75,9 @@ class BranchUpdate(AbstractUpdate):
                                   lost_commits):
         """See AbstractUpdate.get_update_email_contents.
         """
-        if not self.__update_email_needed(added_commits, lost_commits):
+        # For branch updates, we only send the update email when
+        # the summary of changes is needed.
+        if not self.summary_of_changes_needed(added_commits, lost_commits):
             return None
 
         # Compute the subject.
@@ -99,20 +101,19 @@ class BranchUpdate(AbstractUpdate):
 
         return (subject, body)
 
-
-    def __update_email_needed(self, added_commits, lost_commits):
-        """Return True iff the update email is needed.
+    def summary_of_changes_needed(self, added_commits, lost_commits):
+        """Return True iff we need to send a summary of changes.
         """
         # If some commits are no longer accessible from the new
         # revision (must be a non-fast-forward update), definitely
-        # send an update email.
+        # send the summary.
         if lost_commits:
             return True
         # If this update introduces some pre-existing commits (for
         # which individual emails are not going to be sent), send
-        # the update email.
+        # the summary as well.
         for commit in added_commits:
             if commit.pre_existing_p:
                 return True
-        # Send email if there are some merge commits. ???
+        # Send the summary if there are some merge commits. ???
         return False

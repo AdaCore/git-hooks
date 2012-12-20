@@ -79,6 +79,36 @@ def check_file(filename, sha1, commit_rev):
         raise InvalidUpdate(*info)
 
 
+def ensure_empty_line_after_subject(rev, raw_revision_history):
+    """Raise InvalidUpdate if there is no empty line after the subject.
+
+    More precisely, verify that if there is some text besides
+    the commit subject, both parts are separated by an empty line.
+
+    PARAMETERS
+        rev: The revision of the commit being checked.
+        raw_revision_history: A list of lines corresponding to
+            the raw revision history (as opposed to the revision
+            history as usually displayed by git where the subject
+            lines are wrapped).  See --pretty format option "%B"
+            for more details.
+    """
+    if len(raw_revision_history) < 2:
+        # No body other than the subject.  No violation possible.
+        return
+
+    if not raw_revision_history[1].strip() == '':
+        info = ['Invalid revision history for commit %s:' % rev,
+                'The first two lines should be the subject of the commit,',
+                'followed by an empty line.',
+                '',
+                'Below are the first few lines of the revision history:'] \
+                + [ '| %s' % line for line in raw_revision_history[:5]] \
+                + ['',
+                   "Please amend the commit's revision history and try again."]
+        raise InvalidUpdate(*info)
+
+
 def check_commit(old_rev, new_rev):
     """Apply pre-commit checks if appropriate.
 
@@ -92,6 +122,11 @@ def check_commit(old_rev, new_rev):
         new_rev: The commit to be checked.
     """
     debug('check_commit(old_rev=%s, new_rev=%s)' % (old_rev, new_rev))
+
+    # Various checks on the revision history...
+    raw_body = git.log(new_rev, max_count='1', pretty='format:%B',
+                       _split_lines=True)
+    ensure_empty_line_after_subject(new_rev, raw_body)
 
     if old_rev is None:
         # Get the "empty tree" special SHA1, and use that as our old tree.

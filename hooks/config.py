@@ -23,6 +23,11 @@ GIT_CONFIG_OPTS = {
     'hooks.noemails'         : {                  'default' : ''},
 }
 
+# The maximum number of characters from a commit's subject
+# to be used as part of the subject of emails describing
+# the commit.
+SUBJECT_MAX_SUBJECT_CHARS = 100
+
 class UnsupportedOptionName(Exception):
     """An exception raised when trying to lookup an unsupported option name.
     """

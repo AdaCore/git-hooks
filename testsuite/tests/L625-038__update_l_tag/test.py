@@ -51,6 +51,35 @@ remote:
 remote: It previously pointed to:
 remote:
 remote:  8b9a0d6... New file: a.
+remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: 7bit
+remote: From: Test Suite <testsuite@example.com>
+remote: To: something-ci@example.com
+remote: Bcc: file-ci@gnat.com
+remote: Subject: [repo/some-tag] Put some contents in file `a'.
+remote: X-ACT-checkin: repo
+remote: X-Git-Refname: refs/tags/some-tag
+remote: X-Git-Oldrev: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e
+remote: X-Git-Newrev: 8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5
+remote:
+remote: commit 8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5
+remote: Author: Joel Brobecker <brobecker@adacore.com>
+remote: Date:   Mon Jun 25 15:10:13 2012 -0700
+remote:
+remote:     Put some contents in file `a'.
+remote:
+remote: Diff:
+remote: ---
+remote:  a |    1 +
+remote:  1 file changed, 1 insertion(+)
+remote:
+remote: diff --git a/a b/a
+remote: index e69de29..4b29465 100644
+remote: --- a/a
+remote: +++ b/a
+remote: @@ -0,0 +1 @@
+remote: +Put some contents in.
 To ../bare/repo.git
    8b9a0d6..8a567a0  some-tag -> some-tag
 """

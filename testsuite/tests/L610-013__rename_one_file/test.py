@@ -27,6 +27,33 @@ remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=a60540361d47901d3fe254271779f380d94645f7
 remote:                         new_rev=6a48cdab9b100506a387a8398af4751b33a4bfd0)
 remote: DEBUG: update base: a60540361d47901d3fe254271779f380d94645f7
+remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: 7bit
+remote: From: Test Suite <testsuite@adacore.com>
+remote: To: git-hooks-ci@example.com
+remote: Bcc: file-ci@gnat.com
+remote: Subject: [repo] Rename A into B.
+remote: X-ACT-checkin: repo
+remote: X-Git-Refname: refs/heads/master
+remote: X-Git-Oldrev: a60540361d47901d3fe254271779f380d94645f7
+remote: X-Git-Newrev: 6a48cdab9b100506a387a8398af4751b33a4bfd0
+remote:
+remote: commit 6a48cdab9b100506a387a8398af4751b33a4bfd0
+remote: Author: Joel Brobecker <brobecker@adacore.com>
+remote: Date:   Sun May 20 12:58:32 2012 +0200
+remote:
+remote:     Rename A into B.
+remote:
+remote: Diff:
+remote: ---
+remote:  a => b |    0
+remote:  1 file changed, 0 insertions(+), 0 deletions(-)
+remote:
+remote: diff --git a/a b/b
+remote: similarity index 100%
+remote: rename from a
+remote: rename to b
 To ../bare/repo.git
    a605403..6a48cda  master -> master
 """

@@ -60,6 +60,44 @@ remote: Tagger: Joel Brobecker <brobecker@adacore.com>
 remote: Date: Thu Jun 28 11:50:36 2012 -0700
 remote:
 remote:     Tag a commit that makes more sense.
+remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: 7bit
+remote: From: Test Suite <testsuite@example.com>
+remote: To: repo@example.com
+remote: Bcc: file-ci@gnat.com
+remote: Subject: [repo/full-tag] Added bar.c, and updated foo.
+remote: X-ACT-checkin: repo
+remote: X-Git-Refname: refs/tags/full-tag
+remote: X-Git-Oldrev: 354383fa06047ef8053782410c221341e4b07ec4
+remote: X-Git-Newrev: 8c0b4151f9f41efcaeb70ea6f91158e4605aaeda
+remote:
+remote: commit 8c0b4151f9f41efcaeb70ea6f91158e4605aaeda
+remote: Author: Joel Brobecker <brobecker@adacore.com>
+remote: Date:   Thu Jun 28 11:24:42 2012 -0700
+remote:
+remote:     Added bar.c, and updated foo.
+remote:
+remote: Diff:
+remote: ---
+remote:  bar.c |    2 ++
+remote:  foo   |    1 +
+remote:  2 files changed, 3 insertions(+)
+remote:
+remote: diff --git a/bar.c b/bar.c
+remote: new file mode 100644
+remote: index 0000000..2fcb2a3
+remote: --- /dev/null
+remote: +++ b/bar.c
+remote: @@ -0,0 +1,2 @@
+remote: +/* Some globals.  */
+remote: +int global_bar = 0;
+remote: diff --git a/foo b/foo
+remote: index e69de29..bac6ca8 100644
+remote: --- a/foo
+remote: +++ b/foo
+remote: @@ -0,0 +1 @@
+remote: +Added file bar.c
 To ../bare/repo.git
    a69eaab..17b9d4a  full-tag -> full-tag
 """

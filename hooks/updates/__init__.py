@@ -1,6 +1,6 @@
 """The updates root module."""
 
-from config import git_config
+from config import git_config, SUBJECT_MAX_SUBJECT_CHARS
 from git import (git, get_object_type, is_null_rev, commit_parents,
                  commit_rev)
 from pre_commit_checks import check_commit
@@ -81,6 +81,7 @@ class AbstractUpdate(object):
         added = self.__added_commits()
         lost = self.__lost_commits()
         self.__email_ref_update(email_info, added, lost)
+        self.__email_new_commits(email_info, added)
 
     #------------------------------------------------------------------
     #--  Abstract methods that must be overridden by child classes.  --
@@ -345,3 +346,45 @@ class AbstractUpdate(object):
             update_email = Email(email_info, subject, body,
                                  self.ref_name, self.old_rev, self.new_rev)
             update_email.send()
+
+    def __email_commit(self, email_info, commit):
+        """Send an email describing the given commit.
+
+        PARAMETERS
+            email_info: An EmailInfo object.
+            commit: A CommitInfo object.
+        """
+        subject = '[%(repo)s%(branch)s] %(subject)s' % {
+            'repo' : email_info.project_name,
+            'branch' : '/%s' % self.short_ref_name
+                if self.short_ref_name != 'master' else '',
+            'subject' : commit.subject[:SUBJECT_MAX_SUBJECT_CHARS],
+            }
+
+        # Generate the body of the email in two passes:
+        #   1. The commit description without the patch;
+        #   2. The diff stat and patch.
+        # This allows us to insert our little "Diff:" marker that
+        # bugtool detects when parsing the email for filing.
+        # The purpose is to prevent bugtool from searching for
+        # TNs in the patch itself.
+        body = git.log(commit.rev, max_count="1")
+        body += '\n\n'
+        body += git.show(commit.rev, p=True, M=True, stat=True,
+                         pretty="format:%nDiff:%n")
+
+        email = Email(email_info, subject, body, self.ref_name,
+                      commit.base_rev, commit.rev)
+        email.send()
+
+    def __email_new_commits(self, email_info, added_commits):
+        """Send one email per new (non-pre-existing) commit.
+
+        PARAMETERS
+            email_info: An EmailInfo object.
+            added_commits: A list of CommitInfo objects, corresponding
+                to the commits added by this update.
+        """
+        for commit in added_commits:
+            if not commit.pre_existing_p:
+                self.__email_commit(email_info, commit)

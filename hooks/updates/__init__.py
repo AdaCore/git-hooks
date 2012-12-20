@@ -322,6 +322,13 @@ class AbstractUpdate(object):
             # new commit.
             return
 
+        excluded_branches = git_config('hooks.noprecommitcheck')
+        if (excluded_branches
+            and self.ref_name in excluded_branches.split(',')):
+            # Pre-commit checks are explicitly disabled on this branch.
+            debug('(%s in hooks.noprecommitcheck)' % self.ref_name)
+            return
+
         added = self.__added_commits()
         if not added:
             # There are no new commits, so nothing further to check.

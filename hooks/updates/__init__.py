@@ -1,6 +1,7 @@
 """The updates root module."""
 
 from config import git_config, SUBJECT_MAX_SUBJECT_CHARS
+from copy import deepcopy
 from git import (git, get_object_type, is_null_rev, commit_parents,
                  commit_rev)
 from pre_commit_checks import check_commit
@@ -168,8 +169,19 @@ class AbstractUpdate(object):
             A string containing the summary of changes.
         """
         summary = []
-        # ??? Add handling of lost commits.  List them *FIRST* to
-        # increase our changes of attracting the reader's attention.
+        # Display the lost commits (if any) first, to increase
+        # our chances of attracting the reader's attention.
+        if lost_commits:
+            summary.append('')
+            summary.append('')
+            summary.append('!!! WARNING: THE FOLLOWING COMMITS ARE'
+                           ' NO LONGER ACCESSIBLE (LOST):')
+            summary.append('--------------------------------------'
+                           '-----------------------------')
+            summary.append('')
+            for commit in lost_commits:
+                summary.append('  ' + commit.oneline_str())
+
         if added_commits:
             has_pre_existing = False
             summary.append('')
@@ -273,8 +285,29 @@ class AbstractUpdate(object):
             A list of CommitInfo objects, or the empty list if
             the update did not cause any commit to be lost.
         """
-        # ??? Not implemented yet.
-        return []
+        if is_null_rev(self.old_rev):
+            # We are creating a new reference, so we cannot possibly
+            # be losing commits.
+            return []
+
+        # The list of lost commits is computed by listing all commits
+        # accessible from the old_rev, but not from either the new rev
+        # nor any of the other references.
+
+        # First, create new GitReferences were the reference has
+        # the new value.  This will allow us to use it to generate
+        # the exclude list without having to handle this reference
+        # by hand.
+        refs_copy = deepcopy(self.pre_update_refs)
+        refs_copy.update_ref(self.ref_name, self.new_rev)
+
+        # Compute the list of commits accessible from old_rev but
+        # not from refs_copy.  This is our list of lost commits.
+        exclude = ['^%s' % refs_copy.refs[rev]
+                   for rev in refs_copy.refs.keys()]
+        commit_list = commit_info_list(self.old_rev, *exclude)
+
+        return commit_list
 
     def __pre_commit_checks(self):
         """Run the pre-commit checks on this update's new commits.

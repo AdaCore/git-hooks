@@ -115,5 +115,8 @@ class BranchUpdate(AbstractUpdate):
         for commit in added_commits:
             if commit.pre_existing_p:
                 return True
-        # Send the summary if there are some merge commits. ???
+        # The question was raised whether we should include the summary
+        # if one of the commits is a merge commit.  At the moment,
+        # we do not see a reason why merge commits should be treated
+        # differently from other commits.
         return False

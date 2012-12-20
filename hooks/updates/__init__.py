@@ -80,34 +80,7 @@ class AbstractUpdate(object):
             return
         added = self.__added_commits()
         lost = self.__lost_commits()
-        self.email_ref_update(email_info, added, lost)
-
-    def email_ref_update(self, email_info, added_commits, lost_commits):
-        """Send the email describing to the reference update.
-
-        This email can be seen as a "cover email", or a quick summary
-        of the update that was performed.
-
-        PARAMETERS
-            email_info: An EmailInfo object.
-            added_commits: A list of CommitInfo objects, corresponding
-                to the commits added by this update.
-            lost_commits: A list of CommitInfo objects, corresponding
-                to the commits lost after this update.
-
-        REMARKS
-            The hooks may decide that such an email may not be necessary,
-            and thus send nothing. See self.get_update_email_contents
-            for more details.
-        """
-        update_email_contents = \
-            self.get_update_email_contents(email_info, added_commits,
-                                           lost_commits)
-        if update_email_contents is not None:
-            (subject, body) = update_email_contents
-            update_email = Email(email_info, subject, body,
-                                 self.ref_name, self.old_rev, self.new_rev)
-            update_email.send()
+        self.__email_ref_update(email_info, added, lost)
 
     #------------------------------------------------------------------
     #--  Abstract methods that must be overridden by child classes.  --
@@ -346,3 +319,29 @@ class AbstractUpdate(object):
             if not commit.pre_existing_p:
                 check_commit(commit.base_rev, commit.rev)
 
+    def __email_ref_update(self, email_info, added_commits, lost_commits):
+        """Send the email describing to the reference update.
+
+        This email can be seen as a "cover email", or a quick summary
+        of the update that was performed.
+
+        PARAMETERS
+            email_info: An EmailInfo object.
+            added_commits: A list of CommitInfo objects, corresponding
+                to the commits added by this update.
+            lost_commits: A list of CommitInfo objects, corresponding
+                to the commits lost after this update.
+
+        REMARKS
+            The hooks may decide that such an email may not be necessary,
+            and thus send nothing. See self.get_update_email_contents
+            for more details.
+        """
+        update_email_contents = \
+            self.get_update_email_contents(email_info, added_commits,
+                                           lost_commits)
+        if update_email_contents is not None:
+            (subject, body) = update_email_contents
+            update_email = Email(email_info, subject, body,
+                                 self.ref_name, self.old_rev, self.new_rev)
+            update_email.send()

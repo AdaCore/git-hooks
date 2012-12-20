@@ -171,6 +171,7 @@ class AbstractUpdate(object):
         # ??? Add handling of lost commits.  List them *FIRST* to
         # increase our changes of attracting the reader's attention.
         if added_commits:
+            has_pre_existing = False
             summary.append('')
             summary.append('')
             summary.append('Summary of changes (added commits):')
@@ -180,13 +181,17 @@ class AbstractUpdate(object):
             # now accessible from this reference, not just the new
             # ones.
             for commit in added_commits:
+                has_pre_existing = has_pre_existing or commit.pre_existing_p
                 marker = ' (*)' if commit.pre_existing_p else ''
                 summary.append('  ' + commit.oneline_str() + marker)
 
-            summary.append('')
-            summary.append('(*) This commit already existed in another '
-                           'branch/reference.')
-            summary.append('     No separate email sent.')
+            # If we added a ' (*)' marker to at least one commit,
+            # add a footnote explaining what it means.
+            if has_pre_existing:
+                summary.append('')
+                summary.append('(*) This commit already existed in another '
+                               'branch/reference.')
+                summary.append('     No separate email sent.')
 
         return '\n'.join(summary)
 

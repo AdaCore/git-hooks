@@ -2,6 +2,7 @@
 
 from git import commit_oneline
 from updates import AbstractUpdate
+from updates.branches import branch_summary_of_changes_needed
 
 BRANCH_DELETION_EMAIL_BODY_TEMPLATE = """\
 The branch '%(short_ref_name)s' was deleted.
@@ -31,5 +32,7 @@ class BranchDeletion(AbstractUpdate):
                        'commit_oneline' : commit_oneline(self.old_rev),
                       }
         body = BRANCH_DELETION_EMAIL_BODY_TEMPLATE % update_info
+        if branch_summary_of_changes_needed(added_commits, lost_commits):
+            body += self.summary_of_changes(added_commits, lost_commits)
 
         return (subject, body)

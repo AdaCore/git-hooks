@@ -4,6 +4,7 @@ from fast_forward import check_fast_forward
 from git import (is_null_rev, git_show_ref, commit_oneline,
                  commit_subject)
 from updates import AbstractUpdate
+from updates.branches import branch_summary_of_changes_needed
 from utils import InvalidUpdate, warn
 
 BRANCH_UPDATE_EMAIL_BODY_TEMPLATE = """\
@@ -77,7 +78,7 @@ class BranchUpdate(AbstractUpdate):
         """
         # For branch updates, we only send the update email when
         # the summary of changes is needed.
-        if not self.summary_of_changes_needed(added_commits, lost_commits):
+        if not branch_summary_of_changes_needed(added_commits, lost_commits):
             return None
 
         # Compute the subject.
@@ -100,23 +101,3 @@ class BranchUpdate(AbstractUpdate):
         body += self.summary_of_changes(added_commits, lost_commits)
 
         return (subject, body)
-
-    def summary_of_changes_needed(self, added_commits, lost_commits):
-        """Return True iff we need to send a summary of changes.
-        """
-        # If some commits are no longer accessible from the new
-        # revision (must be a non-fast-forward update), definitely
-        # send the summary.
-        if lost_commits:
-            return True
-        # If this update introduces some pre-existing commits (for
-        # which individual emails are not going to be sent), send
-        # the summary as well.
-        for commit in added_commits:
-            if commit.pre_existing_p:
-                return True
-        # The question was raised whether we should include the summary
-        # if one of the commits is a merge commit.  At the moment,
-        # we do not see a reason why merge commits should be treated
-        # differently from other commits.
-        return False

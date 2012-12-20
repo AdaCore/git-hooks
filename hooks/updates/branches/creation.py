@@ -1,6 +1,7 @@
 """Handling of branch creation."""
 
 from git import commit_oneline
+from updates.branches import branch_summary_of_changes_needed
 from updates.branches.update import BranchUpdate
 
 BRANCH_CREATION_EMAIL_BODY_TEMPLATE = """\
@@ -27,7 +28,7 @@ class BranchCreation(BranchUpdate):
                        'commit_oneline' : commit_oneline(self.new_rev),
                       }
         body = BRANCH_CREATION_EMAIL_BODY_TEMPLATE % update_info
-        if self.summary_of_changes_needed(added_commits, lost_commits):
+        if branch_summary_of_changes_needed(added_commits, lost_commits):
             body += self.summary_of_changes(added_commits, lost_commits)
 
         return (subject, body)

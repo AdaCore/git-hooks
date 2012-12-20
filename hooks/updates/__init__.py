@@ -158,41 +158,6 @@ class AbstractUpdate(object):
                                  self.ref_name, self.old_rev, self.new_rev)
             update_email.send()
 
-    def summary_of_changes(self, added_commits, lost_commits):
-        """A summary of changes to be added at the end of the ref-update email.
-
-        PARAMETERS
-            added_commits: A list of CommitInfo objects, corresponding
-                to the commits added by this update.
-            lost_commits: A list of CommitInfo objects, corresponding
-                to the commits lost after this update.
-
-        RETURN VALUE
-            A string containing the summary of changes.
-        """
-        summary = []
-        # ??? Add handling of lost commits.  List them *FIRST* to
-        # increase our changes of attracting the reader's attention.
-        if added_commits:
-            summary.append('')
-            summary.append('')
-            summary.append('Summary of changes (added commits):')
-            summary.append('-----------------------------------')
-            summary.append('')
-            # Note that we want the summary to include all commits
-            # now accessible from this reference, not just the new
-            # ones.
-            for commit in added_commits:
-                marker = ' (*)' if commit.pre_existing_p else ''
-                summary.append('  ' + commit.oneline_str() + marker)
-
-            summary.append('')
-            summary.append('(*) This commit already existed in another '
-                           'branch/reference.')
-            summary.append('     No separate email sent.')
-
-        return '\n'.join(summary)
-
     #------------------------------------------------------------------
     #--  Abstract methods that must be overridden by child classes.  --
     #------------------------------------------------------------------
@@ -264,6 +229,41 @@ class AbstractUpdate(object):
         """
         no_emails_list = git_config("hooks.noemails")
         return no_emails_list and self.ref_name in no_emails_list.split(",")
+
+    def summary_of_changes(self, added_commits, lost_commits):
+        """A summary of changes to be added at the end of the ref-update email.
+
+        PARAMETERS
+            added_commits: A list of CommitInfo objects, corresponding
+                to the commits added by this update.
+            lost_commits: A list of CommitInfo objects, corresponding
+                to the commits lost after this update.
+
+        RETURN VALUE
+            A string containing the summary of changes.
+        """
+        summary = []
+        # ??? Add handling of lost commits.  List them *FIRST* to
+        # increase our changes of attracting the reader's attention.
+        if added_commits:
+            summary.append('')
+            summary.append('')
+            summary.append('Summary of changes (added commits):')
+            summary.append('-----------------------------------')
+            summary.append('')
+            # Note that we want the summary to include all commits
+            # now accessible from this reference, not just the new
+            # ones.
+            for commit in added_commits:
+                marker = ' (*)' if commit.pre_existing_p else ''
+                summary.append('  ' + commit.oneline_str() + marker)
+
+            summary.append('')
+            summary.append('(*) This commit already existed in another '
+                           'branch/reference.')
+            summary.append('     No separate email sent.')
+
+        return '\n'.join(summary)
 
     #------------------------
     #--  Private methods.  --

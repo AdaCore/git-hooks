@@ -63,56 +63,7 @@ class AbstractUpdate(object):
         debug('validate_ref_update (%s, %s, %s)'
               % (self.ref_name, self.old_rev, self.new_rev))
         self.validate_ref_update()
-        self.pre_commit_checks()
-
-    def pre_commit_checks(self):
-        """Run the pre-commit checks on this update's new commits.
-
-        Determine the list of new commits introduced by this
-        update, and perform the pre-commit-checks on them as
-        appropriate.  Raise InvalidUpdate if one or more style
-        violation was detected.
-        """
-        if is_null_rev(self.new_rev):
-            # We are deleting a reference, so there cannot be any
-            # new commit.
-            return
-
-        added = self.__added_commits()
-        if not added:
-            # There are no new commits, so nothing further to check.
-            return
-
-        # Check that the update wouldn't generate too many commit emails.
-        # We know that commit emails would only be sent for commits which
-        # are new for the repository, so we count those.
-        if not self.in_no_emails_list():
-            max_emails = int(git_config('hooks.maxcommitemails'))
-            nb_emails = len([commit for commit in added
-                             if not commit.pre_existing_p])
-            if nb_emails > max_emails:
-                raise InvalidUpdate(
-                    "This update introduces too many new commits (%d),"
-                        " which would" % nb_emails,
-                    "trigger as many emails, exceeding the"
-                        " current limit (%d)." % max_emails,
-                    "Contact your repository adminstrator if you really meant",
-                    "to generate this many commit emails.")
-
-        if git_config('hooks.combinedstylechecking') == 'true':
-            # This project prefers to perform the style check on
-            # the cumulated diff, rather than commit-per-commit.
-            debug('(combined style checking)')
-            combined_commit = added[-1]
-            combined_commit.base_rev = added[0].base_rev
-            added = [combined_commit,]
-        else:
-            debug('(commit-per-commit style checking)')
-
-        # Iterate over our list of commits in pairs...
-        for commit in added:
-            if not commit.pre_existing_p:
-                check_commit(commit.base_rev, commit.rev)
+        self.__pre_commit_checks()
 
     def send_email_notifications(self, email_info):
         """Send all email notifications associated to this update.
@@ -345,3 +296,53 @@ class AbstractUpdate(object):
         """
         # ??? Not implemented yet.
         return []
+
+    def __pre_commit_checks(self):
+        """Run the pre-commit checks on this update's new commits.
+
+        Determine the list of new commits introduced by this
+        update, and perform the pre-commit-checks on them as
+        appropriate.  Raise InvalidUpdate if one or more style
+        violation was detected.
+        """
+        if is_null_rev(self.new_rev):
+            # We are deleting a reference, so there cannot be any
+            # new commit.
+            return
+
+        added = self.__added_commits()
+        if not added:
+            # There are no new commits, so nothing further to check.
+            return
+
+        # Check that the update wouldn't generate too many commit emails.
+        # We know that commit emails would only be sent for commits which
+        # are new for the repository, so we count those.
+        if not self.in_no_emails_list():
+            max_emails = int(git_config('hooks.maxcommitemails'))
+            nb_emails = len([commit for commit in added
+                             if not commit.pre_existing_p])
+            if nb_emails > max_emails:
+                raise InvalidUpdate(
+                    "This update introduces too many new commits (%d),"
+                        " which would" % nb_emails,
+                    "trigger as many emails, exceeding the"
+                        " current limit (%d)." % max_emails,
+                    "Contact your repository adminstrator if you really meant",
+                    "to generate this many commit emails.")
+
+        if git_config('hooks.combinedstylechecking') == 'true':
+            # This project prefers to perform the style check on
+            # the cumulated diff, rather than commit-per-commit.
+            debug('(combined style checking)')
+            combined_commit = added[-1]
+            combined_commit.base_rev = added[0].base_rev
+            added = [combined_commit,]
+        else:
+            debug('(commit-per-commit style checking)')
+
+        # Iterate over our list of commits in pairs...
+        for commit in added:
+            if not commit.pre_existing_p:
+                check_commit(commit.base_rev, commit.rev)
+

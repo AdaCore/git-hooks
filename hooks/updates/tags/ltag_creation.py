@@ -1,5 +1,6 @@
 """Handling of lightweight tag creation."""
 
+from updates.tags import tag_summary_of_changes_needed
 from updates.tags.ltag_update import LightweightTagUpdate
 from git import commit_oneline
 
@@ -27,5 +28,7 @@ class LightweightTagCreation(LightweightTagUpdate):
                 % {'short_ref_name' : self.short_ref_name,
                    'commit_oneline' : commit_oneline(self.new_rev),
                   })
+        if tag_summary_of_changes_needed(added_commits, lost_commits):
+            body += self.summary_of_changes(added_commits, lost_commits)
 
         return (subject, body)

@@ -3,7 +3,7 @@
 from config import git_config
 from git import is_null_rev, commit_oneline
 from updates import AbstractUpdate
-from updates.tags import warn_about_tag_update
+from updates.tags import warn_about_tag_update, tag_summary_of_changes_needed
 from utils import InvalidUpdate
 
 LTAG_UPDATE_EMAIL_BODY_TEMPLATE = """\
@@ -62,5 +62,7 @@ class LightweightTagUpdate(AbstractUpdate):
                    'commit_oneline' : commit_oneline(self.new_rev),
                    'old_commit_oneline' : commit_oneline(self.old_rev),
                   })
+        if tag_summary_of_changes_needed(added_commits, lost_commits):
+            body += self.summary_of_changes(added_commits, lost_commits)
 
         return (subject, body)

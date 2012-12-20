@@ -51,6 +51,14 @@ remote:
 remote: It previously pointed to:
 remote:
 remote:  8b9a0d6... New file: a.
+remote:
+remote: Summary of changes (added commits):
+remote: -----------------------------------
+remote:
+remote:   8a567a0... Put some contents in file `a'.
+remote:
+remote: (*) This commit already existed in another branch/reference.
+remote:      No separate email sent.
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

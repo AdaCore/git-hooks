@@ -1,5 +1,6 @@
 """Handling of annotated tag creation."""
 
+from updates.tags import tag_summary_of_changes_needed
 from updates.tags.atag_update import AnnotatedTagUpdate
 from git import commit_oneline, parse_tag_object
 
@@ -37,5 +38,7 @@ class AnnotatedTagCreation(AnnotatedTagUpdate):
         tag_info['commit_oneline'] = commit_oneline(self.new_rev)
 
         body = ATAG_CREATION_EMAIL_BODY_TEMPLATE % tag_info
+        if tag_summary_of_changes_needed(added_commits, lost_commits):
+            body += self.summary_of_changes(added_commits, lost_commits)
 
         return (subject, body)

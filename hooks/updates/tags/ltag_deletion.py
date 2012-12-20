@@ -3,6 +3,7 @@
 from config import git_config
 from git import commit_oneline
 from updates import AbstractUpdate
+from updates.tags import tag_summary_of_changes_needed
 from utils import InvalidUpdate
 
 LTAG_DELETION_EMAIL_BODY_TEMPLATE = """\
@@ -54,5 +55,7 @@ class LightweightTagDeletion(AbstractUpdate):
                 % {'short_ref_name' : self.short_ref_name,
                    'commit_oneline' : commit_oneline(self.old_rev),
                   })
+        if tag_summary_of_changes_needed(added_commits, lost_commits):
+            body += self.summary_of_changes(added_commits, lost_commits)
 
         return (subject, body)

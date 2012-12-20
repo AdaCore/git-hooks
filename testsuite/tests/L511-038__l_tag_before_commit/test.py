@@ -46,6 +46,14 @@ remote:
 remote: The lightweight tag 'version-0.1a' was created pointing to:
 remote:
 remote:  4f0f08f... Minor modifications.
+remote:
+remote: Summary of changes (added commits):
+remote: -----------------------------------
+remote:
+remote:   4f0f08f... Minor modifications.
+remote:
+remote: (*) This commit already existed in another branch/reference.
+remote:      No separate email sent.
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

@@ -1,6 +1,7 @@
 """Handling of annotated tag deletion."""
 
 from git import commit_oneline
+from updates.tags import tag_summary_of_changes_needed
 from updates.tags.ltag_deletion import LightweightTagDeletion
 
 
@@ -31,6 +32,8 @@ class AnnotatedTagDeletion(LightweightTagDeletion):
         tag_info['short_ref_name'] = self.short_ref_name
         tag_info['commit_oneline'] = commit_oneline(self.old_rev)
         body = ATAG_DELETION_EMAIL_BODY_TEMPLATE % tag_info
+        if tag_summary_of_changes_needed(added_commits, lost_commits):
+            body += self.summary_of_changes(added_commits, lost_commits)
 
         return (subject, body)
 

@@ -2,7 +2,7 @@
 
 from git import is_null_rev, parse_tag_object, commit_oneline
 from updates import AbstractUpdate
-from updates.tags import warn_about_tag_update
+from updates.tags import warn_about_tag_update, tag_summary_of_changes_needed
 
 ATAG_UPDATE_EMAIL_BODY_TEMPLATE = """\
 The %(tag_kind)s tag '%(short_ref_name)s' was updated to point to:
@@ -65,5 +65,7 @@ class AnnotatedTagUpdate(AbstractUpdate):
         tag_info['old_commit_oneline'] = commit_oneline(self.old_rev)
 
         body = ATAG_UPDATE_EMAIL_BODY_TEMPLATE % tag_info
+        if tag_summary_of_changes_needed(added_commits, lost_commits):
+            body += self.summary_of_changes(added_commits, lost_commits)
 
         return (subject, body)

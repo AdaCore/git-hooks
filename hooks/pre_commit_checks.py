@@ -79,7 +79,7 @@ def check_file(filename, sha1, commit_rev):
         raise InvalidUpdate(*info)
 
 
-def check_commit (old_rev, new_rev):
+def check_commit(old_rev, new_rev):
     """Apply pre-commit checks if appropriate.
 
     Raise InvalidUpdate if one or more style violation are detected.

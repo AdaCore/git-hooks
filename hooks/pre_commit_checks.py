@@ -1,6 +1,7 @@
 import os
 from os.path import basename
 from pipes import quote
+import re
 import subprocess
 from subprocess import check_output, STDOUT
 
@@ -108,6 +109,78 @@ def ensure_empty_line_after_subject(rev, raw_rh):
         raise InvalidUpdate(*info)
 
 
+def reject_unedited_merge_commit(rev, raw_rh):
+    """Raise InvalidUpdate if raw_rh looks like an unedited merge commit's RH.
+
+    More precisely, we are trying to catch the cases where a merge
+    was performed without the user being aware of it.  This can
+    happen for instance if the user typed "git pull" instead of
+    "git pull --rebase".
+
+    We implement a very crude identification mechanism at the moment,
+    based on matching the default revision history for merge commits.
+
+    If the merge commit was intended, the user is expected to provide
+    a non-default revision history, thus satisfying this check.
+
+    PARAMETERS
+        rev: The revision of the commit being checked.
+        raw_rh: A list of lines corresponding to the raw revision
+            history (as opposed to the revision history as usually
+            displayed by git where the subject lines are wrapped).
+            See --pretty format option "%B" for more details.
+    """
+    # We have seen cases (with git version 1.7.10.4), where the default
+    # revision history for a merge commit is just: "Merge branch 'xxx'.".
+    RH_PATTERN = "Merge branch '.*'"
+
+    for line in raw_rh:
+        if re.match(RH_PATTERN, line):
+            info = ['Pattern "%s" has been detected.' % RH_PATTERN,
+                    '(in commit %s)' % rev,
+                    '',
+                    'This usually indicates an unintentional merge commit.',
+                    'If you would really like to push a merge commit,'
+                        ' please',
+                    "edit the merge commit's revision history."]
+            raise InvalidUpdate(*info)
+
+
+def reject_merge_conflict_section(rev, raw_rh):
+    """Raise InvalidUpdate if raw_rh contains "Conflicts:" in it.
+
+    More precisely, we are trying to catch the cases where a user
+    performed a merge which had conflicts, resolved them, but then
+    forgot to remove the "Conflicts:" section provided in the default
+    revision history when creating the commit.
+
+    PARAMETERS
+        rev: The revision of the commit being checked.
+        raw_rh: A list of lines corresponding to the raw revision
+            history (as opposed to the revision history as usually
+            displayed by git where the subject lines are wrapped).
+            See --pretty format option "%B" for more details.
+    """
+    RH_PATTERN = "Conflicts:"
+
+    for line in raw_rh:
+        if line.strip() == RH_PATTERN:
+            info = ['Pattern "%s" has been detected.' % RH_PATTERN,
+                    '(in commit %s)' % rev,
+                    '',
+                    'This usually indicates a merge commit where some'
+                        ' merge conflicts',
+                    'had to be resolved, but where the "Conflicts:"'
+                        ' section has not ',
+                    'been deleted from the revision history.',
+                    '',
+                    'Please edit the commit\'s revision history to'
+                        ' either delete',
+                    'the section, or to avoid using the pattern above'
+                        ' by itself.']
+            raise InvalidUpdate(*info)
+
+
 def check_commit(old_rev, new_rev):
     """Apply pre-commit checks if appropriate.
 
@@ -126,6 +199,8 @@ def check_commit(old_rev, new_rev):
     raw_body = git.log(new_rev, max_count='1', pretty='format:%B',
                        _split_lines=True)
     ensure_empty_line_after_subject(new_rev, raw_body)
+    reject_unedited_merge_commit(new_rev, raw_body)
+    reject_merge_conflict_section(new_rev, raw_body)
 
     if old_rev is None:
         # Get the "empty tree" special SHA1, and use that as our old tree.

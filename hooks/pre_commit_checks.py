@@ -79,7 +79,7 @@ def check_file(filename, sha1, commit_rev):
         raise InvalidUpdate(*info)
 
 
-def ensure_empty_line_after_subject(rev, raw_revision_history):
+def ensure_empty_line_after_subject(rev, raw_rh):
     """Raise InvalidUpdate if there is no empty line after the subject.
 
     More precisely, verify that if there is some text besides
@@ -87,23 +87,22 @@ def ensure_empty_line_after_subject(rev, raw_revision_history):
 
     PARAMETERS
         rev: The revision of the commit being checked.
-        raw_revision_history: A list of lines corresponding to
-            the raw revision history (as opposed to the revision
-            history as usually displayed by git where the subject
-            lines are wrapped).  See --pretty format option "%B"
-            for more details.
+        raw_rh: A list of lines corresponding to the raw revision
+            history (as opposed to the revision history as usually
+            displayed by git where the subject lines are wrapped).
+            See --pretty format option "%B" for more details.
     """
-    if len(raw_revision_history) < 2:
+    if len(raw_rh) < 2:
         # No body other than the subject.  No violation possible.
         return
 
-    if not raw_revision_history[1].strip() == '':
+    if not raw_rh[1].strip() == '':
         info = ['Invalid revision history for commit %s:' % rev,
                 'The first two lines should be the subject of the commit,',
                 'followed by an empty line.',
                 '',
                 'Below are the first few lines of the revision history:'] \
-                + [ '| %s' % line for line in raw_revision_history[:5]] \
+                + [ '| %s' % line for line in raw_rh[:5]] \
                 + ['',
                    "Please amend the commit's revision history and try again."]
         raise InvalidUpdate(*info)

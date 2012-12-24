@@ -206,6 +206,36 @@ class AbstractUpdate(object):
             if not commit.pre_existing_p:
                 check_commit(commit.base_rev, commit.rev)
 
+    def email_commit(self, email_info, commit):
+        """Send an email describing the given commit.
+
+        PARAMETERS
+            email_info: An EmailInfo object.
+            commit: A CommitInfo object.
+        """
+        subject = '[%(repo)s%(branch)s] %(subject)s' % {
+            'repo' : email_info.project_name,
+            'branch' : '/%s' % self.short_ref_name
+                if self.short_ref_name != 'master' else '',
+            'subject' : commit.subject[:SUBJECT_MAX_SUBJECT_CHARS],
+            }
+
+        # Generate the body of the email in two passes:
+        #   1. The commit description without the patch;
+        #   2. The diff stat and patch.
+        # This allows us to insert our little "Diff:" marker that
+        # bugtool detects when parsing the email for filing.
+        # The purpose is to prevent bugtool from searching for
+        # TNs in the patch itself.
+        body = git.log(commit.rev, max_count="1")
+        body += '\n\n'
+        body += git.show(commit.rev, p=True, M=True, stat=True,
+                         pretty="format:%nDiff:%n")
+
+        email = Email(email_info, subject, body, self.ref_name,
+                      commit.base_rev, commit.rev)
+        email.send()
+
     #-----------------------
     #--  Useful methods.  --
     #-----------------------
@@ -396,36 +426,6 @@ class AbstractUpdate(object):
                                  self.ref_name, self.old_rev, self.new_rev)
             update_email.send()
 
-    def __email_commit(self, email_info, commit):
-        """Send an email describing the given commit.
-
-        PARAMETERS
-            email_info: An EmailInfo object.
-            commit: A CommitInfo object.
-        """
-        subject = '[%(repo)s%(branch)s] %(subject)s' % {
-            'repo' : email_info.project_name,
-            'branch' : '/%s' % self.short_ref_name
-                if self.short_ref_name != 'master' else '',
-            'subject' : commit.subject[:SUBJECT_MAX_SUBJECT_CHARS],
-            }
-
-        # Generate the body of the email in two passes:
-        #   1. The commit description without the patch;
-        #   2. The diff stat and patch.
-        # This allows us to insert our little "Diff:" marker that
-        # bugtool detects when parsing the email for filing.
-        # The purpose is to prevent bugtool from searching for
-        # TNs in the patch itself.
-        body = git.log(commit.rev, max_count="1")
-        body += '\n\n'
-        body += git.show(commit.rev, p=True, M=True, stat=True,
-                         pretty="format:%nDiff:%n")
-
-        email = Email(email_info, subject, body, self.ref_name,
-                      commit.base_rev, commit.rev)
-        email.send()
-
     def __email_new_commits(self, email_info, added_commits):
         """Send one email per new (non-pre-existing) commit.
 
@@ -436,4 +436,4 @@ class AbstractUpdate(object):
         """
         for commit in added_commits:
             if not commit.pre_existing_p:
-                self.__email_commit(email_info, commit)
+                self.email_commit(email_info, commit)

@@ -20,16 +20,17 @@ remote: X-Git-Refname: refs/notes/commits
 remote: X-Git-Oldrev: bbcc356176bb7f3104788323566c4fcef70650fc
 remote: X-Git-Newrev: 58e8efaaf0dee13edea66b1abbd4b669132b3d77
 remote:
-remote: The annotations of the following commit have been updated.
+remote: A Git Notes has been updated; it now contains:
+remote:
+remote:     This is my new note.
+remote:
+remote: This notes annotates the following commit:
 remote:
 remote: commit d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: Author: Joel Brobecker <brobecker@adacore.com>
 remote: Date:   Fri Apr 27 13:06:44 2012 -0700
 remote:
 remote:     New file: a.
-remote:
-remote: Notes:
-remote:     This is my new note.
 remote:
 remote: Diff:
 remote:
@@ -53,7 +54,11 @@ remote: X-Git-Refname: refs/notes/commits
 remote: X-Git-Oldrev: 58e8efaaf0dee13edea66b1abbd4b669132b3d77
 remote: X-Git-Newrev: 0892f7e8d41c265fc0ffcbe604f0e7ce784bd9d2
 remote:
-remote: The annotations of the following commit have been updated.
+remote: A Git Notes has been updated; it now contains:
+remote:
+remote:     Another short note.
+remote:
+remote: This notes annotates the following commit:
 remote:
 remote: commit 52abc3c195e80fa1713f2603290b6b202484694b
 remote: Author: Joel Brobecker <brobecker@adacore.com>
@@ -65,9 +70,6 @@ remote:     A slightly more verbose description of the change.
 remote:     Takes two lines, too!
 remote:
 remote:     For TICK-ETT.
-remote:
-remote: Notes:
-remote:     Another short note.
 remote:
 remote: Diff:
 remote:

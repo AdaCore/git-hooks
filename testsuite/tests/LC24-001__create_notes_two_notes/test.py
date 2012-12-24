@@ -20,7 +20,11 @@ remote: X-Git-Refname: refs/notes/commits
 remote: X-Git-Oldrev:
 remote: X-Git-Newrev: bbcc356176bb7f3104788323566c4fcef70650fc
 remote:
-remote: The annotations of the following commit have been updated.
+remote: A Git Notes has been updated; it now contains:
+remote:
+remote:     This is my first note.
+remote:
+remote: This notes annotates the following commit:
 remote:
 remote: commit a60540361d47901d3fe254271779f380d94645f7
 remote: Author: Joel Brobecker <brobecker@adacore.com>
@@ -30,9 +34,6 @@ remote:     Updated a.
 remote:
 remote:     Just added a little bit of text inside file a.
 remote:     Thought about doing something else, but not really necessary.
-remote:
-remote: Notes:
-remote:     This is my first note.
 remote:
 remote: Diff:
 remote:
@@ -56,16 +57,17 @@ remote: X-Git-Refname: refs/notes/commits
 remote: X-Git-Oldrev: bbcc356176bb7f3104788323566c4fcef70650fc
 remote: X-Git-Newrev: a0cd78e7b5d7bab7a956489837bf61f7a6376527
 remote:
-remote: The annotations of the following commit have been updated.
+remote: A Git Notes has been updated; it now contains:
+remote:
+remote:     This is my second note.
+remote:
+remote: This notes annotates the following commit:
 remote:
 remote: commit d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: Author: Joel Brobecker <brobecker@adacore.com>
 remote: Date:   Fri Apr 27 13:06:44 2012 -0700
 remote:
 remote:     New file: a.
-remote:
-remote: Notes:
-remote:     This is my second note.
 remote:
 remote: Diff:
 remote:

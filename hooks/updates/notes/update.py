@@ -6,8 +6,14 @@ from updates.emails import Email
 from updates.notes import GitNotes
 from utils import indent, InvalidUpdate
 
-NOTES_COMMIT_EMAIL_BODY_TEMPLATE = """\
-The annotations of the following commit have been updated.
+# The template to be used as the body of the email to be sent
+# for a notes commit which either adds, or modifies a git notes.
+UPDATED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE = """\
+A Git Notes has been updated; it now contains:
+
+%(notes_contents)s
+
+This notes annotates the following commit:
 
 %(annotated_rev_info)s
 
@@ -15,6 +21,20 @@ Diff:
 
 %(diff)s
 """
+
+
+# The template to be used as the body of the email to be sent
+# for a notes commit which deletes a git notes.
+DELETED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE = """\
+The Git Notes annotating the following commit has been deleted.
+
+%(annotated_rev_info)s
+
+Diff:
+
+%(diff)s
+"""
+
 
 class NotesUpdate(AbstractUpdate):
     """Update object for Git Notes creation or update.
@@ -77,17 +97,19 @@ class NotesUpdate(AbstractUpdate):
         # of the same commit multiple times.
         annotated_rev_info = git.log(notes.annotated_rev, no_notes=True,
                                      max_count="1")
-        if notes.contents is not None:
-            annotated_rev_info += '\n\nNotes:\n%s' % indent(notes.contents,
-                                                            ' ' * 4)
-
+        notes_contents = (None if notes.contents is None
+                          else indent(notes.contents, ' ' * 4))
         diff = git.show(commit.rev, pretty="format:", p=True)
 
         subject = '[%s] notes update for %s' % (email_info.project_name,
                                                 notes.annotated_rev)
 
-        body = NOTES_COMMIT_EMAIL_BODY_TEMPLATE % {
+        body_template = (
+            DELETED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE if notes_contents is None
+            else UPDATED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE)
+        body = body_template % {
             'annotated_rev_info' : annotated_rev_info,
+            'notes_contents' : notes_contents,
             'diff' : diff,
             }
 

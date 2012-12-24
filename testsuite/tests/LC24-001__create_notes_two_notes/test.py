@@ -24,7 +24,7 @@ remote: A Git Notes has been updated; it now contains:
 remote:
 remote:     This is my first note.
 remote:
-remote: This notes annotates the following commit:
+remote: This note annotates the following commit:
 remote:
 remote: commit a60540361d47901d3fe254271779f380d94645f7
 remote: Author: Joel Brobecker <brobecker@adacore.com>
@@ -61,7 +61,7 @@ remote: A Git Notes has been updated; it now contains:
 remote:
 remote:     This is my second note.
 remote:
-remote: This notes annotates the following commit:
+remote: This note annotates the following commit:
 remote:
 remote: commit d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: Author: Joel Brobecker <brobecker@adacore.com>

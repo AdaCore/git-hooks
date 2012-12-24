@@ -25,7 +25,7 @@ remote:
 remote:     This is my first note.
 remote:     Add some information about my first note.
 remote:
-remote: This notes annotates the following commit:
+remote: This note annotates the following commit:
 remote:
 remote: commit a60540361d47901d3fe254271779f380d94645f7
 remote: Author: Joel Brobecker <brobecker@adacore.com>
@@ -64,7 +64,7 @@ remote:     This is my first note.
 remote:     Rewrite a little bit how I added some information.
 remote:     And then add even more information.
 remote:
-remote: This notes annotates the following commit:
+remote: This note annotates the following commit:
 remote:
 remote: commit a60540361d47901d3fe254271779f380d94645f7
 remote: Author: Joel Brobecker <brobecker@adacore.com>

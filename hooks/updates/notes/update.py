@@ -13,7 +13,7 @@ A Git Notes has been updated; it now contains:
 
 %(notes_contents)s
 
-This notes annotates the following commit:
+This note annotates the following commit:
 
 %(annotated_rev_info)s
 

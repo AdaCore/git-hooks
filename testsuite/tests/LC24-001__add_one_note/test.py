@@ -24,7 +24,7 @@ remote: A Git Notes has been updated; it now contains:
 remote:
 remote:     This is my new note.
 remote:
-remote: This notes annotates the following commit:
+remote: This note annotates the following commit:
 remote:
 remote: commit d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: Author: Joel Brobecker <brobecker@adacore.com>

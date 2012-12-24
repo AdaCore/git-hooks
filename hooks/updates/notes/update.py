@@ -1,6 +1,6 @@
 """Handling of Git Notes updates."""
 
-from git import git, is_null_rev
+from git import git, is_null_rev, is_valid_commit
 from updates import AbstractUpdate
 from updates.emails import Email
 from updates.notes import GitNotes
@@ -36,7 +36,21 @@ class NotesUpdate(AbstractUpdate):
         # the associated commit is available. We need these
         # associated commits in order to create the emails
         # to be sent for those notes.
-        # Not implemented yet???
+        for notes_commit in self.added_commits:
+            notes = GitNotes(notes_commit.rev)
+            if not is_valid_commit(notes.annotated_rev):
+                error_message = [
+                    'The commit associated to the following notes update',
+                    'cannot be found. Please push your branch commits first',
+                    'and then push your notes commits.',
+                    '',
+                    'Notes commit:     %s' % notes.rev,
+                    'Annotated commit: %s' % notes.annotated_rev,
+                    '',
+                    'Notes contents:',
+                    ] + \
+                    notes.contents.splitlines()
+                raise InvalidUpdate(*error_message)
 
     def pre_commit_checks(self):
         """See AbstractUpdate.pre_commit_checks."""

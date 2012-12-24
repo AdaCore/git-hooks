@@ -21,9 +21,20 @@ class GitNotes(object):
         """
         self.rev = notes_rev
         self.filename = self.__get_notes_filename(notes_rev)
-        self.contents = \
-            self.__get_notes_contents(notes_rev, self.filename)
+        # Implement the contents "attribute" as a property.
+        # This allows us to lazy-initialize it.  And use
+        # a private attribute name __contents to cache its value.
+        self.__contents = None
         self.annotated_rev = self.filename.replace('/', '')
+
+
+    @property
+    def contents(self):
+        """The contents "attribute", lazily initialized."""
+        if self.__contents is None:
+            self.__contents = self.__get_notes_contents(self.rev,
+                                                        self.filename)
+        return self.__contents
 
     @classmethod
     def __get_notes_filename(cls, notes_rev):

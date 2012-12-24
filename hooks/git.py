@@ -157,6 +157,19 @@ def is_null_rev(rev):
     return re.match("0+$", rev) is not None
 
 
+def is_valid_commit(rev):
+    """Return True if rev is a valid commit.
+
+    PARAMETERS
+        rev: The commit SHA1 we want to test.
+    """
+    try:
+        git.cat_file('-e', rev)
+        return True
+    except CalledProcessError:
+        return False
+
+
 def get_object_type(rev):
     """Determine the object type of the given commit.
 

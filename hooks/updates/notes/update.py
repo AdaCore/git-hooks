@@ -43,8 +43,7 @@ class NotesUpdate(AbstractUpdate):
         # No pre-commit checks needed for Git Notes.
         pass
 
-    def get_update_email_contents(self, email_info, added_commits,
-                                  lost_commits):
+    def get_update_email_contents(self, email_info):
         """See AbstractUpdate.get_update_email_contents."""
         # No update email needed for notes (this is always
         # a fast-forward commit)...

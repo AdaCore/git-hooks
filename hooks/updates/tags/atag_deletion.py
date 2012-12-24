@@ -22,8 +22,7 @@ class AnnotatedTagDeletion(LightweightTagDeletion):
         identical for both.  This explains why we inherit from
         LightweightTagDeletion.
     """
-    def get_update_email_contents(self, email_info, added_commits,
-                                  lost_commits):
+    def get_update_email_contents(self, email_info):
         """See AbstractUpdate.get_update_email_contents."""
         subject = '[%s] Deleted tag %s' % (email_info.project_name,
                                            self.short_ref_name)
@@ -32,8 +31,9 @@ class AnnotatedTagDeletion(LightweightTagDeletion):
         tag_info['short_ref_name'] = self.short_ref_name
         tag_info['commit_oneline'] = commit_oneline(self.old_rev)
         body = ATAG_DELETION_EMAIL_BODY_TEMPLATE % tag_info
-        if tag_summary_of_changes_needed(added_commits, lost_commits):
-            body += self.summary_of_changes(added_commits, lost_commits)
+        if tag_summary_of_changes_needed(self.added_commits,
+                                         self.lost_commits):
+            body += self.summary_of_changes()
 
         return (subject, body)
 

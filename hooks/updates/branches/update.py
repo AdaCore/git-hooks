@@ -72,13 +72,13 @@ class BranchUpdate(AbstractUpdate):
         if not is_null_rev(self.old_rev):
             check_fast_forward(self.ref_name, self.old_rev, self.new_rev)
 
-    def get_update_email_contents(self, email_info, added_commits,
-                                  lost_commits):
+    def get_update_email_contents(self, email_info):
         """See AbstractUpdate.get_update_email_contents.
         """
         # For branch updates, we only send the update email when
         # the summary of changes is needed.
-        if not branch_summary_of_changes_needed(added_commits, lost_commits):
+        if not branch_summary_of_changes_needed(self.added_commits,
+                                                self.lost_commits):
             return None
 
         # Compute the subject.
@@ -92,12 +92,13 @@ class BranchUpdate(AbstractUpdate):
                       }
         if self.short_ref_name == 'master':
             update_info['branch'] = ''
-        if len(added_commits) > 1:
-            update_info['n_commits'] = ' (%d commits)' % len(added_commits)
+        if len(self.added_commits) > 1:
+            update_info['n_commits'] = \
+                ' (%d commits)' % len(self.added_commits)
 
         subject = "[%(repo)s%(branch)s]%(n_commits)s %(subject)s" % update_info
 
         body = BRANCH_UPDATE_EMAIL_BODY_TEMPLATE % update_info
-        body += self.summary_of_changes(added_commits, lost_commits)
+        body += self.summary_of_changes()
 
         return (subject, body)

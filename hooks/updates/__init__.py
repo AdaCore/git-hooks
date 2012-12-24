@@ -27,6 +27,8 @@ class AbstractUpdate(object):
         pre_update_refs: A GitReferences class (expected to contain
             the value of all references prior to the update being
             applied).
+        added_commits: A list of CommitInfo objects added by our update.
+        lost_commits: A list of CommitInfo objects lost after our update.
 
     REMARKS
         This class is meant to be abstract and should never be instantiated.
@@ -50,6 +52,17 @@ class AbstractUpdate(object):
         self.new_rev = new_rev
         self.new_rev_type = get_object_type(self.new_rev)
         self.pre_update_refs = pre_update_refs
+
+        # Implement the added_commits "attribute" as a property,
+        # to allow for initialization only on-demand. This allows
+        # us to avoid computing this list until the moment we
+        # actually need it. To help caching its value, avoiding
+        # the need to compute it multiple times, we introduce
+        # a private attribute named __added_commits.
+        #
+        # Same treatment for the lost_commits "attribute".
+        self.__added_commits = None
+        self.__lost_commits = None
 
         self.self_sanity_check()
 
@@ -79,10 +92,8 @@ class AbstractUpdate(object):
             print "--  Commit emails will therefore not be sent."
             print '-' * 75
             return
-        added = self.__added_commits()
-        lost = self.__lost_commits()
-        self.__email_ref_update(email_info, added, lost)
-        self.__email_new_commits(email_info, added)
+        self.__email_ref_update(email_info)
+        self.__email_new_commits(email_info)
 
     #------------------------------------------------------------------
     #--  Abstract methods that must be overridden by child classes.  --
@@ -110,8 +121,7 @@ class AbstractUpdate(object):
         """
         assert False
 
-    def get_update_email_contents(self, email_info, added_commits,
-                                  lost_commits):
+    def get_update_email_contents(self, email_info):
         """Return a (subject, body) tuple describing the update (or None).
 
         This method should return a 2-element tuple to be used for
@@ -139,10 +149,6 @@ class AbstractUpdate(object):
 
         PARAMETERS
             email_info: An EmailInfo object.
-            added_commits: A list of CommitInfo objects, corresponding
-                to the commits added by this update.
-            lost_commits: A list of CommitInfo objects, corresponding
-                to the commits lost after this update.
         """
         assert False
 
@@ -170,7 +176,7 @@ class AbstractUpdate(object):
             debug('(%s in hooks.noprecommitcheck)' % self.ref_name)
             return
 
-        added = self.__added_commits()
+        added = self.added_commits
         if not added:
             # There are no new commits, so nothing further to check.
             return
@@ -246,14 +252,11 @@ class AbstractUpdate(object):
         no_emails_list = git_config("hooks.noemails")
         return no_emails_list and self.ref_name in no_emails_list.split(",")
 
-    def summary_of_changes(self, added_commits, lost_commits):
+    def summary_of_changes(self):
         """A summary of changes to be added at the end of the ref-update email.
 
         PARAMETERS
-            added_commits: A list of CommitInfo objects, corresponding
-                to the commits added by this update.
-            lost_commits: A list of CommitInfo objects, corresponding
-                to the commits lost after this update.
+            None.
 
         RETURN VALUE
             A string containing the summary of changes.
@@ -261,7 +264,7 @@ class AbstractUpdate(object):
         summary = []
         # Display the lost commits (if any) first, to increase
         # our chances of attracting the reader's attention.
-        if lost_commits:
+        if self.lost_commits:
             summary.append('')
             summary.append('')
             summary.append('!!! WARNING: THE FOLLOWING COMMITS ARE'
@@ -269,10 +272,10 @@ class AbstractUpdate(object):
             summary.append('--------------------------------------'
                            '-----------------------------')
             summary.append('')
-            for commit in lost_commits:
+            for commit in self.lost_commits:
                 summary.append('  ' + commit.oneline_str())
 
-        if added_commits:
+        if self.added_commits:
             has_pre_existing = False
             summary.append('')
             summary.append('')
@@ -282,7 +285,7 @@ class AbstractUpdate(object):
             # Note that we want the summary to include all commits
             # now accessible from this reference, not just the new
             # ones.
-            for commit in added_commits:
+            for commit in self.added_commits:
                 has_pre_existing = has_pre_existing or commit.pre_existing_p
                 marker = ' (*)' if commit.pre_existing_p else ''
                 summary.append('  ' + commit.oneline_str() + marker)
@@ -301,7 +304,21 @@ class AbstractUpdate(object):
     #--  Private methods.  --
     #------------------------
 
-    def __added_commits(self):
+    @property
+    def added_commits(self):
+        """The added_commits attribute, lazy initialized."""
+        if self.__added_commits is None:
+            self.__added_commits = self.__get_added_commits()
+        return self.__added_commits
+
+    @property
+    def lost_commits(self):
+        """The lost_commits attribute, lazy initialized."""
+        if self.__lost_commits is None:
+            self.__lost_commits = self.__get_lost_commits()
+        return self.__lost_commits
+
+    def __get_added_commits(self):
         """Return a list of CommitInfo objects added by our update.
 
         RETURN VALUE
@@ -368,7 +385,7 @@ class AbstractUpdate(object):
 
         return commit_list
 
-    def __lost_commits(self):
+    def __get_lost_commits(self):
         """Return a list of CommitInfo objects lost after our update.
 
         RETURN VALUE
@@ -399,7 +416,7 @@ class AbstractUpdate(object):
 
         return commit_list
 
-    def __email_ref_update(self, email_info, added_commits, lost_commits):
+    def __email_ref_update(self, email_info):
         """Send the email describing to the reference update.
 
         This email can be seen as a "cover email", or a quick summary
@@ -407,33 +424,25 @@ class AbstractUpdate(object):
 
         PARAMETERS
             email_info: An EmailInfo object.
-            added_commits: A list of CommitInfo objects, corresponding
-                to the commits added by this update.
-            lost_commits: A list of CommitInfo objects, corresponding
-                to the commits lost after this update.
 
         REMARKS
             The hooks may decide that such an email may not be necessary,
             and thus send nothing. See self.get_update_email_contents
             for more details.
         """
-        update_email_contents = \
-            self.get_update_email_contents(email_info, added_commits,
-                                           lost_commits)
+        update_email_contents = self.get_update_email_contents(email_info)
         if update_email_contents is not None:
             (subject, body) = update_email_contents
             update_email = Email(email_info, subject, body,
                                  self.ref_name, self.old_rev, self.new_rev)
             update_email.send()
 
-    def __email_new_commits(self, email_info, added_commits):
+    def __email_new_commits(self, email_info):
         """Send one email per new (non-pre-existing) commit.
 
         PARAMETERS
             email_info: An EmailInfo object.
-            added_commits: A list of CommitInfo objects, corresponding
-                to the commits added by this update.
         """
-        for commit in added_commits:
+        for commit in self.added_commits:
             if not commit.pre_existing_p:
                 self.email_commit(email_info, commit)

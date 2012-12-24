@@ -23,8 +23,7 @@ class AnnotatedTagCreation(AnnotatedTagUpdate):
         some of the abstract methods would be identical.  So inherit
         from AnnotatedTagUpdate.
     """
-    def get_update_email_contents(self, email_info, added_commits,
-                                  lost_commits):
+    def get_update_email_contents(self, email_info):
         """See AbstractUpdate.get_update_email_contents."""
         subject = '[%s] Created tag %s' % (email_info.project_name,
                                            self.short_ref_name)
@@ -38,7 +37,8 @@ class AnnotatedTagCreation(AnnotatedTagUpdate):
         tag_info['commit_oneline'] = commit_oneline(self.new_rev)
 
         body = ATAG_CREATION_EMAIL_BODY_TEMPLATE % tag_info
-        if tag_summary_of_changes_needed(added_commits, lost_commits):
-            body += self.summary_of_changes(added_commits, lost_commits)
+        if tag_summary_of_changes_needed(self.added_commits,
+                                         self.lost_commits):
+            body += self.summary_of_changes()
 
         return (subject, body)

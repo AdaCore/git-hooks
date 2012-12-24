@@ -4,6 +4,9 @@ from git import is_null_rev, get_object_type
 from updates.branches.creation import BranchCreation
 from updates.branches.deletion import BranchDeletion
 from updates.branches.update import BranchUpdate
+from updates.notes.creation import NotesCreation
+from updates.notes.deletion import NotesDeletion
+from updates.notes.update import NotesUpdate
 from updates.tags.atag_creation import AnnotatedTagCreation
 from updates.tags.atag_update import AnnotatedTagUpdate
 from updates.tags.atag_deletion import AnnotatedTagDeletion
@@ -20,15 +23,18 @@ from updates.tags.ltag_deletion import LightweightTagDeletion
 (CREATE, DELETE, UPDATE) = range(3)
 
 REF_CHANGE_MAP = {
-    ('refs/heads/', CREATE, 'commit') : BranchCreation,
-    ('refs/heads/', DELETE, 'commit') : BranchDeletion,
-    ('refs/heads/', UPDATE, 'commit') : BranchUpdate,
-    ('refs/tags/' , CREATE, 'tag')    : AnnotatedTagCreation,
-    ('refs/tags/' , DELETE, 'tag')    : AnnotatedTagDeletion,
-    ('refs/tags/' , UPDATE, 'tag')    : AnnotatedTagUpdate,
-    ('refs/tags/' , CREATE, 'commit') : LightweightTagCreation,
-    ('refs/tags/' , DELETE, 'commit') : LightweightTagDeletion,
-    ('refs/tags/' , UPDATE, 'commit') : LightweightTagUpdate,
+    ('refs/heads/'       , CREATE, 'commit') : BranchCreation,
+    ('refs/heads/'       , DELETE, 'commit') : BranchDeletion,
+    ('refs/heads/'       , UPDATE, 'commit') : BranchUpdate,
+    ('refs/notes/commits', CREATE, 'commit') : NotesCreation,
+    ('refs/notes/commits', DELETE, 'commit') : NotesDeletion,
+    ('refs/notes/commits', UPDATE, 'commit') : NotesUpdate,
+    ('refs/tags/'        , CREATE, 'tag')    : AnnotatedTagCreation,
+    ('refs/tags/'        , DELETE, 'tag')    : AnnotatedTagDeletion,
+    ('refs/tags/'        , UPDATE, 'tag')    : AnnotatedTagUpdate,
+    ('refs/tags/'        , CREATE, 'commit') : LightweightTagCreation,
+    ('refs/tags/'        , DELETE, 'commit') : LightweightTagDeletion,
+    ('refs/tags/'        , UPDATE, 'commit') : LightweightTagUpdate,
 }
 
 def new_update(ref_name, old_rev, new_rev, pre_update_refs):

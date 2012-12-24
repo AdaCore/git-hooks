@@ -142,3 +142,23 @@ def warn(*args, **kwargs):
         print >> sys.stderr, prefix , arg
 
 
+############################################################################
+#
+# Misc...
+#
+############################################################################
+
+def indent(text, indentation):
+    """Indent every line with indentation.
+
+    PARAMETERS
+        text: A string.
+        indentiation: A string used to indent every non-empty line.
+
+    RETURN VALUE
+        The indented version of text.
+    """
+    indented = []
+    for line in text.splitlines(True):
+        indented.append(indentation + line)
+    return ''.join(indented)

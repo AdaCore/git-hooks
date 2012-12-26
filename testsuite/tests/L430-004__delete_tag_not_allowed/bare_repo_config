@@ -1,0 +1,7 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[hooks]
+        fromdomain = gnat.com
+        mailinglist = git-hooks-ci@example.com

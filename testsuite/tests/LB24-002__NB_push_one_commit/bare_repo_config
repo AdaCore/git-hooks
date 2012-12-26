@@ -1,0 +1,10 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[receive]
+        denyCurrentBranch = ignore
+[hooks]
+        fromdomain = adacore.com
+        mailinglist = git-hooks-ci@example.com

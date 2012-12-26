@@ -1,0 +1,9 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[receive]
+        denyNonFastforwards = false
+[hooks]
+        fromdomain = adacore.com
+        mailinglist = git-hooks-ci@example.com

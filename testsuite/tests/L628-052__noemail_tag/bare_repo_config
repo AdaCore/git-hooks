@@ -1,0 +1,8 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[hooks]
+        mailinglist = testsuite@example.com
+        fromdomain = example.com
+        noemails = refs/tags/v0.1

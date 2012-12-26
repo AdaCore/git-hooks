@@ -1,0 +1,10 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[hooks]
+        fromdomain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+        noprecommitcheck = refs/heads/thirdparty
+        noemails = refs/heads/thirdparty
+        tnrequired = true

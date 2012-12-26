@@ -1,0 +1,11 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[receive]
+        # We should not use denyNonFastforwards, as this overrides our scheme
+        # of allowing non-fast-forward updates on topic/* branches.
+        denyNonFastforwards = false
+[hooks]
+        fromdomain = adacore.com
+        mailinglist = git-hooks-ci@example.com

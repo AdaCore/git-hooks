@@ -1,0 +1,8 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[hooks]
+        allowdeletetag = true
+        fromdomain = example.com
+        mailinglist = something-ci@example.com

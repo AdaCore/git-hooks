@@ -1,0 +1,10 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[hooks]
+        fromdomain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+        # Set the maxcommitemails value to a ridiculously low value
+        # for testing purposes.
+        maxcommitemails = 3

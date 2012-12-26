@@ -7,8 +7,9 @@ used by the testcase.
 """
 
 from gnatpython.ex import Run
+from gnatpython.fileutils import mv
 from os import unlink
-from os.path import exists, isdir
+from os.path import exists, isdir, isfile
 from sys import exit, stderr
 
 def fatal(msg):
@@ -20,8 +21,14 @@ def fatal(msg):
 # inside a tarball called git-repos.tar.gz.
 REPOS_TARBALL='git-repos.tar.bz2'
 
+# The config file to be used in the bare repository...
+BARE_REPO_CONFIG='bare_repo_config'
+
 if not exists(REPOS_TARBALL):
     fatal("Cannot find repositories' tarball: %s" % REPOS_TARBALL)
+
+if not exists(BARE_REPO_CONFIG):
+    fatal("Cannot find config file for bare repository: %s" % BARE_REPO_CONFIG)
 
 r = Run(['tar', 'xvfj', REPOS_TARBALL])
 if r.status != 0:
@@ -36,5 +43,19 @@ if not isdir('repo/.git'):
     fatal('Directory "repo" does not appear to be a git repository')
 if not isdir('bare/repo.git'):
     fatal('Directory "bare/repo.git" does not exist')
+
+# Determine the location of the bare/repo.git's config file.
+# It depends on whether the repository is a bare repository or not.
+if isdir('bare/repo.git/.git'):
+    bare_repo_config_path='bare/repo.git/.git/config'
+else:
+    bare_repo_config_path='bare/repo.git/config'
+
+# Move our config file in place, after having verified that we are not
+# about to overwrite one.
+if isfile(bare_repo_config_path):
+    fatal('Unexpected config file in bare repository: %s'
+          % bare_repo_config_path)
+mv(BARE_REPO_CONFIG, bare_repo_config_path)
 
 unlink(REPOS_TARBALL)

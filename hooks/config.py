@@ -22,6 +22,7 @@ GIT_CONFIG_OPTS = {
     'hooks.maxcommitemails'  : { 'type' : 'int',  'default' : '100' },
     'hooks.noemails'         : {                  'default' : ''},
     'hooks.noprecommitcheck' : {                  'default' : ''},
+    'hooks.tnrequired'       : { 'type' : 'bool', 'default' : 'false' },
 }
 
 # The maximum number of characters from a commit's subject

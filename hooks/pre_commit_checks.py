@@ -5,6 +5,7 @@ import re
 import subprocess
 from subprocess import check_output, STDOUT
 
+from config import git_config
 from git import git, get_module_name, CalledProcessError
 from git_attrs import git_attribute
 import utils
@@ -181,6 +182,46 @@ def reject_merge_conflict_section(rev, raw_rh):
             raise InvalidUpdate(*info)
 
 
+def check_missing_ticket_number(rev, raw_rh):
+    """Raise InvalidUpdate if a TN in the RH is missing...
+
+    Note: This only applies if the project is configured to require TNs.
+
+    PARAMETERS
+        rev: The revision of the commit being checked.
+        raw_rh: A list of lines corresponding to the raw revision
+            history (as opposed to the revision history as usually
+            displayed by git where the subject lines are wrapped).
+            See --pretty format option "%B" for more details.
+    """
+    if git_config('hooks.tnrequired') != 'true':
+        return
+
+    tn_re = [# The word 'minor' (as in "Minor reformatting")
+             # anywhere in the RH removes the need for a TN
+             # in the RH.
+             r'\bminor\b',
+             # Same for '(no-tn-check)'.
+             r'\(no-tn-check\)',
+             # TN regexp.
+             '[0-9A-Z][0-9A-Z][0-9][0-9]-[0-9A-Z][0-9][0-9]',
+            ]
+    for line in raw_rh:
+        if re.search('|'.join(tn_re), line, re.IGNORECASE):
+            return
+
+    raise InvalidUpdate(*[
+        'The following commit is missing a ticket number inside',
+        'its revision history.  If the change is sufficiently',
+        'minor that a ticket number is not meaningful, please use',
+        'either the word "Minor" or the "(no-tn-check)" string',
+        'in place of a ticket number.',
+        '',
+        'commit %s' % rev,
+        'Subject: %s' % raw_rh[0]
+        ])
+
+
 def check_commit(old_rev, new_rev):
     """Apply pre-commit checks if appropriate.
 
@@ -201,6 +242,7 @@ def check_commit(old_rev, new_rev):
     ensure_empty_line_after_subject(new_rev, raw_body)
     reject_unedited_merge_commit(new_rev, raw_body)
     reject_merge_conflict_section(new_rev, raw_body)
+    check_missing_ticket_number(new_rev, raw_body)
 
     if old_rev is None:
         # Get the "empty tree" special SHA1, and use that as our old tree.

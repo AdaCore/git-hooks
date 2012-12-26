@@ -87,6 +87,18 @@ class TestCase(unittest.TestCase):
         # assumes we are being called from there.
         os.chdir('%s/bare/repo.git' % TEST_DIR)
 
+    def git_version(self):
+        """Return the git version number (a LooseVersion object).
+        """
+        from distutils.version import LooseVersion
+        p = gnatpython.ex.Run(['git', '--version'])
+        assert (p.status == 0)
+        out = p.out.splitlines()
+        assert (len (out) > 0)
+        assert (out[0].startswith('git version '))
+        version_str = out[0].replace('git version ', '')
+        return LooseVersion(version_str)
+
 
 def runtests():
     """Call unittest.main.
@@ -107,14 +119,47 @@ class Run(gnatpython.ex.Run):
             returning it.
         """
         lines = self.out.splitlines()
+
+        # git version 1.7.8.2 prints the non-fast-forward error
+        # message differently from 1.7.10.4...  The message is
+        # at the end, so check there...
+        NON_FAST_FORWARD_ERROR_1_7_8_2 = """\
+To prevent you from losing history, non-fast-forward updates were rejected
+Merge the remote changes (e.g. 'git pull') before pushing again.  See the
+'Note about fast-forwards' section of 'git push --help' for details."""
+        NON_FAST_FORWARD_ERROR_1_7_10_4 = """\
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Merge the remote changes (e.g. 'git pull')
+hint: before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details."""
+        if lines[-3:] == NON_FAST_FORWARD_ERROR_1_7_8_2.splitlines():
+            lines[-3:] = NON_FAST_FORWARD_ERROR_1_7_10_4.splitlines()
+
         result = []
         for line in lines:
             # Remove any clear-end-of-line terminal control sequences...
             line = line.replace('\033[K', '')
+
             # git version 1.6.5.rc2 spells 'non-fast forward', whereas
             # git version 1.7.1 spells 'non-fast-forward'. Unify on
             # the latest spelling...
             line = line.replace('non-fast forward', 'non-fast-forward')
+
+            # git version 1.7.8.2 still spells '1 files changed',
+            # instead of '1 file changed' (in 1.7.10.4).
+            line = line.replace('remote:  1 files changed,',
+                                'remote:  1 file changed,')
+
+            # Same as above for insertions and deletions...
+            line = line.replace(', 1 insertions(+)', ', 1 insertion(+)')
+            line = line.replace(', 1 deletions(-)', ', 1 deletion(-)')
+
+            # Same, but with "0 insertions" and "0 deletions", which
+            # is printed by git version 1.7.8.2, but not by newer
+            # versions (1.7.10.4).
+            line = line.replace(', 0 insertions(+)', '')
+            line = line.replace(', 0 deletions(-)', '')
+
             # Lastly, strip any trailing spaces.  We strip them because
             # we do not want to be a the mercy of git's trailing spaces
             # when matching the output of commands, and because they are

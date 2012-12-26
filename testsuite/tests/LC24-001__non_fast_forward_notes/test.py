@@ -16,6 +16,21 @@ hint: counterpart. Check out this branch and merge the remote changes
 hint: (e.g. 'git pull') before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 """
+        if self.git_version() < '1.7.10':
+            # Older versions of git generate the same error message
+            # for current branches as they do for non-current branches,
+            # whereas 1.7.10.4 generates two different outputs.
+            # Fixup the expected output if testing with an older
+            # version of git.
+            expected_out="""\
+To ../bare/repo.git
+ ! [rejected]        refs/notes/commits -> refs/notes/commits (non-fast-forward)
+error: failed to push some refs to '../bare/repo.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Merge the remote changes (e.g. 'git pull')
+hint: before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+"""
 
         self.assertNotEqual(p.status, 0, p.image)
         self.assertEqual(expected_out, p.cmd_out, p.image)

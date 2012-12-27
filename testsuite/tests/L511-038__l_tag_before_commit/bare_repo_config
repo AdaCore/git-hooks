@@ -5,4 +5,4 @@
 [hooks]
         fromdomain = adacore.com
         mailinglist = git-hooks-ci@example.com
-        allowlightweighttag = true
+        allow-lightweight-tag = true

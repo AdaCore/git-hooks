@@ -13,7 +13,8 @@ from git import git, CalledProcessError
 GIT_CONFIG_OPTS = {
     'hooks.allow-delete-tag' : { 'type' : 'bool', 'default' : 'false' },
     'hooks.allow-non-fast-forward' : {            'default' : ''},
-    'hooks.allowlightweighttag' : { 'type' : 'bool', 'default' : 'false' },
+    'hooks.allow-lightweight-tag' :
+                               { 'type' : 'bool', 'default' : 'false' },
     'hooks.combinedstylechecking' :
                                { 'type' : 'bool', 'default' : 'false' },
     'hooks.debuglevel'       : { 'type' : 'int',  'default' : '0' },

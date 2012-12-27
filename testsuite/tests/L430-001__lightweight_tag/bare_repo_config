@@ -3,6 +3,6 @@
 	filemode = true
 	bare = true
 [hooks]
-        allowlightweighttag = true
+        allow-lightweight-tag = true
         fromdomain = example.com
         mailinglist = commits@example.com

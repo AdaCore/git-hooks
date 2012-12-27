@@ -30,7 +30,7 @@ class EmailInfo(object):
             recipients of the email notification.
 
     REMARKS
-        This hoosk assumes that the hooks.from-domain config parameter
+        This class assumes that the hooks.from-domain config parameter
         is set.  Otherwise, an InvalidUpdate exception is raised when
         the object is initialized.
     """

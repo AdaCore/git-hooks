@@ -4,11 +4,14 @@ from config import git_config, SUBJECT_MAX_SUBJECT_CHARS
 from copy import deepcopy
 from git import (git, get_object_type, is_null_rev, commit_parents,
                  commit_rev)
+from os import environ
+from os.path import expanduser, isfile, getmtime
 from pre_commit_checks import check_commit
 import re
+import time
 from updates.commits import commit_info_list
 from updates.emails import Email
-from utils import debug, InvalidUpdate
+from utils import debug, InvalidUpdate, warn
 
 class AbstractUpdate(object):
     """An abstract class representing a reference update.
@@ -174,6 +177,11 @@ class AbstractUpdate(object):
             and self.ref_name in excluded_branches.split(',')):
             # Pre-commit checks are explicitly disabled on this branch.
             debug('(%s in hooks.noprecommitcheck)' % self.ref_name)
+            return
+
+        if self.__no_cvs_check_user_override():
+            # Just return. All necessary traces have already been
+            # handled by the __no_cvs_check_user_override method.
             return
 
         added = self.added_commits
@@ -415,6 +423,35 @@ class AbstractUpdate(object):
         commit_list = commit_info_list(self.old_rev, *exclude)
 
         return commit_list
+
+    def __no_cvs_check_user_override(self):
+        """Return True iff pre-commit-checks are turned off by user override...
+
+        ... via the ~/.no_cvs_check file.
+
+        This function also performs all necessary debug traces, warnings,
+        etc.
+        """
+        no_cvs_check_fullpath = expanduser('~/.no_cvs_check')
+        # Make sure the tilde expansion worked.  Since we are only using
+        # "~" rather than "~username", the expansion should really never
+        # fail...
+        assert (not no_cvs_check_fullpath.startswith('~'))
+
+        if not isfile(no_cvs_check_fullpath):
+            return False
+
+        # The no_cvs_check file exists.  Verify its age.
+        age = time.time() - getmtime(no_cvs_check_fullpath)
+        one_day_in_seconds = 24 * 60 * 60
+
+        if (age > one_day_in_seconds):
+            warn('%s is too old and will be ignored.' % no_cvs_check_fullpath)
+            return False
+
+        debug('%s found - pre-commit checks disabled' % no_cvs_check_fullpath)
+        return True
+
 
     def __email_ref_update(self, email_info):
         """Send the email describing to the reference update.

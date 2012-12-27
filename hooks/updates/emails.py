@@ -103,7 +103,7 @@ class Email(object):
             is set, then a trace of the email is printed, instead
             of sending it.  This is for testing purposes.
         """
-        email_from = parseaddr(self.e_msg.get('From'))
+        email_from = self.e_msg.get('From')
         email_recipients = [addr[1] for addr
                             in getaddresses(self.e_msg.get_all('To', [])
                                             + self.e_msg.get_all('Cc', [])

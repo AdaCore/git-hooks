@@ -205,7 +205,7 @@ class AbstractUpdate(object):
                     "Contact your repository adminstrator if you really meant",
                     "to generate this many commit emails.")
 
-        if git_config('hooks.combinedstylechecking') == 'true':
+        if git_config('hooks.combined-style-checking') == 'true':
             # This project prefers to perform the style check on
             # the cumulated diff, rather than commit-per-commit.
             debug('(combined style checking)')

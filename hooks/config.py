@@ -15,7 +15,7 @@ GIT_CONFIG_OPTS = {
     'hooks.allow-non-fast-forward' : {            'default' : ''},
     'hooks.allow-lightweight-tag' :
                                { 'type' : 'bool', 'default' : 'false' },
-    'hooks.combinedstylechecking' :
+    'hooks.combined-style-checking' :
                                { 'type' : 'bool', 'default' : 'false' },
     'hooks.debuglevel'       : { 'type' : 'int',  'default' : '0' },
     'hooks.fromdomain'       : {                  'default' : None},

@@ -3,5 +3,5 @@
 	filemode = true
 	bare = true
 [hooks]
-        fromdomain = gnat.com
+        from-domain = gnat.com
         mailinglist = git-hooks-ci@example.com

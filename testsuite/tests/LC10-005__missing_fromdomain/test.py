@@ -7,11 +7,11 @@ class TestRun(TestCase):
         cd ('%s/repo' % TEST_DIR)
 
         # Push master to the `origin' remote.
-        # The update should be refused because hooks.fromdomain config
+        # The update should be refused because hooks.from-domain config
         # is not set.
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** Error: hooks.fromdomain config variable not set.
+remote: *** Error: hooks.from-domain config variable not set.
 remote: *** Please contact your repository's administrator.
 remote: error: hook declined to update refs/heads/master
 To ../bare/repo.git

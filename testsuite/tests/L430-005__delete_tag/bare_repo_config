@@ -3,6 +3,6 @@
 	filemode = true
 	bare = true
 [hooks]
-        fromdomain = example.com
+        from-domain = example.com
         mailinglist = repo@example.com
         allow-delete-tag = true

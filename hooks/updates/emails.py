@@ -30,7 +30,7 @@ class EmailInfo(object):
             recipients of the email notification.
 
     REMARKS
-        This hoosk assumes that the hooks.fromdomain config parameter
+        This hoosk assumes that the hooks.from-domain config parameter
         is set.  Otherwise, an InvalidUpdate exception is raised when
         the object is initialized.
     """
@@ -42,10 +42,10 @@ class EmailInfo(object):
         """
         self.project_name = get_module_name()
 
-        from_domain = git_config('hooks.fromdomain')
+        from_domain = git_config('hooks.from-domain')
         if not from_domain:
             raise InvalidUpdate(
-                'Error: hooks.fromdomain config variable not set.',
+                'Error: hooks.from-domain config variable not set.',
                 'Please contact your repository\'s administrator.')
         self.email_from = '%s <%s@%s>' % (get_user_full_name(),
                                           get_user_name(),

@@ -3,4 +3,4 @@
 	filemode = true
 	bare = true
 [hooks]
-        fromdomain = example.com
+        from-domain = example.com

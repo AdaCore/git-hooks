@@ -7,5 +7,5 @@
         # of allowing non-fast-forward updates on topic/* branches.
         denyNonFastforwards = false
 [hooks]
-        fromdomain = adacore.com
+        from-domain = adacore.com
         mailinglist = git-hooks-ci@example.com

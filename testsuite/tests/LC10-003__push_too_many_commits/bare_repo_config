@@ -3,7 +3,7 @@
 	filemode = true
 	bare = true
 [hooks]
-        fromdomain = adacore.com
+        from-domain = adacore.com
         mailinglist = git-hooks-ci@example.com
         # Set the max-commit-emails value to a ridiculously low value
         # for testing purposes.

@@ -3,6 +3,6 @@
 	filemode = true
 	bare = true
 [hooks]
-        fromdomain = adacore.com
+        from-domain = adacore.com
         mailinglist = git-hooks-ci@example.com
         bcc-file-ci = false

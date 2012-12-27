@@ -4,5 +4,5 @@
 	bare = true
 [hooks]
         allow-lightweight-tag = true
-        fromdomain = example.com
+        from-domain = example.com
         mailinglist = something-ci@example.com

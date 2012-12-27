@@ -6,5 +6,5 @@
 [receive]
         denyCurrentBranch = ignore
 [hooks]
-        fromdomain = adacore.com
+        from-domain = adacore.com
         mailinglist = git-hooks-ci@example.com

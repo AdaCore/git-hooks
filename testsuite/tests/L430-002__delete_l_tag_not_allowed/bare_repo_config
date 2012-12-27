@@ -3,5 +3,5 @@
 	filemode = true
 	bare = true
 [hooks]
-        fromdomain = act-europe.fr
+        from-domain = act-europe.fr
         mailinglist = git-hooks-ci@example.com

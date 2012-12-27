@@ -3,7 +3,7 @@
 	filemode = true
 	bare = true
 [hooks]
-        fromdomain = adacore.com
+        from-domain = adacore.com
         mailinglist = git-hooks-ci@example.com
         no-precommit-check = refs/heads/thirdparty
         no-emails = refs/heads/thirdparty

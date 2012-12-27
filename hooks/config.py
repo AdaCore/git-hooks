@@ -18,7 +18,7 @@ GIT_CONFIG_OPTS = {
     'hooks.combined-style-checking' :
                                { 'type' : 'bool', 'default' : 'false' },
     'hooks.debug-level'      : { 'type' : 'int',  'default' : '0' },
-    'hooks.fromdomain'       : {                  'default' : None},
+    'hooks.from-domain'      : {                  'default' : None},
     'hooks.mailinglist'      : {                  'default' : None},
     'hooks.max-commit-emails': { 'type' : 'int',  'default' : '100' },
     'hooks.no-emails'        : {                  'default' : ''},

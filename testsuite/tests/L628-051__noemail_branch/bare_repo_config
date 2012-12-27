@@ -4,5 +4,5 @@
 	bare = true
 [hooks]
         mailinglist = commits@example.com
-        fromdomain = example.com
+        from-domain = example.com
         no-emails = refs/heads/master

@@ -4,4 +4,4 @@
 	bare = true
 [hooks]
         mailinglist = testsuite@example.com
-        fromdomain = example.com
+        from-domain = example.com

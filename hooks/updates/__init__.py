@@ -3,15 +3,16 @@
 from config import git_config, SUBJECT_MAX_SUBJECT_CHARS
 from copy import deepcopy
 from git import (git, get_object_type, is_null_rev, commit_parents,
-                 commit_rev)
+                 commit_rev, get_module_name)
 from os import environ
 from os.path import expanduser, isfile, getmtime
 from pre_commit_checks import check_commit
 import re
+from syslog import syslog
 import time
 from updates.commits import commit_info_list
 from updates.emails import Email
-from utils import debug, InvalidUpdate, warn
+from utils import debug, InvalidUpdate, warn, get_user_name
 
 class AbstractUpdate(object):
     """An abstract class representing a reference update.
@@ -450,6 +451,13 @@ class AbstractUpdate(object):
             return False
 
         debug('%s found - pre-commit checks disabled' % no_cvs_check_fullpath)
+        syslog('Pre-commit checks disabled for %(rev)s on %(repo)s by user'
+               ' %(user)s using %(no_cvs_check_fullpath)s'
+               % {'rev' : self.new_rev,
+                  'repo' : get_module_name(),
+                  'user' : get_user_name(),
+                  'no_cvs_check_fullpath' : no_cvs_check_fullpath,
+                 })
         return True
 
 

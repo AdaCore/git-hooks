@@ -48,6 +48,15 @@ class TestGitHooks(TestRunner):
             git_dir = '%s/.git' % git_dir
         os.symlink('%s/hooks' % root_dir, '%s/hooks' % git_dir)
 
+        # Also, tell the hooks to use our fake (syslog) logger,
+        # rather than the real logger.  Usually, we do this sort
+        # of thing in the testcase.Setup method, but we need
+        # to know the testsuite root dir, which is no longer
+        # accessible once we reach that point.
+        os.environ['GIT_HOOKS_LOGGER'] = \
+            '%s/testsuite/bin/stdout-logger' % root_dir
+
+
     def apply_output_filter(self, str_list):
         """The test is succesful iff the output ends with `OK'.
         """

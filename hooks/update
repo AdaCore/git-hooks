@@ -27,5 +27,11 @@ fi
 # baseline version installed in /gnatmail.
 export PATH=/gnatmail/install/bin:$PATH
 
+# Similarly, update the PATH and LD_LIBRARY_PATH to include the location
+# where cvs_check is installed.
+GNOS=/paris.d/web/services/gnos
+export PATH=$GNOS/bin:$PATH
+export LD_LIBRARY_PATH=$GNOS/lib:$LD_LIBRARY_PATH
+
 python `dirname $0`/update.py "$@"
 

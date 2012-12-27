@@ -193,7 +193,7 @@ class AbstractUpdate(object):
         # We know that commit emails would only be sent for commits which
         # are new for the repository, so we count those.
         if not self.in_no_emails_list():
-            max_emails = int(git_config('hooks.maxcommitemails'))
+            max_emails = int(git_config('hooks.max-commit-emails'))
             nb_emails = len([commit for commit in added
                              if not commit.pre_existing_p])
             if nb_emails > max_emails:

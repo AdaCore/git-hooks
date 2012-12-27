@@ -5,9 +5,9 @@
 [hooks]
         fromdomain = adacore.com
         mailinglist = git-hooks-ci@example.com
-        # Set the maxcommitemails value to a ridiculously low value
+        # Set the max-commit-emails value to a ridiculously low value
         # for testing purposes.
-        maxcommitemails = 3
+        max-commit-emails = 3
         # We want no commit emails on master.  It should mean that
-        # maxcommitemails has no influence over that branch.
+        # max-commit-emails has no influence over that branch.
         noemails = refs/heads/master

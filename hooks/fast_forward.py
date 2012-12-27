@@ -44,7 +44,7 @@ def check_fast_forward(ref_name, old_rev, new_rev):
 
     # Non-fast-forward update.  See if this is one of the branches where
     # such an update is allowed.
-    ok_branches = git_config('hooks.allowNonFastForwardOnBranches')
+    ok_branches = git_config('hooks.allow-non-fast-forward')
 
     for branch in ["refs/heads/" + branch.strip()
                    for branch in (ok_branches.split(",")

@@ -3,6 +3,6 @@
 	filemode = true
 	bare = true
 [hooks]
-        allowdeletetag = true
+        allow-delete-tag = true
         fromdomain = example.com
         mailinglist = something-ci@example.com

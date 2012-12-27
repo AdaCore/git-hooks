@@ -11,7 +11,7 @@ from git import git, CalledProcessError
 #       x 'default': The default value for this config option.
 
 GIT_CONFIG_OPTS = {
-    'hooks.allowdeletetag'   : { 'type' : 'bool', 'default' : 'false' },
+    'hooks.allow-delete-tag' : { 'type' : 'bool', 'default' : 'false' },
     'hooks.allowNonFastForwardOnBranches' : {     'default' : ''},
     'hooks.allowlightweighttag' : { 'type' : 'bool', 'default' : 'false' },
     'hooks.combinedstylechecking' :

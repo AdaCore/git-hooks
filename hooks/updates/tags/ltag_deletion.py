@@ -41,7 +41,7 @@ class LightweightTagDeletion(AbstractUpdate):
         REMARKS
             This method handles both lightweight and annotated tags.
         """
-        if git_config('hooks.allowdeletetag') != "true":
+        if git_config('hooks.allow-delete-tag') != "true":
             raise InvalidUpdate(
                 "Deleting a tag is not allowed in this repository")
 

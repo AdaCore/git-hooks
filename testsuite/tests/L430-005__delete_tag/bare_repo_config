@@ -5,4 +5,4 @@
 [hooks]
         fromdomain = example.com
         mailinglist = repo@example.com
-        allowdeletetag = true
+        allow-delete-tag = true

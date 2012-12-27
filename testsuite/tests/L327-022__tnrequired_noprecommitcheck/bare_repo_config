@@ -6,5 +6,5 @@
         fromdomain = adacore.com
         mailinglist = git-hooks-ci@example.com
         noprecommitcheck = refs/heads/thirdparty
-        noemails = refs/heads/thirdparty
+        no-emails = refs/heads/thirdparty
         tnrequired = true

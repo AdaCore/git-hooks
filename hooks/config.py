@@ -21,7 +21,7 @@ GIT_CONFIG_OPTS = {
     'hooks.fromdomain'       : {                  'default' : None},
     'hooks.mailinglist'      : {                  'default' : None},
     'hooks.max-commit-emails': { 'type' : 'int',  'default' : '100' },
-    'hooks.noemails'         : {                  'default' : ''},
+    'hooks.no-emails'        : {                  'default' : ''},
     'hooks.noprecommitcheck' : {                  'default' : ''},
     'hooks.tnrequired'       : { 'type' : 'bool', 'default' : 'false' },
 

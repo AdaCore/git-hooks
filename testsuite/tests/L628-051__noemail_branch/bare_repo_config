@@ -5,4 +5,4 @@
 [hooks]
         mailinglist = commits@example.com
         fromdomain = example.com
-        noemails = refs/heads/master
+        no-emails = refs/heads/master

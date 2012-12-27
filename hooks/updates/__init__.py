@@ -90,7 +90,7 @@ class AbstractUpdate(object):
         """
         if self.in_no_emails_list():
             print '-' * 75
-            print "--  The hooks.noemails config parameter contains `%s'." \
+            print "--  The hooks.no-emails config parameter contains `%s'." \
                     % self.ref_name
             print "--  Commit emails will therefore not be sent."
             print '-' * 75
@@ -257,7 +257,7 @@ class AbstractUpdate(object):
     def in_no_emails_list(self):
         """Return True if no emails should be sent for this reference update.
         """
-        no_emails_list = git_config("hooks.noemails")
+        no_emails_list = git_config("hooks.no-emails")
         return no_emails_list and self.ref_name in no_emails_list.split(",")
 
     def summary_of_changes(self):

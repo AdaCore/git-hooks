@@ -10,4 +10,4 @@
         max-commit-emails = 3
         # We want no commit emails on master.  It should mean that
         # max-commit-emails has no influence over that branch.
-        noemails = refs/heads/master
+        no-emails = refs/heads/master

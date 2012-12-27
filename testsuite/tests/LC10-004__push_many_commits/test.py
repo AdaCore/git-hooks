@@ -11,7 +11,7 @@ class TestRun(TestCase):
         p = Run('git push origin master'.split())
         expected_out = """\
 remote: ---------------------------------------------------------------------------
-remote: --  The hooks.noemails config parameter contains `refs/heads/master'.
+remote: --  The hooks.no-emails config parameter contains `refs/heads/master'.
 remote: --  Commit emails will therefore not be sent.
 remote: ---------------------------------------------------------------------------
 To ../bare/repo.git

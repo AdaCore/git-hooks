@@ -57,7 +57,7 @@ remote: DEBUG: post_receive_one(ref_name=refs/heads/thirdparty
 remote:                         old_rev=52723db7f709396057df819f73e66b846858217e
 remote:                         new_rev=492fd2fae27c2f358c1d59c59a2e13ec2a3a880f)
 remote: ---------------------------------------------------------------------------
-remote: --  The hooks.noemails config parameter contains `refs/heads/thirdparty'.
+remote: --  The hooks.no-emails config parameter contains `refs/heads/thirdparty'.
 remote: --  Commit emails will therefore not be sent.
 remote: ---------------------------------------------------------------------------
 To ../bare/repo.git

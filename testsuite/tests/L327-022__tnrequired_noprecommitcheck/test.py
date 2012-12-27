@@ -41,7 +41,7 @@ error: failed to push some refs to '../bare/repo.git'
         p = Run('git push origin thirdparty'.split())
         expected_out = """\
 remote: ---------------------------------------------------------------------------
-remote: --  The hooks.noemails config parameter contains `refs/heads/thirdparty'.
+remote: --  The hooks.no-emails config parameter contains `refs/heads/thirdparty'.
 remote: --  Commit emails will therefore not be sent.
 remote: ---------------------------------------------------------------------------
 To ../bare/repo.git

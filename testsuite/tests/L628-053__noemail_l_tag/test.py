@@ -15,7 +15,7 @@ class TestRun(TestCase):
         p = Run('git push origin new-tag'.split())
         expected_out = """\
 remote: ---------------------------------------------------------------------------
-remote: --  The hooks.noemails config parameter contains `refs/tags/new-tag'.
+remote: --  The hooks.no-emails config parameter contains `refs/tags/new-tag'.
 remote: --  Commit emails will therefore not be sent.
 remote: ---------------------------------------------------------------------------
 To ../bare/repo.git

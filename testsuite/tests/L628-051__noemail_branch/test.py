@@ -30,7 +30,7 @@ remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=426fba3571947f6de7f967e885a3168b9df7004a
 remote:                         new_rev=dd6165c96db712d3e918fb5c61088b171b5e7cab)
 remote: ---------------------------------------------------------------------------
-remote: --  The hooks.noemails config parameter contains `refs/heads/master'.
+remote: --  The hooks.no-emails config parameter contains `refs/heads/master'.
 remote: --  Commit emails will therefore not be sent.
 remote: ---------------------------------------------------------------------------
 To ../bare/repo.git

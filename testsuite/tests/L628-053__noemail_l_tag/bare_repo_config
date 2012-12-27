@@ -6,4 +6,4 @@
         allow-lightweight-tag = true
         fromdomain = example.com
         mailinglist = commits@example.com
-        noemails = refs/tags/new-tag
+        no-emails = refs/tags/new-tag

@@ -23,6 +23,10 @@ GIT_CONFIG_OPTS = {
     'hooks.noemails'         : {                  'default' : ''},
     'hooks.noprecommitcheck' : {                  'default' : ''},
     'hooks.tnrequired'       : { 'type' : 'bool', 'default' : 'false' },
+
+    # The following options are for testing purposes only, and should
+    # never be used in an operational repository.
+    'hooks.bcc-file-ci'      : { 'type' : 'bool', 'default' : 'true' },
 }
 
 # The maximum number of characters from a commit's subject

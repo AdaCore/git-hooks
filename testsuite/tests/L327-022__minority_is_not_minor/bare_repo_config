@@ -5,4 +5,4 @@
 [hooks]
         fromdomain = adacore.com
         mailinglist = git-hooks-ci@example.com
-        tnrequired = true
+        tn-required = true

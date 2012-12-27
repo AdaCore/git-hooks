@@ -7,4 +7,4 @@
         mailinglist = git-hooks-ci@example.com
         no-precommit-check = refs/heads/thirdparty
         no-emails = refs/heads/thirdparty
-        tnrequired = true
+        tn-required = true

@@ -5,8 +5,14 @@ from email.mime.text import MIMEText
 from email.utils import parseaddr, getaddresses
 from git import get_module_name
 import os
-import smtplib
 from utils import debug, InvalidUpdate, get_user_name, get_user_full_name
+
+try:
+    from gnatpython.sendmail import sendmail
+except ImportError:
+    # gnatpython is not recent enough, and is missing this module.
+    # Use the copy we saved in our repository.
+    from updates.sendmail import sendmail
 
 # All commit emails should be sent to the following email address
 # for filing/archiving purposes...
@@ -114,6 +120,8 @@ class Email(object):
             # printed.
             debug(self.e_msg.as_string(), level=0)
         else: # pragma: no cover (do not want real emails during testing)
-            s = smtplib.SMTP('localhost')
-            s.sendmail(email_from, email_recipients, self.e_msg.as_string())
-            s.quit()
+            # Use gnatpython's sendmail module rather than Python's
+            # smtplib, because the latter does everything synchronously,
+            # which takes time, and also does not handle queueing.
+            sendmail(email_from, email_recipients, self.e_msg.as_string(),
+                     'localhost')

@@ -4,7 +4,7 @@ class TestRun(TestCase):
     def test_push(self):
         """Try pushing one single-file commit on master.
 
-        The operation should fail due to either config.debuglevel
+        The operation should fail due to either config.debug-level
         having an invalid value, or GIT_HOOKS_DEBUG_LEVEL having
         an invalid value.
         """
@@ -13,7 +13,7 @@ class TestRun(TestCase):
         # Push master to the `origin' remote.
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** Invalid hooks.debuglevel value: -1 (must be integer >= 0)
+remote: *** Invalid hooks.debug-level value: -1 (must be integer >= 0)
 remote: error: hook declined to update refs/heads/master
 To ../bare/repo.git
  ! [remote rejected] master -> master (hook declined)

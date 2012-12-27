@@ -5,4 +5,4 @@
 [hooks]
         fromdomain = adacore.com
         mailinglist = git-hooks-ci@example.com
-        debuglevel = -1
+        debug-level = -1

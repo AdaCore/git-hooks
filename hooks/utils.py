@@ -85,7 +85,7 @@ def debug(msg, level=1):
 
     The debug level is an integer value which can be changed either
     by setting the `GIT_HOOKS_DEBUG_LEVEL' environment variable, or else
-    by setting the hooks.debuglevel git config value.  The value
+    by setting the hooks.debug-level git config value.  The value
     must be an integer value, or this function raises InvalidUpdate.
     By default, the debug level is set to zero (no debug traces).
 
@@ -110,9 +110,9 @@ def debug(msg, level=1):
             raise InvalidUpdate('Invalid value for GIT_HOOKS_DEBUG_LEVEL: %s '
                                 '(must be integer >= 0)' % debug_level)
     else:
-        debug_level = git_config('hooks.debuglevel')
+        debug_level = git_config('hooks.debug-level')
         if not debug_level.isdigit():
-            raise InvalidUpdate('Invalid hooks.debuglevel value: %s '
+            raise InvalidUpdate('Invalid hooks.debug-level value: %s '
                                 '(must be integer >= 0)' % debug_level)
     debug_level = int(debug_level)
 

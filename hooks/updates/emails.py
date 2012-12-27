@@ -9,7 +9,7 @@ from utils import debug, InvalidUpdate, get_user_name, get_user_full_name
 
 try:
     from gnatpython.sendmail import sendmail
-except ImportError:
+except ImportError: # pragma: no cover (testing requires recent version)
     # gnatpython is not recent enough, and is missing this module.
     # Use the copy we saved in our repository.
     from updates.sendmail import sendmail

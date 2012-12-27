@@ -22,7 +22,7 @@ GIT_CONFIG_OPTS = {
     'hooks.mailinglist'      : {                  'default' : None},
     'hooks.max-commit-emails': { 'type' : 'int',  'default' : '100' },
     'hooks.no-emails'        : {                  'default' : ''},
-    'hooks.noprecommitcheck' : {                  'default' : ''},
+    'hooks.no-precommit-check' : {                'default' : ''},
     'hooks.tnrequired'       : { 'type' : 'bool', 'default' : 'false' },
 
     # The following options are for testing purposes only, and should

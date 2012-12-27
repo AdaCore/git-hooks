@@ -6,7 +6,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        # We want to force the "in hooks.noprecommitcheck" debug trace...
+        # We want to force the "in hooks.no-precommit-check" debug trace...
         self.set_debug_level(1)
 
         # There should be no pre-commit checks on branch master.
@@ -17,7 +17,7 @@ class TestRun(TestCase):
         p = Run('git push origin master'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 9cbe95153dd093ef72c0dcb27094c9c6cdd97ad9, e7007066aeb5fefeba7d226e5a31c70971b67cdb)
-remote: DEBUG: (refs/heads/master in hooks.noprecommitcheck)
+remote: DEBUG: (refs/heads/master in hooks.no-precommit-check)
 remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=9cbe95153dd093ef72c0dcb27094c9c6cdd97ad9
 remote:                         new_rev=e7007066aeb5fefeba7d226e5a31c70971b67cdb)

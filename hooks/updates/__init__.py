@@ -172,11 +172,11 @@ class AbstractUpdate(object):
             # new commit.
             return
 
-        excluded_branches = git_config('hooks.noprecommitcheck')
+        excluded_branches = git_config('hooks.no-precommit-check')
         if (excluded_branches
             and self.ref_name in excluded_branches.split(',')):
             # Pre-commit checks are explicitly disabled on this branch.
-            debug('(%s in hooks.noprecommitcheck)' % self.ref_name)
+            debug('(%s in hooks.no-precommit-check)' % self.ref_name)
             return
 
         if self.__no_cvs_check_user_override():

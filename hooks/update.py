@@ -2,8 +2,9 @@ from argparse import ArgumentParser
 from shutil import rmtree
 import sys
 
+from errors import InvalidUpdate
 from git import get_object_type
-from utils import (InvalidUpdate, debug, warn, create_scratch_dir)
+from utils import debug, warn, create_scratch_dir
 # We have to import utils, because we cannot import scratch_dir
 # directly into this module.  Otherwise, our scratch_dir seems
 # to not see the update when create_scratch_dir is called.

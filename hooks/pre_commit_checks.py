@@ -6,10 +6,11 @@ import subprocess
 from subprocess import check_output, STDOUT
 
 from config import git_config
+from errors import InvalidUpdate
 from git import git, get_module_name, CalledProcessError
 from git_attrs import git_attribute
 import utils
-from utils import InvalidUpdate, debug, warn
+from utils import debug, warn
 
 def check_file(filename, sha1, commit_rev):
     """Check a file for style violations if appropriate.

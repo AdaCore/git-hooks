@@ -1,10 +1,10 @@
 """Handling of lightweight tag updates."""
 
 from config import git_config
+from errors import InvalidUpdate
 from git import is_null_rev, commit_oneline
 from updates import AbstractUpdate
 from updates.tags import warn_about_tag_update, tag_summary_of_changes_needed
-from utils import InvalidUpdate
 
 LTAG_UPDATE_EMAIL_BODY_TEMPLATE = """\
 The lightweight tag '%(short_ref_name)s' was updated to point to:

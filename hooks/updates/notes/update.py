@@ -1,10 +1,11 @@
 """Handling of Git Notes updates."""
 
+from errors import InvalidUpdate
 from git import git, is_null_rev, is_valid_commit
 from updates import AbstractUpdate
 from updates.emails import Email
 from updates.notes import GitNotes
-from utils import indent, InvalidUpdate
+from utils import indent
 
 # The template to be used as the body of the email to be sent
 # for a notes commit which either adds, or modifies a git notes.

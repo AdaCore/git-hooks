@@ -6,16 +6,7 @@ import sys
 from tempfile import mkdtemp
 
 from config import git_config
-
-class InvalidUpdate(Exception):
-    """An exception raised when the update is not accepted.
-    """
-    pass
-
-class InvalidUsage(Exception):
-    """An exception raised when a script is not called correctly.
-    """
-    pass
+from errors import InvalidUpdate
 
 ############################################################################
 #

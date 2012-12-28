@@ -1,7 +1,7 @@
 """Handling of Git Notes deletion."""
 
+from errors import InvalidUpdate
 from updates import AbstractUpdate
-from utils import InvalidUpdate
 
 class NotesDeletion(AbstractUpdate):
     """Update object for Git Notes deletion."""

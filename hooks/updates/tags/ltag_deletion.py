@@ -1,10 +1,10 @@
 """Handling of lightweight tag deletion."""
 
 from config import git_config
+from errors import InvalidUpdate
 from git import commit_oneline
 from updates import AbstractUpdate
 from updates.tags import tag_summary_of_changes_needed
-from utils import InvalidUpdate
 
 LTAG_DELETION_EMAIL_BODY_TEMPLATE = """\
 The lightweight tag '%(short_ref_name)s' was deleted.

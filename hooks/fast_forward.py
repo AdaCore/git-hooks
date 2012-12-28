@@ -17,8 +17,9 @@ import re
 import sys
 
 from config import git_config
+from errors import InvalidUpdate
 from git import *
-from utils import InvalidUpdate, debug, warn
+from utils import debug, warn
 
 # A list of regular expressions that match the branches where
 # it will always be OK to do a non-fast-forward update (aka

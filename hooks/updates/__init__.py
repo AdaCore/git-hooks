@@ -2,6 +2,7 @@
 
 from config import git_config, SUBJECT_MAX_SUBJECT_CHARS
 from copy import deepcopy
+from errors import InvalidUpdate
 from git import (git, get_object_type, is_null_rev, commit_parents,
                  commit_rev, get_module_name)
 from os import environ
@@ -12,7 +13,7 @@ from syslog import syslog
 import time
 from updates.commits import commit_info_list
 from updates.emails import Email
-from utils import debug, InvalidUpdate, warn, get_user_name
+from utils import debug, warn, get_user_name
 
 class AbstractUpdate(object):
     """An abstract class representing a reference update.

@@ -42,9 +42,9 @@ if not isdir('bare/repo.git'):
 # Determine the path to the bare repo's config file.
 # It depends on whether our repository is a bare repository or not.
 if isdir('bare/repo.git/.git'):
-    bare_repo_config_path = 'bare/repo.git/.git/%s' % config
+    bare_repo_config_path = 'bare/repo.git/.git/config'
 else:
-    bare_repo_config_path = 'bare/repo.git/%s' % config
+    bare_repo_config_path = 'bare/repo.git/config'
 if not isfile(bare_repo_config_path):
     fatal('Cannot find bare repo config file: %s' % bare_repo_config_path)
 

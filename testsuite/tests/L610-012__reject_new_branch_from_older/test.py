@@ -26,7 +26,7 @@ error: failed to push some refs to '../bare/repo.git'
 """
 
         self.assertTrue(p.status != 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
         # Verify that the branch does not exist on the remote...
 

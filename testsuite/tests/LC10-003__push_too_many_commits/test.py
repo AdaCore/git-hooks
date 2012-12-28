@@ -21,7 +21,7 @@ error: failed to push some refs to '../bare/repo.git'
 """
 
         self.assertTrue(p.status != 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
         # Now, try pushing only HEAD~, which should only push
         # 3 new commits, which should be under the limit, and
@@ -134,7 +134,7 @@ To ../bare/repo.git
 """
 
         self.assertEqual(p.status, 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
         # Now, try push master again.  We should have one last
         # new commit left to push...
@@ -177,7 +177,7 @@ To ../bare/repo.git
 """
 
         self.assertEqual(p.status, 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

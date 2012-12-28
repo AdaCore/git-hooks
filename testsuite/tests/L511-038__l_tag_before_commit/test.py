@@ -105,7 +105,7 @@ To ../bare/repo.git
 """
 
         self.assertTrue(p.status == 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
         # Next, push the changes. Make sure that the commit gets checked.
         # ??? There is a limitation that causes the hooks to re-check
@@ -153,7 +153,7 @@ To ../bare/repo.git
 """
 
         self.assertTrue(p.status == 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

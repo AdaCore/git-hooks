@@ -25,7 +25,7 @@ error: failed to push some refs to '../bare/repo.git'
 """
 
         self.assertNotEqual(p.status, 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
         # Try pushing "master2".
         #
@@ -50,7 +50,7 @@ error: failed to push some refs to '../bare/repo.git'
 """
 
         self.assertNotEqual(p.status, 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

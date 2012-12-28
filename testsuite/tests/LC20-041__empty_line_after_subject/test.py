@@ -44,7 +44,7 @@ error: failed to push some refs to '../bare/repo.git'
 """
 
         self.assertNotEqual(p.status, 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
         # Now, push the thirdparty branch.  This branch is setup
         # to avoid the pre-commit checks, so this should allow
@@ -65,7 +65,7 @@ To ../bare/repo.git
 """
 
         self.assertEqual(p.status, 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
         # And finally, try pushing the "master" branch again.
         # This time, the problematic commit is already in, and
@@ -151,7 +151,7 @@ To ../bare/repo.git
 """
 
         self.assertEqual(p.status, 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

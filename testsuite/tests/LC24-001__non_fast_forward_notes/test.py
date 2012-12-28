@@ -33,7 +33,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 """
 
         self.assertNotEqual(p.status, 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
         # Try again with -f, simulating a user trying to force
         # its way into getting this non-fast-forward update accepted.
@@ -49,7 +49,7 @@ error: failed to push some refs to '../bare/repo.git'
 """
 
         self.assertNotEqual(p.status, 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

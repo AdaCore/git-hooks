@@ -28,7 +28,7 @@ To ../bare/repo.git
  - [deleted]         old-branch
 """
         self.assertEqual(p.status, 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

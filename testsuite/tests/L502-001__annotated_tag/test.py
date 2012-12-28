@@ -36,7 +36,7 @@ To ../bare/repo.git
  * [new tag]         v0.1 -> v0.1
 """
 
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

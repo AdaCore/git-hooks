@@ -99,6 +99,14 @@ class TestCase(unittest.TestCase):
         version_str = out[0].replace('git version ', '')
         return LooseVersion(version_str)
 
+    def assertRunOutputEqual(self, r, expected_out):
+        """assert that r.cmd_out is equal to expected_out...
+
+        ... And if the assertion is not met, then produce a useful
+        output.
+        """
+        self.assertEqual(expected_out, r.cmd_out, r.diff(expected_out))
+
 
 def runtests():
     """Call unittest.main.

@@ -31,7 +31,7 @@ To ../bare/repo.git
 """
 
         self.assertTrue(p.status == 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
         # Verify that the branch has been created in the remote
         # repository and that it points to the expected commit.
@@ -44,7 +44,7 @@ To ../bare/repo.git
 """
 
         self.assertTrue(p.status == 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

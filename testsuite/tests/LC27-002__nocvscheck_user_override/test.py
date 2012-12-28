@@ -37,7 +37,7 @@ error: failed to push some refs to '../bare/repo.git'
     'TEST_DIR' : TEST_DIR }
 
         self.assertNotEqual(p.status, 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
         # Set debug level to 1, in order to get the debug trace
         # when pre-commit checks are skipped due to .no_cvs_check
@@ -101,7 +101,7 @@ To ../bare/repo.git
     'TEST_DIR' : TEST_DIR }
 
         self.assertEqual(p.status, 0, p.image)
-        self.assertEqual(expected_out, p.cmd_out, p.image)
+        self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

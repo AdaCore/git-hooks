@@ -1,0 +1,10 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+        # Invalid value for combined-style-checking, simulating
+        # a typo.
+        combined-style-checking = frue

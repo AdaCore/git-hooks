@@ -8,11 +8,6 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        # Set debug level to 1, in order to get the debug trace
-        # when pre-commit checks are skipped due to .no_cvs_check
-        # user override.
-        self.set_debug_level(1)
-
         # Change the HOME environment variable to TEST_DIR, to get
         # the hooks to look for the .no_cvs_check file there,
         # instead of the real HOME dir.
@@ -40,6 +35,14 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """ % {
     'TEST_DIR' : TEST_DIR }
+
+        self.assertNotEqual(p.status, 0, p.image)
+        self.assertEqual(expected_out, p.cmd_out, p.image)
+
+        # Set debug level to 1, in order to get the debug trace
+        # when pre-commit checks are skipped due to .no_cvs_check
+        # user override.
+        self.set_debug_level(1)
 
         # Make the .no_cvs_check file 1 day minus a few seconds old,
         # which should make it just old enough to be honored.

@@ -8,7 +8,7 @@ from type_conversions import to_type
 #       + 'default': The default value for this config option.
 
 GIT_CONFIG_OPTS = \
-    {'hooks.allow-delete-tag':         {'default': 'false'},
+    {'hooks.allow-delete-tag':         {'default': False, 'type': bool},
      'hooks.allow-non-fast-forward':   {'default': ''},
      'hooks.allow-lightweight-tag':    {'default': 'false'},
      'hooks.combined-style-checking':  {'default': 'false'},

@@ -95,7 +95,7 @@ class Email(object):
         # Create the email's header.
         self.e_msg['From'] = email_info.email_from
         self.e_msg['To'] = email_info.email_to
-        if git_config('hooks.bcc-file-ci') != 'false':
+        if git_config('hooks.bcc-file-ci'):
             self.e_msg['Bcc'] = FILER_EMAIL
         self.e_msg['Subject'] = email_subject
         self.e_msg['X-ACT-checkin'] = email_info.project_name

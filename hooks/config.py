@@ -22,7 +22,7 @@ GIT_CONFIG_OPTS = \
 
      # The following options are for testing purposes only, and should
      # never be used in an operational repository.
-     'hooks.bcc-file-ci':              {'default': 'true'},
+     'hooks.bcc-file-ci':              {'default': True, 'type': bool},
     }
 
 # The maximum number of characters from a commit's subject

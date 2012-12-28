@@ -192,7 +192,7 @@ class AbstractUpdate(object):
             # There are no new commits, so nothing further to check.
             return
 
-        if git_config('hooks.combined-style-checking') == 'true':
+        if git_config('hooks.combined-style-checking'):
             # This project prefers to perform the style check on
             # the cumulated diff, rather than commit-per-commit.
             debug('(combined style checking)')

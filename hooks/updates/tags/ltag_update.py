@@ -39,7 +39,7 @@ class LightweightTagUpdate(AbstractUpdate):
             This method is capable of handling both creation update.
         """
         # If lightweight tags are not allowed, refuse the update.
-        if git_config('hooks.allow-lightweight-tag') != "true":
+        if not git_config('hooks.allow-lightweight-tag'):
             raise InvalidUpdate(
                 "Lightweight tags (%s) are not allowed in this repository."
                     % self.short_ref_name,

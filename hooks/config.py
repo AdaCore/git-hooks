@@ -10,7 +10,7 @@ from type_conversions import to_type
 GIT_CONFIG_OPTS = \
     {'hooks.allow-delete-tag':         {'default': False, 'type': bool},
      'hooks.allow-non-fast-forward':   {'default': ''},
-     'hooks.allow-lightweight-tag':    {'default': 'false'},
+     'hooks.allow-lightweight-tag':    {'default': False, 'type': bool},
      'hooks.combined-style-checking':  {'default': 'false'},
      'hooks.debug-level':              {'default': '0'},
      'hooks.from-domain':              {'default': None},

@@ -40,7 +40,6 @@ remote: --- a/a60540361d47901d3fe254271779f380d94645f7
 remote: +++ /dev/null
 remote: @@ -1 +0,0 @@
 remote: -This is my first note.
-remote:
 To ../bare/repo.git
    58e8efa..5caa78d  refs/notes/commits -> refs/notes/commits
 """

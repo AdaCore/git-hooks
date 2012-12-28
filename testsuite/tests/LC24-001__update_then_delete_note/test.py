@@ -45,7 +45,6 @@ remote: +++ b/a60540361d47901d3fe254271779f380d94645f7
 remote: @@ -1 +1,2 @@
 remote:  This is my first note.
 remote: +Add some information about my first note.
-remote:
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -79,7 +78,6 @@ remote: +++ /dev/null
 remote: @@ -1,2 +0,0 @@
 remote: -This is my first note.
 remote: -Add some information about my first note.
-remote:
 To ../bare/repo.git
    58e8efa..827773c  refs/notes/commits -> refs/notes/commits
 """

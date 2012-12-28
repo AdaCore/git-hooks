@@ -41,7 +41,6 @@ remote: --- /dev/null
 remote: +++ b/d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: @@ -0,0 +1 @@
 remote: +This is my new note.
-remote:
 To ../bare/repo.git
    bbcc356..58e8efa  refs/notes/commits -> refs/notes/commits
 """

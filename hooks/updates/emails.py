@@ -78,7 +78,7 @@ class Email(object):
         e_msg: An email.mime.text.MIMEText object.
     """
     def __init__(self, email_info, email_subject, email_body,
-                 ref_name, old_rev, new_rev):
+                 ref_name, old_rev, new_rev, diff=None):
         """The constructor.
 
         PARAMETERS
@@ -88,8 +88,20 @@ class Email(object):
             ref_name: See AbstractUpdate.ref_name attribute.
             old_rev: See AbstractUpdate.old_rev attribute.
             new_rev: See AbstractUpdate.new_rev attribute.
+            diff: A diff string, if applicable.  Otherwise None.
+                When not None, the diff is appended at the end
+                of the email's body - truncated if necessary.
         """
-        # ??? Need to truncate body if exceeds maximum size.
+        if diff is not None:
+            # Append the "Diff:" marker to email_body, followed by
+            # the diff. Truncate the patch if necessary.
+            max_diff_size = git_config('hooks.max-email-diff-size')
+            if len(diff) > max_diff_size:
+                diff = diff[:max_diff_size]
+                diff += '\n\n[diff truncated at %d bytes]\n' % max_diff_size
+            email_body += '\nDiff:\n'
+            email_body += diff
+
         self.e_msg = MIMEText(email_body)
 
         # Create the email's header.

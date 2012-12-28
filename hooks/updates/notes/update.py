@@ -17,10 +17,6 @@ A Git Notes has been updated; it now contains:
 This note annotates the following commit:
 
 %(annotated_rev_info)s
-
-Diff:
-
-%(diff)s
 """
 
 
@@ -30,10 +26,6 @@ DELETED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE = """\
 The Git Notes annotating the following commit has been deleted.
 
 %(annotated_rev_info)s
-
-Diff:
-
-%(diff)s
 """
 
 
@@ -100,7 +92,6 @@ class NotesUpdate(AbstractUpdate):
                                      max_count="1")
         notes_contents = (None if notes.contents is None
                           else indent(notes.contents, ' ' * 4))
-        diff = git.show(commit.rev, pretty="format:", p=True)
 
         subject = '[%s] notes update for %s' % (email_info.project_name,
                                                 notes.annotated_rev)
@@ -111,11 +102,17 @@ class NotesUpdate(AbstractUpdate):
         body = body_template % {
             'annotated_rev_info' : annotated_rev_info,
             'notes_contents' : notes_contents,
-            'diff' : diff,
             }
 
+        # Git commands calls strip on the output, which is usually
+        # a good thing, but not in the case of the diff output.
+        # Prevent this from happening by putting an artificial
+        # character at the start of the format string, and then
+        # by stripping it from the output.
+        diff = git.show(commit.rev, pretty="format:|", p=True)[1:]
+
         email = Email(email_info, subject, body, self.ref_name,
-                      commit.base_rev, commit.rev)
+                      commit.base_rev, commit.rev, diff)
         email.send()
 
     def __ensure_fast_forward(self):

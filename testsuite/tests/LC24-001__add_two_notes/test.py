@@ -41,7 +41,6 @@ remote: --- /dev/null
 remote: +++ b/d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: @@ -0,0 +1 @@
 remote: +This is my new note.
-remote:
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -80,7 +79,6 @@ remote: --- /dev/null
 remote: +++ b/52abc3c195e80fa1713f2603290b6b202484694b
 remote: @@ -0,0 +1 @@
 remote: +Another short note.
-remote:
 To ../bare/repo.git
    bbcc356..0892f7e  refs/notes/commits -> refs/notes/commits
 """

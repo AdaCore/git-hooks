@@ -227,20 +227,27 @@ class AbstractUpdate(object):
             'subject' : commit.subject[:SUBJECT_MAX_SUBJECT_CHARS],
             }
 
-        # Generate the body of the email in two passes:
+        # Generate the body of the email in two pieces:
         #   1. The commit description without the patch;
         #   2. The diff stat and patch.
         # This allows us to insert our little "Diff:" marker that
-        # bugtool detects when parsing the email for filing.
-        # The purpose is to prevent bugtool from searching for
-        # TNs in the patch itself.
-        body = git.log(commit.rev, max_count="1")
-        body += '\n\n'
-        body += git.show(commit.rev, p=True, M=True, stat=True,
-                         pretty="format:%nDiff:%n")
+        # bugtool detects when parsing the email for filing (this
+        # part is now performed by the Email class). The purpose
+        # is to prevent bugtool from searching for TNs in the patch
+        # itself.
+        #
+        # For the diff, there is one subtlelty:
+        # Git commands calls strip on the output, which is usually
+        # a good thing, but not in the case of the diff output.
+        # Prevent this from happening by putting an artificial
+        # character at the start of the format string, and then
+        # by stripping it from the output.
+        body = git.log(commit.rev, max_count="1") + '\n'
+        diff = git.show(commit.rev, p=True, M=True, stat=True,
+                        pretty="format:|")[1:]
 
         email = Email(email_info, subject, body, self.ref_name,
-                      commit.base_rev, commit.rev)
+                      commit.base_rev, commit.rev, diff)
         email.send()
 
     #-----------------------

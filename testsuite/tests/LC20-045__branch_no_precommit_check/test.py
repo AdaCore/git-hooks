@@ -17,6 +17,7 @@ class TestRun(TestCase):
         p = Run('git push origin master'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 9cbe95153dd093ef72c0dcb27094c9c6cdd97ad9, e7007066aeb5fefeba7d226e5a31c70971b67cdb)
+remote: DEBUG: update base: 9cbe95153dd093ef72c0dcb27094c9c6cdd97ad9
 remote: DEBUG: (refs/heads/master in hooks.no-precommit-check)
 remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=9cbe95153dd093ef72c0dcb27094c9c6cdd97ad9

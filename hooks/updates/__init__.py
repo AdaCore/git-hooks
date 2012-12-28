@@ -81,6 +81,7 @@ class AbstractUpdate(object):
         debug('validate_ref_update (%s, %s, %s)'
               % (self.ref_name, self.old_rev, self.new_rev))
         self.validate_ref_update()
+        self.__check_max_commit_emails()
         self.pre_commit_checks()
 
     def send_email_notifications(self, email_info):
@@ -189,22 +190,6 @@ class AbstractUpdate(object):
         if not added:
             # There are no new commits, so nothing further to check.
             return
-
-        # Check that the update wouldn't generate too many commit emails.
-        # We know that commit emails would only be sent for commits which
-        # are new for the repository, so we count those.
-        if not self.in_no_emails_list():
-            max_emails = int(git_config('hooks.max-commit-emails'))
-            nb_emails = len([commit for commit in added
-                             if not commit.pre_existing_p])
-            if nb_emails > max_emails:
-                raise InvalidUpdate(
-                    "This update introduces too many new commits (%d),"
-                        " which would" % nb_emails,
-                    "trigger as many emails, exceeding the"
-                        " current limit (%d)." % max_emails,
-                    "Contact your repository adminstrator if you really meant",
-                    "to generate this many commit emails.")
 
         if git_config('hooks.combined-style-checking') == 'true':
             # This project prefers to perform the style check on
@@ -460,6 +445,24 @@ class AbstractUpdate(object):
                  })
         return True
 
+    def __check_max_commit_emails(self):
+        """Raise InvalidUpdate is this update will generate too many emails.
+        """
+        # Check that the update wouldn't generate too many commit emails.
+        # We know that commit emails would only be sent for commits which
+        # are new for the repository, so we count those.
+        if not self.in_no_emails_list():
+            max_emails = int(git_config('hooks.max-commit-emails'))
+            nb_emails = len([commit for commit in self.added_commits
+                             if not commit.pre_existing_p])
+            if nb_emails > max_emails:
+                raise InvalidUpdate(
+                    "This update introduces too many new commits (%d),"
+                        " which would" % nb_emails,
+                    "trigger as many emails, exceeding the"
+                        " current limit (%d)." % max_emails,
+                    "Contact your repository adminstrator if you really meant",
+                    "to generate this many commit emails.")
 
     def __email_ref_update(self, email_info):
         """Send the email describing to the reference update.

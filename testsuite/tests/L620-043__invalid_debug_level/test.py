@@ -13,7 +13,7 @@ class TestRun(TestCase):
         # Push master to the `origin' remote.
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** Invalid hooks.debug-level value: -1 (must be integer >= 0)
+remote: *** Invalid hooks.debug-level value: zero (must be integer)
 remote: error: hook declined to update refs/heads/master
 To ../bare/repo.git
  ! [remote rejected] master -> master (hook declined)
@@ -28,7 +28,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** Invalid value for GIT_HOOKS_DEBUG_LEVEL: true (must be integer >= 0)
+remote: *** Invalid value for GIT_HOOKS_DEBUG_LEVEL: true (must be integer)
 remote: error: hook declined to update refs/heads/master
 To ../bare/repo.git
  ! [remote rejected] master -> master (hook declined)

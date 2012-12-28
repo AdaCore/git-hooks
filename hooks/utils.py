@@ -99,13 +99,10 @@ def debug(msg, level=1):
         debug_level = environ['GIT_HOOKS_DEBUG_LEVEL']
         if not debug_level.isdigit():
             raise InvalidUpdate('Invalid value for GIT_HOOKS_DEBUG_LEVEL: %s '
-                                '(must be integer >= 0)' % debug_level)
+                                '(must be integer)' % debug_level)
+        debug_level = int(debug_level)
     else:
         debug_level = git_config('hooks.debug-level')
-        if not debug_level.isdigit():
-            raise InvalidUpdate('Invalid hooks.debug-level value: %s '
-                                '(must be integer >= 0)' % debug_level)
-    debug_level = int(debug_level)
 
     if debug_level >= level:
         warn(msg, prefix='  ' * (level - 1) + 'DEBUG:')

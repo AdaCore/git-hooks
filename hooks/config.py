@@ -12,7 +12,7 @@ GIT_CONFIG_OPTS = \
      'hooks.allow-non-fast-forward':   {'default': ''},
      'hooks.allow-lightweight-tag':    {'default': False, 'type': bool},
      'hooks.combined-style-checking':  {'default': False, 'type': bool},
-     'hooks.debug-level':              {'default': '0'},
+     'hooks.debug-level':              {'default': 0, 'type': int},
      'hooks.from-domain':              {'default': None},
      'hooks.mailinglist':              {'default': None},
      'hooks.max-commit-emails':        {'default': 100, 'type': int},

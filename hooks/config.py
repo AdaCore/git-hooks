@@ -1,4 +1,6 @@
+from errors import InvalidUpdate
 from git import git
+from type_conversions import to_type
 
 # A dictionary of all git config names that this module can query.
 #   - The key used for this table is the config name.
@@ -57,8 +59,28 @@ def git_config(option_name):
 
     if __git_config_map is None:
         initialize_git_config_map()
+    val = __git_config_map[option_name]
 
-    return __git_config_map[option_name]
+    # If this option as a 'type' specified, then convert it to
+    # this type if necessary.  We do this here, rather than during
+    # initialize_git_config_map to avoid the potential for causing
+    # an error for options which might not be used in the end.
+    if ('type' in GIT_CONFIG_OPTS[option_name] and isinstance(val, str)):
+        try:
+            val = to_type(val, GIT_CONFIG_OPTS[option_name]['type'])
+        except ValueError:
+            TYPE_NAME_MAP = {bool: 'boolean',
+                             int:  'integer',
+                            }
+            type_name = TYPE_NAME_MAP[GIT_CONFIG_OPTS[option_name]['type']]
+            raise InvalidUpdate(
+                'Invalid %s value: %s (must be %s)'
+                % (option_name, val, type_name))
+        # Save the converted value to avoid having to do it again
+        # the next time we query the same config option.
+        __git_config_map[option_name] = val
+
+    return val
 
 
 def initialize_git_config_map():

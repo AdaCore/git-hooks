@@ -9,6 +9,7 @@ from config import git_config
 from errors import InvalidUpdate
 from git import git, get_module_name, CalledProcessError
 from git_attrs import git_attribute
+from syslog import syslog
 import utils
 from utils import debug, warn
 
@@ -32,6 +33,12 @@ def check_file(filename, sha1, commit_rev):
     if git_attribute(commit_rev, filename, 'no-precommit-check') == 'set':
         debug('no-precommit-check: %s commit_rev=%s'
               % (filename, commit_rev))
+        syslog('Pre-commit checks disabled for %(rev)s on %(repo)s'
+               ' (%(file)s) by repo attribute'
+               % {'rev' : sha1,
+                  'repo' : get_module_name(),
+                  'file' : filename,
+                 })
         return
 
     # Get a copy of the file and save it in our scratch dir.

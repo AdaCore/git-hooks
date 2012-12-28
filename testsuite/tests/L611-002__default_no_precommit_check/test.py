@@ -10,6 +10,7 @@ class TestRun(TestCase):
         expected_out = """\
 remote: *** cvs_check: `trunk/repo/a'
 remote: *** cvs_check: `trunk/repo/c'
+remote: SYSLOG: cvs_check: Pre-commit checks disabled for 8b7fc7be7be2beb9648d74d72976d024f6150061 on repo (b) by repo attribute
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

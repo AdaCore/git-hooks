@@ -195,7 +195,7 @@ def check_missing_ticket_number(rev, raw_rh):
             displayed by git where the subject lines are wrapped).
             See --pretty format option "%B" for more details.
     """
-    if git_config('hooks.tn-required') != 'true':
+    if not git_config('hooks.tn-required'):
         return
 
     tn_re = [# The word 'minor' (as in "Minor reformatting")

@@ -18,7 +18,7 @@ GIT_CONFIG_OPTS = \
      'hooks.max-commit-emails':        {'default': '100'},
      'hooks.no-emails':                {'default': ''},
      'hooks.no-precommit-check':       {'default': ''},
-     'hooks.tn-required':              {'default': 'false'},
+     'hooks.tn-required':              {'default': False, 'type': bool},
 
      # The following options are for testing purposes only, and should
      # never be used in an operational repository.

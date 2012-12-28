@@ -1,6 +1,6 @@
 from gnatpython.env import Env
 import gnatpython.ex
-from gnatpython.fileutils import mkdir, cd
+from gnatpython.fileutils import mkdir, cd, diff
 from gnatpython.internal.excross import PIPE, run_cross
 
 import os
@@ -180,3 +180,13 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details."""
         return '%% %s -> %s\n%s' % (self.command_line_image(),
                                     self.status,
                                     self.cmd_out)
+
+    def diff(self, expected_out):
+        """Return self.out followed by a diff self.cmd_out and expected_out.
+
+        PARAMETERS
+            expected_out: A string containing the expected output.
+        """
+        diff_str = diff(expected_out.splitlines(),
+                        self.cmd_out.splitlines())
+        return '%s\n\nDiff:\n\n%s' % (self.image, diff_str)

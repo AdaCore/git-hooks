@@ -8,22 +8,22 @@ from type_conversions import to_type
 #       + 'default': The default value for this config option.
 
 GIT_CONFIG_OPTS = \
-    {'hooks.allow-delete-tag':         {'default': False, 'type': bool},
+    {'hooks.allow-delete-tag':         {'default': False,  'type': bool},
      'hooks.allow-non-fast-forward':   {'default': ''},
-     'hooks.allow-lightweight-tag':    {'default': False, 'type': bool},
-     'hooks.combined-style-checking':  {'default': False, 'type': bool},
-     'hooks.debug-level':              {'default': 0, 'type': int},
+     'hooks.allow-lightweight-tag':    {'default': False,  'type': bool},
+     'hooks.combined-style-checking':  {'default': False,  'type': bool},
+     'hooks.debug-level':              {'default': 0,      'type': int},
      'hooks.from-domain':              {'default': None},
      'hooks.mailinglist':              {'default': None},
-     'hooks.max-commit-emails':        {'default': 100, 'type': int},
-     'hooks.max-email-diff-size':      {'default': 100000,'type': int},
+     'hooks.max-commit-emails':        {'default': 100,    'type': int},
+     'hooks.max-email-diff-size':      {'default': 100000, 'type': int},
      'hooks.no-emails':                {'default': ''},
      'hooks.no-precommit-check':       {'default': ''},
-     'hooks.tn-required':              {'default': False, 'type': bool},
+     'hooks.tn-required':              {'default': False,  'type': bool},
 
      # The following options are for testing purposes only, and should
      # never be used in an operational repository.
-     'hooks.bcc-file-ci':              {'default': True, 'type': bool},
+     'hooks.bcc-file-ci':              {'default': True,   'type': bool},
     }
 
 # The maximum number of characters from a commit's subject

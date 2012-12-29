@@ -24,7 +24,7 @@ from utils import debug, warn
 # A list of regular expressions that match the branches where
 # it will always be OK to do a non-fast-forward update (aka
 # a "forced update").
-FORCED_UPDATE_OK_BRANCHES = ["topic/.*"]
+FORCED_UPDATE_OK_BRANCHES = ("topic/.*",)
 
 def check_fast_forward(ref_name, old_rev, new_rev):
     """Raise InvalidUpdate if the update violates the fast-forward policy.
@@ -48,9 +48,7 @@ def check_fast_forward(ref_name, old_rev, new_rev):
     ok_branches = git_config('hooks.allow-non-fast-forward')
 
     for branch in ["refs/heads/" + branch.strip()
-                   for branch in (ok_branches.split(",")
-                                  + FORCED_UPDATE_OK_BRANCHES)
-                   if branch != '']:
+                   for branch in ok_branches + FORCED_UPDATE_OK_BRANCHES]:
         if re.match(branch, ref_name) is not None:
             # This is one of the branches where a non-fast-forward update
             # is allowed.  Allow the update, but print a warning for

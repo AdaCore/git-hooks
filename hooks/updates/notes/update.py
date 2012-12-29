@@ -113,7 +113,7 @@ class NotesUpdate(AbstractUpdate):
 
         email = Email(email_info, subject, body, self.ref_name,
                       commit.base_rev, commit.rev, diff)
-        email.send()
+        email.enqueue()
 
     def __ensure_fast_forward(self):
         """Raise InvalidUpdate if the update is not a fast-forward update.

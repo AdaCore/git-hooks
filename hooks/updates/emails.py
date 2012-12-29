@@ -6,6 +6,7 @@ from email.utils import parseaddr, getaddresses
 from errors import InvalidUpdate
 from git import get_module_name
 import os
+from time import sleep
 from utils import debug, get_user_name, get_user_full_name
 
 try:
@@ -18,6 +19,13 @@ except ImportError: # pragma: no cover (testing requires recent version)
 # All commit emails should be sent to the following email address
 # for filing/archiving purposes...
 FILER_EMAIL='file-ci@gnat.com'
+
+# The delay (in seconds) between each email being sent out.
+# The purpose of the delay is to help separate each email
+# in time, in order to increase our chances of having each
+# one of them delivered in order.
+EMAIL_DELAY_IN_SECONDS = 5
+
 
 class EmailInfo(object):
     """Aggregates various pieces of info needed to send emails.
@@ -63,6 +71,65 @@ class EmailInfo(object):
             # help at all.  Do the best we can, which is trying to file
             # the commits.
             self.email_to=FILER_EMAIL
+
+
+class EmailQueue(object):
+    """An email queue (a singleton).
+
+    ATTRIBUTES
+        queue: A list of emails to be sent.
+    """
+    def __new__(cls, *args, **kw):
+        """The allocator."""
+        if not hasattr(cls, '_instance'):
+            orig = super(EmailQueue, cls)
+            cls._instance = orig.__new__(cls, *args, **kw)
+        return cls._instance
+
+    def __init__(self):
+        """The constructor."""
+        # If the singleton has never been initialized, do it now.
+        if not hasattr(self, 'queue'):
+            self.queue = []
+
+    def enqueue(self, email):
+        """Enqueue the given email.
+
+        PARAMETERS
+            email: An Email object.
+        """
+        self.queue.append(email)
+
+    def flush(self):
+        """Send all enqueued emails...
+
+        ... in the same order that they were enqueued.  A delay
+        of EMAIL_DELAY_IN_SECONDS is also introduced between
+        emails.
+
+        REMARKS
+            If the GIT_HOOKS_TESTSUITE_MODE environment variable
+            is set, then a trace of the delay is printed, instead
+            of actually delaying the execution.  Since emails are
+            not actually sent when in GIT_HOOKS_TESTSUITE_MODE,
+            there is no point in waiting for this delay.
+        """
+        nb_emails_left = len(self.queue)
+        for email in self.queue:
+            email.send()
+            nb_emails_left -= 1
+            if nb_emails_left > 0:
+                # Need a small delay until we can send the next one.
+                if 'GIT_HOOKS_TESTSUITE_MODE' in os.environ:
+                    # For the testsuite, print a debug trace in place
+                    # of delaying the execution.  Use debug level 0
+                    # to make sure it is always printed (to make sure
+                    # the testsuite always alerts us if there is any
+                    # change in the delay policy).
+                    debug('inter-email delay...', level=0)
+                else:  # pragma: no cover (do not want delays during testing)
+                    sleep(EMAIL_DELAY_IN_SECONDS)
+        self.queue = []
 
 
 class Email(object):
@@ -111,6 +178,14 @@ class Email(object):
         self.ref_name = ref_name
         self.old_rev = old_rev
         self.new_rev = new_rev
+
+    def enqueue(self):
+        """Enqueue this email in the EmailQueue.
+
+        REMARKS
+            This is mostly a convenience method.
+        """
+        EmailQueue().enqueue(self)
 
     def send(self):
         """Send this email.

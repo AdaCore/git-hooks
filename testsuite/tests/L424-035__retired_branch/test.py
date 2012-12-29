@@ -27,6 +27,7 @@ remote:
 remote: The branch 'retired/gdb-5.0' was created pointing to:
 remote:
 remote:  a605403... Updated a.
+remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

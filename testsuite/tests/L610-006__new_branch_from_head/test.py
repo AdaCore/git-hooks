@@ -32,6 +32,7 @@ remote:
 remote: The branch 'release-0.1-branch' was created pointing to:
 remote:
 remote:  dcc477c... New file b, add reference to it from file a.
+remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -75,6 +76,7 @@ remote: @@ -1,2 +1,3 @@
 remote:  Title: D
 remote:  This is a new file.
 remote: +EOF
+remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

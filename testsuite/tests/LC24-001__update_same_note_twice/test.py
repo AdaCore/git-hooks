@@ -45,6 +45,7 @@ remote: +++ b/a60540361d47901d3fe254271779f380d94645f7
 remote: @@ -1 +1,2 @@
 remote:  This is my first note.
 remote: +Add some information about my first note.
+remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

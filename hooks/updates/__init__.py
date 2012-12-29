@@ -248,7 +248,7 @@ class AbstractUpdate(object):
 
         email = Email(email_info, subject, body, self.ref_name,
                       commit.base_rev, commit.rev, diff)
-        email.send()
+        email.enqueue()
 
     #-----------------------
     #--  Useful methods.  --
@@ -497,7 +497,7 @@ class AbstractUpdate(object):
             (subject, body) = update_email_contents
             update_email = Email(email_info, subject, body,
                                  self.ref_name, self.old_rev, self.new_rev)
-            update_email.send()
+            update_email.enqueue()
 
     def __email_new_commits(self, email_info):
         """Send one email per new (non-pre-existing) commit.

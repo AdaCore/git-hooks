@@ -56,6 +56,7 @@ remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:
 remote:   8a567a0... Put some contents in file `a'.
+remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

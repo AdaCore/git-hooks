@@ -72,6 +72,7 @@ remote: +++ b/c
 remote: @@ -1,2 +1 @@
 remote:  hello world.
 remote: -ZZ
+remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -110,6 +111,7 @@ remote: --- /dev/null
 remote: +++ b/d
 remote: @@ -0,0 +1 @@
 remote: +This is a new file.
+remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -151,6 +153,7 @@ remote: @@ -1,2 +1,2 @@
 remote:  hello world.
 remote: -This is file number C.
 remote: +This is file number c.
+remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

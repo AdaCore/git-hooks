@@ -41,6 +41,7 @@ remote: --- /dev/null
 remote: +++ b/d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: @@ -0,0 +1 @@
 remote: +This is my new note.
+remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

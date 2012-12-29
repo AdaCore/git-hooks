@@ -9,7 +9,7 @@ from argparse import ArgumentParser
 from collections import OrderedDict
 import sys
 
-from updates.emails import EmailInfo
+from updates.emails import EmailInfo, EmailQueue
 from updates.factory import new_update
 from updates.refs import GitReferences
 from utils import (debug, warn)
@@ -78,6 +78,8 @@ def post_receive(updated_refs):
             post_receive_one(ref_name, old_rev, new_rev, email_info, refs)
         finally:
             refs.update_ref(ref_name, new_rev)
+
+    EmailQueue().flush()
 
 
 def parse_command_line(args):

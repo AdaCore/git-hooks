@@ -30,6 +30,7 @@ remote:
 remote: The branch 'release-0.1-branch' was created pointing to:
 remote:
 remote:  4205e52... Generate update.
+remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -62,6 +63,7 @@ remote:  some contents inside
 remote:  that file
 remote:  that is not really all that interesting.
 remote: +Add more text to make it interesting.
+remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

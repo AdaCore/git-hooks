@@ -40,6 +40,7 @@ remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:
 remote:   86c3276... Minor modifications.
+remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

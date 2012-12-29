@@ -37,6 +37,7 @@ remote:   ffb05b4... Merge topic branch fsf-head.
 remote:
 remote: (*) This commit already existed in another branch/reference.
 remote:      No separate email sent.
+remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

@@ -65,6 +65,7 @@ remote: +Second line, in the middle.
 remote: +In the middle too!
 remote:  Third line.
 remote: +
+remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -97,6 +98,7 @@ remote:  Some file.
 remote: -Second line, in the middle.
 remote:  In the middle too!
 remote:  Third line.
+remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

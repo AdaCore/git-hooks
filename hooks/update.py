@@ -68,10 +68,7 @@ if __name__ == "__main__":
         # the minimum required to email update notifications,
         # refuse the update.  For this, we rely on the EmailInfo
         # class instantiation, which performs the checks for us.
-        # Do not print warnings now - they will be printed during
-        # the post-receive phase, after we know that the update
-        # has been accepted.
-        EmailInfo(print_warnings=False)
+        EmailInfo()
 
         create_scratch_dir()
         check_update(args.ref_name, args.old_rev, args.new_rev)

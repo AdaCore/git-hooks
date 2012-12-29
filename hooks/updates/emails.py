@@ -6,7 +6,7 @@ from email.utils import parseaddr, getaddresses
 from errors import InvalidUpdate
 from git import get_module_name
 import os
-from utils import debug, get_user_name, get_user_full_name, warn
+from utils import debug, get_user_name, get_user_full_name
 
 try:
     from gnatpython.sendmail import sendmail
@@ -29,13 +29,15 @@ class EmailInfo(object):
             when sending the email notification.
         email_to: The email addresses, in RFC 822 format, of the
             recipients of the email notification.
+        has_mailinglist_config: True iff the 'hooks.mailinglist'
+            git config parameter is set for this project.
 
     REMARKS
         This class assumes that the hooks.from-domain config parameter
         is set.  Otherwise, an InvalidUpdate exception is raised when
         the object is initialized.
     """
-    def __init__(self, print_warnings=True):
+    def __init__(self):
         """The constructor.
 
         PARAMETERS
@@ -53,21 +55,14 @@ class EmailInfo(object):
                                           from_domain)
 
         self.email_to = git_config('hooks.mailinglist')
-        if not self.email_to:
+        self.has_mailinglist_config = bool(self.email_to)
+        if not self.has_mailinglist_config:
             # We should really raise an error if this config variable is
             # not set.  But since emailing occurs after the update
             # has already been made, error-ing out would not actually
             # help at all.  Do the best we can, which is trying to file
-            # the commits, and also warn the user about it.
+            # the commits.
             self.email_to=FILER_EMAIL
-            if print_warnings:
-                warn(*['-' * 60,
-                       '-- WARNING:',
-                       '-- The hooks.mailinglist config variable not set.',
-                       '-- Commit emails will only be sent to %s.'
-                         % self.email_to,
-                       '-' * 60,
-                      ], prefix='')
 
 
 class Email(object):

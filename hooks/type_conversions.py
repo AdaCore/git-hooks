@@ -30,6 +30,28 @@ def to_bool(val):
     raise ValueError("invalid boolean value: '%s'", str(val))
 
 
+def to_tuple(val):
+    """Translate val into a tuple.
+
+    PARAMETERS
+        val: The value to convert, assumed to be a string for now.
+            An assertion will be raised if this is not the case.
+
+    REMARKS
+        Handling of val being a tuple, or even maybe other types
+        could be added as well.  But there is no need for it at
+        the moment.
+    """
+    assert isinstance(val, str)
+
+    # Handle the case where val is empty separately, as split would
+    # return a tuple containing an empty string.  We want to return
+    # an empty tuple in this case.
+    if not val:
+        return tuple()
+    return tuple(val.split(','))
+
+
 def to_type(val, new_type):
     """Translate val to the given type.
 
@@ -45,4 +67,6 @@ def to_type(val, new_type):
     # are some exceptions...
     if new_type == bool:
         new_type = to_bool
+    elif new_type == tuple:
+        new_type = to_tuple
     return new_type(val)

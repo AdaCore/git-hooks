@@ -70,8 +70,9 @@ def git_config(option_name):
         try:
             val = to_type(val, GIT_CONFIG_OPTS[option_name]['type'])
         except ValueError:
-            TYPE_NAME_MAP = {bool: 'boolean',
-                             int:  'integer',
+            TYPE_NAME_MAP = {bool:  'boolean',
+                             int:   'integer',
+                             tuple: 'list',
                             }
             type_name = TYPE_NAME_MAP[GIT_CONFIG_OPTS[option_name]['type']]
             raise InvalidUpdate(

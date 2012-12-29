@@ -259,7 +259,7 @@ class AbstractUpdate(object):
         """Return True if no emails should be sent for this reference update.
         """
         no_emails_list = git_config("hooks.no-emails")
-        return no_emails_list and self.ref_name in no_emails_list.split(",")
+        return self.ref_name in no_emails_list
 
     def summary_of_changes(self):
         """A summary of changes to be added at the end of the ref-update email.

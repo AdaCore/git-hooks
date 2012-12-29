@@ -105,7 +105,7 @@ def debug(msg, level=1):
         debug_level = git_config('hooks.debug-level')
 
     if debug_level >= level:
-        warn(msg, prefix='  ' * (level - 1) + 'DEBUG:')
+        warn(msg, prefix='  ' * (level - 1) + 'DEBUG: ')
 
 
 def warn(*args, **kwargs):
@@ -123,11 +123,11 @@ def warn(*args, **kwargs):
     PARAMETERS
         *args: Zero or more arguments to be printed on stderr.
         prefix: The prefix to be used when printing the message.
-            Default value is '***'.
+            Default value is '*** '.
     """
-    prefix = kwargs['prefix'] if 'prefix' in kwargs else '***'
+    prefix = kwargs['prefix'] if 'prefix' in kwargs else '*** '
     for arg in args:
-        print >> sys.stderr, prefix , arg
+        print >> sys.stderr, "%s%s" % (prefix, arg)
 
 
 ############################################################################

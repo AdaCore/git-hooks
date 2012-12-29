@@ -9,6 +9,7 @@ from argparse import ArgumentParser
 from collections import OrderedDict
 import sys
 
+from daemon import run_in_daemon
 from updates.emails import EmailInfo, EmailQueue
 from updates.factory import new_update
 from updates.refs import GitReferences
@@ -79,7 +80,11 @@ def post_receive(updated_refs):
         finally:
             refs.update_ref(ref_name, new_rev)
 
-    EmailQueue().flush()
+    # Flush the email queue.  Since this involves creating a daemon,
+    # only do so if there is at least one email to be sent.
+    email_queue = EmailQueue()
+    if email_queue.queue:
+        run_in_daemon(email_queue.flush)
 
 
 def parse_command_line(args):

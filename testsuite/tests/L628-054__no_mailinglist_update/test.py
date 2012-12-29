@@ -10,6 +10,11 @@ class TestRun(TestCase):
 
         expected_out = """\
 remote: *** cvs_check: `trunk/repo/a'
+remote: ------------------------------------------------------------
+remote: -- WARNING:
+remote: -- The hooks.mailinglist config variable not set.
+remote: -- Commit emails will only be sent to file-ci@gnat.com.
+remote: ------------------------------------------------------------
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -47,11 +52,6 @@ remote: +Second line, in the middle.
 remote: +In the middle too!
 remote:  Third line.
 remote: +
-remote: ------------------------------------------------------------
-remote: -- WARNING:
-remote: -- The hooks.mailinglist config variable not set.
-remote: -- Commit emails will only be sent to file-ci@gnat.com.
-remote: ------------------------------------------------------------
 To ../bare/repo.git
    d065089..a605403  master -> master
 """

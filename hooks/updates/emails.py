@@ -6,7 +6,7 @@ from email.utils import parseaddr, getaddresses
 from errors import InvalidUpdate
 from git import get_module_name
 import os
-from utils import debug, get_user_name, get_user_full_name
+from utils import debug, get_user_name, get_user_full_name, warn
 
 try:
     from gnatpython.sendmail import sendmail
@@ -39,7 +39,7 @@ class EmailInfo(object):
         """The constructor.
 
         PARAMETERS
-            print_warnings: If True, then print warnings on stdout.
+            print_warnings: If True, then emit warnings.
         """
         self.project_name = get_module_name()
 
@@ -61,11 +61,13 @@ class EmailInfo(object):
             # the commits, and also warn the user about it.
             self.email_to=FILER_EMAIL
             if print_warnings:
-                print '-' * 60
-                print "-- WARNING:"
-                print "-- The hooks.mailinglist config variable not set."
-                print "-- Commit emails will only be sent to %s." % FILER_EMAIL
-                print '-' * 60
+                warn(*['-' * 60,
+                       '-- WARNING:',
+                       '-- The hooks.mailinglist config variable not set.',
+                       '-- Commit emails will only be sent to %s.'
+                         % self.email_to,
+                       '-' * 60,
+                      ], prefix='')
 
 
 class Email(object):

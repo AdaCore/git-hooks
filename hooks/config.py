@@ -18,7 +18,7 @@ GIT_CONFIG_OPTS = \
      'hooks.max-commit-emails':        {'default': 100,    'type': int},
      'hooks.max-email-diff-size':      {'default': 100000, 'type': int},
      'hooks.no-emails':                {'default': '',     'type': tuple},
-     'hooks.no-precommit-check':       {'default': ''},
+     'hooks.no-precommit-check':       {'default': '',     'type': tuple},
      'hooks.tn-required':              {'default': False,  'type': bool},
 
      # The following options are for testing purposes only, and should

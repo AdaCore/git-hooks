@@ -92,11 +92,12 @@ class AbstractUpdate(object):
             email_info: An EmailInfo object.
         """
         if self.in_no_emails_list():
-            print '-' * 75
-            print "--  The hooks.no-emails config parameter contains `%s'." \
-                    % self.ref_name
-            print "--  Commit emails will therefore not be sent."
-            print '-' * 75
+            warn(*['-' * 75,
+                   "--  The hooks.no-emails config parameter contains `%s'."
+                     % self.ref_name,
+                   '--  Commit emails will therefore not be sent.',
+                   '-' * 75,
+                  ], prefix='')
             return
         self.__email_ref_update(email_info)
         self.__email_new_commits(email_info)

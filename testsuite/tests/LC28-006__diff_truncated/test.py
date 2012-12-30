@@ -53,7 +53,7 @@ To ../bare/repo.git
         # section of the diff, causing the truncation to occur at
         # a different location when using older versions of git
         # (1.7.8.2 in our case). Adjust the expected output accordingly.
-        if self.git_version() < '1,7.10':
+        if self.git_version() < '1.7.10':
             expected_out = expected_out.replace('remote: -Se', 'remote: -')
 
         self.assertEqual(p.status, 0, p.image)

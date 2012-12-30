@@ -39,17 +39,19 @@ class TestRun(TestCase):
 
         # For coverage purposes, we want to test the calling of
         # the style-check program via the regular method (where
-        # GIT_HOOKS_CVS_CHECK is not defined.  But we still want
-        # to provide our own.
+        # GIT_HOOKS_CVS_CHECK is not defined. Ideally, we would
+        # still like to provide our own, and we try doing so by
+        # updating PATH with the path to our own cvs_check script.
+        # But this only works on machines where the cvs_check
+        # script is NOT installed in the standard location, because
+        # the "update" hook inserts the standard cvs_check path
+        # at the start of the PATH.
         #
-        # The way we do that is by:
-        #   - Provide our own `cvs_check' script in TEST_DIR.
-        #   - add TEST_DIR to the front of the PATH.
-        #   - Unset GIT_HOOKS_CVS_CHECK.
-        #
-        # The hooks should see that there is no GIT_HOOKS_CVS_CHECK,
-        # and thus call `cvs_check', find our copy from the TEST_DIR
-        # that we just added to the front of the PATH, and execute it.
+        # This means that, on machines with cvs_check installed,
+        # deleting GIT_HOOKS_CVS_CHECK will cause the real cvs_check
+        # to be called, whereas our fake cvs_check will be called
+        # on all other machines. For matching purposes of the
+        # expected output, both scripts must produce the same output.
         del os.environ['GIT_HOOKS_CVS_CHECK']
         os.environ['PATH'] = TEST_DIR + ':' + os.environ['PATH']
 
@@ -65,7 +67,6 @@ remote: DEBUG: validate_ref_update (refs/heads/master, 7a373b536b65b600a449b5c73
 remote: DEBUG: update base: 7a373b536b65b600a449b5c739c137301f6fd364
 remote: DEBUG: (commit-per-commit style checking)
 remote: DEBUG: check_commit(old_rev=7a373b536b65b600a449b5c739c137301f6fd364, new_rev=%(subm_rev)s)
-remote: *** cvs_check: `trunk/repo/.gitmodules'
 remote:   DEBUG: subproject entry ignored: subm
 remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=7a373b536b65b600a449b5c739c137301f6fd364

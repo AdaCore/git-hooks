@@ -9,54 +9,15 @@ class TestRun(TestCase):
         p = Run('git push origin master'.split())
 
         expected_out = """\
-remote: *** cvs_check: `trunk/repo/a'
-remote: ------------------------------------------------------------
-remote: -- WARNING:
-remote: -- The hooks.mailinglist config variable not set.
-remote: -- Commit emails will only be sent to file-ci@gnat.com.
-remote: ------------------------------------------------------------
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: From: Test Suite <testsuite@example.com>
-remote: To: file-ci@gnat.com
-remote: Bcc: file-ci@gnat.com
-remote: Subject: [repo] Updated a.
-remote: X-ACT-checkin: repo
-remote: X-Git-Refname: refs/heads/master
-remote: X-Git-Oldrev: d065089ff184d97934c010ccd0e7e8ed94cb7165
-remote: X-Git-Newrev: a60540361d47901d3fe254271779f380d94645f7
-remote:
-remote: commit a60540361d47901d3fe254271779f380d94645f7
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Fri Apr 27 13:08:29 2012 -0700
-remote:
-remote:     Updated a.
-remote:
-remote:     Just added a little bit of text inside file a.
-remote:     Thought about doing something else, but not really necessary.
-remote:
-remote: Diff:
-remote: ---
-remote:  a |    4 +++-
-remote:  1 file changed, 3 insertions(+), 1 deletion(-)
-remote:
-remote: diff --git a/a b/a
-remote: index 01d0f12..a90d851 100644
-remote: --- a/a
-remote: +++ b/a
-remote: @@ -1,3 +1,5 @@
-remote:  Some file.
-remote: -Second line.
-remote: +Second line, in the middle.
-remote: +In the middle too!
-remote:  Third line.
-remote: +
+remote: *** Error: hooks.mailinglist config option not set.
+remote: *** Please contact your repository's administrator.
+remote: error: hook declined to update refs/heads/master
 To ../bare/repo.git
-   d065089..a605403  master -> master
+ ! [remote rejected] master -> master (hook declined)
+error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        self.assertNotEqual(p.status, 0, p.image)
         self.assertRunOutputEqual(p, expected_out)
 
 

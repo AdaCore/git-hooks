@@ -57,16 +57,6 @@ def post_receive(updated_refs):
     email_info = EmailInfo()
     refs = GitReferences()
 
-    # Print a warning if hooks.mailinglist is not set.
-    if not email_info.has_mailinglist_config:
-        warn(*['-' * 60,
-               '-- WARNING:',
-               '-- The hooks.mailinglist config variable not set.',
-               '-- Commit emails will only be sent to %s.'
-                 % email_info.email_to,
-               '-' * 60,
-              ], prefix='')
-
     # Adjust refs to reflect the situation prior to the push
     # (by "undoing" updated_refs).
     for ref_name in updated_refs.keys():

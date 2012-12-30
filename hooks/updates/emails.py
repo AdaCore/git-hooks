@@ -37,8 +37,6 @@ class EmailInfo(object):
             when sending the email notification.
         email_to: The email addresses, in RFC 822 format, of the
             recipients of the email notification.
-        has_mailinglist_config: True iff the 'hooks.mailinglist'
-            git config parameter is set for this project.
 
     REMARKS
         This class assumes that the hooks.from-domain config parameter
@@ -63,14 +61,10 @@ class EmailInfo(object):
                                           from_domain)
 
         self.email_to = git_config('hooks.mailinglist')
-        self.has_mailinglist_config = bool(self.email_to)
-        if not self.has_mailinglist_config:
-            # We should really raise an error if this config variable is
-            # not set.  But since emailing occurs after the update
-            # has already been made, error-ing out would not actually
-            # help at all.  Do the best we can, which is trying to file
-            # the commits.
-            self.email_to=FILER_EMAIL
+        if not self.email_to:
+            raise InvalidUpdate(
+                'Error: hooks.mailinglist config option not set.',
+                'Please contact your repository\'s administrator.')
 
 
 class EmailQueue(object):

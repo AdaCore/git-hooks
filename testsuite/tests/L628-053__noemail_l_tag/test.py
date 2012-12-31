@@ -14,10 +14,13 @@ class TestRun(TestCase):
         # to accept such updates.
         p = Run('git push origin new-tag'.split())
         expected_out = """\
-remote: ---------------------------------------------------------------------------
-remote: --  The hooks.no-emails config parameter contains `refs/tags/new-tag'.
+remote: ----------------------------------------------------------------------
+remote: --  The hooks.no-emails config option contains `refs/tags/new-tag',
+remote: --  which matches the name of the reference being updated
+remote: --  (refs/tags/new-tag).
+remote: --
 remote: --  Commit emails will therefore not be sent.
-remote: ---------------------------------------------------------------------------
+remote: ----------------------------------------------------------------------
 To ../bare/repo.git
  * [new tag]         new-tag -> new-tag
 """

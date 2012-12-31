@@ -41,10 +41,13 @@ error: failed to push some refs to '../bare/repo.git'
         p = Run('git push origin thirdparty'.split())
         expected_out = """\
 remote: SYSLOG: cvs_check: Pre-commit checks disabled for ef602fcf81b53dc7512d6c404c532f5c07187abf on repo by hooks.no-precommit-check config (refs/heads/thirdparty)
-remote: ---------------------------------------------------------------------------
-remote: --  The hooks.no-emails config parameter contains `refs/heads/thirdparty'.
+remote: ----------------------------------------------------------------------
+remote: --  The hooks.no-emails config option contains `refs/heads/thirdparty',
+remote: --  which matches the name of the reference being updated
+remote: --  (refs/heads/thirdparty).
+remote: --
 remote: --  Commit emails will therefore not be sent.
-remote: ---------------------------------------------------------------------------
+remote: ----------------------------------------------------------------------
 To ../bare/repo.git
    52723db..ef602fc  thirdparty -> thirdparty
 """

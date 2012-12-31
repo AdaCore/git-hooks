@@ -55,10 +55,13 @@ remote: SYSLOG: cvs_check: Pre-commit checks disabled for 492fd2fae27c2f358c1d59
 remote: DEBUG: post_receive_one(ref_name=refs/heads/thirdparty
 remote:                         old_rev=52723db7f709396057df819f73e66b846858217e
 remote:                         new_rev=492fd2fae27c2f358c1d59c59a2e13ec2a3a880f)
-remote: ---------------------------------------------------------------------------
-remote: --  The hooks.no-emails config parameter contains `refs/heads/thirdparty'.
+remote: ----------------------------------------------------------------------
+remote: --  The hooks.no-emails config option contains `refs/heads/thirdparty',
+remote: --  which matches the name of the reference being updated
+remote: --  (refs/heads/thirdparty).
+remote: --
 remote: --  Commit emails will therefore not be sent.
-remote: ---------------------------------------------------------------------------
+remote: ----------------------------------------------------------------------
 To ../bare/repo.git
    52723db..492fd2f  thirdparty -> thirdparty
 """

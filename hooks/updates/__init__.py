@@ -91,12 +91,17 @@ class AbstractUpdate(object):
         PARAMETERS
             email_info: An EmailInfo object.
         """
-        if self.in_no_emails_list():
-            warn(*['-' * 75,
-                   "--  The hooks.no-emails config parameter contains `%s'."
-                     % self.ref_name,
+        no_email_re = self.search_no_emails_list()
+        if no_email_re is not None:
+            warn(*['-' * 70,
+                   "--  The hooks.no-emails config option contains `%s',"
+                     % no_email_re,
+                   '--  which matches the name of the reference being'
+                     ' updated ',
+                   '--  (%s).' % self.ref_name,
+                   '--',
                    '--  Commit emails will therefore not be sent.',
-                   '-' * 75,
+                   '-' * 70,
                   ], prefix='')
             return
         self.__email_ref_update(email_info)
@@ -264,11 +269,19 @@ class AbstractUpdate(object):
     #--  Useful methods.  --
     #-----------------------
 
-    def in_no_emails_list(self):
-        """Return True if no emails should be sent for this reference update.
+    def search_no_emails_list(self):
+        """Search the hooks.no-emails list, and returns the first match.
+
+        This function iterates over all entries of the hooks.no-emails
+        list, and finds the first one that matches self.ref_name.
+        If found, return it.  Otherwise, return None.
         """
         no_emails_list = git_config("hooks.no-emails")
-        return self.ref_name in no_emails_list
+        for no_email_re in no_emails_list:
+            no_email_re = no_email_re.strip()
+            if re.match(no_email_re, self.ref_name):
+                return no_email_re
+        return None
 
     def summary_of_changes(self):
         """A summary of changes to be added at the end of the ref-update email.
@@ -475,7 +488,7 @@ class AbstractUpdate(object):
         # Check that the update wouldn't generate too many commit emails.
         # We know that commit emails would only be sent for commits which
         # are new for the repository, so we count those.
-        if not self.in_no_emails_list():
+        if self.search_no_emails_list() is None:
             max_emails = git_config('hooks.max-commit-emails')
             nb_emails = len([commit for commit in self.added_commits
                              if not commit.pre_existing_p])

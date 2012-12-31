@@ -29,10 +29,13 @@ remote: *** cvs_check: `trunk/repo/d'
 remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=426fba3571947f6de7f967e885a3168b9df7004a
 remote:                         new_rev=dd6165c96db712d3e918fb5c61088b171b5e7cab)
-remote: ---------------------------------------------------------------------------
-remote: --  The hooks.no-emails config parameter contains `refs/heads/master'.
+remote: ----------------------------------------------------------------------
+remote: --  The hooks.no-emails config option contains `refs/heads/master',
+remote: --  which matches the name of the reference being updated
+remote: --  (refs/heads/master).
+remote: --
 remote: --  Commit emails will therefore not be sent.
-remote: ---------------------------------------------------------------------------
+remote: ----------------------------------------------------------------------
 To ../bare/repo.git
    426fba3..dd6165c  master -> master
 """

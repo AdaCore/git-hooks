@@ -24,8 +24,6 @@ class TestRun(TestCase):
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 96cc4826ed3f82bee77514177ff3944601d1800d, bd6c0a7343402a7a5d1e5b42e5d338e5c1e3cb35)
 remote: DEBUG: update base: 96cc4826ed3f82bee77514177ff3944601d1800d
-remote: DEBUG: (commit-per-commit style checking)
-remote: DEBUG: check_commit(old_rev=96cc4826ed3f82bee77514177ff3944601d1800d, new_rev=492fd2fae27c2f358c1d59c59a2e13ec2a3a880f)
 remote: *** Invalid revision history for commit 492fd2fae27c2f358c1d59c59a2e13ec2a3a880f:
 remote: *** The first two lines should be the subject of the commit,
 remote: *** followed by an empty line.

@@ -4,4 +4,8 @@
 	bare = true
 [hooks]
         from-domain = adacore.com
-        mailinglist = git-hooks-ci@example.com
+        # Define mailing-list to contain multiple recipients.
+        # Unrelated to the actual testcase, but generally useful
+        # to make sure that at least one testcase defines it
+        # to contain multiple recipient.
+        mailinglist = git-hooks-ci@example.com, user@example.com

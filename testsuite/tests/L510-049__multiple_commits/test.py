@@ -34,7 +34,7 @@ remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
-remote: To: git-hooks-ci@example.com
+remote: To: git-hooks-ci@example.com, user@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Minor modifications.
 remote: X-ACT-checkin: repo
@@ -84,7 +84,7 @@ remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
-remote: To: git-hooks-ci@example.com
+remote: To: git-hooks-ci@example.com, user@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] 1 modified file, 1 new file.
 remote: X-ACT-checkin: repo
@@ -123,7 +123,7 @@ remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
-remote: To: git-hooks-ci@example.com
+remote: To: git-hooks-ci@example.com, user@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Modify `c', delete `b'.
 remote: X-ACT-checkin: repo
@@ -165,7 +165,7 @@ remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
-remote: To: git-hooks-ci@example.com
+remote: To: git-hooks-ci@example.com, user@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Modify file `d' alone.
 remote: X-ACT-checkin: repo

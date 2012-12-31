@@ -279,4 +279,3 @@ def check_commit(old_rev, new_rev):
             # above to detect renames, and why we do not have a special
             # branch for status values starting with `R'.
             check_file(filename, new_sha1, new_rev)
-

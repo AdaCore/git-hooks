@@ -181,17 +181,20 @@ class AbstractUpdate(object):
             # new commit.
             return
 
-        excluded_branches = git_config('hooks.no-precommit-check')
-        if self.ref_name in excluded_branches:
-            # Pre-commit checks are explicitly disabled on this branch.
-            debug('(%s in hooks.no-precommit-check)' % self.ref_name)
-            syslog('Pre-commit checks disabled for %(rev)s on %(repo)s'
-                   ' by hooks.no-precommit-check config (%(ref_name)s)'
-                   % {'rev' : self.new_rev,
-                      'repo' : get_module_name(),
-                      'ref_name' : self.ref_name,
-                     })
-            return
+        # Check to see if any of the entries in hooks.no-precommit-check
+        # might be matching our reference name...
+        for exp in git_config('hooks.no-precommit-check'):
+            exp = exp.strip()
+            if re.match(exp, self.ref_name):
+                # Pre-commit checks are explicitly disabled on this branch.
+                debug("(hooks.no-precommit-check match: `%s')" % exp)
+                syslog('Pre-commit checks disabled for %(rev)s on %(repo)s'
+                       ' by hooks.no-precommit-check config (%(ref_name)s)'
+                       % {'rev' : self.new_rev,
+                          'repo' : get_module_name(),
+                          'ref_name' : self.ref_name,
+                         })
+                return
 
         if self.__no_cvs_check_user_override():
             # Just return. All necessary traces have already been

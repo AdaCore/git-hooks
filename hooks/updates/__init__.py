@@ -7,7 +7,7 @@ from git import (git, get_object_type, is_null_rev, commit_parents,
                  commit_rev, get_module_name)
 from os import environ
 from os.path import expanduser, isfile, getmtime
-from pre_commit_checks import check_commit
+from pre_commit_checks import check_revision_history, check_commit
 import re
 from syslog import syslog
 import time
@@ -197,6 +197,16 @@ class AbstractUpdate(object):
         if not added:
             # There are no new commits, so nothing further to check.
             return
+
+        # Perform the revision-history of all new commits.
+        # Done separately from the rest of the pre-commit checks,
+        # which check the files changed by the commits, because of
+        # the case where hooks.combined-style-checking is true;
+        # we do not want to forget checking the revision history
+        # of some of the commits.
+        for commit in added:
+            if not commit.pre_existing_p:
+                check_revision_history(commit.rev)
 
         if git_config('hooks.combined-style-checking'):
             # This project prefers to perform the style check on

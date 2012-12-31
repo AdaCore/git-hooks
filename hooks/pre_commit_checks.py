@@ -230,8 +230,25 @@ def check_missing_ticket_number(rev, raw_rh):
         ])
 
 
+def check_revision_history(rev):
+    """Apply pre-commit checks to the commit's revision history.
+
+    Raise InvalidUpdate if one or more style violation are detected.
+
+    PARAMETERS
+        rev: The commit to be checked.
+    """
+    # Various checks on the revision history...
+    raw_body = git.log(rev, max_count='1', pretty='format:%B',
+                       _split_lines=True)
+    ensure_empty_line_after_subject(rev, raw_body)
+    reject_unedited_merge_commit(rev, raw_body)
+    reject_merge_conflict_section(rev, raw_body)
+    check_missing_ticket_number(rev, raw_body)
+
+
 def check_commit(old_rev, new_rev):
-    """Apply pre-commit checks if appropriate.
+    """Call check_file for every file changed between old_rev and new_rev.
 
     Raise InvalidUpdate if one or more style violation are detected.
 
@@ -243,14 +260,6 @@ def check_commit(old_rev, new_rev):
         new_rev: The commit to be checked.
     """
     debug('check_commit(old_rev=%s, new_rev=%s)' % (old_rev, new_rev))
-
-    # Various checks on the revision history...
-    raw_body = git.log(new_rev, max_count='1', pretty='format:%B',
-                       _split_lines=True)
-    ensure_empty_line_after_subject(new_rev, raw_body)
-    reject_unedited_merge_commit(new_rev, raw_body)
-    reject_merge_conflict_section(new_rev, raw_body)
-    check_missing_ticket_number(new_rev, raw_body)
 
     if old_rev is None:
         # Get the "empty tree" special SHA1, and use that as our old tree.

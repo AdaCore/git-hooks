@@ -42,7 +42,7 @@ remote: --- a/a
 remote: +++ b/a
 remote: @@ -1,3 +1,39 @@
 remote:  Some file.
-remote: -Se
+remote: -Se[...]
 remote:
 remote: [diff truncated at 200 bytes]
 remote:

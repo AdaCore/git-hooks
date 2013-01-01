@@ -162,7 +162,9 @@ class Email(object):
             max_diff_size = git_config('hooks.max-email-diff-size')
             if len(diff) > max_diff_size:
                 diff = diff[:max_diff_size]
-                diff += '\n\n[diff truncated at %d bytes]\n' % max_diff_size
+                diff += ('[...]\n\n[diff truncated at %d bytes]\n'
+                         % max_diff_size)
+
             email_body += '\nDiff:\n'
             email_body += diff
 

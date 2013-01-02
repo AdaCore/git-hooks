@@ -19,7 +19,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Created branch retired/gdb-5.0
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/retired/gdb-5.0
 remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
 remote: X-Git-Newrev: a60540361d47901d3fe254271779f380d94645f7
@@ -35,7 +35,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/retired/gdb-5.0] Updated a.
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/retired/gdb-5.0
 remote: X-Git-Oldrev: d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: X-Git-Newrev: a60540361d47901d3fe254271779f380d94645f7

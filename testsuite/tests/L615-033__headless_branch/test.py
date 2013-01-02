@@ -40,7 +40,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Created branch headless
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/headless
 remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
 remote: X-Git-Newrev: 902092ffe1cf61b28e28c86949a447b9fc2591a4
@@ -56,7 +56,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/headless] Initial commit.
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/headless
 remote: X-Git-Oldrev:
 remote: X-Git-Newrev: 27ebebdd36a485235982f54e8ae68dfea6432c87
@@ -95,7 +95,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/headless] Small update. Add file "there" as well.
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/headless
 remote: X-Git-Oldrev: 27ebebdd36a485235982f54e8ae68dfea6432c87
 remote: X-Git-Newrev: 6586d1c0db5147a521975c15cc6bfd92d2f66de6
@@ -134,7 +134,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/headless] Forgot to update this.txt in the previous commit.
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/headless
 remote: X-Git-Oldrev: 6586d1c0db5147a521975c15cc6bfd92d2f66de6
 remote: X-Git-Newrev: 902092ffe1cf61b28e28c86949a447b9fc2591a4
@@ -186,7 +186,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Created branch one-commit
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/one-commit
 remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
 remote: X-Git-Newrev: ef3ab848df2bef804d5bd0880475d40cb6aab0bf
@@ -202,7 +202,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/one-commit] Initial commit.
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/one-commit
 remote: X-Git-Oldrev:
 remote: X-Git-Newrev: ef3ab848df2bef804d5bd0880475d40cb6aab0bf

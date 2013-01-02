@@ -16,7 +16,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Add single file pck.ads.
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: f82624871b6cfc46d5a7c5be518bc20e8f42be42
 remote: X-Git-Newrev: 52f1517edfdd0a74916f010f1a95997113639749

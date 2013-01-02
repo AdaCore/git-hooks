@@ -39,7 +39,7 @@ remote: From: Test Suite <testsuite@example.com>
 remote: To: something-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Updated tag some-tag
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/tags/some-tag
 remote: X-Git-Oldrev: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e
 remote: X-Git-Newrev: 8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5
@@ -64,7 +64,7 @@ remote: From: Test Suite <testsuite@example.com>
 remote: To: something-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/some-tag] Put some contents in file `a'.
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/tags/some-tag
 remote: X-Git-Oldrev: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e
 remote: X-Git-Newrev: 8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5

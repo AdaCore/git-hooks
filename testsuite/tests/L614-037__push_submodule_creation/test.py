@@ -79,7 +79,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Add submodule subm
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: 7a373b536b65b600a449b5c739c137301f6fd364
 remote: X-Git-Newrev: %(subm_rev)s

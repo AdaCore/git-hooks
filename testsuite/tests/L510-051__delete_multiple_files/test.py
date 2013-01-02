@@ -31,7 +31,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Remove all .adb files.
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: f82624871b6cfc46d5a7c5be518bc20e8f42be42
 remote: X-Git-Newrev: 0c702ad3051f00b1251bca7a0241a3a9bf19bf0d

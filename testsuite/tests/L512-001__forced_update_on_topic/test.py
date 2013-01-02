@@ -19,7 +19,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/topic/new-feature] Change a, and create b.
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/topic/new-feature
 remote: X-Git-Oldrev: a60540361d47901d3fe254271779f380d94645f7
 remote: X-Git-Newrev: 14d1fa28493dd548753d11729a117dadaa9905fe

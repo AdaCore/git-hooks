@@ -199,7 +199,7 @@ class Email(object):
         if git_config('hooks.bcc-file-ci'):
             e_msg['Bcc'] = FILER_EMAIL
         e_msg['Subject'] = self.email_subject
-        e_msg['X-ACT-checkin'] = self.email_info.project_name
+        e_msg['X-Act-Checkin'] = self.email_info.project_name
         e_msg['X-Git-Refname'] = self.ref_name
         e_msg['X-Git-Oldrev'] = self.old_rev
         e_msg['X-Git-Newrev'] = self.new_rev

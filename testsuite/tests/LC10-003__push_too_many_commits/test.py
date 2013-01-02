@@ -35,7 +35,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Updated a.
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: X-Git-Newrev: a60540361d47901d3fe254271779f380d94645f7
@@ -73,7 +73,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Remove second line.
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: a60540361d47901d3fe254271779f380d94645f7
 remote: X-Git-Newrev: 2f3fa950307558340d5f50f825a92e73c35f64aa
@@ -106,7 +106,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Re-edit a.
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: 2f3fa950307558340d5f50f825a92e73c35f64aa
 remote: X-Git-Newrev: c32bed0e676d14129183f2849470b2dfdc48e4a6
@@ -149,7 +149,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Delete trailing empty line.
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: c32bed0e676d14129183f2849470b2dfdc48e4a6
 remote: X-Git-Newrev: 4ca9852283b70f9cf6698e8be82fd25746f1f477

@@ -18,7 +18,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Minor modifications.
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: 426fba3571947f6de7f967e885a3168b9df7004a
 remote: X-Git-Newrev: 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3

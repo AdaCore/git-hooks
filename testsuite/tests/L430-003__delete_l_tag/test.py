@@ -17,7 +17,7 @@ remote: From: Test Suite <testsuite@example.com>
 remote: To: something-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Deleted tag some-tag
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/tags/some-tag
 remote: X-Git-Oldrev: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e
 remote: X-Git-Newrev: 0000000000000000000000000000000000000000

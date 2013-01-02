@@ -43,7 +43,7 @@ remote: From: Test Suite <testsuite@example.com>
 remote: To: repo@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Updated tag full-tag
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/tags/full-tag
 remote: X-Git-Oldrev: a69eaaba59ea6d7574a9c5437805a628ea652c8e
 remote: X-Git-Newrev: 17b9d4acf8505cd1da487ad62e37819b93779a27
@@ -73,7 +73,7 @@ remote: From: Test Suite <testsuite@example.com>
 remote: To: repo@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/full-tag] Added bar.c, and updated foo.
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/tags/full-tag
 remote: X-Git-Oldrev: 354383fa06047ef8053782410c221341e4b07ec4
 remote: X-Git-Newrev: 8c0b4151f9f41efcaeb70ea6f91158e4605aaeda

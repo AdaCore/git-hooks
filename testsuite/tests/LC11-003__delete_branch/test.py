@@ -15,7 +15,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Deleted branch old-branch
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/old-branch
 remote: X-Git-Oldrev: cc8d2c2637bda27f0bc2125181dd2f8534d16222
 remote: X-Git-Newrev: 0000000000000000000000000000000000000000

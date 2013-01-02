@@ -19,7 +19,7 @@ remote: From: Test Suite <testsuite@example.com>
 remote: To: testsuite@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Created tag v0.1
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/tags/v0.1
 remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
 remote: X-Git-Newrev: c4c1e91cddc3d48a2aab7d454bc6537149f37dd8

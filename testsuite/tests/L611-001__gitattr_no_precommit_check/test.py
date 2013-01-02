@@ -19,7 +19,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Update all files.
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: c8c2f4576c9b677b5a0217defdc163ac44484585
 remote: X-Git-Newrev: 8b4778c47abe4af16f5a72b0dc8db46814a196ef

@@ -15,7 +15,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] notes update for d065089ff184d97934c010ccd0e7e8ed94cb7165
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/notes/commits
 remote: X-Git-Oldrev: bbcc356176bb7f3104788323566c4fcef70650fc
 remote: X-Git-Newrev: 58e8efaaf0dee13edea66b1abbd4b669132b3d77

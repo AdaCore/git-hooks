@@ -17,7 +17,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Deleted tag retired/gdb-7.2
-remote: X-ACT-checkin: repo
+remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/tags/retired/gdb-7.2
 remote: X-Git-Oldrev: 0c8f5c4eb5e58eb59b9a69019581004950de581d
 remote: X-Git-Newrev: 0000000000000000000000000000000000000000

@@ -23,9 +23,9 @@ class AnnotatedTagCreation(AnnotatedTagUpdate):
         some of the abstract methods would be identical.  So inherit
         from AnnotatedTagUpdate.
     """
-    def get_update_email_contents(self, email_info):
+    def get_update_email_contents(self):
         """See AbstractUpdate.get_update_email_contents."""
-        subject = '[%s] Created tag %s' % (email_info.project_name,
+        subject = '[%s] Created tag %s' % (self.email_info.project_name,
                                            self.short_ref_name)
 
         tag_info = parse_tag_object(self.short_ref_name)

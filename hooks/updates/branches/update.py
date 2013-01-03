@@ -73,7 +73,7 @@ class BranchUpdate(AbstractUpdate):
         if not is_null_rev(self.old_rev):
             check_fast_forward(self.ref_name, self.old_rev, self.new_rev)
 
-    def get_update_email_contents(self, email_info):
+    def get_update_email_contents(self):
         """See AbstractUpdate.get_update_email_contents.
         """
         # For branch updates, we only send the update email when
@@ -83,7 +83,7 @@ class BranchUpdate(AbstractUpdate):
             return None
 
         # Compute the subject.
-        update_info = {'repo' : email_info.project_name,
+        update_info = {'repo' : self.email_info.project_name,
                        'short_ref_name' : self.short_ref_name,
                        'branch' : '/%s' % self.short_ref_name,
                        'n_commits' : '',

@@ -4,7 +4,7 @@ from config import git_config, SUBJECT_MAX_SUBJECT_CHARS
 from copy import deepcopy
 from errors import InvalidUpdate
 from git import (git, get_object_type, is_null_rev, commit_parents,
-                 commit_rev, get_module_name)
+                 commit_rev)
 from os import environ
 from os.path import expanduser, isfile, getmtime
 from pre_commit_checks import check_revision_history, check_commit
@@ -12,7 +12,7 @@ import re
 from syslog import syslog
 import time
 from updates.commits import commit_info_list
-from updates.emails import Email
+from updates.emails import EmailInfo, Email
 from utils import debug, warn, get_user_name
 
 class AbstractUpdate(object):
@@ -32,11 +32,25 @@ class AbstractUpdate(object):
         pre_update_refs: A GitReferences class (expected to contain
             the value of all references prior to the update being
             applied).
+        email_info: An EmailInfo object.  See REMARKS below.
         added_commits: A list of CommitInfo objects added by our update.
         lost_commits: A list of CommitInfo objects lost after our update.
 
     REMARKS
         This class is meant to be abstract and should never be instantiated.
+
+        Regarding the "email_info" attribute: This object is not strictly
+        required during the "update" phase.  However, instantiating it
+        allows for two things:
+            1. The instantiation itself verifies that the repository
+               provides the minimum configuration required to send
+               email notifications, and raise an InvalidUpdate exception
+               if not.
+            2. It contains some information which is used repeatedly
+               (Eg: the module name can be queries every time a file
+               is style-checked). We will use this object to provide
+               this required information, rather than recomputing it
+               repeatedly.
     """
     def __init__(self, ref_name, old_rev, new_rev, pre_update_refs):
         """The constructor.
@@ -57,6 +71,12 @@ class AbstractUpdate(object):
         self.new_rev = new_rev
         self.new_rev_type = get_object_type(self.new_rev)
         self.pre_update_refs = pre_update_refs
+
+        # If the repository's configuration does not provide
+        # the minimum required to email update notifications,
+        # refuse the update.  For this, we rely on the EmailInfo
+        # class instantiation, which performs the checks for us.
+        self.email_info = EmailInfo()
 
         # Implement the added_commits "attribute" as a property,
         # to allow for initialization only on-demand. This allows
@@ -85,11 +105,8 @@ class AbstractUpdate(object):
         self.__check_max_commit_emails()
         self.pre_commit_checks()
 
-    def send_email_notifications(self, email_info):
+    def send_email_notifications(self):
         """Send all email notifications associated to this update.
-
-        PARAMETERS
-            email_info: An EmailInfo object.
         """
         no_email_re = self.search_no_emails_list()
         if no_email_re is not None:
@@ -104,8 +121,8 @@ class AbstractUpdate(object):
                    '-' * 70,
                   ], prefix='')
             return
-        self.__email_ref_update(email_info)
-        self.__email_new_commits(email_info)
+        self.__email_ref_update()
+        self.__email_new_commits()
 
     #------------------------------------------------------------------
     #--  Abstract methods that must be overridden by child classes.  --
@@ -133,7 +150,7 @@ class AbstractUpdate(object):
         """
         assert False
 
-    def get_update_email_contents(self, email_info):
+    def get_update_email_contents(self):
         """Return a (subject, body) tuple describing the update (or None).
 
         This method should return a 2-element tuple to be used for
@@ -158,9 +175,6 @@ class AbstractUpdate(object):
         For instance, if a branch update only introduces a few new
         commits, a branch update summary email is not going to bring
         much, and thus can be omitted.
-
-        PARAMETERS
-            email_info: An EmailInfo object.
         """
         assert False
 
@@ -191,7 +205,7 @@ class AbstractUpdate(object):
                 syslog('Pre-commit checks disabled for %(rev)s on %(repo)s'
                        ' by hooks.no-precommit-check config (%(ref_name)s)'
                        % {'rev' : self.new_rev,
-                          'repo' : get_module_name(),
+                          'repo' : self.email_info.project_name,
                           'ref_name' : self.ref_name,
                          })
                 return
@@ -229,17 +243,17 @@ class AbstractUpdate(object):
         # Iterate over our list of commits in pairs...
         for commit in added:
             if not commit.pre_existing_p:
-                check_commit(commit.base_rev, commit.rev)
+                check_commit(commit.base_rev, commit.rev,
+                             self.email_info.project_name)
 
-    def email_commit(self, email_info, commit):
+    def email_commit(self, commit):
         """Send an email describing the given commit.
 
         PARAMETERS
-            email_info: An EmailInfo object.
             commit: A CommitInfo object.
         """
         subject = '[%(repo)s%(branch)s] %(subject)s' % {
-            'repo' : email_info.project_name,
+            'repo' : self.email_info.project_name,
             'branch' : '/%s' % self.short_ref_name
                 if self.short_ref_name != 'master' else '',
             'subject' : commit.subject[:SUBJECT_MAX_SUBJECT_CHARS],
@@ -264,7 +278,7 @@ class AbstractUpdate(object):
         diff = git.show(commit.rev, p=True, M=True, stat=True,
                         pretty="format:|")[1:]
 
-        email = Email(email_info, subject, body, self.ref_name,
+        email = Email(self.email_info, subject, body, self.ref_name,
                       commit.base_rev, commit.rev, diff)
         email.enqueue()
 
@@ -479,7 +493,7 @@ class AbstractUpdate(object):
         syslog('Pre-commit checks disabled for %(rev)s on %(repo)s by user'
                ' %(user)s using %(no_cvs_check_fullpath)s'
                % {'rev' : self.new_rev,
-                  'repo' : get_module_name(),
+                  'repo' : self.email_info.project_name,
                   'user' : get_user_name(),
                   'no_cvs_check_fullpath' : no_cvs_check_fullpath,
                  })
@@ -504,33 +518,27 @@ class AbstractUpdate(object):
                     "Contact your repository adminstrator if you really meant",
                     "to generate this many commit emails.")
 
-    def __email_ref_update(self, email_info):
+    def __email_ref_update(self):
         """Send the email describing to the reference update.
 
         This email can be seen as a "cover email", or a quick summary
         of the update that was performed.
-
-        PARAMETERS
-            email_info: An EmailInfo object.
 
         REMARKS
             The hooks may decide that such an email may not be necessary,
             and thus send nothing. See self.get_update_email_contents
             for more details.
         """
-        update_email_contents = self.get_update_email_contents(email_info)
+        update_email_contents = self.get_update_email_contents()
         if update_email_contents is not None:
             (subject, body) = update_email_contents
-            update_email = Email(email_info, subject, body,
+            update_email = Email(self.email_info, subject, body,
                                  self.ref_name, self.old_rev, self.new_rev)
             update_email.enqueue()
 
-    def __email_new_commits(self, email_info):
+    def __email_new_commits(self):
         """Send one email per new (non-pre-existing) commit.
-
-        PARAMETERS
-            email_info: An EmailInfo object.
         """
         for commit in self.added_commits:
             if not commit.pre_existing_p:
-                self.email_commit(email_info, commit)
+                self.email_commit(commit)

@@ -15,12 +15,11 @@ class TestRun(TestCase):
 
         from post_receive import post_receive_one
 
-        # No need to pass a valid EmailInfo, so pass None instead.
         post_receive_one(
             'bogus/heads/master',
             '0000000000000000000000000000000000000000',
             'd065089ff184d97934c010ccd0e7e8ed94cb7165',
-            None, None)
+            None)
         expected_out = """\
 *** post-receive: Unsupported reference update: bogus/heads/master (ignored).
 ***               old_rev = 0000000000000000000000000000000000000000

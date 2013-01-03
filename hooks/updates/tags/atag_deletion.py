@@ -22,9 +22,9 @@ class AnnotatedTagDeletion(LightweightTagDeletion):
         identical for both.  This explains why we inherit from
         LightweightTagDeletion.
     """
-    def get_update_email_contents(self, email_info):
+    def get_update_email_contents(self):
         """See AbstractUpdate.get_update_email_contents."""
-        subject = '[%s] Deleted tag %s' % (email_info.project_name,
+        subject = '[%s] Deleted tag %s' % (self.email_info.project_name,
                                            self.short_ref_name)
 
         tag_info = {}

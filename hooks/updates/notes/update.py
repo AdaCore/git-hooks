@@ -70,13 +70,13 @@ class NotesUpdate(AbstractUpdate):
         # No pre-commit checks needed for Git Notes.
         pass
 
-    def get_update_email_contents(self, email_info):
+    def get_update_email_contents(self):
         """See AbstractUpdate.get_update_email_contents."""
         # No update email needed for notes (this is always
         # a fast-forward commit)...
         return  None
 
-    def email_commit(self, email_info, commit):
+    def email_commit(self, commit):
         """See AbstractUpdate.email_commit."""
         notes = GitNotes(commit.rev)
 
@@ -93,7 +93,7 @@ class NotesUpdate(AbstractUpdate):
         notes_contents = (None if notes.contents is None
                           else indent(notes.contents, ' ' * 4))
 
-        subject = '[%s] notes update for %s' % (email_info.project_name,
+        subject = '[%s] notes update for %s' % (self.email_info.project_name,
                                                 notes.annotated_rev)
 
         body_template = (
@@ -111,7 +111,7 @@ class NotesUpdate(AbstractUpdate):
         # by stripping it from the output.
         diff = git.show(commit.rev, pretty="format:|", p=True)[1:]
 
-        email = Email(email_info, subject, body, self.ref_name,
+        email = Email(self.email_info, subject, body, self.ref_name,
                       commit.base_rev, commit.rev, diff)
         email.enqueue()
 

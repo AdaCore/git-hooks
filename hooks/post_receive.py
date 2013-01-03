@@ -10,20 +10,19 @@ from collections import OrderedDict
 import sys
 
 from daemon import run_in_daemon
-from updates.emails import EmailInfo, EmailQueue
+from updates.emails import EmailQueue
 from updates.factory import new_update
 from updates.refs import GitReferences
 from utils import (debug, warn)
 
 
-def post_receive_one(ref_name, old_rev, new_rev, email_info, refs):
+def post_receive_one(ref_name, old_rev, new_rev, refs):
     """post-receive treatment for one reference.
 
     PARAMETERS
         ref_name: The name of the reference.
         old_rev: The SHA1 of the reference before the update.
         new_rev: The SHA1 of the reference after the update.
-        email_info: An EmailInfo object.
         refs: A GitReferences object, expected to contain the value
             of all references.
     """
@@ -42,7 +41,7 @@ def post_receive_one(ref_name, old_rev, new_rev, email_info, refs):
              "              old_rev = %s" % old_rev,
              "              new_rev = %s" % new_rev)
         return
-    update.send_email_notifications(email_info)
+    update.send_email_notifications()
 
 
 def post_receive(updated_refs):
@@ -54,7 +53,6 @@ def post_receive(updated_refs):
             contains the previous revision, and the new revision of the
             reference.
     """
-    email_info = EmailInfo()
     refs = GitReferences()
 
     # Adjust refs to reflect the situation prior to the push
@@ -66,7 +64,7 @@ def post_receive(updated_refs):
     for ref_name in updated_refs.keys():
         (old_rev, new_rev) = updated_refs[ref_name]
         try:
-            post_receive_one(ref_name, old_rev, new_rev, email_info, refs)
+            post_receive_one(ref_name, old_rev, new_rev, refs)
         finally:
             refs.update_ref(ref_name, new_rev)
 

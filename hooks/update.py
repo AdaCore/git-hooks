@@ -64,12 +64,6 @@ def check_update(ref_name, old_rev, new_rev):
 if __name__ == "__main__":
     args = parse_command_line()
     try:
-        # If the repository's configuration does not provide
-        # the minimum required to email update notifications,
-        # refuse the update.  For this, we rely on the EmailInfo
-        # class instantiation, which performs the checks for us.
-        EmailInfo()
-
         create_scratch_dir()
         check_update(args.ref_name, args.old_rev, args.new_rev)
     except InvalidUpdate, E:

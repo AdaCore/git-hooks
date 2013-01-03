@@ -21,10 +21,10 @@ class BranchDeletion(AbstractUpdate):
         # Deleting a branch is always allowed.
         pass
 
-    def get_update_email_contents(self, email_info):
+    def get_update_email_contents(self):
         """See AbstractUpdate.get_update_email_contents.
         """
-        subject = "[%s] Deleted branch %s" % (email_info.project_name,
+        subject = "[%s] Deleted branch %s" % (self.email_info.project_name,
                                               self.short_ref_name)
 
         update_info = {'short_ref_name' : self.short_ref_name,

@@ -39,8 +39,7 @@ class TestRun(TestCase):
             bad_update.validate_ref_update()
 
         with self.assertRaises(AssertionError):
-            # No need to pass a valid EmailInfo, pass None instead.
-            bad_update.get_update_email_contents(None)
+            bad_update.get_update_email_contents()
 
 
 if __name__ == '__main__':

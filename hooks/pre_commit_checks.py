@@ -7,13 +7,13 @@ from subprocess import check_output, STDOUT
 
 from config import git_config
 from errors import InvalidUpdate
-from git import git, get_module_name, CalledProcessError
+from git import git, CalledProcessError
 from git_attrs import git_attribute
 from syslog import syslog
 import utils
 from utils import debug, warn
 
-def check_file(filename, sha1, commit_rev):
+def check_file(filename, sha1, commit_rev, project_name):
     """Check a file for style violations if appropriate.
 
     Raise InvalidUpdate if one or more style violations are detected.
@@ -25,6 +25,8 @@ def check_file(filename, sha1, commit_rev):
             helps us find the correct version of the .gitattributes files,
             in order to determine whether pre-commit-checks should be
             applied or not.
+        project_name: The name of the project (same as the attribute
+            in updates.emails.EmailInfo).
     """
     debug("check_file (filename=`%s', sha1=%s)" % (filename, sha1), level=3)
 
@@ -36,7 +38,7 @@ def check_file(filename, sha1, commit_rev):
         syslog('Pre-commit checks disabled for %(rev)s on %(repo)s'
                ' (%(file)s) by repo attribute'
                % {'rev' : sha1,
-                  'repo' : get_module_name(),
+                  'repo' : project_name,
                   'file' : filename,
                  })
         return
@@ -62,7 +64,7 @@ def check_file(filename, sha1, commit_rev):
     # to be checked as the first argument. Not sure why, but that does
     # not really apply in our context. Use `trunk/<module>/<path>' to
     # work around the issue.
-    cvs_check_args = ['trunk/%s/%s' % (get_module_name(), filename),
+    cvs_check_args = ['trunk/%s/%s' % (project_name, filename),
                       tmp_filename]
 
     try:
@@ -247,7 +249,7 @@ def check_revision_history(rev):
     check_missing_ticket_number(rev, raw_body)
 
 
-def check_commit(old_rev, new_rev):
+def check_commit(old_rev, new_rev, project_name):
     """Call check_file for every file changed between old_rev and new_rev.
 
     Raise InvalidUpdate if one or more style violation are detected.
@@ -258,6 +260,8 @@ def check_commit(old_rev, new_rev):
             the new commit.  May be None, in which case all files
             in new_rev will be checked.
         new_rev: The commit to be checked.
+        project_name: The name of the project (same as the attribute
+            in updates.emails.EmailInfo).
     """
     debug('check_commit(old_rev=%s, new_rev=%s)' % (old_rev, new_rev))
 
@@ -287,4 +291,4 @@ def check_commit(old_rev, new_rev):
             # This is why we did not tell the `git diff-tree' command
             # above to detect renames, and why we do not have a special
             # branch for status values starting with `R'.
-            check_file(filename, new_sha1, new_rev)
+            check_file(filename, new_sha1, new_rev, project_name)

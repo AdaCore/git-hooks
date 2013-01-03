@@ -44,6 +44,28 @@ def get_attribute(filename, attr_name):
     return attr_info[len(attr_info_prefix):]
 
 
+def cached_file_exists(commit_rev, filename):
+    """A wrapper around git.file_exists but with a cache...
+
+    ... to avoid repetitive calls to git.
+
+    PARAMETERS
+        commit_rev: Same as git.file_exists.
+        filename: Same as git.file_exists.
+    """
+    # Implement the cache as an attribute of this function,
+    # where the key is a tuple (commit_rev, filename), and
+    # the value the result of the query.
+    if 'cache' not in cached_file_exists.__dict__:
+        # First time call, initialize the attribute.
+        cached_file_exists.cache = {}
+
+    key = (commit_rev, filename)
+    if key not in cached_file_exists.cache:
+        cached_file_exists.cache[key] = file_exists(commit_rev, filename)
+    return cached_file_exists.cache[key]
+
+
 def git_attribute(commit_rev, filename, attr_name):
     """Return filename's attribute value at commit_rev.
 
@@ -82,7 +104,7 @@ def git_attribute(commit_rev, filename, attr_name):
         path = dirname(path)
         gitattributes_file = os.path.join(path, '.gitattributes')
 
-        if file_exists(commit_rev, gitattributes_file):
+        if cached_file_exists(commit_rev, gitattributes_file):
             # Get the .gitattributes files in that directory, and save it
             # as GIT_DIR/info/attributes, and then get `git check-attr'
             # to read it for us.

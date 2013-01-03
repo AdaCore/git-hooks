@@ -17,13 +17,14 @@ It previously pointed to:
 
  %(old_commit_oneline)s"""
 
-def reject_retired_branch_update(ref_name, short_ref_name):
+def reject_retired_branch_update(short_ref_name, pre_update_refs):
     """Raise InvalidUpdate if trying to update a retired branch.
 
     PARAMETERS:
-        ref_name: The name of the branch to be updated.
         short_ref_name: The reference's short name (see short_ref_name
             attribute in class AbstractUpdate).
+        pre_update_refs: See the pre_update_refs attribute in class
+            AbstractUpdate).
 
     REMARKS
         By convention, retiring a branch means "moving" it to the
@@ -41,13 +42,13 @@ def reject_retired_branch_update(ref_name, short_ref_name):
         return
 
     retired_short_ref_name = 'retired/%s' % short_ref_name
-    if git_show_ref('refs/heads/%s' % retired_short_ref_name) is not None:
+    if 'refs/heads/%s' % retired_short_ref_name in pre_update_refs.refs:
         raise InvalidUpdate(
             "Updates to the %s branch are no longer allowed, because"
               % short_ref_name,
             "this branch has been retired (and renamed into `%s')."
               % retired_short_ref_name)
-    if git_show_ref('refs/tags/%s' % retired_short_ref_name) is not None:
+    if 'refs/tags/%s' % retired_short_ref_name in pre_update_refs.refs:
         raise InvalidUpdate(
             "Updates to the %s branch are no longer allowed, because"
               % short_ref_name,
@@ -64,7 +65,8 @@ class BranchUpdate(AbstractUpdate):
 
     def validate_ref_update(self):
         """See AbstractUpdate.validate_ref_update."""
-        reject_retired_branch_update(self.ref_name, self.short_ref_name)
+        reject_retired_branch_update(self.short_ref_name,
+                                     self.pre_update_refs)
 
         # Check that this is either a fast-forward update, or else that
         # forced-updates are allowed for that branch.  If old_rev is

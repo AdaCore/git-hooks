@@ -197,7 +197,7 @@ def commit_rev(rev):
     PARAMETERS
         rev: A revision.
     """
-    return git.rev_list(rev, _split_lines=True)[0]
+    return git.rev_list('-n1', rev)
 
 
 def commit_oneline(rev):

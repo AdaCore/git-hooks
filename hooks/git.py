@@ -356,6 +356,6 @@ def commit_subject(rev):
     PARAMETERS
         rev: A commit revision.
     """
-    info = git.rev_list(rev, oneline=True, _split_lines=True)[0]
+    info = git.rev_list(rev, max_count='1', oneline=True)
     _, subject = info.split(None, 1)
     return subject

@@ -120,6 +120,35 @@ def ensure_empty_line_after_subject(rev, raw_rh):
         raise InvalidUpdate(*info)
 
 
+def reject_lines_too_long(rev, raw_rh):
+    """Raise InvalidUpdate if raw_rh contains a line that's too long.
+
+    PARAMETERS
+        rev: The revision of the commit being checked.
+        raw_rh: A list of lines corresponding to the raw revision
+            history (as opposed to the revision history as usually
+            displayed by git where the subject lines are wrapped).
+            See --pretty format option "%B" for more details.
+    """
+    # The maximum line length.
+    #
+    # We want to restrict the maximum line length to the usual
+    # 80 characters.  But git has a tendency to indent the RH
+    # with 4 spaces, so we set the limit to 76.
+    MAX_LINE_LENGTH = 76
+
+    for line in raw_rh:
+        if len(line) > MAX_LINE_LENGTH:
+            raise InvalidUpdate(
+                'Invalid revision history for commit %s:' % rev,
+                '',
+                'The following line in the revision history is too long',
+                '(%d characters, when the maximum is %d characters):'
+                    % (len(line), MAX_LINE_LENGTH),
+                '',
+                '>>> %s' % line)
+
+
 def reject_unedited_merge_commit(rev, raw_rh):
     """Raise InvalidUpdate if raw_rh looks like an unedited merge commit's RH.
 
@@ -244,6 +273,7 @@ def check_revision_history(rev):
     raw_body = git.log(rev, max_count='1', pretty='format:%B',
                        _split_lines=True)
     ensure_empty_line_after_subject(rev, raw_body)
+    reject_lines_too_long(rev, raw_body)
     reject_unedited_merge_commit(rev, raw_body)
     reject_merge_conflict_section(rev, raw_body)
     check_missing_ticket_number(rev, raw_body)

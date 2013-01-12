@@ -316,6 +316,9 @@ def git_show_ref(*args):
     The key of the dictionary is the reference name, and the value
     is a string containing the reference's rev (SHA1).
 
+    This function assumes that all arguments are valid, and
+    the usual CalledProcessError will be raised if not.
+
     PARAMETERS
         *args: Each argument is passed to the "git show-ref"
             as a pattern.
@@ -323,15 +326,12 @@ def git_show_ref(*args):
     RETURN VALUE
         A dictionary of references that matched the given patterns.
     """
-    try:
-        matching_refs = git.show_ref(*args, _split_lines=True)
-        result = {}
-        for ref_info in matching_refs:
-            rev, ref = ref_info.split(None, 2)
-            result[ref] = rev
-        return result
-    except CalledProcessError:
-        return None
+    matching_refs = git.show_ref(*args, _split_lines=True)
+    result = {}
+    for ref_info in matching_refs:
+        rev, ref = ref_info.split(None, 2)
+        result[ref] = rev
+    return result
 
 
 def commit_parents(rev):

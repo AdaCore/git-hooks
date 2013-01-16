@@ -1,4 +1,6 @@
 from support import *
+import os
+import stat
 
 class TestRun(TestCase):
     def test_push_commit_on_master(self):
@@ -71,6 +73,11 @@ To ../bare/repo.git
 
         self.assertTrue(p.status == 0, p.image)
         self.assertRunOutputEqual(p, expected_out)
+
+        # The hooks should have copied the repository's .gitattribute
+        # file into the bare repository.  Verify that is has the
+        # necessary file permissions.
+        self.assertInfoAttributeFilePermissions()
 
 
 if __name__ == '__main__':

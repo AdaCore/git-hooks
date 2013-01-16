@@ -110,6 +110,9 @@ def git_attribute(commit_rev, filename, attr_name):
             # to read it for us.
             git.show('%s:%s' % (commit_rev, gitattributes_file),
                      _outfile=BARE_REPO_ATTRIBUTES_FILE)
+            # The file needs to be group-writable, because the next
+            # user doing a push might be different.
+            os.chmod(BARE_REPO_ATTRIBUTES_FILE, 0664)
             attr_value = get_attribute(filename, attr_name)
 
             # If this .gitattribute file provided us with an attribute
@@ -122,6 +125,9 @@ def git_attribute(commit_rev, filename, attr_name):
     # file.
     if attr_value == UNSPECIFIED_ATTR and isfile(DEFAULT_ATTRIBUTES_FILE):
         copy(DEFAULT_ATTRIBUTES_FILE, BARE_REPO_ATTRIBUTES_FILE)
+        # The file needs to be group-writable, because the next user
+        # doing a push might be different.
+        os.chmod(BARE_REPO_ATTRIBUTES_FILE, 0664)
         attr_value = get_attribute(filename, attr_name)
 
     return attr_value

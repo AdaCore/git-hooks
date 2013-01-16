@@ -107,6 +107,16 @@ class TestCase(unittest.TestCase):
         """
         self.assertEqual(expected_out, r.cmd_out, r.diff(expected_out))
 
+    def assertInfoAttributeFilePermissions(self):
+        """Verify the file permissions of the bare repo's info/attribute file.
+        """
+        # What we really care about is that it is user and group
+        # writable, in order to a user to overwrite the file installed
+        # by another user during an earlier push.
+        st = os.stat('%s/bare/repo.git/info/attributes' % TEST_DIR)
+        self.assertNotEqual(st.st_mode & stat.S_IWUSR, 0)
+        self.assertNotEqual(st.st_mode & stat.S_IWGRP, 0)
+
 
 def runtests():
     """Call unittest.main.

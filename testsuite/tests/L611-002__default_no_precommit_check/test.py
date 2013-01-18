@@ -71,11 +71,6 @@ To ../bare/repo.git
         self.assertTrue(p.status == 0, p.image)
         self.assertRunOutputEqual(p, expected_out)
 
-        # The hooks should have copied the bare repository's
-        # default_attributes.  Verify that it has the necessary
-        # file permissions.
-        self.assertInfoAttributeFilePermissions()
-
 
 if __name__ == '__main__':
     runtests()

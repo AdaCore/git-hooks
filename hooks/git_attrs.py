@@ -99,6 +99,12 @@ def git_attribute(commit_rev, filename, attr_name):
     path = filename
     attr_value = UNSPECIFIED_ATTR
 
+    # First, delete any old BARE_REPO_ATTRIBUTES_FILE left from
+    # the previous push.  Otherwise, it causes problems if owned
+    # by a different user.
+    if os.path.exists(BARE_REPO_ATTRIBUTES_FILE):
+        os.remove(BARE_REPO_ATTRIBUTES_FILE)
+
     keep_going = True
     while path:
         path = dirname(path)

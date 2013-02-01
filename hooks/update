@@ -29,7 +29,8 @@ export PATH=/gnatmail/local/gnatpython/bin:$PATH
 
 # Similarly, update the PATH and LD_LIBRARY_PATH to include the location
 # where cvs_check is installed.
-for cvs_check_dir in /svn/Dev/hooks /usr/local/svn-hooks; do
+for cvs_check_dir in /svn/Dev/hooks /usr/local/svn-hooks \
+   /jouy.a/web/services/gnos/bin; do
   if [ -d $cvs_check_dir ]; then
     export PATH=$cvs_check_dir:$PATH
     export LD_LIBRARY_PATH=$cvs_check_dir/cvs_check.libs:$LD_LIBRARY_PATH

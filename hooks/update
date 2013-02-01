@@ -16,10 +16,10 @@
 # sample "update" script provided by git.
 
 if [ -z "$GIT_DIR" ]; then
-        echo "Don't run this script from the command line." >&2
-        echo " (if you want, you could supply GIT_DIR then run" >&2
-        echo "  $0 <ref> <oldrev> <newrev>)" >&2
-        exit 1
+  echo "Don't run this script from the command line." >&2
+  echo " (if you want, you could supply GIT_DIR then run" >&2
+  echo "  $0 <ref> <oldrev> <newrev>)" >&2
+  exit 1
 fi
 
 # The following is AdaCore-specific: It allows us to make sure that

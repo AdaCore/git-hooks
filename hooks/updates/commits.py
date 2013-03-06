@@ -38,12 +38,12 @@ def commit_info_list(*args):
         Same as in the "git rev-list" command.
     """
     # In the following call to "git.rev_list", we list the --oneline
-    # and --no-abbrev-commit arguments explicitly instead of using
+    # and --no-abbrev arguments explicitly instead of using
     # the usual named arguments, because the order between named
     # arguments is not guaranteed to be preserved.  In this case,
-    # the order between the oneline and no-abbrev-commit switches
+    # the order between the oneline and no-abbrev switches
     # is very important to make sure we get non-abbreviated commit revs.
-    all_revs = git.rev_list('--oneline', '--no-abbrev-commit', *args,
+    all_revs = git.rev_list('--oneline', '--no-abbrev', *args,
                             _split_lines=True, reverse=True)
 
     result = []

@@ -91,7 +91,9 @@ def initialize_git_config_map():
     global __git_config_map
 
     # Get the currently defined config values, all in one go.
-    all_configs = git.config('-l', _split_lines=True)
+    # Use "--file config" to make sure that we only parse the repository's
+    # config file. Otherwise, git also parses the user's config file.
+    all_configs = git.config('-l', '--file', 'config', _split_lines=True)
     all_configs_map = dict([config.split('=', 1) for config in all_configs])
 
     # Populate the __git_config_map dictionary...

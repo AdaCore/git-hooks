@@ -110,7 +110,7 @@ def ensure_empty_line_after_subject(rev, raw_rh):
 
     if not raw_rh[1].strip() == '':
         info = ['Invalid revision history for commit %s:' % rev,
-                'The first two lines should be the subject of the commit,',
+                'The first line should be the subject of the commit,',
                 'followed by an empty line.',
                 '',
                 'Below are the first few lines of the revision history:'] \

@@ -1,0 +1,9 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+        # No RH style checking on any branch...
+        no-rh-style-checks = refs/heads/.*

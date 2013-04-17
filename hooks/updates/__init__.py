@@ -220,15 +220,25 @@ class AbstractUpdate(object):
             # There are no new commits, so nothing further to check.
             return
 
-        # Perform the revision-history of all new commits.
+        # Determine whether we should be doing RH style checking...
+        do_rh_style_checks = True
+        for exp in git_config('hooks.no-rh-style-checks'):
+            exp = exp.strip()
+            if re.match(exp, self.ref_name):
+                do_rh_style_checks = False
+
+        # Perform the revision-history of all new commits, unless
+        # specifically disabled by configuration.
+        #
         # Done separately from the rest of the pre-commit checks,
         # which check the files changed by the commits, because of
         # the case where hooks.combined-style-checking is true;
         # we do not want to forget checking the revision history
         # of some of the commits.
-        for commit in added:
-            if not commit.pre_existing_p:
-                check_revision_history(commit.rev)
+        if do_rh_style_checks:
+            for commit in added:
+                if not commit.pre_existing_p:
+                    check_revision_history(commit.rev)
 
         if git_config('hooks.combined-style-checking'):
             # This project prefers to perform the style check on

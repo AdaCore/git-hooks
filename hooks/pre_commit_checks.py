@@ -269,9 +269,14 @@ def check_revision_history(rev):
     PARAMETERS
         rev: The commit to be checked.
     """
-    # Various checks on the revision history...
     raw_body = git.log(rev, max_count='1', pretty='format:%B',
                        _split_lines=True)
+
+    for line in raw_body:
+        if '(no-rh-check)' in line:
+            return
+
+    # Various checks on the revision history...
     ensure_empty_line_after_subject(rev, raw_body)
     reject_lines_too_long(rev, raw_body)
     reject_unedited_merge_commit(rev, raw_body)

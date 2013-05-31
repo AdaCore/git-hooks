@@ -284,6 +284,42 @@ def check_revision_history(rev):
     check_missing_ticket_number(rev, raw_body)
 
 
+def check_filename_collisions(rev):
+    """raise InvalidUpdate if the name of two files only differ in casing.
+
+    PARAMETERS
+        rev: The commit to be checked.
+    """
+    all_files = git.ls_tree('--full-tree', '--name-only', '-r', rev,
+                            _split_lines=True)
+    filename_map = {}
+    for filename in all_files:
+        key = filename.lower()
+        if key not in filename_map:
+            filename_map[key] = [filename]
+        else:
+            filename_map[key].append(filename)
+    collisions = [filename_map[key] for key in filename_map.keys()
+                  if len(filename_map[key]) > 1]
+    if collisions:
+        raw_body = git.log(rev, max_count='1', pretty='format:%B',
+                           _split_lines=True)
+        info = [
+            'The following filename collisions have been detected.',
+            'These collisions happen when the name of two or more files',
+            'differ in casing only (Eg: "hello.txt" and "hello.txt").',
+            'Please re-do your commit, chosing names that do not collide.',
+            '',
+            '    Commit: %s' % rev,
+            '    Subject: %s' % raw_body[0],
+            '',
+            'The matching files are:']
+        for matching_names in collisions:
+            info.append('') # Empty line to separate each group...
+            info += ['    %s' % filename for filename in matching_names]
+        raise InvalidUpdate(*info)
+
+
 def check_commit(old_rev, new_rev, project_name):
     """Call check_file for every file changed between old_rev and new_rev.
 

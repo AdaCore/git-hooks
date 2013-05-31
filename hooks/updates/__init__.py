@@ -7,7 +7,8 @@ from git import (git, get_object_type, is_null_rev, commit_parents,
                  commit_rev)
 from os import environ
 from os.path import expanduser, isfile, getmtime
-from pre_commit_checks import check_revision_history, check_commit
+from pre_commit_checks import (check_revision_history, check_commit,
+                               check_filename_collisions)
 import re
 from syslog import syslog
 import time
@@ -239,6 +240,15 @@ class AbstractUpdate(object):
             for commit in added:
                 if not commit.pre_existing_p:
                     check_revision_history(commit.rev)
+
+        # Perform the filename-collision checks.  These collisions
+        # can cause a lot of confusion and fustration to the users,
+        # so do not provide the option of doing the check on the
+        # final commit only (following hooks.combined-style-checking).
+        # Do it on all new commits.
+        for commit in added:
+            if not commit.pre_existing_p:
+                check_filename_collisions(commit.rev)
 
         if git_config('hooks.combined-style-checking'):
             # This project prefers to perform the style check on

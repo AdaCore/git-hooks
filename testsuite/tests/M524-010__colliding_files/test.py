@@ -12,7 +12,7 @@ class TestRun(TestCase):
         expected_out = """\
 remote: *** The following filename collisions have been detected.
 remote: *** These collisions happen when the name of two or more files
-remote: *** differ in casing only (Eg: "hello.txt" and "hello.txt").
+remote: *** differ in casing only (Eg: "hello.txt" and "Hello.txt").
 remote: *** Please re-do your commit, chosing names that do not collide.
 remote: ***
 remote: ***     Commit: 2cb0ac93cfb4ac44db4d24973d0f13e087900cb4
@@ -41,7 +41,7 @@ error: failed to push some refs to '../bare/repo.git'
         expected_out = """\
 remote: *** The following filename collisions have been detected.
 remote: *** These collisions happen when the name of two or more files
-remote: *** differ in casing only (Eg: "hello.txt" and "hello.txt").
+remote: *** differ in casing only (Eg: "hello.txt" and "Hello.txt").
 remote: *** Please re-do your commit, chosing names that do not collide.
 remote: ***
 remote: ***     Commit: 8666d4ae4d66cff8c036db8b75ae26dd3bf1df14

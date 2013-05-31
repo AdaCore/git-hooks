@@ -307,7 +307,7 @@ def check_filename_collisions(rev):
         info = [
             'The following filename collisions have been detected.',
             'These collisions happen when the name of two or more files',
-            'differ in casing only (Eg: "hello.txt" and "hello.txt").',
+            'differ in casing only (Eg: "hello.txt" and "Hello.txt").',
             'Please re-do your commit, chosing names that do not collide.',
             '',
             '    Commit: %s' % rev,

@@ -8,19 +8,19 @@ from type_conversions import to_type
 #       + 'default': The default value for this config option.
 
 GIT_CONFIG_OPTS = \
-    {'hooks.allow-delete-tag':         {'default': False,  'type': bool},
-     'hooks.allow-non-fast-forward':   {'default': '',     'type': tuple},
-     'hooks.allow-lightweight-tag':    {'default': False,  'type': bool},
-     'hooks.combined-style-checking':  {'default': False,  'type': bool},
-     'hooks.debug-level':              {'default': 0,      'type': int},
-     'hooks.from-domain':              {'default': None},
-     'hooks.mailinglist':              {'default': None},
-     'hooks.max-commit-emails':        {'default': 100,    'type': int},
-     'hooks.max-email-diff-size':      {'default': 100000, 'type': int},
-     'hooks.no-emails':                {'default': '',     'type': tuple},
-     'hooks.no-precommit-check':       {'default': '',     'type': tuple},
-     'hooks.no-rh-style-checks':       {'default': '',     'type': tuple},
-     'hooks.tn-required':              {'default': False,  'type': bool},
+    {'hooks.allow-delete-tag':            {'default': False,  'type': bool},
+     'hooks.allow-non-fast-forward':      {'default': '',     'type': tuple},
+     'hooks.allow-lightweight-tag':       {'default': False,  'type': bool},
+     'hooks.combined-style-checking':     {'default': False,  'type': bool},
+     'hooks.debug-level':                 {'default': 0,      'type': int},
+     'hooks.from-domain':                 {'default': None},
+     'hooks.mailinglist':                 {'default': None},
+     'hooks.max-commit-emails':           {'default': 100,    'type': int},
+     'hooks.max-email-diff-size':         {'default': 100000, 'type': int},
+     'hooks.no-emails':                   {'default': '',     'type': tuple},
+     'hooks.no-precommit-check':          {'default': '',     'type': tuple},
+     'hooks.no-rh-style-checks':          {'default': '',     'type': tuple},
+     'hooks.tn-required':                 {'default': False,  'type': bool},
 
      # The following options are for testing purposes only, and should
      # never be used in an operational repository.

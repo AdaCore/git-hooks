@@ -170,6 +170,11 @@ def reject_unedited_merge_commit(rev, raw_rh):
             displayed by git where the subject lines are wrapped).
             See --pretty format option "%B" for more details.
     """
+    if git_config('hooks.disable-merge-commit-checks'):
+        # The users of this repository do not want this safety guard.
+        # So do not perform this check.
+        return
+
     # We have seen cases (with git version 1.7.10.4), where the default
     # revision history for a merge commit is just: "Merge branch 'xxx'.".
     RH_PATTERN = "Merge branch '.*'"

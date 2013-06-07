@@ -10,8 +10,9 @@ class TestRun(TestCase):
         # commit with one file being modified.
         p = Run('git push origin master'.split())
         expected_out = """\
+remote: *** cvs_check: `trunk/repo/README'
 remote: *** cvs_check: `trunk/repo/a'
-remote: *** cvs_check: `trunk/repo/b'
+remote: *** cvs_check: `trunk/repo/c'
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -51,7 +52,7 @@ remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Merge topic branch fsf-head.
 remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/master
-remote: X-Git-Oldrev: b4bfa84ef414162de60ff93005c5528f68b4c755
+remote: X-Git-Oldrev: 33e7556e39b638aa07f769bd894e75ed1af490dc
 remote: X-Git-Newrev: ffb05b4a606fdb7b2919b209c725fe3b71880c00
 remote:
 remote: commit ffb05b4a606fdb7b2919b209c725fe3b71880c00

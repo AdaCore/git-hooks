@@ -253,9 +253,15 @@ class AbstractUpdate(object):
         if git_config('hooks.combined-style-checking'):
             # This project prefers to perform the style check on
             # the cumulated diff, rather than commit-per-commit.
+            # Behave as if the update only added one commit (new_rev),
+            # with a single parent being old_rev.  If old_rev is nul
+            # (branch creation), then use the first parent of the oldest
+            # added commit.
             debug('(combined style checking)')
             combined_commit = added[-1]
-            combined_commit.base_rev = added[0].base_rev
+            combined_commit.base_rev = (
+                added[0].base_rev if is_null_rev(self.old_rev)
+                else self.old_rev)
             added = [combined_commit,]
         else:
             debug('(commit-per-commit style checking)')
@@ -442,8 +448,39 @@ class AbstractUpdate(object):
         else:
             commit_list = commit_info_list(self.new_rev)
             base_rev = None
-        if commit_list:
-            commit_list[0].base_rev = base_rev
+
+        # Make sure we use each commits's first parent as the base
+        # commit, rather than the revision of the previous commit
+        # in the commit_list.  This is important for merge commits,
+        # or commits imported by merges.
+        #
+        # Consider for instance the following scenario...
+        #
+        #                    <-- origin/master
+        #                   /
+        #    C1 <-- C2 <-- C3 <-- M4 <-- master
+        #      \                  /
+        #        <-- B1 <-- B2 <-+
+        #
+        # ... where the user merged his changes B1 & B2 into
+        # his master branch (as commit M4), and then tries
+        # to push this merge.
+        #
+        # There are 3 new commits in this case to be checked,
+        # which are B1, B2, and M4, with C3 being the update's
+        # base rev.
+        #
+        # If not careful, we would be checking B1 against C3,
+        # rather than C1, which would cause these scripts
+        # to think that all the files modified by C2 and C3
+        # have been modified by B1, and thus must be checked.
+        #
+        # Similarly, we would be checking M4 against B2,
+        # whereas it makes more sense in that case to be
+        # checking it against C3.
+        for commit in commit_list:
+            parents = commit_parents(commit.rev)
+            commit.base_rev = parents[0] if parents is not None else None
 
         # Iterate over every commit, and set their pre_existing_p attribute.
         for commit in commit_list:

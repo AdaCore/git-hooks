@@ -61,6 +61,9 @@ remote: Date: Thu Jun 28 11:50:36 2012 -0700
 remote:
 remote:     Tag a commit that makes more sense.
 remote:
+remote: Diff:
+remote:
+remote:
 remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:

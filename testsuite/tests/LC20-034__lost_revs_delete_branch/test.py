@@ -15,7 +15,6 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
-remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Deleted branch topic/experiment1
 remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/topic/experiment1

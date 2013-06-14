@@ -392,6 +392,16 @@ class AbstractUpdate(object):
             self.__lost_commits = self.__get_lost_commits()
         return self.__lost_commits
 
+    @property
+    def send_cover_email_to_filer(self):
+        """True iff the cover email should be sent to FILER_EMAIL.
+
+        By default, the cover email is just an informational email
+        which is not specific to any particular TN, and thus should
+        not be filed. So return False by default.
+        """
+        return False
+
     def __get_added_commits(self):
         """Return a list of CommitInfo objects added by our update.
 
@@ -590,7 +600,8 @@ class AbstractUpdate(object):
         if update_email_contents is not None:
             (subject, body) = update_email_contents
             update_email = Email(self.email_info, subject, body,
-                                 self.ref_name, self.old_rev, self.new_rev)
+                                 self.ref_name, self.old_rev, self.new_rev,
+                                 send_to_filer=self.send_cover_email_to_filer)
             update_email.enqueue()
 
     def __email_new_commits(self):

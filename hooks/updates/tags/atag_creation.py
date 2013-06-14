@@ -23,6 +23,17 @@ class AnnotatedTagCreation(AnnotatedTagUpdate):
         some of the abstract methods would be identical.  So inherit
         from AnnotatedTagUpdate.
     """
+    @property
+    def send_cover_email_to_filer(self):
+        """See AbstractUpdate.send_cover_email_to_filer.
+
+        For annotated tags, we want to file the cover email, because
+        the email contains a message which may include one or more TNs.
+        We want that message filed, as no other email is going to
+        contain that information.
+        """
+        return True
+
     def get_update_email_contents(self):
         """See AbstractUpdate.get_update_email_contents."""
         subject = '[%s] Created tag %s' % (self.email_info.project_name,
@@ -39,6 +50,11 @@ class AnnotatedTagCreation(AnnotatedTagUpdate):
         body = ATAG_CREATION_EMAIL_BODY_TEMPLATE % tag_info
         if tag_summary_of_changes_needed(self.added_commits,
                                          self.lost_commits):
+            # Before adding the summary of changes in the email, add
+            # a "Diff:" marker, to avoid having this summary trigger
+            # some unexpected filing due to some commits having a TN
+            # in their subject.
+            body += '\n\nDiff:\n'
             body += self.summary_of_changes()
 
         return (subject, body)

@@ -137,12 +137,16 @@ class Email(object):
         email_subject: The email's subject.
         email_body: The email's body, possibly including a diff
             at the end (see __init__ method).
+        send_to_filer: A boolean, True if the email should be sent to
+            FILER_EMAIL, False otherwise.  The default should always
+            be to copy FILER_EMAIL, unless proven otherwise.
         ref_name: See AbstractUpdate.ref_name attribute.
         old_rev: See AbstractUpdate.old_rev attribute.
         new_rev: See AbstractUpdate.new_rev attribute.
     """
     def __init__(self, email_info, email_subject, email_body,
-                 ref_name, old_rev, new_rev, diff=None):
+                 ref_name, old_rev, new_rev, diff=None,
+                 send_to_filer=True):
         """The constructor.
 
         PARAMETERS
@@ -155,6 +159,7 @@ class Email(object):
             diff: A diff string, if applicable.  Otherwise None.
                 When not None, the diff is appended at the end
                 of the email's body - truncated if necessary.
+            send_to_filer: Same as the attribute.
         """
         if diff is not None:
             # Append the "Diff:" marker to email_body, followed by
@@ -171,6 +176,7 @@ class Email(object):
         self.email_info = email_info
         self.email_subject = email_subject
         self.email_body = email_body
+        self.send_to_filer = send_to_filer
         self.ref_name = ref_name
         self.old_rev = old_rev
         self.new_rev = new_rev
@@ -196,7 +202,7 @@ class Email(object):
         # Create the email's header.
         e_msg['From'] = self.email_info.email_from
         e_msg['To'] = self.email_info.email_to
-        if git_config('hooks.bcc-file-ci'):
+        if self.send_to_filer and git_config('hooks.bcc-file-ci'):
             e_msg['Bcc'] = FILER_EMAIL
         e_msg['Subject'] = self.email_subject
         e_msg['X-Act-Checkin'] = self.email_info.project_name

@@ -18,7 +18,6 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
-remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] (3 commits) Merge topic branch fsf-head.
 remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/master

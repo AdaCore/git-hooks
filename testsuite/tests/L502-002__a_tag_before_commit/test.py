@@ -53,6 +53,9 @@ remote:     Tag version 0.1 alpha.
 remote:
 remote:     First (alpha) release of this project.
 remote:
+remote: Diff:
+remote:
+remote:
 remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:
@@ -132,7 +135,6 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
-remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Minor modifications.
 remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/master

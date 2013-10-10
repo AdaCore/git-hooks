@@ -89,8 +89,8 @@ remote:     Added bar.c, and updated foo.
 remote:
 remote: Diff:
 remote: ---
-remote:  bar.c |    2 ++
-remote:  foo   |    1 +
+remote:  bar.c | 2 ++
+remote:  foo   | 1 +
 remote:  2 files changed, 3 insertions(+)
 remote:
 remote: diff --git a/bar.c b/bar.c

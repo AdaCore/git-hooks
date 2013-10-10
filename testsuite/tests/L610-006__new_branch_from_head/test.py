@@ -54,8 +54,8 @@ remote:     Fixes a couple of critical issues.
 remote:
 remote: Diff:
 remote: ---
-remote:  a |    3 ++-
-remote:  d |    1 +
+remote:  a | 3 ++-
+remote:  d | 1 +
 remote:  2 files changed, 3 insertions(+), 1 deletion(-)
 remote:
 remote: diff --git a/a b/a
@@ -98,8 +98,8 @@ remote:     Some additional information needed by this project.
 remote:
 remote: Diff:
 remote: ---
-remote:  a |    1 +
-remote:  b |    1 +
+remote:  a | 1 +
+remote:  b | 1 +
 remote:  2 files changed, 2 insertions(+)
 remote:
 remote: diff --git a/a b/a

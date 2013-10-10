@@ -77,7 +77,7 @@ remote:     12345678901234567890123456789012345678901234567890123456789012345678
 remote:
 remote: Diff:
 remote: ---
-remote:  a |    3 ++-
+remote:  a | 3 ++-
 remote:  1 file changed, 2 insertions(+), 1 deletion(-)
 remote:
 remote: diff --git a/a b/a

@@ -34,7 +34,7 @@ remote:     Thought about doing something else, but not really necessary.
 remote:
 remote: Diff:
 remote: ---
-remote:  a |    4 +++-
+remote:  a | 4 +++-
 remote:  1 file changed, 3 insertions(+), 1 deletion(-)
 remote:
 remote: diff --git a/a b/a

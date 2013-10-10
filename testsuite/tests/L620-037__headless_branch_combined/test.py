@@ -65,8 +65,8 @@ remote:     Initial commit.
 remote:
 remote: Diff:
 remote: ---
-remote:  that.txt |    1 +
-remote:  this.txt |    1 +
+remote:  that.txt | 1 +
+remote:  this.txt | 1 +
 remote:  2 files changed, 2 insertions(+)
 remote:
 remote: diff --git a/that.txt b/that.txt
@@ -104,8 +104,8 @@ remote:     Small update. Add file "there" as well.
 remote:
 remote: Diff:
 remote: ---
-remote:  that.txt |    2 +-
-remote:  there    |    1 +
+remote:  that.txt | 2 +-
+remote:  there    | 1 +
 remote:  2 files changed, 2 insertions(+), 1 deletion(-)
 remote:
 remote: diff --git a/that.txt b/that.txt
@@ -143,7 +143,7 @@ remote:     Forgot to update this.txt in the previous commit.
 remote:
 remote: Diff:
 remote: ---
-remote:  this.txt |    2 +-
+remote:  this.txt | 2 +-
 remote:  1 file changed, 1 insertion(+), 1 deletion(-)
 remote:
 remote: diff --git a/this.txt b/this.txt
@@ -210,8 +210,8 @@ remote:     Initial commit.
 remote:
 remote: Diff:
 remote: ---
-remote:  contents.txt |    1 +
-remote:  stuff        |    1 +
+remote:  contents.txt | 1 +
+remote:  stuff        | 1 +
 remote:  2 files changed, 2 insertions(+)
 remote:
 remote: diff --git a/contents.txt b/contents.txt

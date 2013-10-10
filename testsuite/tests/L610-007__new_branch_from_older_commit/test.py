@@ -50,7 +50,7 @@ remote:     Update file b.
 remote:
 remote: Diff:
 remote: ---
-remote:  b |    1 +
+remote:  b | 1 +
 remote:  1 file changed, 1 insertion(+)
 remote:
 remote: diff --git a/b b/b
@@ -85,9 +85,9 @@ remote:     Should be safe enough for the release branch.
 remote:
 remote: Diff:
 remote: ---
-remote:  a |    3 ++-
-remote:  c |    1 +
-remote:  d |    1 +
+remote:  a | 3 ++-
+remote:  c | 1 +
+remote:  d | 1 +
 remote:  3 files changed, 4 insertions(+), 1 deletion(-)
 remote:
 remote: diff --git a/a b/a

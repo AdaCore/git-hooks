@@ -135,7 +135,7 @@ remote:     Nothing else.
 remote:
 remote: Diff:
 remote:
-remote:  top |    1 +
+remote:  top | 1 +
 remote:  1 file changed, 1 insertion(+)
 remote:
 remote: diff --cc top

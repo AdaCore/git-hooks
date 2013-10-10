@@ -31,9 +31,9 @@ remote:     Add 3 files.
 remote:
 remote: Diff:
 remote: ---
-remote:  pck.adb   |    6 ++++++
-remote:  pck.ads   |    4 ++++
-remote:  types.ads |    3 +++
+remote:  pck.adb   | 6 ++++++
+remote:  pck.ads   | 4 ++++
+remote:  types.ads | 3 +++
 remote:  3 files changed, 13 insertions(+)
 remote:
 remote: diff --git a/pck.adb b/pck.adb

@@ -51,7 +51,7 @@ remote:     Thought about doing something else, but not really necessary.
 remote:
 remote: Diff:
 remote: ---
-remote:  a |    4 +++-
+remote:  a | 4 +++-
 remote:  1 file changed, 3 insertions(+), 1 deletion(-)
 remote:
 remote: diff --git a/a b/a
@@ -86,7 +86,7 @@ remote:     Remove second line.
 remote:
 remote: Diff:
 remote: ---
-remote:  a |    1 -
+remote:  a | 1 -
 remote:  1 file changed, 1 deletion(-)
 remote:
 remote: diff --git a/a b/a
@@ -119,7 +119,7 @@ remote:     Re-edit a.
 remote:
 remote: Diff:
 remote: ---
-remote:  a |    1 +
+remote:  a | 1 +
 remote:  1 file changed, 1 insertion(+)
 remote:
 remote: diff --git a/a b/a
@@ -162,7 +162,7 @@ remote:     Delete trailing empty line.
 remote:
 remote: Diff:
 remote: ---
-remote:  a |    1 -
+remote:  a | 1 -
 remote:  1 file changed, 1 deletion(-)
 remote:
 remote: diff --git a/a b/a

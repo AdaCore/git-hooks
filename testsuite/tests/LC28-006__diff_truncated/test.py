@@ -33,7 +33,7 @@ remote:     Added a lot of text to a, to triggger "diff truncated message".
 remote:
 remote: Diff:
 remote: ---
-remote:  a |   38 +++++++++++++++++++++++++++++++++++++-
+remote:  a | 38 +++++++++++++++++++++++++++++++++++++-
 remote:  1 file changed, 37 insertions(+), 1 deletion(-)
 remote:
 remote: diff --git a/a b/a
@@ -42,7 +42,7 @@ remote: --- a/a
 remote: +++ b/a
 remote: @@ -1,3 +1,39 @@
 remote:  Some file.
-remote: -Se[...]
+remote: -Seco[...]
 remote:
 remote: [diff truncated at 200 bytes]
 remote:

@@ -76,7 +76,7 @@ remote:     Put some contents in file `a'.
 remote:
 remote: Diff:
 remote: ---
-remote:  a |    1 +
+remote:  a | 1 +
 remote:  1 file changed, 1 insertion(+)
 remote:
 remote: diff --git a/a b/a

@@ -46,8 +46,8 @@ remote:     They need to be removed for our testing.
 remote:
 remote: Diff:
 remote: ---
-remote:  a.adb |    4 ----
-remote:  b.adb |    4 ----
+remote:  a.adb | 4 ----
+remote:  b.adb | 4 ----
 remote:  2 files changed, 8 deletions(-)
 remote:
 remote: diff --git a/a.adb b/a.adb

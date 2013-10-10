@@ -44,9 +44,9 @@ remote:     Update all files.
 remote:
 remote: Diff:
 remote: ---
-remote:  a |    1 +
-remote:  b |    2 ++
-remote:  c |    1 +
+remote:  a | 1 +
+remote:  b | 2 ++
+remote:  c | 1 +
 remote:  3 files changed, 4 insertions(+)
 remote:
 remote: diff --git a/a b/a

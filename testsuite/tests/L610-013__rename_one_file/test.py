@@ -47,7 +47,7 @@ remote:     Rename A into B.
 remote:
 remote: Diff:
 remote: ---
-remote:  a => b |    0
+remote:  a => b | 0
 remote:  1 file changed
 remote:
 remote: diff --git a/a b/b

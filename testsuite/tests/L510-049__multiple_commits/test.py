@@ -50,9 +50,9 @@ remote:     Minor modifications.
 remote:
 remote: Diff:
 remote: ---
-remote:  a |    2 +-
-remote:  b |    2 +-
-remote:  c |    1 -
+remote:  a | 2 +-
+remote:  b | 2 +-
+remote:  c | 1 -
 remote:  3 files changed, 2 insertions(+), 3 deletions(-)
 remote:
 remote: diff --git a/a b/a
@@ -100,8 +100,8 @@ remote:     1 modified file, 1 new file.
 remote:
 remote: Diff:
 remote: ---
-remote:  c |    1 +
-remote:  d |    1 +
+remote:  c | 1 +
+remote:  d | 1 +
 remote:  2 files changed, 2 insertions(+)
 remote:
 remote: diff --git a/c b/c
@@ -139,8 +139,8 @@ remote:     Modify `c', delete `b'.
 remote:
 remote: Diff:
 remote: ---
-remote:  b |    3 ---
-remote:  c |    2 +-
+remote:  b | 3 ---
+remote:  c | 2 +-
 remote:  2 files changed, 1 insertion(+), 4 deletions(-)
 remote:
 remote: diff --git a/b b/b
@@ -181,7 +181,7 @@ remote:     Modify file `d' alone.
 remote:
 remote: Diff:
 remote: ---
-remote:  d |    1 +
+remote:  d | 1 +
 remote:  1 file changed, 1 insertion(+)
 remote:
 remote: diff --git a/d b/d

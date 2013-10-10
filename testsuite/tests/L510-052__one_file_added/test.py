@@ -29,7 +29,7 @@ remote:     Add single file pck.ads.
 remote:
 remote: Diff:
 remote: ---
-remote:  pck.ads |    3 +++
+remote:  pck.ads | 3 +++
 remote:  1 file changed, 3 insertions(+)
 remote:
 remote: diff --git a/pck.ads b/pck.ads

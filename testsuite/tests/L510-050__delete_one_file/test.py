@@ -44,7 +44,7 @@ remote:     Some explanations of why that is.
 remote:
 remote: Diff:
 remote: ---
-remote:  foo.c |    4 ----
+remote:  foo.c | 4 ----
 remote:  1 file changed, 4 deletions(-)
 remote:
 remote: diff --git a/foo.c b/foo.c

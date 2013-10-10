@@ -69,9 +69,9 @@ remote:             * README: New file.
 remote:
 remote: Diff:
 remote:
-remote:  README |    4 ++++
-remote:  a      |    2 ++
-remote:  c      |    1 +
+remote:  README | 4 ++++
+remote:  a      | 2 ++
+remote:  c      | 1 +
 remote:  3 files changed, 7 insertions(+)
 remote:
 remote: diff --cc a

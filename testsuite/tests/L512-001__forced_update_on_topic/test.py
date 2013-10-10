@@ -32,8 +32,8 @@ remote:     Change a, and create b.
 remote:
 remote: Diff:
 remote: ---
-remote:  a |    2 +-
-remote:  b |    1 +
+remote:  a | 2 +-
+remote:  b | 1 +
 remote:  2 files changed, 2 insertions(+), 1 deletion(-)
 remote:
 remote: diff --git a/a b/a

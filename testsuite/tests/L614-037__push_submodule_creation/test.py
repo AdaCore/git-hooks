@@ -92,8 +92,8 @@ remote:     Add submodule subm
 remote:
 remote: Diff:
 remote: ---
-remote:  .gitmodules |    3 +++
-remote:  subm        |    1 +
+remote:  .gitmodules | 3 +++
+remote:  subm        | 1 +
 remote:  2 files changed, 4 insertions(+)
 remote:
 remote: diff --git a/.gitmodules b/.gitmodules

@@ -62,7 +62,7 @@ remote:     Implement foo.c:second.
 remote:
 remote: Diff:
 remote: ---
-remote:  foo.c |    1 +
+remote:  foo.c | 1 +
 remote:  1 file changed, 1 insertion(+)
 remote:
 remote: diff --git a/foo.c b/foo.c
@@ -97,7 +97,7 @@ remote:     Merge change from the 'topic' branch.
 remote:
 remote: Diff:
 remote:
-remote:  foo.c |    1 +
+remote:  foo.c | 1 +
 remote:  1 file changed, 1 insertion(+)
 To ../bare/repo.git
    128c438..7277e89  master -> master

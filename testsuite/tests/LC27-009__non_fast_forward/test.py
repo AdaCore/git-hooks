@@ -60,8 +60,8 @@ remote:     Minor modifications.
 remote:
 remote: Diff:
 remote: ---
-remote:  a |    2 +-
-remote:  c |    1 -
+remote:  a | 2 +-
+remote:  c | 1 -
 remote:  2 files changed, 1 insertion(+), 2 deletions(-)
 remote:
 remote: diff --git a/a b/a

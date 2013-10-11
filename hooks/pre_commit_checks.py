@@ -73,7 +73,7 @@ def check_file(filename, sha1, commit_rev, project_name):
     if 'GIT_HOOKS_STYLE_CHECKER' in os.environ:
         style_checker = os.environ['GIT_HOOKS_STYLE_CHECKER']
     else:
-        style_checker = 'cvs_check'
+        style_checker = git_config('hooks.style-checker')
 
     # ??? It appears that cvs_check, the official style-checker,
     # requires the SVN path of the file to be checked as the first

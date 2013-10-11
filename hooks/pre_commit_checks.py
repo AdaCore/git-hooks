@@ -62,7 +62,7 @@ def check_file(filename, sha1, commit_rev, project_name):
         os.makedirs(path_to_filename)
     git.show(sha1, _outfile="%s/%s" % (utils.scratch_dir, filename))
 
-    # Call cvs_check.
+    # Call the style-checker.
 
     # For testing purposes, provide a back-door allowing the user
     # to override the style-checking program to be used.  That way,
@@ -70,29 +70,30 @@ def check_file(filename, sha1, commit_rev, project_name):
     # and easily test all execution paths without having to maintain
     # some sources specifically designed to trigger the various
     # error conditions.
-    if 'GIT_HOOKS_CVS_CHECK' in os.environ:
-        cvs_check = os.environ['GIT_HOOKS_CVS_CHECK']
+    if 'GIT_HOOKS_STYLE_CHECKER' in os.environ:
+        style_checker = os.environ['GIT_HOOKS_STYLE_CHECKER']
     else:
-        cvs_check = 'cvs_check'
+        style_checker = 'cvs_check'
 
-    # ??? It appears that cvs_check requires the SVN path to the file
-    # to be checked as the first argument. Not sure why, but that does
-    # not really apply in our context. Use `trunk/<module>/<path>' to
-    # work around the issue.
-    cvs_check_args = ['trunk/%s/%s' % (project_name, filename),
-                      filename]
+    # ??? It appears that cvs_check, the official style-checker,
+    # requires the SVN path of the file to be checked as the first
+    # argument. Not sure why, but that does not really apply in
+    # our context. Use `trunk/<module>/<path>' to work around
+    # the issue.
+    style_checker_args = ['trunk/%s/%s' % (project_name, filename),
+                          filename]
 
     try:
-        # In order to allow cvs_check to be a script, we need to run it
-        # through a shell.  But when we do so, the Popen class no longer
-        # allows us to pass the arguments as a list.  In order to avoid
-        # problems with spaces or special characters, we quote the
+        # In order to allow the style-checker to be a script, we need to
+        # run it through a shell.  But when we do so, the Popen class no
+        # longer allows us to pass the arguments as a list.  In order to
+        # avoid problems with spaces or special characters, we quote the
         # arguments as needed.
-        quoted_args = [quote(arg) for arg in cvs_check_args]
-        out = check_output('%s %s' % (cvs_check, ' '.join(quoted_args)),
+        quoted_args = [quote(arg) for arg in style_checker_args]
+        out = check_output('%s %s' % (style_checker, ' '.join(quoted_args)),
                            shell=True, cwd=utils.scratch_dir, stderr=STDOUT)
 
-        # If we reach this point, it means that cvs_check returned
+        # If we reach this point, it means that the style-checker returned
         # zero (success). Print any output, it might be a non-fatal
         # warning.
         if out:

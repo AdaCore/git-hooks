@@ -39,7 +39,7 @@ class TestRun(TestCase):
 
         # For coverage purposes, we want to test the calling of
         # the style-check program via the regular method (where
-        # GIT_HOOKS_CVS_CHECK is not defined. Ideally, we would
+        # GIT_HOOKS_STYLE_CHECKER is not defined. Ideally, we would
         # still like to provide our own, and we try doing so by
         # updating PATH with the path to our own cvs_check script.
         # But this only works on machines where the cvs_check
@@ -48,11 +48,11 @@ class TestRun(TestCase):
         # at the start of the PATH.
         #
         # This means that, on machines with cvs_check installed,
-        # deleting GIT_HOOKS_CVS_CHECK will cause the real cvs_check
+        # deleting GIT_HOOKS_STYLE_CHECKER will cause the real cvs_check
         # to be called, whereas our fake cvs_check will be called
         # on all other machines. For matching purposes of the
         # expected output, both scripts must produce the same output.
-        del os.environ['GIT_HOOKS_CVS_CHECK']
+        del os.environ['GIT_HOOKS_STYLE_CHECKER']
         os.environ['PATH'] = TEST_DIR + ':' + os.environ['PATH']
 
         # And finally, try pushing that commit.

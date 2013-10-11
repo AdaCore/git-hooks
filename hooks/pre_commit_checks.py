@@ -44,13 +44,28 @@ def check_file(filename, sha1, commit_rev, project_name):
         return
 
     # Get a copy of the file and save it in our scratch dir.
-    tmp_filename = "%s/%s" % (utils.scratch_dir, os.path.basename(filename))
-    git.show(sha1, _outfile=tmp_filename)
+    # In order to allow us to call the style-checker using
+    # the full path (from the project's root directory) of
+    # the file being checked, we re-create the path to that
+    # filename, and then copy the file at that same path.
+    #
+    # Providing the path as part of the filename argument is useful,
+    # because it allows the messages printed by the style-checker
+    # to be unambiguous in the situation where the same project
+    # has multiple files sharing the same name. More generally,
+    # it can also be useful to quickly locate a file in the project
+    # when trying to make the needed corrections outlined by the
+    # style-checker.
+    path_to_filename = "%s/%s" % (utils.scratch_dir,
+                                  os.path.dirname(filename))
+    if not os.path.exists(path_to_filename):
+        os.makedirs(path_to_filename)
+    git.show(sha1, _outfile="%s/%s" % (utils.scratch_dir, filename))
 
     # Call cvs_check.
 
     # For testing purposes, provide a back-door allowing the user
-    # to override the precommit-check program to be used.  That way,
+    # to override the style-checking program to be used.  That way,
     # the testsuite has a way to control what the program returns,
     # and easily test all execution paths without having to maintain
     # some sources specifically designed to trigger the various
@@ -65,7 +80,7 @@ def check_file(filename, sha1, commit_rev, project_name):
     # not really apply in our context. Use `trunk/<module>/<path>' to
     # work around the issue.
     cvs_check_args = ['trunk/%s/%s' % (project_name, filename),
-                      tmp_filename]
+                      filename]
 
     try:
         # In order to allow cvs_check to be a script, we need to run it
@@ -75,7 +90,7 @@ def check_file(filename, sha1, commit_rev, project_name):
         # arguments as needed.
         quoted_args = [quote(arg) for arg in cvs_check_args]
         out = check_output('%s %s' % (cvs_check, ' '.join(quoted_args)),
-                           shell=True, stderr=STDOUT)
+                           shell=True, cwd=utils.scratch_dir, stderr=STDOUT)
 
         # If we reach this point, it means that cvs_check returned
         # zero (success). Print any output, it might be a non-fatal

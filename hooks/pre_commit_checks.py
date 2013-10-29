@@ -139,6 +139,8 @@ def ensure_empty_line_after_subject(rev, raw_rh):
 def reject_lines_too_long(rev, raw_rh):
     """Raise InvalidUpdate if raw_rh contains a line that's too long.
 
+    Does nothing if the project was configured to skip this check.
+
     PARAMETERS
         rev: The revision of the commit being checked.
         raw_rh: A list of lines corresponding to the raw revision
@@ -146,21 +148,20 @@ def reject_lines_too_long(rev, raw_rh):
             displayed by git where the subject lines are wrapped).
             See --pretty format option "%B" for more details.
     """
-    # The maximum line length.
-    #
-    # We want to restrict the maximum line length to the usual
-    # 80 characters.  But git has a tendency to indent the RH
-    # with 4 spaces, so we set the limit to 76.
-    MAX_LINE_LENGTH = 76
+    max_line_length = git_config('hooks.max-rh-line-length')
+    if max_line_length <= 0:
+        # A value of zero (or less) means that the project does not
+        # want this check to be applied.  Skip it.
+        return
 
     for line in raw_rh:
-        if len(line) > MAX_LINE_LENGTH:
+        if len(line) > max_line_length:
             raise InvalidUpdate(
                 'Invalid revision history for commit %s:' % rev,
                 '',
                 'The following line in the revision history is too long',
                 '(%d characters, when the maximum is %d characters):'
-                    % (len(line), MAX_LINE_LENGTH),
+                    % (len(line), max_line_length),
                 '',
                 '>>> %s' % line)
 

@@ -1,0 +1,15 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+
+        # No pre-commit-checks and no emails on third-party...
+        no-precommit-check = refs/heads/third-party
+        no-emails = refs/heads/third-party
+
+        # We want to disable RH line-length checks for this repository.
+        # This is done by setting max-rh-line-length to zero.
+        max-rh-line-length = 0

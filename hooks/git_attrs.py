@@ -106,10 +106,9 @@ def git_attribute(commit_rev, filename, attr_name):
         os.remove(BARE_REPO_ATTRIBUTES_FILE)
 
     # Also, if the directory where BARE_REPO_ATTRIBUTES_FILE is stored
-    # does not exist, create it now.  Git normally creates it for us
-    # when creating the repository, but gerrit (a code review tool)
-    # users have reported that some repositories have been missing it.
-    # Not sure why, but easy to handle.
+    # does not exist, create it now.  With git version 1.8.1.2, the
+    # directory is automatically created at repository creation. But
+    # with git version 1.7.10.4, that's not the case. Easy to handle.
     attributes_dir = dirname(BARE_REPO_ATTRIBUTES_FILE)
     if not os.path.exists(attributes_dir):
         os.makedirs(attributes_dir)

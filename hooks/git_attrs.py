@@ -105,6 +105,20 @@ def git_attribute(commit_rev, filename, attr_name):
     if os.path.exists(BARE_REPO_ATTRIBUTES_FILE):
         os.remove(BARE_REPO_ATTRIBUTES_FILE)
 
+    # Also, if the directory where BARE_REPO_ATTRIBUTES_FILE is stored
+    # does not exist, create it now.  Git normally creates it for us
+    # when creating the repository, but gerrit (a code review tool)
+    # users have reported that some repositories have been missing it.
+    # Not sure why, but easy to handle.
+    attributes_dir = dirname(BARE_REPO_ATTRIBUTES_FILE)
+    if not os.path.exists(attributes_dir):
+        os.makedirs(attributes_dir)
+        # Depending on how the repository is setup and the user's
+        # umask, the group-write bit might not be set.  Just force
+        # the permissions to be read-write-execute for both owner
+        # and group.
+        os.chmod(attributes_dir, 0775)
+
     keep_going = True
     while path:
         path = dirname(path)

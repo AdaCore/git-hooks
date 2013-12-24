@@ -13,7 +13,7 @@ class TestRun(TestCase):
         # Push "full-tag". This tag has a new value, different from
         # that is on the remote.  We should get an email notification,
         # and a warning about how bad it is to do that.
-        p = Run('git push origin full-tag'.split())
+        p = Run('git push --force origin full-tag'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/tags/full-tag, a69eaaba59ea6d7574a9c5437805a628ea652c8e, 17b9d4acf8505cd1da487ad62e37819b93779a27)
 remote: *** ---------------------------------------------------------------
@@ -108,10 +108,17 @@ remote: +++ b/foo
 remote: @@ -0,0 +1 @@
 remote: +Added file bar.c
 To ../bare/repo.git
-   a69eaab..17b9d4a  full-tag -> full-tag
+ + a69eaab...17b9d4a full-tag -> full-tag (forced update)
 """
 
         self.assertEqual(p.status, 0, p.image)
+        # The expected output matches the output for git version 1.8.3.2.
+        # For older versions of git, and in particular version 1.7.11.5,
+        # the output is slightly different.  Upgrade the actual output
+        # to pretend we got the new one.
+        p.out = p.out.replace(
+            '   a69eaab..17b9d4a  full-tag -> full-tag',
+            ' + a69eaab...17b9d4a full-tag -> full-tag (forced update)')
         self.assertRunOutputEqual(p, expected_out)
 
 

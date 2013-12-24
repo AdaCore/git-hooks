@@ -10,7 +10,7 @@ class TestRun(TestCase):
         # such as verifying that each commit gets checked individually.
         self.set_debug_level(1)
 
-        p = Run('git push origin some-tag'.split())
+        p = Run('git push --force origin some-tag'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/tags/some-tag, 8b9a0d6bf08d7a983affbee3c187adadaaedec9e, 8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5)
 remote: *** ---------------------------------------------------------------
@@ -86,10 +86,17 @@ remote: +++ b/a
 remote: @@ -0,0 +1 @@
 remote: +Put some contents in.
 To ../bare/repo.git
-   8b9a0d6..8a567a0  some-tag -> some-tag
+ + 8b9a0d6...8a567a0 some-tag -> some-tag (forced update)
 """
 
         self.assertEqual(p.status, 0, p.image)
+        # The expected output matches the output for git version 1.8.3.2.
+        # For older versions of git, and in particular version 1.7.11.5,
+        # the output is slightly different.  Upgrade the actual output
+        # to pretend we got the new one.
+        p.out = p.out.replace(
+            '   8b9a0d6..8a567a0  some-tag -> some-tag',
+            ' + 8b9a0d6...8a567a0 some-tag -> some-tag (forced update)')
         self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':

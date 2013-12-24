@@ -269,13 +269,55 @@ def parse_tag_object(tag_name):
               'date'     : '*** Failed to determine tag creation date ***',
               'signed_p' : False}
 
-    # Use cat-file -p to dump the contents of the tag.  The output
-    # is made of 2 sections, separated by an empty line.
+    # We used to be able to extract everything we need about the tag
+    # from the output of "git cat-file -p". Unfortunately, at least
+    # as of git version 1.8.3.2, the date is no longer pretty-printed,
+    # giving us now a timestamp and a TZ (Eg: '1340722274 -0700')
+    # instead of a human-readable date (Eg: 'Tue Jun 26 07:51:14 2012
+    # -0700').
+    #
+    # This seems to be a deliberate change, and attempts to find
+    # a way to either get git to pretty-print that timestamp have
+    # failed. Attempts to convert that timestamp ourselves have
+    # also failed; in the example above we get a translation which
+    # appears to be off by an odd number of hours: '18:51:14 -0700'
+    # instead of '07:51:14 -0700'. The difference of 11 hours is
+    # odd.
+    #
+    # After having wasted a certain amount of time, it seems to me
+    # that the only practical solution is to get git to pretty-print
+    # the timestamp. The only way I found to inspect the tag itself
+    # was via "git show". "git show" prints the tagger and date fine,
+    # as well as the tag's revision log.  But it follows the tag
+    # description with a description of the tagged commit (the same
+    # we'd get if we did "git show" of that commit).  That part makes
+    # the extraction of the tag's revision log a little harder.
+    # On top of that, trying to touch the output via the --format
+    # command-line option in order to facilitate a bit the parsing
+    # immediately results in the "Date:" field disappearing from
+    # the tag section! ARGH!
+    #
+    # Rather than add more heuristics about how the commit's section
+    # starts, we'll limit the extract from the output of "git show"
+    # to the tagger and date fields only. And we will overcome the
+    # rev-log/signature extraction issue by calling "git cat-file"
+    # (as we used to do before).
+
+    for line in git.show(tag_name, _split_lines=True):
+        if line.strip() == '':
+            break
+        elif line.startswith('Tagger:'):
+            result['tagger'] = line.partition(':')[2].strip()
+        elif line.startswith('Date:'):
+            result['date'] =  line.partition(':')[2].strip()
+
+
+    # Now, get the revision log using "git cat-file -p".
     #
     # The first section contains information about the tag, such as
-    # the tag name, type, and tagger.  We're looking for the line
-    # that starts with "tagger", as it contains both the name of
-    # the tagger as well as the date the message was tagged.
+    # the tag name, type, and tagger.  We have already collected
+    # that information above, so skip it (we know that it ends with
+    # an empty line).
     #
     # The second section contains the revision history, optionally
     # followed by the PGP signature (if the tag was signed).
@@ -289,13 +331,6 @@ def parse_tag_object(tag_name):
                 # We have reached the end of this section, moving on
                 # to the next.
                 section_no += 1
-                continue
-            # Check if the line is the "tagger line", and extract
-            # the tagger name and tagging time as best we can.
-            m = re.match(r"tagger\s+([^>]*>)\s*(.*)", line)
-            if m:
-                result['tagger'] = m.group(1)
-                result['date'] = m.group(2)
                 continue
         else:
             if line.startswith('-----BEGIN PGP SIGNATURE-----'):

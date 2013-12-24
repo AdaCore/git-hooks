@@ -102,6 +102,8 @@ remote: It previously pointed to:
 remote:
 remote:  96cc482... Add end to top.
 remote:
+remote: Diff:
+remote:
 remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:

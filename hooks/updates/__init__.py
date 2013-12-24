@@ -372,6 +372,16 @@ class AbstractUpdate(object):
                                'branch/reference.')
                 summary.append('     No separate email sent.')
 
+        # We do not want that summary to be used for filing purposes.
+        # So add a "Diff:" marker.
+        if summary:
+            # We know that the output starts with a couple of
+            # empty strings. To avoid too much of a break between
+            # the "Diff:" marker and the rest of the summary,
+            # replace the first empty line with our diff marker
+            # (instead of pre-pending it, for instance).
+            summary[0] = '\n\nDiff:'
+
         return '\n'.join(summary)
 
     #------------------------

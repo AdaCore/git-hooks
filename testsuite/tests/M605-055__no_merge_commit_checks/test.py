@@ -33,6 +33,8 @@ remote: It previously pointed to:
 remote:
 remote:  a89ee05... Edit a.
 remote:
+remote: Diff:
+remote:
 remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:

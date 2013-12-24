@@ -24,6 +24,8 @@ remote: It previously pointed to:
 remote:
 remote:  dd6165c... Modify file `d' alone.
 remote:
+remote: Diff:
+remote:
 remote: !!! WARNING: THE FOLLOWING COMMITS ARE NO LONGER ACCESSIBLE (LOST):
 remote: -------------------------------------------------------------------
 remote:

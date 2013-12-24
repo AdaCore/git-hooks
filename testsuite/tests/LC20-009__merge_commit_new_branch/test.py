@@ -28,6 +28,8 @@ remote: The branch 'topic/resync' was created pointing to:
 remote:
 remote:  ffb05b4... Merge topic branch fsf-head.
 remote:
+remote: Diff:
+remote:
 remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:

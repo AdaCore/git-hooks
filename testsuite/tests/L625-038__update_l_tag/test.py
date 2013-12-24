@@ -51,6 +51,8 @@ remote: It previously pointed to:
 remote:
 remote:  8b9a0d6... New file: a.
 remote:
+remote: Diff:
+remote:
 remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:

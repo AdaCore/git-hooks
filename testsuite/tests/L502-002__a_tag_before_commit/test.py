@@ -55,7 +55,6 @@ remote:     First (alpha) release of this project.
 remote:
 remote: Diff:
 remote:
-remote:
 remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:
@@ -148,6 +147,8 @@ remote:
 remote: It previously pointed to:
 remote:
 remote:  426fba3... Initial commit.
+remote:
+remote: Diff:
 remote:
 remote: Summary of changes (added commits):
 remote: -----------------------------------

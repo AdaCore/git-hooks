@@ -33,6 +33,8 @@ remote: It previously pointed to:
 remote:
 remote:  33e7556... Add new file b.
 remote:
+remote: Diff:
+remote:
 remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:

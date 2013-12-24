@@ -46,6 +46,8 @@ remote: The lightweight tag 'version-0.1a' was created pointing to:
 remote:
 remote:  4f0f08f... Minor modifications.
 remote:
+remote: Diff:
+remote:
 remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:
@@ -139,6 +141,8 @@ remote:
 remote: It previously pointed to:
 remote:
 remote:  426fba3... Initial commit.
+remote:
+remote: Diff:
 remote:
 remote: Summary of changes (added commits):
 remote: -----------------------------------

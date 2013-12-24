@@ -63,7 +63,6 @@ remote:     Tag a commit that makes more sense.
 remote:
 remote: Diff:
 remote:
-remote:
 remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:

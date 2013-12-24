@@ -26,6 +26,8 @@ remote: It previously pointed to:
 remote:
 remote:  a605403... Updated a.
 remote:
+remote: Diff:
+remote:
 remote: !!! WARNING: THE FOLLOWING COMMITS ARE NO LONGER ACCESSIBLE (LOST):
 remote: -------------------------------------------------------------------
 remote:

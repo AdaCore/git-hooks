@@ -41,8 +41,9 @@ remote:   6d62250... New file README. Update a. (*)
 remote:   b4bfa84... New file `c', update README accordingly. (*)
 remote:   ffb05b4... Merge topic branch fsf-head.
 remote:
-remote: (*) This commit already existed in another branch/reference.
-remote:      No separate email sent.
+remote: (*) This commit exists in a branch whose name matches
+remote:     the hooks.noemail config option. No separate email
+remote:     sent.
 remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0

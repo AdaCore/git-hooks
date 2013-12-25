@@ -110,8 +110,9 @@ remote:
 remote:   492fd2f... Add second bottom to top. The second line should have been  (*)
 remote:   bd6c0a7... Merge changes from branch thirdparty.
 remote:
-remote: (*) This commit already existed in another branch/reference.
-remote:      No separate email sent.
+remote: (*) This commit exists in a branch whose name matches
+remote:     the hooks.noemail config option. No separate email
+remote:     sent.
 remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0

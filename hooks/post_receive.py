@@ -10,9 +10,9 @@ from collections import OrderedDict
 import sys
 
 from daemon import run_in_daemon
+from git import git_show_ref
 from updates.emails import EmailQueue
 from updates.factory import new_update
-from updates.refs import GitReferences
 from utils import (debug, warn)
 
 
@@ -23,8 +23,8 @@ def post_receive_one(ref_name, old_rev, new_rev, refs):
         ref_name: The name of the reference.
         old_rev: The SHA1 of the reference before the update.
         new_rev: The SHA1 of the reference after the update.
-        refs: A GitReferences object, expected to contain the value
-            of all references.
+        refs: A dictionary containing all references, as described
+            in git_show_ref.
     """
     debug('post_receive_one(ref_name=%s\n'
           '                        old_rev=%s\n'
@@ -53,20 +53,11 @@ def post_receive(updated_refs):
             contains the previous revision, and the new revision of the
             reference.
     """
-    refs = GitReferences()
-
-    # Adjust refs to reflect the situation prior to the push
-    # (by "undoing" updated_refs).
-    for ref_name in updated_refs.keys():
-        old_rev, _ = updated_refs[ref_name]
-        refs.update_ref(ref_name, old_rev)
+    refs = git_show_ref()
 
     for ref_name in updated_refs.keys():
         (old_rev, new_rev) = updated_refs[ref_name]
-        try:
-            post_receive_one(ref_name, old_rev, new_rev, refs)
-        finally:
-            refs.update_ref(ref_name, new_rev)
+        post_receive_one(ref_name, old_rev, new_rev, refs)
 
     # Flush the email queue.  Since this involves creating a daemon,
     # only do so if there is at least one email to be sent.

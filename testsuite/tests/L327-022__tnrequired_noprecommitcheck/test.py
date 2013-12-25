@@ -88,8 +88,9 @@ remote:
 remote:   ef602fc... Add second bottom to top. (*)
 remote:   3c75c8d... Merge the changes made in the 'thirdparty' branch.
 remote:
-remote: (*) This commit already existed in another branch/reference.
-remote:      No separate email sent.
+remote: (*) This commit exists in a branch whose name matches
+remote:     the hooks.noemail config option. No separate email
+remote:     sent.
 remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0

@@ -19,30 +19,33 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
-remote: Subject: [repo] (2 commits) Merge branch 'topic'
+remote: Bcc: file-ci@gnat.com
+remote: Subject: [repo] Add new file b.
 remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/master
-remote: X-Git-Oldrev: a89ee05260e5f0499f09dc36a9c3c1fd55fd4a79
-remote: X-Git-Newrev: 3c799a3825af79b1a0f56b00ccc72a1e2837b4ed
+remote: X-Git-Oldrev: a60540361d47901d3fe254271779f380d94645f7
+remote: X-Git-Newrev: 80885319069c691f295150b51f478d99a36919c3
 remote:
-remote: The branch 'master' was updated to point to:
+remote: commit 80885319069c691f295150b51f478d99a36919c3
+remote: Author: Joel Brobecker <brobecker@adacore.com>
+remote: Date:   Sun Dec 23 17:03:48 2012 +0400
 remote:
-remote:  3c799a3... Merge branch 'topic'
+remote:     Add new file b.
 remote:
-remote: It previously pointed to:
-remote:
-remote:  a89ee05... Edit a.
+remote:     This is some other rh text.
 remote:
 remote: Diff:
+remote: ---
+remote:  b | 1 +
+remote:  1 file changed, 1 insertion(+)
 remote:
-remote: Summary of changes (added commits):
-remote: -----------------------------------
-remote:
-remote:   8088531... Add new file b. (*)
-remote:   3c799a3... Merge branch 'topic'
-remote:
-remote: (*) This commit already existed in another branch/reference.
-remote:      No separate email sent.
+remote: diff --git a/b b/b
+remote: new file mode 100644
+remote: index 0000000..6ea0e45
+remote: --- /dev/null
+remote: +++ b/b
+remote: @@ -0,0 +1 @@
+remote: +A second file. No chance of conflict.
 remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0

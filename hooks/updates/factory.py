@@ -37,7 +37,8 @@ REF_CHANGE_MAP = {
     ('refs/tags/'        , UPDATE, 'commit') : LightweightTagUpdate,
 }
 
-def new_update(ref_name, old_rev, new_rev, pre_update_refs):
+
+def new_update(ref_name, old_rev, new_rev, all_refs):
     """Return the correct object for the given parameters.
 
     PARAMETERS
@@ -70,4 +71,4 @@ def new_update(ref_name, old_rev, new_rev, pre_update_refs):
     if new_cls is None:
         return None
 
-    return new_cls(ref_name, old_rev, new_rev, pre_update_refs)
+    return new_cls(ref_name, old_rev, new_rev, all_refs)

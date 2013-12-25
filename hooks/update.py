@@ -3,16 +3,15 @@ from shutil import rmtree
 import sys
 
 from errors import InvalidUpdate
-from git import get_object_type
+from git import get_object_type, git_show_ref
 from utils import debug, warn, create_scratch_dir
 # We have to import utils, because we cannot import scratch_dir
 # directly into this module.  Otherwise, our scratch_dir seems
 # to not see the update when create_scratch_dir is called.
 import utils
 
-from updates.emails import EmailInfo
 from updates.factory import new_update
-from updates.refs import GitReferences
+
 
 def parse_command_line():
     """Return a namespace built after parsing the command line.
@@ -53,7 +52,7 @@ def check_update(ref_name, old_rev, new_rev):
     debug('check_update(ref_name=%s, old_rev=%s, new_rev=%s)'
           % (ref_name, old_rev, new_rev),
           level=2)
-    update_cls = new_update(ref_name, old_rev, new_rev, GitReferences())
+    update_cls = new_update(ref_name, old_rev, new_rev, git_show_ref())
     if update_cls is None:
         raise InvalidUpdate(
             "This type of update (%s,%s) is currently unsupported."

@@ -20,11 +20,12 @@ def branch_summary_of_changes_needed(added_commits, lost_commits):
     if lost_commits:
         return True
 
-    # If this update introduces some pre-existing commits (for
-    # which individual emails are not going to be sent), send
-    # the summary as well.
+    # Send a summary if any of the commits was marked as "no email".
+    # Since the user is not going to see the commit email for those
+    # commits, it's good to send a summary email in order to have
+    # have a trace of that commit.
     for commit in added_commits:
-        if commit.pre_existing_p:
+        if not commit.send_email_p:
             return True
 
     # The question was raised whether we should include the summary

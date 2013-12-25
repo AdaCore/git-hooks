@@ -9,21 +9,25 @@ class CommitInfo(object):
     ATTRIBUTES
         rev: The commit's revision (SHA1).
         subject: The subject of the commit.
-        pre_existing_p: True if this commit was accessible from
-            any of the existing references prior to this update.
-            False if it was not. None if the value has not been
-            determined yet.
         base_rev: The revision (SHA1) of the commit's parent,
             for "diff'ing" purpose (determining what changes are
             introduced by this commit).
             The null revision if this is a headless commit.
             None if the value has not been determined yet.
+        pre_existing_p: True if this commit already existed in another
+            branch prior to the update, False otherwise. May be None,
+            meaning that the value of that attribute has not been
+            computed yet.
+        send_email_p: True if a commit email should be sent for
+            this commit, False otherwise. May be None, meaning that
+            the value of that attribute has not been computed yet.
     """
     def __init__(self, rev, subject, base_rev=None):
         self.rev = rev
         self.subject = subject
-        self.pre_existing_p = None
         self.base_rev = base_rev
+        self.pre_existing_p = None
+        self.send_email_p = None
 
     def oneline_str(self):
         """A one-line string description of the commit.

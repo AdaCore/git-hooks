@@ -85,8 +85,8 @@ remote:
 remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:
-remote:   ef602fc... Add second bottom to top. (*)
 remote:   3c75c8d... Merge the changes made in the 'thirdparty' branch.
+remote:   ef602fc... Add second bottom to top. (*)
 remote:
 remote: (*) This commit exists in a branch whose name matches
 remote:     the hooks.noemail config option. No separate email

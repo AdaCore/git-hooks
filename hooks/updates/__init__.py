@@ -367,7 +367,7 @@ class AbstractUpdate(object):
             summary.append('--------------------------------------'
                            '-----------------------------')
             summary.append('')
-            for commit in self.lost_commits:
+            for commit in reversed(self.lost_commits):
                 summary.append('  ' + commit.oneline_str())
             for commit in reversed(self.lost_commits):
                 summary.append('')
@@ -383,7 +383,7 @@ class AbstractUpdate(object):
             # Note that we want the summary to include all commits
             # now accessible from this reference, not just the new
             # ones.
-            for commit in self.added_commits:
+            for commit in reversed(self.added_commits):
                 if commit.send_email_p:
                     marker = ''
                 else:

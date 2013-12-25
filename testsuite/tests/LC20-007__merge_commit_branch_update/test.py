@@ -37,9 +37,9 @@ remote:
 remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:
-remote:   6d62250... New file README. Update a. (*)
-remote:   b4bfa84... New file `c', update README accordingly. (*)
 remote:   ffb05b4... Merge topic branch fsf-head.
+remote:   b4bfa84... New file `c', update README accordingly. (*)
+remote:   6d62250... New file README. Update a. (*)
 remote:
 remote: (*) This commit exists in a branch whose name matches
 remote:     the hooks.noemail config option. No separate email

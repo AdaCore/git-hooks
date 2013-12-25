@@ -31,10 +31,10 @@ remote:
 remote: !!! WARNING: THE FOLLOWING COMMITS ARE NO LONGER ACCESSIBLE (LOST):
 remote: -------------------------------------------------------------------
 remote:
-remote:   4f0f08f... Minor modifications.
-remote:   4a325b3... 1 modified file, 1 new file.
-remote:   cc8d2c2... Modify `c', delete `b'.
 remote:   dd6165c... Modify file `d' alone.
+remote:   cc8d2c2... Modify `c', delete `b'.
+remote:   4a325b3... 1 modified file, 1 new file.
+remote:   4f0f08f... Minor modifications.
 remote:
 remote: commit dd6165c96db712d3e918fb5c61088b171b5e7cab
 remote: Author: Joel Brobecker <brobecker@adacore.com>

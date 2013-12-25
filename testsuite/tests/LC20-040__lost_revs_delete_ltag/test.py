@@ -33,6 +33,30 @@ remote:   4f0f08f... Minor modifications.
 remote:   4a325b3... 1 modified file, 1 new file.
 remote:   cc8d2c2... Modify `c', delete `b'.
 remote:   dd6165c... Modify file `d' alone.
+remote:
+remote: commit dd6165c96db712d3e918fb5c61088b171b5e7cab
+remote: Author: Joel Brobecker <brobecker@adacore.com>
+remote: Date:   Thu May 10 15:21:57 2012 -0700
+remote:
+remote:     Modify file `d' alone.
+remote:
+remote: commit cc8d2c2637bda27f0bc2125181dd2f8534d16222
+remote: Author: Joel Brobecker <brobecker@adacore.com>
+remote: Date:   Thu May 10 15:21:06 2012 -0700
+remote:
+remote:     Modify `c', delete `b'.
+remote:
+remote: commit 4a325b31f594b1dc2c66ac15c4b6b68702bd0cdf
+remote: Author: Joel Brobecker <brobecker@adacore.com>
+remote: Date:   Thu May 10 15:20:05 2012 -0700
+remote:
+remote:     1 modified file, 1 new file.
+remote:
+remote: commit 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3
+remote: Author: Joel Brobecker <brobecker@adacore.com>
+remote: Date:   Sat May 5 15:23:36 2012 -0700
+remote:
+remote:     Minor modifications.
 To ../bare/repo.git
  - [deleted]         retired/gdb-7.2
 """

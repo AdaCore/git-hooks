@@ -36,11 +36,23 @@ remote: -------------------------------------------------------------------
 remote:
 remote:   4f0f08f... Minor modifications.
 remote:
+remote: commit 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3
+remote: Author: Joel Brobecker <brobecker@adacore.com>
+remote: Date:   Sat May 5 15:23:36 2012 -0700
+remote:
+remote:     Minor modifications.
+remote:
 remote:
 remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:
 remote:   86c3276... Minor modifications.
+remote:
+remote: commit 86c327680eae7942acad3d38e6503f3e05c338b0
+remote: Author: Joel Brobecker <brobecker@adacore.com>
+remote: Date:   Sat May 5 15:23:36 2012 -0700
+remote:
+remote:     Minor modifications.
 remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0

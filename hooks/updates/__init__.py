@@ -369,6 +369,9 @@ class AbstractUpdate(object):
             summary.append('')
             for commit in self.lost_commits:
                 summary.append('  ' + commit.oneline_str())
+            for commit in reversed(self.lost_commits):
+                summary.append('')
+                summary.append(git.log('-n1', commit.rev, pretty='medium'))
 
         if self.added_commits:
             has_silent = False
@@ -396,6 +399,31 @@ class AbstractUpdate(object):
                     '(*) This commit exists in a branch whose name matches',
                     '    the hooks.noemail config option. No separate email',
                     '    sent.'])
+
+            # Print a more verbose description of the added commits.
+            #
+            # Instead of calling git once per commit, we try to produce
+            # the entire log using one single command.  As a result,
+            # we have to make a short and approximate duplication
+            # of the code in self.__get_added_commits, which is not
+            # really ideal. But sharing the code does not seem obvious
+            # at first sight, and calling git multiple times is really
+            # an unattractive solution too (for performance reasons,
+            # as we routinely do merges that bring in a large number
+            # of commits).
+            #
+            # In practice, the amount of code is fairly short, and
+            # the approximation should be very close to matching
+            # self.added_commits.
+
+            log_options = ['--pretty=medium', self.new_rev]
+            base_rev = self.added_commits[0].base_rev
+            if not is_null_rev(base_rev):
+                log_options.append('^%s' % base_rev)
+            if not is_null_rev(self.old_rev) and self.old_rev != base_rev:
+                log_options.append('^%s' % self.old_rev)
+            summary.append('')
+            summary.append(git.log(*log_options))
 
         # We do not want that summary to be used for filing purposes.
         # So add a "Diff:" marker.

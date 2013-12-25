@@ -57,6 +57,12 @@ remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:
 remote:   8a567a0... Put some contents in file `a'.
+remote:
+remote: commit 8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5
+remote: Author: Joel Brobecker <brobecker@adacore.com>
+remote: Date:   Mon Jun 25 15:10:13 2012 -0700
+remote:
+remote:     Put some contents in file `a'.
 remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0

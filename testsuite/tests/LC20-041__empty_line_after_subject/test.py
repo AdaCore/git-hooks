@@ -113,6 +113,25 @@ remote:
 remote: (*) This commit exists in a branch whose name matches
 remote:     the hooks.noemail config option. No separate email
 remote:     sent.
+remote:
+remote: commit bd6c0a7343402a7a5d1e5b42e5d338e5c1e3cb35
+remote: Merge: 96cc482 492fd2f
+remote: Author: Joel Brobecker <brobecker@adacore.com>
+remote: Date:   Thu Dec 20 21:55:52 2012 +0400
+remote:
+remote:     Merge changes from branch thirdparty.
+remote:
+remote:     This changs only bring a second bottom to top.
+remote:     Nothing else.
+remote:
+remote: commit 492fd2fae27c2f358c1d59c59a2e13ec2a3a880f
+remote: Author: Joel Brobecker <brobecker@adacore.com>
+remote: Date:   Thu Dec 20 21:51:00 2012 +0400
+remote:
+remote:     Add second bottom to top.
+remote:     The second line should have been an empty line.
+remote:     This is very bad, so try to reject the update if detected on
+remote:     a branch that does not have noprecommitcheck.
 remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0

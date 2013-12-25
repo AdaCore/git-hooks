@@ -91,6 +91,25 @@ remote:
 remote: (*) This commit exists in a branch whose name matches
 remote:     the hooks.noemail config option. No separate email
 remote:     sent.
+remote:
+remote: commit 3c75c8d4c196c09cae03ba1832b4c31285f8a85e
+remote: Merge: 96cc482 ef602fc
+remote: Author: Joel Brobecker <brobecker@adacore.com>
+remote: Date:   Wed Dec 26 11:13:44 2012 +0400
+remote:
+remote:     Merge the changes made in the 'thirdparty' branch.
+remote:
+remote:     This repo requires a ticket number, so there: L327-022.
+remote:
+remote: commit ef602fcf81b53dc7512d6c404c532f5c07187abf
+remote: Author: Joel Brobecker <brobecker@adacore.com>
+remote: Date:   Thu Dec 20 21:51:00 2012 +0400
+remote:
+remote:     Add second bottom to top.
+remote:
+remote:     This commit comes from an external source, and thus does not have
+remote:     a ticket number in the rh.  But that's OK, because it is on a branch
+remote:     for which pre-commit-checks are disabled.
 remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0

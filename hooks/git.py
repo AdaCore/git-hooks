@@ -28,7 +28,6 @@ import os
 import re
 from subprocess import Popen, PIPE, STDOUT
 import subprocess
-import sys
 
 
 class CalledProcessError(subprocess.CalledProcessError):

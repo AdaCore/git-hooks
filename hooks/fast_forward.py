@@ -19,12 +19,13 @@ import sys
 from config import git_config
 from errors import InvalidUpdate
 from git import *
-from utils import debug, warn
+from utils import warn
 
 # A list of regular expressions that match the branches where
 # it will always be OK to do a non-fast-forward update (aka
 # a "forced update").
 FORCED_UPDATE_OK_BRANCHES = ("topic/.*",)
+
 
 def check_fast_forward(ref_name, old_rev, new_rev):
     """Raise InvalidUpdate if the update violates the fast-forward policy.
@@ -78,5 +79,3 @@ if __name__ == '__main__':
         # exit with a nonzero status.
         warn(*E)
         sys.exit(1)
-
-

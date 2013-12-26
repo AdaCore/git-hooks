@@ -10,6 +10,7 @@ It previously pointed to:
 
  %(commit_oneline)s"""
 
+
 class BranchDeletion(AbstractUpdate):
     """Update object for branch creation/update."""
     def self_sanity_check(self):
@@ -27,9 +28,9 @@ class BranchDeletion(AbstractUpdate):
         subject = "[%s] Deleted branch %s" % (self.email_info.project_name,
                                               self.short_ref_name)
 
-        update_info = {'short_ref_name' : self.short_ref_name,
-                       'commit_oneline' : commit_oneline(self.old_rev),
-                      }
+        update_info = {'short_ref_name': self.short_ref_name,
+                       'commit_oneline': commit_oneline(self.old_rev),
+                       }
         body = BRANCH_DELETION_EMAIL_BODY_TEMPLATE % update_info
         if branch_summary_of_changes_needed(self.added_commits,
                                             self.lost_commits):

@@ -14,6 +14,7 @@ from errors import InvalidUpdate
 #
 ############################################################################
 
+
 def get_user_name():
     """Return the user name (in the Unix sense: The account name).
     """
@@ -50,6 +51,7 @@ def get_user_full_name():
 # session, and to delete it at the end.
 
 scratch_dir = None
+
 
 def create_scratch_dir():
     """Create a temporary directory.

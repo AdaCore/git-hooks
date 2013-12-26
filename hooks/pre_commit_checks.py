@@ -13,6 +13,7 @@ from syslog import syslog
 import utils
 from utils import debug, warn
 
+
 def check_file(filename, sha1, commit_rev, project_name):
     """Check a file for style violations if appropriate.
 
@@ -37,10 +38,10 @@ def check_file(filename, sha1, commit_rev, project_name):
               % (filename, commit_rev))
         syslog('Pre-commit checks disabled for %(rev)s on %(repo)s'
                ' (%(file)s) by repo attribute'
-               % {'rev' : sha1,
-                  'repo' : project_name,
-                  'file' : filename,
-                 })
+               % {'rev': sha1,
+                  'repo': project_name,
+                  'file': filename,
+                  })
         return
 
     # Get a copy of the file and save it in our scratch dir.
@@ -101,9 +102,10 @@ def check_file(filename, sha1, commit_rev, project_name):
 
     except subprocess.CalledProcessError, E:
         debug(str(E), level=4)
-        info = ["pre-commit check failed for file `%s' at commit: %s"
-                % (filename, commit_rev)] \
-               + E.output.splitlines()
+        info = (
+            ["pre-commit check failed for file `%s' at commit: %s"
+             % (filename, commit_rev)]
+            + E.output.splitlines())
         raise InvalidUpdate(*info)
 
 
@@ -125,14 +127,15 @@ def ensure_empty_line_after_subject(rev, raw_rh):
         return
 
     if not raw_rh[1].strip() == '':
-        info = ['Invalid revision history for commit %s:' % rev,
-                'The first line should be the subject of the commit,',
-                'followed by an empty line.',
-                '',
-                'Below are the first few lines of the revision history:'] \
-                + [ '| %s' % line for line in raw_rh[:5]] \
-                + ['',
-                   "Please amend the commit's revision history and try again."]
+        info = (
+            ['Invalid revision history for commit %s:' % rev,
+             'The first line should be the subject of the commit,',
+             'followed by an empty line.',
+             '',
+             'Below are the first few lines of the revision history:']
+            + ['| %s' % line for line in raw_rh[:5]]
+            + ['',
+               "Please amend the commit's revision history and try again."])
         raise InvalidUpdate(*info)
 
 
@@ -161,7 +164,7 @@ def reject_lines_too_long(rev, raw_rh):
                 '',
                 'The following line in the revision history is too long',
                 '(%d characters, when the maximum is %d characters):'
-                    % (len(line), max_line_length),
+                % (len(line), max_line_length),
                 '',
                 '>>> %s' % line)
 
@@ -203,7 +206,7 @@ def reject_unedited_merge_commit(rev, raw_rh):
                     '',
                     'This usually indicates an unintentional merge commit.',
                     'If you would really like to push a merge commit,'
-                        ' please',
+                    ' please',
                     "edit the merge commit's revision history."]
             raise InvalidUpdate(*info)
 
@@ -231,15 +234,15 @@ def reject_merge_conflict_section(rev, raw_rh):
                     '(in commit %s)' % rev,
                     '',
                     'This usually indicates a merge commit where some'
-                        ' merge conflicts',
+                    ' merge conflicts',
                     'had to be resolved, but where the "Conflicts:"'
-                        ' section has not ',
+                    ' section has not ',
                     'been deleted from the revision history.',
                     '',
                     'Please edit the commit\'s revision history to'
-                        ' either delete',
+                    ' either delete',
                     'the section, or to avoid using the pattern above'
-                        ' by itself.']
+                    ' by itself.']
             raise InvalidUpdate(*info)
 
 
@@ -258,15 +261,16 @@ def check_missing_ticket_number(rev, raw_rh):
     if not git_config('hooks.tn-required'):
         return
 
-    tn_re = [# The word 'minor' (as in "Minor reformatting")
-             # anywhere in the RH removes the need for a TN
-             # in the RH.
-             r'\bminor\b',
-             # Same for '(no-tn-check)'.
-             r'\(no-tn-check\)',
-             # TN regexp.
-             '[0-9A-Z][0-9A-Z][0-9][0-9]-[0-9A-Z][0-9][0-9]',
-            ]
+    tn_re = [  # Satisfy pep8's 2-spaces before inline comment.
+        # The word 'minor' (as in "Minor reformatting")
+        # anywhere in the RH removes the need for a TN
+        # in the RH.
+        r'\bminor\b',
+        # Same for '(no-tn-check)'.
+        r'\(no-tn-check\)',
+        # TN regexp.
+        '[0-9A-Z][0-9A-Z][0-9][0-9]-[0-9A-Z][0-9][0-9]',
+        ]
     for line in raw_rh:
         if re.search('|'.join(tn_re), line, re.IGNORECASE):
             return
@@ -337,7 +341,7 @@ def check_filename_collisions(rev):
             '',
             'The matching files are:']
         for matching_names in collisions:
-            info.append('') # Empty line to separate each group...
+            info.append('')  # Empty line to separate each group...
             info += ['    %s' % filename for filename in matching_names]
         raise InvalidUpdate(*info)
 

@@ -3,6 +3,7 @@
 from git import git
 from utils import debug
 
+
 class CommitInfo(object):
     """A git commit.
 

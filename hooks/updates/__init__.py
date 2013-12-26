@@ -111,14 +111,14 @@ class AbstractUpdate(object):
         if no_email_re is not None:
             warn(*['-' * 70,
                    "--  The hooks.no-emails config option contains `%s',"
-                     % no_email_re,
+                   % no_email_re,
                    '--  which matches the name of the reference being'
-                     ' updated ',
+                   ' updated ',
                    '--  (%s).' % self.ref_name,
                    '--',
                    '--  Commit emails will therefore not be sent.',
                    '-' * 70,
-                  ], prefix='')
+                   ], prefix='')
             return
         # This phase needs all added commits to have certain attributes
         # to be computed.  Do it now.
@@ -207,10 +207,10 @@ class AbstractUpdate(object):
                 debug("(hooks.no-precommit-check match: `%s')" % exp)
                 syslog('Pre-commit checks disabled for %(rev)s on %(repo)s'
                        ' by hooks.no-precommit-check config (%(ref_name)s)'
-                       % {'rev' : self.new_rev,
-                          'repo' : self.email_info.project_name,
-                          'ref_name' : self.ref_name,
-                         })
+                       % {'rev': self.new_rev,
+                          'repo': self.email_info.project_name,
+                          'ref_name': self.ref_name,
+                          })
                 return
 
         if self.__no_cvs_check_user_override():
@@ -262,7 +262,7 @@ class AbstractUpdate(object):
             combined_commit.base_rev = (
                 added[0].base_rev if is_null_rev(self.old_rev)
                 else self.old_rev)
-            added = [combined_commit,]
+            added = [combined_commit, ]
         else:
             debug('(commit-per-commit style checking)')
 
@@ -279,10 +279,10 @@ class AbstractUpdate(object):
             commit: A CommitInfo object.
         """
         subject = '[%(repo)s%(branch)s] %(subject)s' % {
-            'repo' : self.email_info.project_name,
-            'branch' : '/%s' % self.short_ref_name
-                if self.short_ref_name != 'master' else '',
-            'subject' : commit.subject[:SUBJECT_MAX_SUBJECT_CHARS],
+            'repo': self.email_info.project_name,
+            'branch': ('/%s' % self.short_ref_name
+                       if self.short_ref_name != 'master' else ''),
+            'subject': commit.subject[:SUBJECT_MAX_SUBJECT_CHARS],
             }
 
         # Generate the body of the email in two pieces:
@@ -616,11 +616,11 @@ class AbstractUpdate(object):
         debug('%s found - pre-commit checks disabled' % no_cvs_check_fullpath)
         syslog('Pre-commit checks disabled for %(rev)s on %(repo)s by user'
                ' %(user)s using %(no_cvs_check_fullpath)s'
-               % {'rev' : self.new_rev,
-                  'repo' : self.email_info.project_name,
-                  'user' : get_user_name(),
-                  'no_cvs_check_fullpath' : no_cvs_check_fullpath,
-                 })
+               % {'rev': self.new_rev,
+                  'repo': self.email_info.project_name,
+                  'user': get_user_name(),
+                  'no_cvs_check_fullpath': no_cvs_check_fullpath,
+                  })
         return True
 
     def __check_max_commit_emails(self):
@@ -644,9 +644,9 @@ class AbstractUpdate(object):
         if nb_emails > max_emails:
             raise InvalidUpdate(
                 "This update introduces too many new commits (%d),"
-                    " which would" % nb_emails,
+                " which would" % nb_emails,
                 "trigger as many emails, exceeding the"
-                    " current limit (%d)." % max_emails,
+                " current limit (%d)." % max_emails,
                 "Contact your repository adminstrator if you really meant",
                 "to generate this many commit emails.")
 

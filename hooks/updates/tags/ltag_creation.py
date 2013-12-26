@@ -24,9 +24,9 @@ class LightweightTagCreation(LightweightTagUpdate):
                                            self.short_ref_name)
 
         body = (LTAG_CREATION_EMAIL_BODY_TEMPLATE
-                % {'short_ref_name' : self.short_ref_name,
-                   'commit_oneline' : commit_oneline(self.new_rev),
-                  })
+                % {'short_ref_name': self.short_ref_name,
+                   'commit_oneline': commit_oneline(self.new_rev),
+                   })
         if tag_summary_of_changes_needed(self.added_commits,
                                          self.lost_commits):
             body += self.summary_of_changes()

@@ -37,7 +37,7 @@ def post_receive_one(ref_name, old_rev, new_rev, refs):
         # it gives the script a chance to process any other reference
         # that was updated, but not processed yet.
         warn("post-receive: Unsupported reference update: %s (ignored)."
-               % ref_name,
+             % ref_name,
              "              old_rev = %s" % old_rev,
              "              new_rev = %s" % new_rev)
         return

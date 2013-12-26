@@ -3,6 +3,7 @@
 from errors import InvalidUpdate
 from updates import AbstractUpdate
 
+
 class NotesDeletion(AbstractUpdate):
     """Update object for Git Notes deletion."""
     def self_sanity_check(self):

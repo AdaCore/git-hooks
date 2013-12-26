@@ -2,11 +2,9 @@
 
 from errors import InvalidUpdate
 from fast_forward import check_fast_forward
-from git import (is_null_rev, git_show_ref, commit_oneline,
-                 commit_subject)
+from git import is_null_rev, commit_oneline, commit_subject
 from updates import AbstractUpdate
 from updates.branches import branch_summary_of_changes_needed
-from utils import warn
 
 BRANCH_UPDATE_EMAIL_BODY_TEMPLATE = """\
 The branch '%(short_ref_name)s' was updated to point to:

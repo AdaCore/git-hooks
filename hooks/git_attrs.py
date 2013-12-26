@@ -13,15 +13,16 @@ from git import git, file_exists
 
 # The string printed by git when querying the value of attribute
 # when it is actually unspecified (which is different from unset).
-UNSPECIFIED_ATTR='unspecified'
+UNSPECIFIED_ATTR = 'unspecified'
 
 # The name of the file searched by 'git attributes' when inside
 # a bare repository.
-BARE_REPO_ATTRIBUTES_FILE='info/attributes'
+BARE_REPO_ATTRIBUTES_FILE = 'info/attributes'
 
 # The name of the default attributes file in the bare repository.
 # This file expected to be relative to the root of the bare repository.
-DEFAULT_ATTRIBUTES_FILE='info/default_attributes'
+DEFAULT_ATTRIBUTES_FILE = 'info/default_attributes'
+
 
 def get_attribute(filename, attr_name):
     """Read GIT_DIR/info/attributes and return the file's attribute value.
@@ -118,7 +119,6 @@ def git_attribute(commit_rev, filename, attr_name):
         # and group.
         os.chmod(attributes_dir, 0775)
 
-    keep_going = True
     while path:
         path = dirname(path)
         gitattributes_file = os.path.join(path, '.gitattributes')

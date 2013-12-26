@@ -11,14 +11,14 @@ from utils import debug, get_user_name, get_user_full_name
 
 try:
     from gnatpython.sendmail import sendmail
-except ImportError: # pragma: no cover (testing requires recent version)
+except ImportError:  # pragma: no cover (testing requires recent version)
     # gnatpython is not recent enough, and is missing this module.
     # Use the copy we saved in our repository.
     from updates.sendmail import sendmail
 
 # All commit emails should be sent to the following email address
 # for filing/archiving purposes...
-FILER_EMAIL='file-ci@gnat.com'
+FILER_EMAIL = 'file-ci@gnat.com'
 
 # The delay (in seconds) between each email being sent out.
 # The purpose of the delay is to help separate each email
@@ -220,7 +220,7 @@ class Email(object):
             # Use debug level 0 to make sure that the trace is always
             # printed.
             debug(e_msg.as_string(), level=0)
-        else: # pragma: no cover (do not want real emails during testing)
+        else:  # pragma: no cover (do not want real emails during testing)
             # Use gnatpython's sendmail module rather than Python's
             # smtplib, because the latter does everything synchronously,
             # which takes time, and also does not handle queueing.

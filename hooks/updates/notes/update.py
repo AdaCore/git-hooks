@@ -74,7 +74,7 @@ class NotesUpdate(AbstractUpdate):
         """See AbstractUpdate.get_update_email_contents."""
         # No update email needed for notes (this is always
         # a fast-forward commit)...
-        return  None
+        return None
 
     def email_commit(self, commit):
         """See AbstractUpdate.email_commit."""
@@ -100,8 +100,8 @@ class NotesUpdate(AbstractUpdate):
             DELETED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE if notes_contents is None
             else UPDATED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE)
         body = body_template % {
-            'annotated_rev_info' : annotated_rev_info,
-            'notes_contents' : notes_contents,
+            'annotated_rev_info': annotated_rev_info,
+            'notes_contents': notes_contents,
             }
 
         # Git commands calls strip on the output, which is usually

@@ -36,4 +36,3 @@ class AnnotatedTagDeletion(LightweightTagDeletion):
             body += self.summary_of_changes()
 
         return (subject, body)
-

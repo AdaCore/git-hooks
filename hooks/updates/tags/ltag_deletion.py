@@ -51,9 +51,9 @@ class LightweightTagDeletion(AbstractUpdate):
                                            self.short_ref_name)
 
         body = (LTAG_DELETION_EMAIL_BODY_TEMPLATE
-                % {'short_ref_name' : self.short_ref_name,
-                   'commit_oneline' : commit_oneline(self.old_rev),
-                  })
+                % {'short_ref_name': self.short_ref_name,
+                   'commit_oneline': commit_oneline(self.old_rev),
+                   })
         if tag_summary_of_changes_needed(self.added_commits,
                                          self.lost_commits):
             body += self.summary_of_changes()

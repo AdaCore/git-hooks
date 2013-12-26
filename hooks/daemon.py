@@ -5,6 +5,7 @@ import os
 import sys
 from syslog import syslog
 
+
 def daemonize(output_fd=None):
     """Create a daemon process.
 
@@ -76,7 +77,7 @@ def run_in_daemon(fun):
     if 'GIT_HOOKS_TESTSUITE_MODE' in os.environ:
         daemon_pipe = os.pipe()
 
-    in_daemon = daemonize (daemon_pipe[1])
+    in_daemon = daemonize(daemon_pipe[1])
     if in_daemon:
         fun()
         sys.exit(0)

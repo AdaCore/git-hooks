@@ -18,7 +18,7 @@ import sys
 
 from config import git_config
 from errors import InvalidUpdate
-from git import *
+from git import git
 from utils import warn
 
 # A list of regular expressions that match the branches where

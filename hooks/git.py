@@ -45,6 +45,7 @@ class CalledProcessError(subprocess.CalledProcessError):
     # module subprocess), make that class an identical child.
     pass
 
+
 def git_run(command, *args, **kwargs):
     """Run a git command.
 
@@ -63,7 +64,7 @@ def git_run(command, *args, **kwargs):
     input = None
     outfile = None
     do_split_lines = False
-    for (k,v) in kwargs.iteritems():
+    for (k, v) in kwargs.iteritems():
         if k == '_input':
             input = v
         elif k == '_outfile':
@@ -116,8 +117,8 @@ class Git:
                 # If a string _outfile parameter was given, turn it
                 # into a file descriptor.
                 tmp_fd = None
-                if ('_outfile' in kwargs
-                    and isinstance(kwargs['_outfile'], basestring)):
+                if (('_outfile' in kwargs
+                     and isinstance(kwargs['_outfile'], basestring))):
                     tmp_fd = open(kwargs['_outfile'], 'w')
                     kwargs['_outfile'] = tmp_fd
                 return git_run(command, *args, **kwargs)
@@ -265,9 +266,9 @@ def parse_tag_object(tag_name):
             'signed_p': True if the tag was signed, False otherwise.
     """
     # Provide default values for certain fields.
-    result = {'tagger'   : '*** Failed to determine tagger ***',
-              'date'     : '*** Failed to determine tag creation date ***',
-              'signed_p' : False}
+    result = {'tagger':   '*** Failed to determine tagger ***',
+              'date':     '*** Failed to determine tag creation date ***',
+              'signed_p': False}
 
     # We used to be able to extract everything we need about the tag
     # from the output of "git cat-file -p". Unfortunately, at least
@@ -309,8 +310,7 @@ def parse_tag_object(tag_name):
         elif line.startswith('Tagger:'):
             result['tagger'] = line.partition(':')[2].strip()
         elif line.startswith('Date:'):
-            result['date'] =  line.partition(':')[2].strip()
-
+            result['date'] = line.partition(':')[2].strip()
 
     # Now, get the revision log using "git cat-file -p".
     #

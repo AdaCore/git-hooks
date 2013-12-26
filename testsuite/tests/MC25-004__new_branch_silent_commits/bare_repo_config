@@ -1,0 +1,8 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[hooks]
+        mailinglist = git-hooks-ci@example.com
+        from-domain = adacore.com
+        no-emails = refs/heads/fsf-.*

@@ -2,6 +2,7 @@
 
 from updates.notes.update import NotesUpdate
 
+
 class NotesCreation(NotesUpdate):
     """Update object for Git Notes creation."""
     # Notes creation is a special case of Notes Update, where the

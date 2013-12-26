@@ -1,5 +1,4 @@
 import os
-from os.path import basename
 from pipes import quote
 import re
 import subprocess
@@ -7,7 +6,7 @@ from subprocess import check_output, STDOUT
 
 from config import git_config
 from errors import InvalidUpdate
-from git import git, CalledProcessError
+from git import git
 from git_attrs import git_attribute
 from syslog import syslog
 import utils

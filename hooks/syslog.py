@@ -5,6 +5,7 @@ from gnatpython.ex import Run
 from os import environ
 from utils import warn
 
+
 def syslog(message, tag='cvs_check', priority='local0.warn'):
     """Add the given entry to the syslog file.
 

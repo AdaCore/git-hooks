@@ -42,7 +42,7 @@ class LightweightTagUpdate(AbstractUpdate):
         if not git_config('hooks.allow-lightweight-tag'):
             raise InvalidUpdate(
                 "Lightweight tags (%s) are not allowed in this repository."
-                    % self.short_ref_name,
+                % self.short_ref_name,
                 "Use 'git tag [ -a | -s ]' for tags you want to propagate.")
 
         # If this is a pre-existing tag being updated, there are pitfalls
@@ -57,10 +57,10 @@ class LightweightTagUpdate(AbstractUpdate):
                                            self.short_ref_name)
 
         body = (LTAG_UPDATE_EMAIL_BODY_TEMPLATE
-                % {'short_ref_name' : self.short_ref_name,
-                   'commit_oneline' : commit_oneline(self.new_rev),
-                   'old_commit_oneline' : commit_oneline(self.old_rev),
-                  })
+                % {'short_ref_name': self.short_ref_name,
+                   'commit_oneline': commit_oneline(self.new_rev),
+                   'old_commit_oneline': commit_oneline(self.old_rev),
+                   })
         if tag_summary_of_changes_needed(self.added_commits,
                                          self.lost_commits):
             body += self.summary_of_changes()

@@ -2,7 +2,7 @@
 
 from config import git_config
 from email.mime.text import MIMEText
-from email.utils import parseaddr, getaddresses
+from email.utils import getaddresses
 from errors import InvalidUpdate
 from git import get_module_name
 import os

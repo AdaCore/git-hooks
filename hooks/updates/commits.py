@@ -1,7 +1,6 @@
 """Management of git commits during updates..."""
 
 from git import git
-from utils import debug
 
 
 class CommitInfo(object):

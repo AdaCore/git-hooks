@@ -23,18 +23,18 @@ from updates.tags.ltag_deletion import LightweightTagDeletion
 (CREATE, DELETE, UPDATE) = range(3)
 
 REF_CHANGE_MAP = {
-    ('refs/heads/'       , CREATE, 'commit') : BranchCreation,
-    ('refs/heads/'       , DELETE, 'commit') : BranchDeletion,
-    ('refs/heads/'       , UPDATE, 'commit') : BranchUpdate,
-    ('refs/notes/commits', CREATE, 'commit') : NotesCreation,
-    ('refs/notes/commits', DELETE, 'commit') : NotesDeletion,
-    ('refs/notes/commits', UPDATE, 'commit') : NotesUpdate,
-    ('refs/tags/'        , CREATE, 'tag')    : AnnotatedTagCreation,
-    ('refs/tags/'        , DELETE, 'tag')    : AnnotatedTagDeletion,
-    ('refs/tags/'        , UPDATE, 'tag')    : AnnotatedTagUpdate,
-    ('refs/tags/'        , CREATE, 'commit') : LightweightTagCreation,
-    ('refs/tags/'        , DELETE, 'commit') : LightweightTagDeletion,
-    ('refs/tags/'        , UPDATE, 'commit') : LightweightTagUpdate,
+    ('refs/heads/',        CREATE, 'commit'): BranchCreation,
+    ('refs/heads/',        DELETE, 'commit'): BranchDeletion,
+    ('refs/heads/',        UPDATE, 'commit'): BranchUpdate,
+    ('refs/notes/commits', CREATE, 'commit'): NotesCreation,
+    ('refs/notes/commits', DELETE, 'commit'): NotesDeletion,
+    ('refs/notes/commits', UPDATE, 'commit'): NotesUpdate,
+    ('refs/tags/',         CREATE, 'tag'):    AnnotatedTagCreation,
+    ('refs/tags/',         DELETE, 'tag'):    AnnotatedTagDeletion,
+    ('refs/tags/',         UPDATE, 'tag'):    AnnotatedTagUpdate,
+    ('refs/tags/',         CREATE, 'commit'): LightweightTagCreation,
+    ('refs/tags/',         DELETE, 'commit'): LightweightTagDeletion,
+    ('refs/tags/',         UPDATE, 'commit'): LightweightTagUpdate,
 }
 
 
@@ -63,9 +63,9 @@ def new_update(ref_name, old_rev, new_rev, all_refs):
     new_cls = None
     for key in REF_CHANGE_MAP:
         (map_ref_prefix, map_change_type, map_object_type) = key
-        if (change_type == map_change_type
-            and object_type == map_object_type
-            and ref_name.startswith(map_ref_prefix)):
+        if ((change_type == map_change_type
+             and object_type == map_object_type
+             and ref_name.startswith(map_ref_prefix))):
             new_cls = REF_CHANGE_MAP[key]
             break
     if new_cls is None:

@@ -28,7 +28,7 @@ GIT_CONFIG_OPTS = \
      # The following options are for testing purposes only, and should
      # never be used in an operational repository.
      'hooks.bcc-file-ci':              {'default': True,   'type': bool},
-    }
+     }
 
 # The maximum number of characters from a commit's subject
 # to be used as part of the subject of emails describing
@@ -77,7 +77,7 @@ def git_config(option_name):
             TYPE_NAME_MAP = {bool:  'boolean',
                              int:   'integer',
                              tuple: 'list',
-                            }
+                             }
             type_name = TYPE_NAME_MAP[GIT_CONFIG_OPTS[option_name]['type']]
             raise InvalidUpdate(
                 'Invalid %s value: %s (must be %s)'

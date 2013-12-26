@@ -2,6 +2,7 @@
 
 from utils import warn
 
+
 def warn_about_tag_update(tag_name, old_rev, new_rev):
     """Emit a warning about tag updates.
 

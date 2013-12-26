@@ -103,8 +103,6 @@ def initialize_git_config_map():
     # Populate the __git_config_map dictionary...
     __git_config_map = {}
     for config_name in GIT_CONFIG_OPTS.keys():
-        config_info = GIT_CONFIG_OPTS[config_name]
-
         # Get the config value from either the all_configs_map
         # if defined, or else from the default value.
         if config_name in all_configs_map:

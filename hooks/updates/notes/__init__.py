@@ -2,6 +2,7 @@
 
 from git import git, CalledProcessError
 
+
 class GitNotes(object):
     """An object representing a Git Notes change.
 
@@ -26,7 +27,6 @@ class GitNotes(object):
         # a private attribute name __contents to cache its value.
         self.__contents = None
         self.annotated_rev = self.filename.replace('/', '')
-
 
     @property
     def contents(self):

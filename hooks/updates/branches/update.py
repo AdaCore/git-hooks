@@ -45,15 +45,15 @@ def reject_retired_branch_update(short_ref_name, all_refs):
     if 'refs/heads/%s' % retired_short_ref_name in all_refs:
         raise InvalidUpdate(
             "Updates to the %s branch are no longer allowed, because"
-              % short_ref_name,
+            % short_ref_name,
             "this branch has been retired (and renamed into `%s')."
-              % retired_short_ref_name)
+            % retired_short_ref_name)
     if 'refs/tags/%s' % retired_short_ref_name in all_refs:
         raise InvalidUpdate(
             "Updates to the %s branch are no longer allowed, because"
-              % short_ref_name,
+            % short_ref_name,
             "this branch has been retired (a tag called `%s' has been"
-              % retired_short_ref_name,
+            % retired_short_ref_name,
             "created in its place).")
 
 
@@ -85,14 +85,14 @@ class BranchUpdate(AbstractUpdate):
             return None
 
         # Compute the subject.
-        update_info = {'repo' : self.email_info.project_name,
-                       'short_ref_name' : self.short_ref_name,
-                       'branch' : '/%s' % self.short_ref_name,
-                       'n_commits' : '',
-                       'subject' : commit_subject(self.new_rev)[:59],
-                       'old_commit_oneline' : commit_oneline(self.old_rev),
-                       'commit_oneline' : commit_oneline(self.new_rev),
-                      }
+        update_info = {'repo': self.email_info.project_name,
+                       'short_ref_name': self.short_ref_name,
+                       'branch': '/%s' % self.short_ref_name,
+                       'n_commits': '',
+                       'subject': commit_subject(self.new_rev)[:59],
+                       'old_commit_oneline': commit_oneline(self.old_rev),
+                       'commit_oneline': commit_oneline(self.new_rev),
+                       }
         if self.short_ref_name == 'master':
             update_info['branch'] = ''
         if len(self.added_commits) > 1:

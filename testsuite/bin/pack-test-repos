@@ -53,6 +53,25 @@ if not isfile(bare_repo_config_path):
 # repo tarball.
 mv(bare_repo_config_path, BARE_REPO_CONFIG)
 
+# Temporary: Split repository config and hooks configuration into
+# two files. In the near future, the hooks' config will be checked in
+# the repository, rather than being handled via the unmanaged
+# repository's config file.
+if True:
+    src_file = BARE_REPO_CONFIG
+    meta_config_file = 'hooks_config'
+
+    with open(src_file) as fd:
+        src_txt = fd.readlines()
+
+    with open(src_file, 'w') as src_fd:
+        with open(meta_config_file, 'w') as cfg_fd:
+            dst_fd = src_fd
+            for l in src_txt:
+                if l.strip() == '[hooks]':
+                    dst_fd = cfg_fd
+                dst_fd.write(l)
+
 r = Run('tar cvfj git-repos.tar.bz2 bare repo'.split())
 if r.status != 0:
     # The packing operation failed. Print an error message, and exit.

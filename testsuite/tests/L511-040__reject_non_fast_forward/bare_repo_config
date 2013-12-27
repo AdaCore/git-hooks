@@ -6,6 +6,3 @@
         # We should not use denyNonFastforwards, as this overrides our scheme
         # of allowing non-fast-forward updates on topic/* branches.
         denyNonFastforwards = false
-[hooks]
-        from-domain = adacore.com
-        mailinglist = git-hooks-ci@example.com

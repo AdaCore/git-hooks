@@ -2,7 +2,3 @@
 	repositoryformatversion = 0
 	filemode = true
 	bare = true
-[hooks]
-        from-domain = adacore.com
-        mailinglist = git-hooks-ci@example.com
-        disable-merge-commit-checks = true

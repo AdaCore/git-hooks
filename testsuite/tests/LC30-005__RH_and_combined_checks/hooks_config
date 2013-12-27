@@ -1,0 +1,8 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+        # The purpose of this testcase is to verify that an RH
+        # requirement (tn-required) is verified even when
+        # combined-style-checking is true.
+        combined-style-checking = true
+        tn-required = true

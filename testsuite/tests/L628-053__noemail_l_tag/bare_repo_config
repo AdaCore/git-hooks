@@ -2,8 +2,3 @@
 	repositoryformatversion = 0
 	filemode = true
 	bare = true
-[hooks]
-        allow-lightweight-tag = true
-        from-domain = example.com
-        mailinglist = commits@example.com
-        no-emails = refs/tags/new-tag

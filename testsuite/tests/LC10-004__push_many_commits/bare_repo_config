@@ -2,12 +2,3 @@
 	repositoryformatversion = 0
 	filemode = true
 	bare = true
-[hooks]
-        from-domain = adacore.com
-        mailinglist = git-hooks-ci@example.com
-        # Set the max-commit-emails value to a ridiculously low value
-        # for testing purposes.
-        max-commit-emails = 3
-        # We want no commit emails on master.  It should mean that
-        # max-commit-emails has no influence over that branch.
-        no-emails = refs/heads/master

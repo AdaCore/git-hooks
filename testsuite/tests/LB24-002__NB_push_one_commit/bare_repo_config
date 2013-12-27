@@ -5,6 +5,3 @@
 	logallrefupdates = true
 [receive]
         denyCurrentBranch = ignore
-[hooks]
-        from-domain = adacore.com
-        mailinglist = git-hooks-ci@example.com

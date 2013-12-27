@@ -1,0 +1,5 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+        # Use a small value to provoke behavior for testing purposes.
+        max-email-diff-size = 200

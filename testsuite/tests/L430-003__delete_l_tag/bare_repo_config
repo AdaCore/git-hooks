@@ -2,7 +2,3 @@
 	repositoryformatversion = 0
 	filemode = true
 	bare = true
-[hooks]
-        allow-delete-tag = true
-        from-domain = example.com
-        mailinglist = something-ci@example.com

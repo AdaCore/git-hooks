@@ -1,6 +1,10 @@
 from errors import InvalidUpdate
-from git import git
+from git import git, CalledProcessError
 from type_conversions import to_type
+
+import os
+from tempfile import mkstemp
+import sys
 
 # A dictionary of all git config names that this module can query.
 #   - The key used for this table is the config name.
@@ -50,6 +54,16 @@ class UnsupportedOptionName(Exception):
 # its place.
 __git_config_map = None
 
+NO_REFS_META_CONFIG_WARNING = """\
+-----------------------------------------------------------------
+Unable to find file project.config from branch refs/meta/config
+Using your repository's config file instead.
+
+This is not a fatal issue, but please contact your repository's
+administrator to set your project.config file up.
+-----------------------------------------------------------------\
+"""
+
 
 def git_config(option_name):
     """Return the git config value for option_name.
@@ -94,10 +108,45 @@ def initialize_git_config_map():
     """
     global __git_config_map
 
-    # Get the currently defined config values, all in one go.
-    # Use "--file config" to make sure that we only parse the repository's
-    # config file. Otherwise, git also parses the user's config file.
-    all_configs = git.config('-l', '--file', 'config', _split_lines=True)
+    # The hooks' configuration is stored on a special branch called
+    # refs/meta/config, inside a file called project.config.  Get
+    # that file.
+    (tmp_fd, tmp_file) = mkstemp('tmp-git-hooks-')
+    try:
+        cfg_file = tmp_file
+        try:
+            git.show('refs/meta/config:project.config', _outfile=tmp_fd)
+        except CalledProcessError:
+            # Most likely a project that still uses the repository's
+            # config file to store the hooks configuration, rather
+            # that the controlled project.config file.
+            #
+            # Handle this situation by doing what we used to do,
+            # which is get the configuration from the repository's
+            # config file, after having warned the user about it
+            # (to expedite the transition).
+            #
+            # Note that we cannot use "utils.warn" to do the warning
+            # in this module, as the "utils" module depends on this
+            # module. Do the warning by hand.
+            #
+            # ??? One small issue is the fact that this warning may get
+            # displayed multiple times (once per "phase", eg "update",
+            # then "post-receive"). Given the relatively rare nature
+            # of this event, we'll just accept it, instead of fancying
+            # things up.
+            for l in NO_REFS_META_CONFIG_WARNING.splitlines():
+                print >> sys.stderr, '*** %s' % l
+            cfg_file = 'config'
+        os.close(tmp_fd)
+        # Get the currently defined config values, all in one go.
+        # Use "--file <cfg_file>" to make sure that we only parse
+        # the file we just retrieved. Otherwise, git also parses
+        # the user's config file.
+        all_configs = git.config('-l', '--file', cfg_file, _split_lines=True)
+    finally:
+        os.unlink(tmp_file)
+
     all_configs_map = dict([config.split('=', 1) for config in all_configs])
 
     # Populate the __git_config_map dictionary...

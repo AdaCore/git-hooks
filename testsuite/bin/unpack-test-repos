@@ -58,15 +58,4 @@ if isfile(bare_repo_config_path):
           % bare_repo_config_path)
 mv(BARE_REPO_CONFIG, bare_repo_config_path)
 
-# Temporary: Get the hooks configuration portion from that special
-# file in that special branch, and merge it into the bare repository's
-# configuration file. Eventually, this will become unnecessary, as
-# the hooks will be looking directly inside original location.
-with open(bare_repo_config_path, 'a') as fd:
-    r = Run('git show refs/meta/config:project.config'.split(),
-            cwd='bare/repo.git', output=fd, error=stderr)
-    if r.status != 0:
-        fatal('cannot find project.config file in refs/meta/config (err: %d)',
-              r.status)
-
 unlink(REPOS_TARBALL)

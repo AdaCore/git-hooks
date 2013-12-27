@@ -58,12 +58,15 @@ if isfile(bare_repo_config_path):
           % bare_repo_config_path)
 mv(BARE_REPO_CONFIG, bare_repo_config_path)
 
-# Temporary while working on the transition towards getting the hooks
-# configuration from refs/meta/config. Copy the hooks config into
-# this config file as well.
-HOOKS_CONFIG = 'hooks_config'
+# Temporary: Get the hooks configuration portion from that special
+# file in that special branch, and merge it into the bare repository's
+# configuration file. Eventually, this will become unnecessary, as
+# the hooks will be looking directly inside original location.
 with open(bare_repo_config_path, 'a') as fd:
-    with open(HOOKS_CONFIG) as hooks_fd:
-        fd.write(hooks_fd.read())
+    r = Run('git show refs/meta/config:project.config'.split(),
+            cwd='bare/repo.git', output=fd, error=stderr)
+    if r.status != 0:
+        fatal('cannot find project.config file in refs/meta/config (err: %d)',
+              r.status)
 
 unlink(REPOS_TARBALL)

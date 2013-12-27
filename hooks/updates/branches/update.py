@@ -59,7 +59,15 @@ class BranchUpdate(AbstractUpdate):
     """Update object for branch creation/update."""
     def self_sanity_check(self):
         """See AbstractUpdate.self_sanity_check."""
-        assert self.ref_name.startswith('refs/heads/')
+        # Only accept namespaces we know about. The purpose is to reject
+        # the update unless we have had a chance to verify that these hooks
+        # work well with those branches.
+        assert (self.ref_name.startswith('refs/heads/')
+                # Namespaces used by Gerrit.
+                or self.ref_name.startswith('refs/meta/')
+                or self.ref_name.startswith('refs/publish/')
+                or self.ref_name.startswith('refs/for/')
+                or self.ref_name.startswith('refs/drafts/'))
 
     def validate_ref_update(self):
         """See AbstractUpdate.validate_ref_update."""

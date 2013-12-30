@@ -4,7 +4,6 @@
 Driver for the git hooks testsuite.
 """
 
-from gnatpython.env import Env
 from gnatpython.fileutils import rm
 from gnatpython.main import Main
 from gnatpython.mainloop import (MainLoop, add_mainloop_options,

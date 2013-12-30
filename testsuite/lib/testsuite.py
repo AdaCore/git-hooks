@@ -64,6 +64,21 @@ def get_testcases(testcase_dirs):
     return result
 
 
+def print_testsuite_results_summary(metrics):
+    """Print a quick summary of the results after a testsuite run.
+
+    ARGUMENTS
+        metrics: Same as in gnatpython.mainloop.generate_collect_result.
+    """
+    print """\
+
+Testsuite Results Summary -- Out of %(run)d testscase(s) run in total:
+
+    %(failed)4d testcase(s) failed
+    %(crashed)4d testcase(s) crashed
+""" % metrics
+
+
 def main():
     """Run the testsuite.
     """
@@ -94,12 +109,15 @@ def main():
         # We do not need discriminants in this testsuite at the moment.
         discs = None
 
-        collect_result = generate_collect_result(options=m.options)
+        metrics = {}
+        collect_result = generate_collect_result(metrics=metrics,
+                                                 options=m.options)
         run_testcase = generate_run_testcase('bin/run-testcase',
                                              discs, m.options)
 
         MainLoop(testcases, run_testcase, collect_result,
                  m.options.mainloop_jobs)
+        print_testsuite_results_summary(metrics)
     finally:
         rm(m.options.tmp, recursive=True)
 

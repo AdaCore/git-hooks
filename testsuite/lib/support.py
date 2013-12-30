@@ -1,11 +1,8 @@
-from gnatpython.env import Env
 import gnatpython.ex
-from gnatpython.fileutils import mkdir, cd, diff
-from gnatpython.internal.excross import PIPE, run_cross
+from gnatpython.fileutils import diff
 
 import os
 import sys
-import re
 from tempfile import mkdtemp
 import unittest
 

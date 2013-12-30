@@ -1,10 +1,11 @@
 from argparse import ArgumentParser
+import os
 from shutil import rmtree
 import sys
 
 from errors import InvalidUpdate
 from git import get_object_type, git_show_ref
-from utils import debug, warn, create_scratch_dir
+from utils import debug, warn, create_scratch_dir, lock_directory
 # We have to import utils, because we cannot import scratch_dir
 # directly into this module.  Otherwise, our scratch_dir seems
 # to not see the update when create_scratch_dir is called.
@@ -57,7 +58,9 @@ def check_update(ref_name, old_rev, new_rev):
         raise InvalidUpdate(
             "This type of update (%s,%s) is currently unsupported."
             % (ref_name, get_object_type(new_rev)))
+    lock_socket = lock_directory(os.getcwd())
     update_cls.validate()
+    lock_socket.close()
 
 
 if __name__ == "__main__":

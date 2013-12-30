@@ -2,6 +2,7 @@ from os import environ
 import os
 import pwd
 import re
+import socket
 import sys
 from tempfile import mkdtemp
 
@@ -152,3 +153,35 @@ def indent(text, indentation):
     for line in text.splitlines(True):
         indented.append(indentation + line)
     return ''.join(indented)
+
+
+def lock_directory(dir_name):
+    """Return a socket-based lock on the given DIR_NAME.
+
+    Raise InvalidUpdate if the lock could not be obtained.
+
+    PARAMETERS
+        dir_name: The name of the directory to lock.
+
+    RETURN VALUE
+        A socket.Socket object.  Use the "close" method to release
+        the lock.
+    """
+    lock_socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+    try:
+        lock_socket.bind('\0git-hooks::' + os.path.realpath(dir_name))
+    except socket.error:
+        # It would be better if the warning was part of the InvalidUpdate
+        # exception date, since a client handling the lock failure
+        # might have prefered to silence the warning???  But that would
+        # require us to add a keyword argument to handle error message
+        # prefixes. Good enough for now.
+        warn('-' * 69,
+             '--  Another user is currently pushing changes to this'
+             ' repository.  --',
+             '--  Please try again in another minute or two.       '
+             '              --',
+             '-' * 69,
+             prefix='')
+        raise InvalidUpdate
+    return lock_socket

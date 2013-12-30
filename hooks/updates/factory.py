@@ -29,6 +29,7 @@ REF_CHANGE_MAP = {
     ('refs/for/',          CREATE, 'commit'): BranchCreation,
     ('refs/for/',          DELETE, 'commit'): BranchDeletion,
     ('refs/for/',          UPDATE, 'commit'): BranchUpdate,
+    ('refs/meta/',         CREATE, 'commit'): BranchCreation,
     ('refs/meta/',         UPDATE, 'commit'): BranchUpdate,
     ('refs/meta/',         DELETE, 'commit'): None,  # Not allowed for now.
     ('refs/publish/',      CREATE, 'commit'): BranchCreation,

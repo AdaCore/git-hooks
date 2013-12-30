@@ -15,7 +15,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
-remote: Subject: [repo] Created branch my-topic
+remote: Subject: [repo] Created branch 'my-topic'
 remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/my-topic
 remote: X-Git-Oldrev: 0000000000000000000000000000000000000000

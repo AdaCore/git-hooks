@@ -18,7 +18,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
-remote: Subject: [repo] Created branch topic/resync
+remote: Subject: [repo] Created branch 'topic/resync'
 remote: X-Act-Checkin: repo
 remote: X-Git-Refname: refs/heads/topic/resync
 remote: X-Git-Oldrev: 0000000000000000000000000000000000000000

@@ -23,6 +23,11 @@ class AbstractUpdate(object):
         short_ref_name: The reference's short name.  It is obtained by
             removing the "refs/[...]/" prefix.  For example, if ref_name
             is "refs/heads/master", then short_ref_name is "master".
+        ref_namespace: The part of the reference name prior to
+            the short_ref_name (excluding the separating '/').
+            It can be None if the namespace could not be parsed out of
+            the ref_name, in which case short_ref_name should be equal
+            to ref_name.
         old_rev: The reference's revision (SHA1) prior to the update.
             A null revision means that this is a new reference.
         new_rev: The reference's revision (SHA1) after the update.
@@ -62,10 +67,11 @@ class AbstractUpdate(object):
             new_rev: Same as the attribute.
             all_refs: Same as the attribute.
         """
-        m = re.match(r"refs/[^/]*/(.*)", ref_name)
+        m = re.match(r"([^/]+/[^/]+)/(.+)", ref_name)
 
         self.ref_name = ref_name
-        self.short_ref_name = m.group(1) if m else ref_name
+        self.short_ref_name = m.group(2) if m else ref_name
+        self.ref_namespace = m.group(1) if m else None
         self.old_rev = old_rev
         self.new_rev = new_rev
         self.new_rev_type = get_object_type(self.new_rev)
@@ -278,10 +284,19 @@ class AbstractUpdate(object):
         PARAMETERS
             commit: A CommitInfo object.
         """
+        if self.ref_namespace in ('refs/heads', 'refs/tags'):
+            if self.short_ref_name == 'master':
+                branch = ''
+            else:
+                branch = '/%s' % self.short_ref_name
+        else:
+            # Unusual namespace for our reference. Use the reference
+            # name in full to label the branch name.
+            branch = '(%s)' % self.ref_name
+
         subject = '[%(repo)s%(branch)s] %(subject)s' % {
             'repo': self.email_info.project_name,
-            'branch': ('/%s' % self.short_ref_name
-                       if self.short_ref_name != 'master' else ''),
+            'branch': branch,
             'subject': commit.subject[:SUBJECT_MAX_SUBJECT_CHARS],
             }
 

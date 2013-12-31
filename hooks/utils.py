@@ -1,8 +1,9 @@
+from datetime import datetime
+import fcntl
 from os import environ
 import os
 import pwd
 import re
-import socket
 import sys
 from tempfile import mkdtemp
 
@@ -155,33 +156,52 @@ def indent(text, indentation):
     return ''.join(indented)
 
 
-def lock_directory(dir_name):
-    """Return a socket-based lock on the given DIR_NAME.
+class FileLock(object):
+    """An object implementing file locking (work in "with" statement only).
 
-    Raise InvalidUpdate if the lock could not be obtained.
-
-    PARAMETERS
-        dir_name: The name of the directory to lock.
-
-    RETURN VALUE
-        A socket.Socket object.  Use the "close" method to release
-        the lock.
+    The locking is relying on os.link being atomic, and thus only
+    works on Unix systems.
     """
-    lock_socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
-    try:
-        lock_socket.bind('\0git-hooks::' + os.path.realpath(dir_name))
-    except socket.error:
-        # It would be better if the warning was part of the InvalidUpdate
-        # exception date, since a client handling the lock failure
-        # might have prefered to silence the warning???  But that would
-        # require us to add a keyword argument to handle error message
-        # prefixes. Good enough for now.
-        warn('-' * 69,
-             '--  Another user is currently pushing changes to this'
-             ' repository.  --',
-             '--  Please try again in another minute or two.       '
-             '              --',
-             '-' * 69,
-             prefix='')
-        raise InvalidUpdate
-    return lock_socket
+    def __init__(self, filename):
+        """The constructor.
+
+        PARAMETERS
+            filename: The name of the file to be locking.  If the file
+                does not exist at the time this class is instantiated,
+                it is automatically created.
+        """
+        self.filename = filename
+        self.lock_filename = self.filename + '.lock'
+        # Make sure the file to be locked exists; if not, create it now.
+        if not os.path.exists(self.filename):
+            # Use mode 'a' instead of 'w' to avoid truncating the file
+            # if someone opens the same file at the same time.
+            open(self.filename, 'a').close()
+            os.chmod(self.filename, 0664)
+
+    def __enter__(self):
+        try:
+            os.link(self.filename, self.lock_filename)
+            # Just in case the lock is accidently left behind, write
+            # some information that helps us track the author of
+            # the lock.
+            with open(self.lock_filename, 'w') as f:
+                f.write('locked by user %s at %s (pid = %d)\n'
+                        % (get_user_name(), str(datetime.now()), os.getpid()))
+        except:
+            # It would be better if the warning was part of the InvalidUpdate
+            # exception date, since a client handling the lock failure
+            # might have prefered to silence the warning???  But that would
+            # require us to add a keyword argument to handle error message
+            # prefixes. Good enough for now.
+            warn('-' * 69,
+                 '--  Another user is currently pushing changes to this'
+                 ' repository.  --',
+                 '--  Please try again in another minute or two.       '
+                 '              --',
+                 '-' * 69,
+                 prefix='')
+            raise InvalidUpdate
+
+    def __exit__(self, type, value, traceback):
+        os.unlink(self.lock_filename)

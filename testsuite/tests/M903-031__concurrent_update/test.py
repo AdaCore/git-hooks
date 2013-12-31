@@ -1,4 +1,5 @@
 from support import *
+import fcntl
 import os
 import socket
 
@@ -12,10 +13,30 @@ class TestRun(TestCase):
         # to the same repository, but using a bit of internal knowledge
         # to create a lock on the repository.
 
-        lock_socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
-        lock_socket.bind('\0git-hooks::%s/bare/repo.git'
-                         % os.path.realpath(TEST_DIR))
+        lock_filename = os.path.join(TEST_DIR, 'bare', 'repo.git',
+                                     'git-hooks::update.token.lock')
+        f = open(lock_filename, 'w')
+        f.write('locked by testsuite at <now> (pid = %d)'
+                % os.getpid())
+        f.close()
 
+        p = Run('git push origin master'.split())
+        expected_out = """\
+remote: ---------------------------------------------------------------------
+remote: --  Another user is currently pushing changes to this repository.  --
+remote: --  Please try again in another minute or two.                     --
+remote: ---------------------------------------------------------------------
+remote: error: hook declined to update refs/heads/master
+To ../bare/repo.git
+ ! [remote rejected] master -> master (hook declined)
+error: failed to push some refs to '../bare/repo.git'
+"""
+
+        self.assertNotEqual(p.status, 0, p.image)
+        self.assertRunOutputEqual(p, expected_out)
+
+        # Try it again, to make sure that the previous attempt did not
+        # accidently deleted the lock file.
         p = Run('git push origin master'.split())
         expected_out = """\
 remote: ---------------------------------------------------------------------
@@ -35,7 +56,7 @@ error: failed to push some refs to '../bare/repo.git'
         # removing our artificial lock, and verify that the push
         # now succeeds.
 
-        lock_socket.close()
+        os.unlink(lock_filename)
 
         p = Run('git push origin master'.split())
         expected_out = """\

@@ -1,0 +1,4 @@
+# This is where the tests are, so no need to provide pre-commit checks.
+# We know we're going to have some failures, if anything due to lines
+# that are too long in the expected output.
+*    no-precommit-check

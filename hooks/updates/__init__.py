@@ -417,28 +417,24 @@ class AbstractUpdate(object):
 
             # Print a more verbose description of the added commits.
             #
-            # Instead of calling git once per commit, we try to produce
-            # the entire log using one single command.  As a result,
-            # we have to make a short and approximate duplication
-            # of the code in self.__get_added_commits, which is not
-            # really ideal. But sharing the code does not seem obvious
-            # at first sight, and calling git multiple times is really
-            # an unattractive solution too (for performance reasons,
-            # as we routinely do merges that bring in a large number
-            # of commits).
+            # We do this by calling "git log -n1" for each and every
+            # commit in self.added_commits. This not ideal, as this list
+            # can be pretty long. We still do it this way, because
+            # it's very simple, and allows us to be certain that
+            # the list of commits in the "verbose" section is the exact
+            # same as the "short" list above.
             #
-            # In practice, the amount of code is fairly short, and
-            # the approximation should be very close to matching
-            # self.added_commits.
+            # If it turns out to be unnacceptable, we can try producing
+            # the full log using a single git command. Because of
+            # merge commits, it's not sufficient to only exclude
+            # the parent of the base commit. One must exclude all
+            # parents which are not in self.added_commits.  Otherwise,
+            # the log will be including commits accessible from
+            # the merge's other parents.
 
-            log_options = ['--pretty=medium', self.new_rev]
-            base_rev = self.added_commits[0].base_rev
-            if not is_null_rev(base_rev):
-                log_options.append('^%s' % base_rev)
-            if not is_null_rev(self.old_rev) and self.old_rev != base_rev:
-                log_options.append('^%s' % self.old_rev)
-            summary.append('')
-            summary.append(git.log(*log_options))
+            for commit in reversed(self.added_commits):
+                summary.append('')
+                summary.append(git.log('-n1', '--pretty=medium', commit.rev))
 
         # We do not want that summary to be used for filing purposes.
         # So add a "Diff:" marker.

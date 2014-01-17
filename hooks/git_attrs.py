@@ -97,9 +97,6 @@ def git_attribute(commit_rev, filename, attr_name):
         file yielded a value for this attribute, then try one last
         time with GIT_DIR/info/default_attributes (if it exists).
     """
-    path = filename
-    attr_value = UNSPECIFIED_ATTR
-
     # First, delete any old BARE_REPO_ATTRIBUTES_FILE left from
     # the previous push.  Otherwise, it causes problems if owned
     # by a different user.
@@ -119,9 +116,11 @@ def git_attribute(commit_rev, filename, attr_name):
         # and group.
         os.chmod(attributes_dir, 0775)
 
-    while path:
-        path = dirname(path)
-        gitattributes_file = os.path.join(path, '.gitattributes')
+    (path_to_rel, rel_file_path) = os.path.split(filename)
+    attr_value = UNSPECIFIED_ATTR
+
+    while True:
+        gitattributes_file = os.path.join(path_to_rel, '.gitattributes')
 
         if cached_file_exists(commit_rev, gitattributes_file):
             # Get the .gitattributes files in that directory, and save it
@@ -129,12 +128,18 @@ def git_attribute(commit_rev, filename, attr_name):
             # to read it for us.
             git.show('%s:%s' % (commit_rev, gitattributes_file),
                      _outfile=BARE_REPO_ATTRIBUTES_FILE)
-            attr_value = get_attribute(filename, attr_name)
+            attr_value = get_attribute(rel_file_path, attr_name)
 
             # If this .gitattribute file provided us with an attribute
             # value, then we're done.
             if attr_value != UNSPECIFIED_ATTR:
                 break
+
+        if not path_to_rel or path_to_rel == '.':
+            # No more parent directories.  We're done.
+            break
+        (path_to_rel, parent_dir) = os.path.split(path_to_rel)
+        rel_file_path = os.path.join(parent_dir, rel_file_path)
 
     # If none of the .gitattributes files in the project provided
     # an attribute value, then check the `info/default_attributes'

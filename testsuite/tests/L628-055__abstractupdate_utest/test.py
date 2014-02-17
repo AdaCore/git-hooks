@@ -27,13 +27,13 @@ class TestRun(TestCase):
                 'refs/heads/master',
                 '0000000000000000000000000000000000000000',
                 'd065089ff184d97934c010ccd0e7e8ed94cb7165',
-                None)
+                None, None)
 
         bad_update = MissingOtherMethods(
             'refs/heads/master',
             '0000000000000000000000000000000000000000',
             'd065089ff184d97934c010ccd0e7e8ed94cb7165',
-            None)
+            None, None)
 
         with self.assertRaises(AssertionError):
             bad_update.validate_ref_update()

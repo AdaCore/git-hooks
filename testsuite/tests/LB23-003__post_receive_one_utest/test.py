@@ -19,7 +19,7 @@ class TestRun(TestCase):
             'bogus/heads/master',
             '0000000000000000000000000000000000000000',
             'd065089ff184d97934c010ccd0e7e8ed94cb7165',
-            None)
+            None, None)
         expected_out = """\
 *** post-receive: Unsupported reference update: bogus/heads/master (ignored).
 ***               old_rev = 0000000000000000000000000000000000000000

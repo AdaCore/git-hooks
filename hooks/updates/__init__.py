@@ -56,7 +56,8 @@ class AbstractUpdate(object):
                this required information, rather than recomputing it
                repeatedly.
     """
-    def __init__(self, ref_name, old_rev, new_rev, all_refs):
+    def __init__(self, ref_name, old_rev, new_rev, all_refs,
+                 submitter_email):
         """The constructor.
 
         Also calls self.auto_sanity_check() at the end.
@@ -66,6 +67,11 @@ class AbstractUpdate(object):
             old_rev: Same as the attribute.
             new_rev: Same as the attribute.
             all_refs: Same as the attribute.
+            submitter_email: Same as parameter from_email in class
+                EmailInfo's constructor.
+                This is used to override the default "from" email when
+                the user sending the emails is different from the user
+                that pushed/submitted the update.
         """
         m = re.match(r"([^/]+/[^/]+)/(.+)", ref_name)
 
@@ -81,7 +87,7 @@ class AbstractUpdate(object):
         # the minimum required to email update notifications,
         # refuse the update.  For this, we rely on the EmailInfo
         # class instantiation, which performs the checks for us.
-        self.email_info = EmailInfo()
+        self.email_info = EmailInfo(email_from=submitter_email)
 
         # Implement the added_commits "attribute" as a property,
         # to allow for initialization only on-demand. This allows

@@ -43,11 +43,13 @@ class EmailInfo(object):
         is set.  Otherwise, an InvalidUpdate exception is raised when
         the object is initialized.
     """
-    def __init__(self):
+    def __init__(self, email_from):
         """The constructor.
 
         PARAMETERS
-            print_warnings: If True, then emit warnings.
+            email_from: If not None, a string that provides the email
+                address of the sender.  Eg: 'David Smith <ds@example.com>'.
+                If None, this address is computed from the environment.
         """
         self.project_name = get_module_name()
 
@@ -56,9 +58,12 @@ class EmailInfo(object):
             raise InvalidUpdate(
                 'Error: hooks.from-domain config variable not set.',
                 'Please contact your repository\'s administrator.')
-        self.email_from = '%s <%s@%s>' % (get_user_full_name(),
-                                          get_user_name(),
-                                          from_domain)
+        if email_from is None:
+            self.email_from = '%s <%s@%s>' % (get_user_full_name(),
+                                              get_user_name(),
+                                              from_domain)
+        else:
+            self.email_from = email_from
 
         self.email_to = git_config('hooks.mailinglist')
         if not self.email_to:

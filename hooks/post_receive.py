@@ -16,7 +16,7 @@ from updates.factory import new_update
 from utils import (debug, warn)
 
 
-def post_receive_one(ref_name, old_rev, new_rev, refs):
+def post_receive_one(ref_name, old_rev, new_rev, refs, submitter_email):
     """post-receive treatment for one reference.
 
     PARAMETERS
@@ -25,13 +25,14 @@ def post_receive_one(ref_name, old_rev, new_rev, refs):
         new_rev: The SHA1 of the reference after the update.
         refs: A dictionary containing all references, as described
             in git_show_ref.
+        submitter_email: Same as AbstractUpdate.__init__.
     """
     debug('post_receive_one(ref_name=%s\n'
           '                        old_rev=%s\n'
           '                        new_rev=%s)'
           % (ref_name, old_rev, new_rev))
 
-    update = new_update(ref_name, old_rev, new_rev, refs)
+    update = new_update(ref_name, old_rev, new_rev, refs, submitter_email)
     if update is None:
         # We emit a warning, rather than trigger an assertion, because
         # it gives the script a chance to process any other reference
@@ -44,7 +45,7 @@ def post_receive_one(ref_name, old_rev, new_rev, refs):
     update.send_email_notifications()
 
 
-def post_receive(updated_refs):
+def post_receive(updated_refs, submitter_email):
     """Implement the post-receive hook for all given updated_refs.
 
     PARAMETERS
@@ -52,12 +53,14 @@ def post_receive(updated_refs):
             being updated, and containing 2-elements tuple.  This tuple
             contains the previous revision, and the new revision of the
             reference.
+        submitter_email: Same as AbstractUpdate.__init__.
     """
     refs = git_show_ref()
 
     for ref_name in updated_refs.keys():
         (old_rev, new_rev) = updated_refs[ref_name]
-        post_receive_one(ref_name, old_rev, new_rev, refs)
+        post_receive_one(ref_name, old_rev, new_rev, refs,
+                         submitter_email)
 
     # Flush the email queue.  Since this involves creating a daemon,
     # only do so if there is at least one email to be sent.
@@ -80,6 +83,11 @@ def parse_command_line(args):
     # Python version 2.7 or later, because it handles mandatory
     # command-line arguments for us as well.
     ap = ArgumentParser(description='Git "update" hook.')
+    ap.add_argument('--submitter-email',
+                    help=('Use this email address instead as the sender'
+                          ' of email notifications instead of using the'
+                          ' email address of the user calling this'
+                          ' script'))
     ap.add_argument('old_rev',
                     help='the SHA1 before update')
     ap.add_argument('new_rev',
@@ -93,7 +101,7 @@ def parse_command_line(args):
 if __name__ == '__main__':
     refs_data = OrderedDict()
     for line in sys.stdin:
-        stdin_argv = line.strip().split()
+        stdin_argv = line.strip().split() + sys.argv[1:]
         args = parse_command_line(stdin_argv)
         refs_data[args.ref_name] = (args.old_rev, args.new_rev)
-    post_receive(refs_data)
+    post_receive(refs_data, args.submitter_email)

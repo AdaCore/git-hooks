@@ -50,7 +50,7 @@ REF_CHANGE_MAP = {
 }
 
 
-def new_update(ref_name, old_rev, new_rev, all_refs):
+def new_update(ref_name, old_rev, new_rev, all_refs, submitter_email):
     """Return the correct object for the given parameters.
 
     PARAMETERS
@@ -83,4 +83,5 @@ def new_update(ref_name, old_rev, new_rev, all_refs):
     if new_cls is None:
         return None
 
-    return new_cls(ref_name, old_rev, new_rev, all_refs)
+    return new_cls(ref_name, old_rev, new_rev, all_refs,
+                   submitter_email)

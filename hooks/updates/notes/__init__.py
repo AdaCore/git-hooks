@@ -71,7 +71,17 @@ class GitNotes(object):
         # ... except in the case where the notes_rev does not have
         # a parent (first note).  In that case, we diff-tree'ed against
         # the empty tree rev, and the first line is omitted.
-        assert len(all_changes) in (1, 2)
+        #
+        # There is also another situation where the output is more than
+        # two lines: Newer version of git sometimes rename some of the
+        # files created by older versions of "git notes" during notes
+        # updates, and bunches those renamings together with a note
+        # update, thus creating commits that actually touch multiple
+        # files (N707-041). In that situation, it appears as though
+        # the first entry is always the one corresponding to the commit
+        # being annotated, so discard anything past the second line.
+        all_changes = all_changes[:2]
+        assert all_changes
 
         (_, _, _, _, _, filename) = all_changes[-1].split(None, 5)
         return filename

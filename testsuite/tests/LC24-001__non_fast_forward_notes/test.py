@@ -13,8 +13,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 hint: Updates were rejected because the remote contains work that you do
 hint: not have locally. This is usually caused by another repository pushing
-hint: to the same ref. You may want to first merge the remote changes (e.g.,
-hint: 'git pull') before pushing again.
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 """
         if self.git_version() < '1.7.10':
@@ -41,6 +41,18 @@ error: failed to push some refs to '../bare/repo.git'
 hint: Updates were rejected because a pushed branch tip is behind its remote
 hint: counterpart. Check out this branch and merge the remote changes
 hint: (e.g. 'git pull') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+"""
+        elif self.git_version() < '1.9':
+            # Slight differences in output...
+            expected_out="""\
+To ../bare/repo.git
+ ! [rejected]        refs/notes/commits -> refs/notes/commits (fetch first)
+error: failed to push some refs to '../bare/repo.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first merge the remote changes (e.g.,
+hint: 'git pull') before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 """
 

@@ -111,8 +111,8 @@ class NotesUpdate(AbstractUpdate):
         # by stripping it from the output.
         diff = git.show(commit.rev, pretty="format:|", p=True)[1:]
 
-        email = Email(self.email_info, subject, body, self.ref_name,
-                      commit.base_rev, commit.rev, diff)
+        email = Email(self.email_info, subject, body, commit.author,
+                      self.ref_name, commit.base_rev, commit.rev, diff)
         email.enqueue()
 
     def __ensure_fast_forward(self):

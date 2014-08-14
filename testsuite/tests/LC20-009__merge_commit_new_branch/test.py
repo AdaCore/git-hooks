@@ -20,6 +20,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Subject: [repo] Created branch 'topic/resync'
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Test Suite <testsuite@adacore.com>
 remote: X-Git-Refname: refs/heads/topic/resync
 remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
 remote: X-Git-Newrev: ffb05b4a606fdb7b2919b209c725fe3b71880c00
@@ -36,6 +37,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/topic/resync] New file README. Update a.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/topic/resync
 remote: X-Git-Oldrev: e02e15c547420b61fdc384c816e0e670ee8795b2
 remote: X-Git-Newrev: 6d62250fdaed631cb170c0fc19c338accdba14ec
@@ -79,6 +81,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/topic/resync] New file `c', update README accordingly.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/topic/resync
 remote: X-Git-Oldrev: 6d62250fdaed631cb170c0fc19c338accdba14ec
 remote: X-Git-Newrev: b4bfa84ef414162de60ff93005c5528f68b4c755
@@ -126,6 +129,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/topic/resync] Merge topic branch fsf-head.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/topic/resync
 remote: X-Git-Oldrev: 33e7556e39b638aa07f769bd894e75ed1af490dc
 remote: X-Git-Newrev: ffb05b4a606fdb7b2919b209c725fe3b71880c00

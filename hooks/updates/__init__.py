@@ -325,8 +325,8 @@ class AbstractUpdate(object):
         diff = git.show(commit.rev, p=True, M=True, stat=True,
                         pretty="format:|")[1:]
 
-        email = Email(self.email_info, subject, body, self.ref_name,
-                      commit.base_rev, commit.rev, diff)
+        email = Email(self.email_info, subject, body, commit.author,
+                      self.ref_name, commit.base_rev, commit.rev, diff)
         email.enqueue()
 
     #-----------------------
@@ -681,7 +681,7 @@ class AbstractUpdate(object):
         update_email_contents = self.get_update_email_contents()
         if update_email_contents is not None:
             (subject, body) = update_email_contents
-            update_email = Email(self.email_info, subject, body,
+            update_email = Email(self.email_info, subject, body, None,
                                  self.ref_name, self.old_rev, self.new_rev,
                                  send_to_filer=self.send_cover_email_to_filer)
             update_email.enqueue()

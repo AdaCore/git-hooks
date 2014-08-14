@@ -35,6 +35,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Rename A into B.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: a60540361d47901d3fe254271779f380d94645f7
 remote: X-Git-Newrev: 6a48cdab9b100506a387a8398af4751b33a4bfd0

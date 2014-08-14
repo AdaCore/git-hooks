@@ -31,6 +31,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Minor modifications.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: 426fba3571947f6de7f967e885a3168b9df7004a
 remote: X-Git-Newrev: 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3
@@ -81,6 +82,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] 1 modified file, 1 new file.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3
 remote: X-Git-Newrev: 4a325b31f594b1dc2c66ac15c4b6b68702bd0cdf
@@ -120,6 +122,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Modify `c', delete `b'.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: 4a325b31f594b1dc2c66ac15c4b6b68702bd0cdf
 remote: X-Git-Newrev: cc8d2c2637bda27f0bc2125181dd2f8534d16222
@@ -162,6 +165,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Modify file `d' alone.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: cc8d2c2637bda27f0bc2125181dd2f8534d16222
 remote: X-Git-Newrev: dd6165c96db712d3e918fb5c61088b171b5e7cab

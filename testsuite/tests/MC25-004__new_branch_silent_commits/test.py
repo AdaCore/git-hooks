@@ -22,6 +22,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Subject: [repo] Created branch 'head'
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Test Suite <testsuite@adacore.com>
 remote: X-Git-Refname: refs/heads/head
 remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
 remote: X-Git-Newrev: 53ec7dc719ba973a33490a696250b2bdeb931e7b
@@ -80,6 +81,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/head] Add .gitignore file.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/head
 remote: X-Git-Oldrev: c524e6e114e8e4256e54953bedcf047b08d55a60
 remote: X-Git-Newrev: a878a5637be2c5ccf3186729825d96d2c9d50a7b
@@ -112,6 +114,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/head] Resync with fsf-master as of now.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/head
 remote: X-Git-Oldrev: a878a5637be2c5ccf3186729825d96d2c9d50a7b
 remote: X-Git-Newrev: 07e4909783876d0b2372da64eab2996c2460f67d
@@ -139,6 +142,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/head] Add file use_source.c.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/head
 remote: X-Git-Oldrev: 07e4909783876d0b2372da64eab2996c2460f67d
 remote: X-Git-Newrev: 53ec7dc719ba973a33490a696250b2bdeb931e7b

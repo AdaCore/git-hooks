@@ -50,6 +50,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Implement foo.c:second.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: 007bd39b476d596fbc140227f31a73247272d281
 remote: X-Git-Newrev: 1091f4333e5842fe4e17bd6b445f5899f13cc7e9
@@ -84,6 +85,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Merge change from the 'topic' branch.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: 128c4380beb275f9002a42e0b5da3618e00c11a9
 remote: X-Git-Newrev: 7277e89f8909d7279357489ccf0de81c7c0f3286

@@ -20,6 +20,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Subject: [repo] (3 commits) Merge topic branch fsf-head.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Test Suite <testsuite@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: 33e7556e39b638aa07f769bd894e75ed1af490dc
 remote: X-Git-Newrev: ffb05b4a606fdb7b2919b209c725fe3b71880c00
@@ -86,6 +87,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Merge topic branch fsf-head.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: 33e7556e39b638aa07f769bd894e75ed1af490dc
 remote: X-Git-Newrev: ffb05b4a606fdb7b2919b209c725fe3b71880c00

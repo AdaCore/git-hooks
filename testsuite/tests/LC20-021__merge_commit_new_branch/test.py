@@ -17,6 +17,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Subject: [repo] Created branch 'topic/resync'
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Test Suite <testsuite@adacore.com>
 remote: X-Git-Refname: refs/heads/topic/resync
 remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
 remote: X-Git-Newrev: ffb05b4a606fdb7b2919b209c725fe3b71880c00

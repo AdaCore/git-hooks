@@ -20,6 +20,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] 104 characters. Way too long.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: X-Git-Newrev: 8f9e357b53cc88eb0e7a57ee8c7d1ccd74db1ae3

@@ -30,6 +30,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Delete foo.c
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: f82624871b6cfc46d5a7c5be518bc20e8f42be42
 remote: X-Git-Newrev: adb8ffe7b1718f6f8a6ec22f7c0ff06b83f086ec

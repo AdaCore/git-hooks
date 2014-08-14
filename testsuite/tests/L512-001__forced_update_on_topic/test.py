@@ -20,6 +20,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/topic/new-feature] Change a, and create b.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/topic/new-feature
 remote: X-Git-Oldrev: d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: X-Git-Newrev: 14d1fa28493dd548753d11729a117dadaa9905fe

@@ -22,6 +22,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Add new file b.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: a60540361d47901d3fe254271779f380d94645f7
 remote: X-Git-Newrev: 80885319069c691f295150b51f478d99a36919c3
@@ -55,6 +56,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Merge branch 'topic'
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: a89ee05260e5f0499f09dc36a9c3c1fd55fd4a79
 remote: X-Git-Newrev: 3c799a3825af79b1a0f56b00ccc72a1e2837b4ed

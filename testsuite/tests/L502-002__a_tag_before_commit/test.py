@@ -38,6 +38,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Created tag version-0.1a
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Test Suite <testsuite@adacore.com>
 remote: X-Git-Refname: refs/tags/version-0.1a
 remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
 remote: X-Git-Newrev: b03c3952e1cd29c6ec0cad2590689c0b22d02197
@@ -74,6 +75,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/version-0.1a] Minor modifications.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/tags/version-0.1a
 remote: X-Git-Oldrev: 426fba3571947f6de7f967e885a3168b9df7004a
 remote: X-Git-Newrev: 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3
@@ -143,6 +145,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Minor modifications.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: 426fba3571947f6de7f967e885a3168b9df7004a
 remote: X-Git-Newrev: 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3

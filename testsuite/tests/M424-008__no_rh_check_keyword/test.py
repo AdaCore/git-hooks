@@ -21,6 +21,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Updated a. Non-empty line after subject (no no).
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: X-Git-Newrev: 67091e2b3fd5b0b072f4cb6f6f8b5d58fac891a3

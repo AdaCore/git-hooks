@@ -68,6 +68,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Subject: [repo] (2 commits) Merge the changes made in the 'thirdparty' branch.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Test Suite <testsuite@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: 96cc4826ed3f82bee77514177ff3944601d1800d
 remote: X-Git-Newrev: 3c75c8d4c196c09cae03ba1832b4c31285f8a85e
@@ -119,6 +120,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Merge the changes made in the 'thirdparty' branch.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: 96cc4826ed3f82bee77514177ff3944601d1800d
 remote: X-Git-Newrev: 3c75c8d4c196c09cae03ba1832b4c31285f8a85e

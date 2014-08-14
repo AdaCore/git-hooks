@@ -16,6 +16,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] notes update for d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/notes/commits
 remote: X-Git-Oldrev: bbcc356176bb7f3104788323566c4fcef70650fc
 remote: X-Git-Newrev: 58e8efaaf0dee13edea66b1abbd4b669132b3d77
@@ -50,6 +51,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] notes update for 52abc3c195e80fa1713f2603290b6b202484694b
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/notes/commits
 remote: X-Git-Oldrev: 58e8efaaf0dee13edea66b1abbd4b669132b3d77
 remote: X-Git-Newrev: 0892f7e8d41c265fc0ffcbe604f0e7ce784bd9d2

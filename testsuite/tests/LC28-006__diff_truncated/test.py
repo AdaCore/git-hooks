@@ -19,6 +19,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Updated a.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: X-Git-Newrev: 1becc1a611a0059146a839001527229fa6f75569

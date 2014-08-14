@@ -22,6 +22,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Subject: [repo] Created branch 'release-0.1-branch'
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Test Suite <testsuite@adacore.com>
 remote: X-Git-Refname: refs/heads/release-0.1-branch
 remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
 remote: X-Git-Newrev: 4205e52273adad6b014e19fb1cf1fe1c9b8b4089
@@ -38,6 +39,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/release-0.1-branch] Update file b.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/release-0.1-branch
 remote: X-Git-Oldrev: 4a325b31f594b1dc2c66ac15c4b6b68702bd0cdf
 remote: X-Git-Newrev: 2e5cfdf54f56b54de1d507e00b62ecc3de5addd3
@@ -71,6 +73,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/release-0.1-branch] Generate update.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/release-0.1-branch
 remote: X-Git-Oldrev: 2e5cfdf54f56b54de1d507e00b62ecc3de5addd3
 remote: X-Git-Newrev: 4205e52273adad6b014e19fb1cf1fe1c9b8b4089

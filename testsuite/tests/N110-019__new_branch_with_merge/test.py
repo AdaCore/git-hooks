@@ -17,6 +17,7 @@ remote: From: Test Suite <testsuite@example.com>
 remote: To: commits@example.com
 remote: Subject: [repo] Created branch 'wavefront'
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Test Suite <testsuite@example.com>
 remote: X-Git-Refname: refs/heads/wavefront
 remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
 remote: X-Git-Newrev: 3373422d2112eb335512f72cfbc59df0ae78506f
@@ -65,6 +66,7 @@ remote: To: commits@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo/wavefront] today's resync from fsf-master. Mostly to get c.txt.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/wavefront
 remote: X-Git-Oldrev: 17edc77b55f058bedc97e7db2e35b21250bef8b3
 remote: X-Git-Newrev: 3373422d2112eb335512f72cfbc59df0ae78506f

@@ -19,6 +19,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Add 3 files.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: f82624871b6cfc46d5a7c5be518bc20e8f42be42
 remote: X-Git-Newrev: c699b49d82d8c18c519f41dacb78839fc7416edb

@@ -46,6 +46,7 @@ remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Subject: [repo] Created branch 'config' in namespace 'refs/meta'
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Test Suite <testsuite@adacore.com>
 remote: X-Git-Refname: refs/meta/config
 remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
 remote: X-Git-Newrev: 85d4247731f5fb93305b733053bc7e2c665f2fb5
@@ -62,6 +63,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo(refs/meta/config)] Initial config for project
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/meta/config
 remote: X-Git-Oldrev:
 remote: X-Git-Newrev: 85d4247731f5fb93305b733053bc7e2c665f2fb5

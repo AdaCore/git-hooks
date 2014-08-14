@@ -26,6 +26,7 @@ remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Do not perform precommit checks on test.py files in
 remote:  testsuite/tests.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: cf7aa60ca98b115fbc691d67f6f6b10810224d29
 remote: X-Git-Newrev: f2e95c7d99c45ac81569b6eaeec9f03035191060
@@ -57,6 +58,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Add comment in test_001/test.py, create test_001/test.out.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: f2e95c7d99c45ac81569b6eaeec9f03035191060
 remote: X-Git-Newrev: 83afb60ef63e1d2e3c418f027e61a448bb4f589c

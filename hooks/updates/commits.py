@@ -8,6 +8,7 @@ class CommitInfo(object):
 
     ATTRIBUTES
         rev: The commit's revision (SHA1).
+        author: The author of the commit.
         subject: The subject of the commit.
         base_rev: The revision (SHA1) of the commit's parent,
             for "diff'ing" purpose (determining what changes are
@@ -22,8 +23,9 @@ class CommitInfo(object):
             this commit, False otherwise. May be None, meaning that
             the value of that attribute has not been computed yet.
     """
-    def __init__(self, rev, subject, base_rev=None):
+    def __init__(self, rev, author, subject, base_rev=None):
         self.rev = rev
+        self.author = author
         self.subject = subject
         self.base_rev = base_rev
         self.pre_existing_p = None
@@ -41,20 +43,19 @@ def commit_info_list(*args):
     PARAMETERS
         Same as in the "git rev-list" command.
     """
-    # In the following call to "git.rev_list", we list the --oneline
-    # and --no-abbrev arguments explicitly instead of using
-    # the usual named arguments, because the order between named
-    # arguments is not guaranteed to be preserved.  In this case,
-    # the order between the oneline and no-abbrev switches
-    # is very important to make sure we get non-abbreviated commit revs.
-    all_revs = git.rev_list('--oneline', '--no-abbrev', *args,
+    rev_info = git.rev_list(*args, pretty='format:%an <%ae>%n%s',
                             _split_lines=True, reverse=True)
+    # Each commit should generate 3 lines of output.
+    assert len(rev_info) % 3 == 0
 
     result = []
     prev_rev = None
-    for rev_info in all_revs:
-        rev, subject = rev_info.split(None, 1)
-        result.append(CommitInfo(rev, subject, prev_rev))
+    while rev_info:
+        commit_keyword, rev = rev_info.pop(0).split(None, 1)
+        author = rev_info.pop(0)
+        subject = rev_info.pop(0)
+        assert commit_keyword == 'commit'
+        result.append(CommitInfo(rev, author, subject, prev_rev))
         prev_rev = rev
 
     return result

@@ -19,6 +19,7 @@ remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo(refs/meta/config)] Add small comment.
 remote: X-Act-Checkin: repo
+remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/meta/config
 remote: X-Git-Oldrev: 85d4247731f5fb93305b733053bc7e2c665f2fb5
 remote: X-Git-Newrev: fe3f0147873852f46b6fc0c372fbe846367055d5

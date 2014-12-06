@@ -19,7 +19,7 @@ GIT_CONFIG_OPTS = \
      'hooks.debug-level':                 {'default': 0,      'type': int},
      'hooks.disable-merge-commit-checks': {'default': False,  'type': bool},
      'hooks.from-domain':                 {'default': None},
-     'hooks.mailinglist':                 {'default': None},
+     'hooks.mailinglist':                 {'default': None,   'type': tuple},
      'hooks.max-commit-emails':           {'default': 100,    'type': int},
      'hooks.max-email-diff-size':         {'default': 100000, 'type': int},
      'hooks.max-rh-line-length':          {'default': 76,     'type': int},

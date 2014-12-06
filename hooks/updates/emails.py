@@ -6,6 +6,7 @@ from email.utils import getaddresses
 from errors import InvalidUpdate
 from git import get_module_name
 import os
+from string import strip
 from time import sleep
 from updates.sendmail import sendmail
 from utils import debug, get_user_name, get_user_full_name
@@ -205,7 +206,7 @@ class Email(object):
 
         # Create the email's header.
         e_msg['From'] = self.email_info.email_from
-        e_msg['To'] = self.email_info.email_to
+        e_msg['To'] = ', '.join(map(strip, self.email_info.email_to))
         if self.send_to_filer and git_config('hooks.bcc-file-ci'):
             e_msg['Bcc'] = FILER_EMAIL
         e_msg['Subject'] = self.email_subject

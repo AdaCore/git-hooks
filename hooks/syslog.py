@@ -1,8 +1,9 @@
 """Handling of syslog-ing...
 """
 
-from gnatpython.ex import Run
 from os import environ
+from subprocess import Popen, PIPE, STDOUT
+
 from utils import warn
 
 
@@ -18,16 +19,18 @@ def syslog(message, tag='cvs_check', priority='local0.warn'):
     if 'GIT_HOOKS_LOGGER' in environ:
         logger_exe = environ['GIT_HOOKS_LOGGER']
 
-    p = Run([logger_exe, '-t', tag, '-p', priority, message])
-    if p.status != 0:
+    p = Popen([logger_exe, '-t', tag, '-p', priority, message],
+              stdout=PIPE, stderr=STDOUT)
+    out, _ = p.communicate()
+    if p.returncode != 0:
         info = (['Failed to file the following syslog entry:',
                  '  - message: %s' % message,
                  '  - tag: %s' % tag,
                  '  - priority: %s' % priority,
                  '',
-                 'logger returned with error code %d:' % p.status]
-                + p.out.splitlines())
+                 'logger returned with error code %d:' % p.returncode]
+                + out.splitlines())
         warn(*info)
 
-    elif p.out.rstrip():
-        print p.out.rstrip()
+    elif out.rstrip():
+        print out.rstrip()

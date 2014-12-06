@@ -1,8 +1,8 @@
 This directory contains the AdaCore Git Hooks.
 
-The AdaCore Git Hooks provides a set of scripts to be used as server-side
-hooks for git repositories.  In addition to those scripts, it also
-provides a testsuite to validate those scripts.
+The AdaCore Git Hooks project provides a set of scripts to be used as
+server-side hooks for git repositories.  In addition to those scripts,
+it also provides a testsuite to validate those scripts.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by

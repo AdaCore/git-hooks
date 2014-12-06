@@ -1,7 +1,4 @@
-"""A copy of gnatpython's sendmail module.
-
-Imported here, because the module is fairly recent and not available
-in the latest gnatpython release, it seems.  To be used as a fallback.
+"""A module to send emails...
 """
 from gnatpython.ex import Run
 

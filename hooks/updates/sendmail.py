@@ -1,8 +1,7 @@
 """A module to send emails...
 """
-from gnatpython.ex import Run
-
 import os
+from subprocess import Popen, PIPE, STDOUT
 
 
 def sendmail(from_email, to_emails, mail_as_string, smtp_server):
@@ -23,11 +22,14 @@ def sendmail(from_email, to_emails, mail_as_string, smtp_server):
     """
     for sendmail in ('/usr/lib/sendmail', '/usr/sbin/sendmail'):
         if os.path.exists(sendmail):
-            p = Run([sendmail] + to_emails, input="|" +
-                    mail_as_string, output=None)
-            return p.status == 0
+            p = Popen([sendmail] + to_emails,
+                      stdin=PIPE, stdout=PIPE, stderr=STDOUT)
+            out, _ = p.communicate(mail_as_string)
+            if p.returncode != 0:
+                print out
+            return p.returncode == 0
 
-    # Else try to use smtplib
+    # Else try using smtplib
     import smtplib
     s = smtplib.SMTP(smtp_server)
     s.sendmail(from_email, to_emails, mail_as_string)

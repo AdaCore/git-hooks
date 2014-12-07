@@ -353,20 +353,12 @@ def check_commit(old_rev, new_rev, project_name):
     PARAMETERS
         old_rev: The commit to be used as a reference to determine
             the list of files that have been modified/added by
-            the new commit.  May be None, in which case all files
-            in new_rev will be checked.
+            the new commit.  Must be a valid revision.
         new_rev: The commit to be checked.
         project_name: The name of the project (same as the attribute
             in updates.emails.EmailInfo).
     """
     debug('check_commit(old_rev=%s, new_rev=%s)' % (old_rev, new_rev))
-
-    if old_rev is None:
-        # Get the "empty tree" special SHA1, and use that as our old tree.
-        # This SHA1 is actually hard-coded in the git implementation, but
-        # we recompute it each time, just in case it ever changes.
-        old_rev = git.mktree(_input='')
-        debug('check_commit: old_rev -> %s (empty tree SHA1)' % old_rev)
 
     all_changes = git.diff_tree('-r', old_rev, new_rev, _split_lines=True)
     for item in all_changes:

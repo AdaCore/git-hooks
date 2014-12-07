@@ -273,19 +273,19 @@ class AbstractUpdate(object):
             # (branch creation), then use the first parent of the oldest
             # added commit.
             debug('(combined style checking)')
-            combined_commit = added[-1]
-            combined_commit.base_rev = (
-                added[0].base_rev if is_null_rev(self.old_rev)
-                else self.old_rev)
-            added = [combined_commit, ]
+            if not added[-1].pre_existing_p:
+                base_rev = (
+                    added[0].base_rev_for_git() if is_null_rev(self.old_rev)
+                    else self.old_rev)
+                check_commit(base_rev, self.new_rev,
+                             self.email_info.project_name)
         else:
             debug('(commit-per-commit style checking)')
-
-        # Perform the pre-commit checks, as needed...
-        for commit in added:
-            if not commit.pre_existing_p:
-                check_commit(commit.base_rev, commit.rev,
-                             self.email_info.project_name)
+            # Perform the pre-commit checks, as needed...
+            for commit in added:
+                if not commit.pre_existing_p:
+                    check_commit(commit.base_rev_for_git(), commit.rev,
+                                 self.email_info.project_name)
 
     def email_commit(self, commit):
         """Send an email describing the given commit.
@@ -330,7 +330,8 @@ class AbstractUpdate(object):
 
         email = Email(self.email_info,
                       commit.email_to, subject, body, commit.author,
-                      self.ref_name, commit.base_rev, commit.rev, diff)
+                      self.ref_name, commit.base_rev_for_display(),
+                      commit.rev, diff)
         email.enqueue()
 
     #-----------------------
@@ -527,7 +528,7 @@ class AbstractUpdate(object):
                 # we are pushing an entirely new headless branch, and
                 # base_rev should remain null.
                 parents = commit_parents(new_repo_revs[0])
-                if parents is not None:
+                if parents:
                     base_rev = parents[0]
             else:
                 # This reference update does not bring any new commits
@@ -546,39 +547,6 @@ class AbstractUpdate(object):
         else:
             commit_list = commit_info_list(self.new_rev)
             base_rev = None
-
-        # Make sure we use each commits's first parent as the base
-        # commit, rather than the revision of the previous commit
-        # in the commit_list.  This is important for merge commits,
-        # or commits imported by merges.
-        #
-        # Consider for instance the following scenario...
-        #
-        #                    <-- origin/master
-        #                   /
-        #    C1 <-- C2 <-- C3 <-- M4 <-- master
-        #      \                  /
-        #        <-- B1 <-- B2 <-+
-        #
-        # ... where the user merged his changes B1 & B2 into
-        # his master branch (as commit M4), and then tries
-        # to push this merge.
-        #
-        # There are 3 new commits in this case to be checked,
-        # which are B1, B2, and M4, with C3 being the update's
-        # base rev.
-        #
-        # If not careful, we would be checking B1 against C3,
-        # rather than C1, which would cause these scripts
-        # to think that all the files modified by C2 and C3
-        # have been modified by B1, and thus must be checked.
-        #
-        # Similarly, we would be checking M4 against B2,
-        # whereas it makes more sense in that case to be
-        # checking it against C3.
-        for commit in commit_list:
-            parents = commit_parents(commit.rev)
-            commit.base_rev = parents[0] if parents is not None else None
 
         # Iterate over every commit, and set their pre_existing_p attribute.
         for commit in commit_list:
@@ -716,7 +684,7 @@ class AbstractUpdate(object):
         # should be set to True.
         exclude = ['^%s' % ref_name for ref_name
                    in self.get_refs_matching_config(exclude_config_name)]
-        base_rev = commit_list[0].base_rev
+        base_rev = commit_list[0].base_rev_for_display()
         if base_rev is not None:
             # Also reduce the list already present in this branch
             # prior to the update.

@@ -84,7 +84,7 @@ class NotesUpdate(AbstractUpdate):
         # Create a partial CommitInfo object for the commit that
         # our note annotates.  We create a partial one in order
         # to avoid computing some info we do not need...
-        annotated_commit = CommitInfo(notes.annotated_rev, None, None)
+        annotated_commit = CommitInfo(notes.annotated_rev, None, None, None)
 
         # Get a description of the annotated commit (a la "git show"),
         # except that we do not want the diff.
@@ -119,7 +119,7 @@ class NotesUpdate(AbstractUpdate):
 
         email = Email(self.email_info, annotated_commit.email_to,
                       subject, body, commit.author, self.ref_name,
-                      commit.base_rev, commit.rev, diff)
+                      commit.base_rev_for_display(), commit.rev, diff)
         email.enqueue()
 
     def __ensure_fast_forward(self):

@@ -282,7 +282,7 @@ def check_missing_ticket_number(rev, raw_rh):
         'in place of a ticket number.',
         '',
         'commit %s' % rev,
-        'Subject: %s' % raw_rh[0]
+        'Subject: %s' % raw_rh[0],
         ])
 
 
@@ -324,8 +324,8 @@ def check_filename_collisions(rev):
             filename_map[key] = [filename]
         else:
             filename_map[key].append(filename)
-    collisions = [filename_map[key] for key in filename_map.keys()
-                  if len(filename_map[key]) > 1]
+    collisions = [filename_map[k] for k in filename_map.keys()
+                  if len(filename_map[k]) > 1]
     if collisions:
         raw_body = git.log(rev, max_count='1', pretty='format:%B',
                            _split_lines=True)

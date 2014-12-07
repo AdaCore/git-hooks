@@ -3,6 +3,7 @@
 from errors import InvalidUpdate
 from git import git, is_null_rev, is_valid_commit
 from updates import AbstractUpdate
+from updates.commits import CommitInfo
 from updates.emails import Email
 from updates.notes import GitNotes
 from utils import indent
@@ -80,6 +81,11 @@ class NotesUpdate(AbstractUpdate):
         """See AbstractUpdate.email_commit."""
         notes = GitNotes(commit.rev)
 
+        # Create a partial CommitInfo object for the commit that
+        # our note annotates.  We create a partial one in order
+        # to avoid computing some info we do not need...
+        annotated_commit = CommitInfo(notes.annotated_rev, None, None)
+
         # Get a description of the annotated commit (a la "git show"),
         # except that we do not want the diff.
         #
@@ -88,7 +94,7 @@ class NotesUpdate(AbstractUpdate):
         # whereas what we needs is the contents at the commit.rev.
         # This makes a difference when a single push updates the notes
         # of the same commit multiple times.
-        annotated_rev_info = git.log(notes.annotated_rev, no_notes=True,
+        annotated_rev_info = git.log(annotated_commit.rev, no_notes=True,
                                      max_count="1")
         notes_contents = (None if notes.contents is None
                           else indent(notes.contents, ' ' * 4))
@@ -111,8 +117,9 @@ class NotesUpdate(AbstractUpdate):
         # by stripping it from the output.
         diff = git.show(commit.rev, pretty="format:|", p=True)[1:]
 
-        email = Email(self.email_info, subject, body, commit.author,
-                      self.ref_name, commit.base_rev, commit.rev, diff)
+        email = Email(self.email_info, annotated_commit.email_to,
+                      subject, body, commit.author, self.ref_name,
+                      commit.base_rev, commit.rev, diff)
         email.enqueue()
 
     def __ensure_fast_forward(self):

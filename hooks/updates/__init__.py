@@ -73,6 +73,14 @@ class AbstractUpdate(object):
                 the user sending the emails is different from the user
                 that pushed/submitted the update.
         """
+        # If the repository's configuration does not provide
+        # the minimum required to email update notifications,
+        # refuse the update.
+        if not git_config('hooks.mailinglist'):
+            raise InvalidUpdate(
+                'Error: hooks.mailinglist config option not set.',
+                'Please contact your repository\'s administrator.')
+
         m = re.match(r"([^/]+/[^/]+)/(.+)", ref_name)
 
         self.ref_name = ref_name
@@ -82,11 +90,6 @@ class AbstractUpdate(object):
         self.new_rev = new_rev
         self.new_rev_type = get_object_type(self.new_rev)
         self.all_refs = all_refs
-
-        # If the repository's configuration does not provide
-        # the minimum required to email update notifications,
-        # refuse the update.  For this, we rely on the EmailInfo
-        # class instantiation, which performs the checks for us.
         self.email_info = EmailInfo(email_from=submitter_email)
 
         # Implement the added_commits "attribute" as a property,
@@ -325,7 +328,8 @@ class AbstractUpdate(object):
         diff = git.show(commit.rev, p=True, M=True, stat=True,
                         pretty="format:|")[1:]
 
-        email = Email(self.email_info, subject, body, commit.author,
+        email = Email(self.email_info,
+                      commit.email_to, subject, body, commit.author,
                       self.ref_name, commit.base_rev, commit.rev, diff)
         email.enqueue()
 
@@ -679,9 +683,14 @@ class AbstractUpdate(object):
             for more details.
         """
         update_email_contents = self.get_update_email_contents()
+
         if update_email_contents is not None:
+            email_to = git_config('hooks.mailinglist')
+            assert email_to
+
             (subject, body) = update_email_contents
-            update_email = Email(self.email_info, subject, body, None,
+            update_email = Email(self.email_info,
+                                 email_to, subject, body, None,
                                  self.ref_name, self.old_rev, self.new_rev,
                                  send_to_filer=self.send_cover_email_to_filer)
             update_email.enqueue()

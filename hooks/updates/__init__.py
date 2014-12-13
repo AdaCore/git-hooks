@@ -169,11 +169,12 @@ class AbstractUpdate(object):
         assert False
 
     def get_update_email_contents(self):
-        """Return a (subject, body) tuple describing the update (or None).
+        """Return a tuple describing the update (or None).
 
-        This method should return a 2-element tuple to be used for
+        This method should return a 3-element tuple to be used for
         creating an email describing the reference update, containing
         the following elements (in that order):
+            - the email distribution list (an iterable);
             - the email subject (a string);
             - the email body (a string).
 
@@ -459,6 +460,16 @@ class AbstractUpdate(object):
 
         return '\n'.join(summary)
 
+    def everyone_emails(self):
+        """A list of email addresses listing everyone possible.
+
+        For now, just return the hooks.mailinglist config, but
+        eventually, we will allow external scripts to be called
+        as well, and this function is going to be one location
+        where this is handled.
+        """
+        return git_config('hooks.mailinglist')
+
     #------------------------
     #--  Private methods.  --
     #------------------------
@@ -653,10 +664,7 @@ class AbstractUpdate(object):
         update_email_contents = self.get_update_email_contents()
 
         if update_email_contents is not None:
-            email_to = git_config('hooks.mailinglist')
-            assert email_to
-
-            (subject, body) = update_email_contents
+            (email_to, subject, body) = update_email_contents
             update_email = Email(self.email_info,
                                  email_to, subject, body, None,
                                  self.ref_name, self.old_rev, self.new_rev,

@@ -207,7 +207,14 @@ class Email(object):
         # Create the email's header.
         e_msg['From'] = self.email_info.email_from
         e_msg['To'] = ', '.join(map(strip, self.email_info.email_to))
-        if self.send_to_filer and git_config('hooks.bcc-file-ci'):
+        # Bcc FILER_EMAIL, but only in testsuite mode.  This allows us
+        # to turn this feature off by default, while still testing it.
+        # That's because this is an AdaCore-specific feature which is
+        # otherwise on by default, and we do not want to non-AdaCore
+        # projects to send emails to AdaCore by accident.
+        if (('GIT_HOOKS_TESTSUITE_MODE' in os.environ
+             and self.send_to_filer
+             and git_config('hooks.bcc-file-ci'))):
             e_msg['Bcc'] = FILER_EMAIL
         e_msg['Subject'] = self.email_subject
         e_msg['X-Act-Checkin'] = self.email_info.project_name

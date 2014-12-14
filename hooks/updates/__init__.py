@@ -12,6 +12,7 @@ from syslog import syslog
 import time
 from updates.commits import commit_info_list
 from updates.emails import EmailInfo, Email
+from updates.mailinglists import expanded_mailing_list
 from utils import debug, warn, get_user_name
 
 
@@ -461,14 +462,9 @@ class AbstractUpdate(object):
         return '\n'.join(summary)
 
     def everyone_emails(self):
-        """A list of email addresses listing everyone possible.
-
-        For now, just return the hooks.mailinglist config, but
-        eventually, we will allow external scripts to be called
-        as well, and this function is going to be one location
-        where this is handled.
+        """Return the list of email addresses listing everyone possible.
         """
-        return git_config('hooks.mailinglist')
+        return expanded_mailing_list(None)
 
     #------------------------
     #--  Private methods.  --

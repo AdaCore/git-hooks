@@ -157,6 +157,19 @@ def is_null_rev(rev):
     return re.match("0+$", rev) is not None
 
 
+def empty_tree_rev():
+    """Return the empty tree's SHA1.
+
+    This is a SHA1 one can use as the parent of a commit that
+    does not have a parent (root commit).
+    """
+    # To compute this SHA1 requires a call to git, so cache
+    # the result in an attribute called 'cached_rev'.
+    if not hasattr(empty_tree_rev, 'cached_rev'):
+        empty_tree_rev.cached_rev = git.mktree(_input='')
+    return empty_tree_rev.cached_rev
+
+
 def is_valid_commit(rev):
     """Return True if rev is a valid commit.
 
@@ -377,12 +390,9 @@ def commit_parents(rev):
     RETURN VALUE
         A list of revisions corresponding to each parent, ordered
         (ie: the first parent is first on the list, etc). If this is
-        a headeless commit, return None.
+        a headeless commit, return an empty list.
     """
-    parents = git.log('-n1', '--pretty=format:%P', rev).strip().split()
-    if not parents:
-        parents = None
-    return parents
+    return git.log('-n1', '--pretty=format:%P', rev).strip().split()
 
 
 def commit_subject(rev):

@@ -21,8 +21,7 @@ class TestRun(TestCase):
 remote: DEBUG: validate_ref_update (refs/heads/headless, 0000000000000000000000000000000000000000, 902092ffe1cf61b28e28c86949a447b9fc2591a4)
 remote: DEBUG: update base: None
 remote: DEBUG: (combined style checking)
-remote: DEBUG: check_commit(old_rev=None, new_rev=902092ffe1cf61b28e28c86949a447b9fc2591a4)
-remote: DEBUG: check_commit: old_rev -> 4b825dc642cb6eb9a060e54bf8d69288fbee4904 (empty tree SHA1)
+remote: DEBUG: check_commit(old_rev=4b825dc642cb6eb9a060e54bf8d69288fbee4904, new_rev=902092ffe1cf61b28e28c86949a447b9fc2591a4)
 remote: *** cvs_check: `trunk/repo/that.txt'
 remote: *** cvs_check: `trunk/repo/there'
 remote: *** cvs_check: `trunk/repo/this.txt'
@@ -171,8 +170,7 @@ To ../bare/repo.git
 remote: DEBUG: validate_ref_update (refs/heads/one-commit, 0000000000000000000000000000000000000000, ef3ab848df2bef804d5bd0880475d40cb6aab0bf)
 remote: DEBUG: update base: None
 remote: DEBUG: (combined style checking)
-remote: DEBUG: check_commit(old_rev=None, new_rev=ef3ab848df2bef804d5bd0880475d40cb6aab0bf)
-remote: DEBUG: check_commit: old_rev -> 4b825dc642cb6eb9a060e54bf8d69288fbee4904 (empty tree SHA1)
+remote: DEBUG: check_commit(old_rev=4b825dc642cb6eb9a060e54bf8d69288fbee4904, new_rev=ef3ab848df2bef804d5bd0880475d40cb6aab0bf)
 remote: *** cvs_check: `trunk/repo/contents.txt'
 remote: *** cvs_check: `trunk/repo/stuff'
 remote: DEBUG: post_receive_one(ref_name=refs/heads/one-commit

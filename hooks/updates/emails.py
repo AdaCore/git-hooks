@@ -30,8 +30,6 @@ class EmailInfo(object):
             the directory holding the git repository).
         email_from: The email address to use in the From: field
             when sending the email notification.
-        email_to: The email addresses, in RFC 822 format, of the
-            recipients of the email notification.
 
     REMARKS
         This class assumes that the hooks.from-domain config parameter
@@ -59,12 +57,6 @@ class EmailInfo(object):
                                               from_domain)
         else:
             self.email_from = email_from
-
-        self.email_to = git_config('hooks.mailinglist')
-        if not self.email_to:
-            raise InvalidUpdate(
-                'Error: hooks.mailinglist config option not set.',
-                'Please contact your repository\'s administrator.')
 
 
 class EmailQueue(object):
@@ -134,6 +126,8 @@ class Email(object):
 
     ATTRIBUTES
         email_info: An EmailInfo object.
+        email_to: A list of email addresses, in RFC 822 format,
+            whom to send this email to.
         email_subject: The email's subject.
         email_body: The email's body, possibly including a diff
             at the end (see __init__ method).
@@ -147,13 +141,14 @@ class Email(object):
         old_rev: See AbstractUpdate.old_rev attribute.
         new_rev: See AbstractUpdate.new_rev attribute.
     """
-    def __init__(self, email_info, email_subject, email_body,
+    def __init__(self, email_info, email_to, email_subject, email_body,
                  author, ref_name, old_rev, new_rev, diff=None,
                  send_to_filer=True):
         """The constructor.
 
         PARAMETERS
             email_info: Same as the attribute.
+            email_to: Same as the attribute.
             email_subject: Same as the attribute.
             email_body: Same as the attribute.
             author: Same as the attribute.
@@ -178,6 +173,7 @@ class Email(object):
             email_body += diff
 
         self.email_info = email_info
+        self.email_to = email_to
         self.email_subject = email_subject
         self.email_body = email_body
         self.send_to_filer = send_to_filer
@@ -206,7 +202,7 @@ class Email(object):
 
         # Create the email's header.
         e_msg['From'] = self.email_info.email_from
-        e_msg['To'] = ', '.join(map(strip, self.email_info.email_to))
+        e_msg['To'] = ', '.join(map(strip, self.email_to))
         # Bcc FILER_EMAIL, but only in testsuite mode.  This allows us
         # to turn this feature off by default, while still testing it.
         # That's because this is an AdaCore-specific feature which is

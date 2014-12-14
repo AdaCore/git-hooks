@@ -1,5 +1,4 @@
 from datetime import datetime
-import fcntl
 from os import environ
 import os
 import pwd

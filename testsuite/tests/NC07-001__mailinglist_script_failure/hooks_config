@@ -1,0 +1,5 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = %(TEST_DIR)s/email_to.py
+        no-emails = refs/heads/contrib/.*
+        allow-lightweight-tag = true

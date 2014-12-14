@@ -12,6 +12,7 @@ from syslog import syslog
 import time
 from updates.commits import commit_info_list
 from updates.emails import EmailInfo, Email
+from updates.mailinglists import expanded_mailing_list
 from utils import debug, warn, get_user_name
 
 
@@ -73,6 +74,14 @@ class AbstractUpdate(object):
                 the user sending the emails is different from the user
                 that pushed/submitted the update.
         """
+        # If the repository's configuration does not provide
+        # the minimum required to email update notifications,
+        # refuse the update.
+        if not git_config('hooks.mailinglist'):
+            raise InvalidUpdate(
+                'Error: hooks.mailinglist config option not set.',
+                'Please contact your repository\'s administrator.')
+
         m = re.match(r"([^/]+/[^/]+)/(.+)", ref_name)
 
         self.ref_name = ref_name
@@ -82,11 +91,6 @@ class AbstractUpdate(object):
         self.new_rev = new_rev
         self.new_rev_type = get_object_type(self.new_rev)
         self.all_refs = all_refs
-
-        # If the repository's configuration does not provide
-        # the minimum required to email update notifications,
-        # refuse the update.  For this, we rely on the EmailInfo
-        # class instantiation, which performs the checks for us.
         self.email_info = EmailInfo(email_from=submitter_email)
 
         # Implement the added_commits "attribute" as a property,
@@ -139,9 +143,9 @@ class AbstractUpdate(object):
         self.__email_ref_update()
         self.__email_new_commits()
 
-    #------------------------------------------------------------------
-    #--  Abstract methods that must be overridden by child classes.  --
-    #------------------------------------------------------------------
+    # ------------------------------------------------------------------
+    # --  Abstract methods that must be overridden by child classes.  --
+    # ------------------------------------------------------------------
 
     def self_sanity_check(self):
         """raise an assertion failure if the init parameters are invalid...
@@ -166,11 +170,12 @@ class AbstractUpdate(object):
         assert False
 
     def get_update_email_contents(self):
-        """Return a (subject, body) tuple describing the update (or None).
+        """Return a tuple describing the update (or None).
 
-        This method should return a 2-element tuple to be used for
+        This method should return a 3-element tuple to be used for
         creating an email describing the reference update, containing
         the following elements (in that order):
+            - the email distribution list (an iterable);
             - the email subject (a string);
             - the email body (a string).
 
@@ -193,9 +198,9 @@ class AbstractUpdate(object):
         """
         assert False
 
-    #------------------------------------------------------------------
-    #--  Methods that child classes may override.                    --
-    #------------------------------------------------------------------
+    # ------------------------------------------------------------------
+    # --  Methods that child classes may override.                    --
+    # ------------------------------------------------------------------
 
     def pre_commit_checks(self):
         """Run the pre-commit checks on this update's new commits.
@@ -270,19 +275,19 @@ class AbstractUpdate(object):
             # (branch creation), then use the first parent of the oldest
             # added commit.
             debug('(combined style checking)')
-            combined_commit = added[-1]
-            combined_commit.base_rev = (
-                added[0].base_rev if is_null_rev(self.old_rev)
-                else self.old_rev)
-            added = [combined_commit, ]
+            if not added[-1].pre_existing_p:
+                base_rev = (
+                    added[0].base_rev_for_git() if is_null_rev(self.old_rev)
+                    else self.old_rev)
+                check_commit(base_rev, self.new_rev,
+                             self.email_info.project_name)
         else:
             debug('(commit-per-commit style checking)')
-
-        # Perform the pre-commit checks, as needed...
-        for commit in added:
-            if not commit.pre_existing_p:
-                check_commit(commit.base_rev, commit.rev,
-                             self.email_info.project_name)
+            # Perform the pre-commit checks, as needed...
+            for commit in added:
+                if not commit.pre_existing_p:
+                    check_commit(commit.base_rev_for_git(), commit.rev,
+                                 self.email_info.project_name)
 
     def email_commit(self, commit):
         """Send an email describing the given commit.
@@ -325,13 +330,15 @@ class AbstractUpdate(object):
         diff = git.show(commit.rev, p=True, M=True, stat=True,
                         pretty="format:|")[1:]
 
-        email = Email(self.email_info, subject, body, commit.author,
-                      self.ref_name, commit.base_rev, commit.rev, diff)
+        email = Email(self.email_info,
+                      commit.email_to, subject, body, commit.author,
+                      self.ref_name, commit.base_rev_for_display(),
+                      commit.rev, diff)
         email.enqueue()
 
-    #-----------------------
-    #--  Useful methods.  --
-    #-----------------------
+    # -----------------------
+    # --  Useful methods.  --
+    # -----------------------
 
     def search_config_option_list(self, option_name, ref_name=None):
         """Search the hooks.no-emails list, and returns the first match.
@@ -454,9 +461,14 @@ class AbstractUpdate(object):
 
         return '\n'.join(summary)
 
-    #------------------------
-    #--  Private methods.  --
-    #------------------------
+    def everyone_emails(self):
+        """Return the list of email addresses listing everyone possible.
+        """
+        return expanded_mailing_list(None)
+
+    # ------------------------
+    # --  Private methods.  --
+    # ------------------------
 
     @property
     def added_commits(self):
@@ -523,7 +535,7 @@ class AbstractUpdate(object):
                 # we are pushing an entirely new headless branch, and
                 # base_rev should remain null.
                 parents = commit_parents(new_repo_revs[0])
-                if parents is not None:
+                if parents:
                     base_rev = parents[0]
             else:
                 # This reference update does not bring any new commits
@@ -542,39 +554,6 @@ class AbstractUpdate(object):
         else:
             commit_list = commit_info_list(self.new_rev)
             base_rev = None
-
-        # Make sure we use each commits's first parent as the base
-        # commit, rather than the revision of the previous commit
-        # in the commit_list.  This is important for merge commits,
-        # or commits imported by merges.
-        #
-        # Consider for instance the following scenario...
-        #
-        #                    <-- origin/master
-        #                   /
-        #    C1 <-- C2 <-- C3 <-- M4 <-- master
-        #      \                  /
-        #        <-- B1 <-- B2 <-+
-        #
-        # ... where the user merged his changes B1 & B2 into
-        # his master branch (as commit M4), and then tries
-        # to push this merge.
-        #
-        # There are 3 new commits in this case to be checked,
-        # which are B1, B2, and M4, with C3 being the update's
-        # base rev.
-        #
-        # If not careful, we would be checking B1 against C3,
-        # rather than C1, which would cause these scripts
-        # to think that all the files modified by C2 and C3
-        # have been modified by B1, and thus must be checked.
-        #
-        # Similarly, we would be checking M4 against B2,
-        # whereas it makes more sense in that case to be
-        # checking it against C3.
-        for commit in commit_list:
-            parents = commit_parents(commit.rev)
-            commit.base_rev = parents[0] if parents is not None else None
 
         # Iterate over every commit, and set their pre_existing_p attribute.
         for commit in commit_list:
@@ -679,9 +658,11 @@ class AbstractUpdate(object):
             for more details.
         """
         update_email_contents = self.get_update_email_contents()
+
         if update_email_contents is not None:
-            (subject, body) = update_email_contents
-            update_email = Email(self.email_info, subject, body, None,
+            (email_to, subject, body) = update_email_contents
+            update_email = Email(self.email_info,
+                                 email_to, subject, body, None,
                                  self.ref_name, self.old_rev, self.new_rev,
                                  send_to_filer=self.send_cover_email_to_filer)
             update_email.enqueue()
@@ -707,7 +688,7 @@ class AbstractUpdate(object):
         # should be set to True.
         exclude = ['^%s' % ref_name for ref_name
                    in self.get_refs_matching_config(exclude_config_name)]
-        base_rev = commit_list[0].base_rev
+        base_rev = commit_list[0].base_rev_for_display()
         if base_rev is not None:
             # Also reduce the list already present in this branch
             # prior to the update.

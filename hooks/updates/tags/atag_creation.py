@@ -52,4 +52,4 @@ class AnnotatedTagCreation(AnnotatedTagUpdate):
                                          self.lost_commits):
             body += self.summary_of_changes()
 
-        return (subject, body)
+        return (self.everyone_emails(), subject, body)

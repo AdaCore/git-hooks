@@ -143,9 +143,9 @@ class AbstractUpdate(object):
         self.__email_ref_update()
         self.__email_new_commits()
 
-    #------------------------------------------------------------------
-    #--  Abstract methods that must be overridden by child classes.  --
-    #------------------------------------------------------------------
+    # ------------------------------------------------------------------
+    # --  Abstract methods that must be overridden by child classes.  --
+    # ------------------------------------------------------------------
 
     def self_sanity_check(self):
         """raise an assertion failure if the init parameters are invalid...
@@ -198,9 +198,9 @@ class AbstractUpdate(object):
         """
         assert False
 
-    #------------------------------------------------------------------
-    #--  Methods that child classes may override.                    --
-    #------------------------------------------------------------------
+    # ------------------------------------------------------------------
+    # --  Methods that child classes may override.                    --
+    # ------------------------------------------------------------------
 
     def pre_commit_checks(self):
         """Run the pre-commit checks on this update's new commits.
@@ -336,9 +336,9 @@ class AbstractUpdate(object):
                       commit.rev, diff)
         email.enqueue()
 
-    #-----------------------
-    #--  Useful methods.  --
-    #-----------------------
+    # -----------------------
+    # --  Useful methods.  --
+    # -----------------------
 
     def search_config_option_list(self, option_name, ref_name=None):
         """Search the hooks.no-emails list, and returns the first match.
@@ -466,9 +466,9 @@ class AbstractUpdate(object):
         """
         return expanded_mailing_list(None)
 
-    #------------------------
-    #--  Private methods.  --
-    #------------------------
+    # ------------------------
+    # --  Private methods.  --
+    # ------------------------
 
     @property
     def added_commits(self):

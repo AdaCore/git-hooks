@@ -129,8 +129,9 @@ class Email(object):
         email_to: A list of email addresses, in RFC 822 format,
             whom to send this email to.
         email_subject: The email's subject.
-        email_body: The email's body, possibly including a diff
-            at the end (see __init__ method).
+        email_body: The email's body, NOT including the diff.
+        diff: A diff to be included at the end of the email being
+            sent out.
         send_to_filer: A boolean, True if the email should be sent to
             FILER_EMAIL, False otherwise.  The default should always
             be to copy FILER_EMAIL, unless proven otherwise.
@@ -160,22 +161,11 @@ class Email(object):
                 of the email's body - truncated if necessary.
             send_to_filer: Same as the attribute.
         """
-        if diff is not None:
-            # Append the "Diff:" marker to email_body, followed by
-            # the diff. Truncate the patch if necessary.
-            max_diff_size = git_config('hooks.max-email-diff-size')
-            if len(diff) > max_diff_size:
-                diff = diff[:max_diff_size]
-                diff += ('[...]\n\n[diff truncated at %d bytes]\n'
-                         % max_diff_size)
-
-            email_body += '\nDiff:\n'
-            email_body += diff
-
         self.email_info = email_info
         self.email_to = email_to
         self.email_subject = email_subject
         self.email_body = email_body
+        self.diff = diff
         self.send_to_filer = send_to_filer
         self.author = author
         self.ref_name = ref_name
@@ -198,7 +188,7 @@ class Email(object):
             is set, then a trace of the email is printed, instead
             of sending it.  This is for testing purposes.
         """
-        e_msg = MIMEText(self.email_body)
+        e_msg = MIMEText(self.__email_body_with_diff)
 
         # Create the email's header.
         e_msg['From'] = self.email_info.email_from
@@ -225,3 +215,30 @@ class Email(object):
         else:  # pragma: no cover (do not want real emails during testing)
             sendmail(self.email_info.email_from, email_recipients,
                      e_msg.as_string(), 'localhost')
+
+    @property
+    def __email_body_with_diff(self):
+        """Return self.email_body with the diff at the end (if any).
+
+        This attributes returns self.email_body augmentted with
+        self.diff (if not None), possibly truncated to fit the
+        hooks.max-email-diff-size limit, with a "diff marker"
+        between email_body and diff.  The diff marker is meant
+        to be used by scripts processing the contents of those
+        emails but not wanting to include the diff as part of
+        their processing.
+        """
+        email_body = self.email_body
+        if self.diff is not None:
+            # Append the "Diff:" marker to email_body, followed by
+            # the diff. Truncate the patch if necessary.
+            diff = self.diff
+            max_diff_size = git_config('hooks.max-email-diff-size')
+            if len(diff) > max_diff_size:
+                diff = diff[:max_diff_size]
+                diff += ('[...]\n\n[diff truncated at %d bytes]\n'
+                         % max_diff_size)
+
+            email_body += '\nDiff:\n'
+            email_body += diff
+        return email_body

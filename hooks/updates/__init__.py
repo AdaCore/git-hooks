@@ -8,6 +8,7 @@ from os.path import expanduser, isfile, getmtime
 from pre_commit_checks import (check_revision_history, check_commit,
                                check_filename_collisions)
 import re
+import shlex
 from syslog import syslog
 import time
 from updates.commits import commit_info_list
@@ -330,10 +331,14 @@ class AbstractUpdate(object):
         diff = git.show(commit.rev, p=True, M=True, stat=True,
                         pretty="format:|")[1:]
 
+        filer_cmd = git_config('hooks.file-commit-cmd')
+        if filer_cmd is not None:
+            filer_cmd = shlex.split(filer_cmd)
+
         email = Email(self.email_info,
                       commit.email_to, subject, body, commit.author,
                       self.ref_name, commit.base_rev_for_display(),
-                      commit.rev, diff)
+                      commit.rev, diff, filer_cmd=filer_cmd)
         email.enqueue()
 
     # -----------------------

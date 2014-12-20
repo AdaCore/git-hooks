@@ -1,0 +1,5 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+        no-emails = refs/heads/fsf-.*
+        file-commit-cmd = %(TEST_DIR)s/commit-filer -G "gdb binutils"

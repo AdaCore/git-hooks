@@ -18,6 +18,7 @@ GIT_CONFIG_OPTS = \
      'hooks.combined-style-checking':     {'default': False,  'type': bool},
      'hooks.debug-level':                 {'default': 0,      'type': int},
      'hooks.disable-merge-commit-checks': {'default': False,  'type': bool},
+     'hooks.file-commit-cmd':             {'default': None},
      'hooks.from-domain':                 {'default': None},
      'hooks.mailinglist':                 {'default': None,   'type': tuple},
      'hooks.max-commit-emails':           {'default': 100,    'type': int},

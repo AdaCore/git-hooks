@@ -17,6 +17,11 @@ TEST_DIR = os.path.abspath(TEST_DIR)
 
 class TestCase(unittest.TestCase):
     def setUp(self):
+        # Override the global git user name, to help making sure
+        # the output does not depend on who is running the testsuite.
+        os.environ['GIT_AUTHOR_EMAIL'] = 'hooks-tester@example.com'
+        os.environ['GIT_AUTHOR_NAME'] = 'hooks tester'
+
         # Export GIT_HOOKS_TESTSUITE_MODE so that the hooks know
         # that we are in testsuite mode, thus replacing certain
         # features, such as email, by simple traces.

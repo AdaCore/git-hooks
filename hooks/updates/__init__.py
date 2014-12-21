@@ -6,8 +6,10 @@ from git import (git, get_object_type, is_null_rev, commit_parents,
                  commit_rev)
 from os.path import expanduser, isfile, getmtime
 from pre_commit_checks import (check_revision_history, check_commit,
-                               check_filename_collisions)
+                               check_filename_collisions,
+                               reject_commit_if_merge)
 import re
+import shlex
 from syslog import syslog
 import time
 from updates.commits import commit_info_list
@@ -258,6 +260,13 @@ class AbstractUpdate(object):
                 if not commit.pre_existing_p:
                     check_revision_history(commit.rev)
 
+        reject_merge_commits = (
+            self.search_config_option_list('hooks.reject-merge-commits')
+            is not None)
+        if reject_merge_commits:
+            for commit in added:
+                reject_commit_if_merge(commit, self.ref_name)
+
         # Perform the filename-collision checks.  These collisions
         # can cause a lot of confusion and fustration to the users,
         # so do not provide the option of doing the check on the
@@ -326,14 +335,26 @@ class AbstractUpdate(object):
         # Prevent this from happening by putting an artificial
         # character at the start of the format string, and then
         # by stripping it from the output.
+
         body = git.log(commit.rev, max_count="1") + '\n'
+        if git_config('hooks.commit-url') is not None:
+            url_info = {'rev': commit.rev,
+                        'ref_name': self.ref_name}
+            body = (git_config('hooks.commit-url') % url_info
+                    + '\n\n'
+                    + body)
+
         diff = git.show(commit.rev, p=True, M=True, stat=True,
                         pretty="format:|")[1:]
+
+        filer_cmd = git_config('hooks.file-commit-cmd')
+        if filer_cmd is not None:
+            filer_cmd = shlex.split(filer_cmd)
 
         email = Email(self.email_info,
                       commit.email_to, subject, body, commit.author,
                       self.ref_name, commit.base_rev_for_display(),
-                      commit.rev, diff)
+                      commit.rev, diff, filer_cmd=filer_cmd)
         email.enqueue()
 
     # -----------------------

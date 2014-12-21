@@ -7,6 +7,7 @@ from errors import InvalidUpdate
 from git import get_module_name
 import os
 from string import strip
+from subprocess import Popen, PIPE, STDOUT
 from time import sleep
 from updates.sendmail import sendmail
 from utils import debug, get_user_name, get_user_full_name
@@ -129,11 +130,15 @@ class Email(object):
         email_to: A list of email addresses, in RFC 822 format,
             whom to send this email to.
         email_subject: The email's subject.
-        email_body: The email's body, possibly including a diff
-            at the end (see __init__ method).
+        email_body: The email's body, NOT including the diff.
+        diff: A diff to be included at the end of the email being
+            sent out.
         send_to_filer: A boolean, True if the email should be sent to
             FILER_EMAIL, False otherwise.  The default should always
             be to copy FILER_EMAIL, unless proven otherwise.
+        filer_cmd: If not None, sending this email also results
+            in this command being called with the contents of the
+            email_body parameter (and therefore, no diff).
         author: A string in "name <email>" format, to be used as
             the X-Git-Author field in the email header. May be None,
             in which case we'll use email_info.email_from instead.
@@ -143,7 +148,7 @@ class Email(object):
     """
     def __init__(self, email_info, email_to, email_subject, email_body,
                  author, ref_name, old_rev, new_rev, diff=None,
-                 send_to_filer=True):
+                 send_to_filer=True, filer_cmd=None):
         """The constructor.
 
         PARAMETERS
@@ -160,23 +165,13 @@ class Email(object):
                 of the email's body - truncated if necessary.
             send_to_filer: Same as the attribute.
         """
-        if diff is not None:
-            # Append the "Diff:" marker to email_body, followed by
-            # the diff. Truncate the patch if necessary.
-            max_diff_size = git_config('hooks.max-email-diff-size')
-            if len(diff) > max_diff_size:
-                diff = diff[:max_diff_size]
-                diff += ('[...]\n\n[diff truncated at %d bytes]\n'
-                         % max_diff_size)
-
-            email_body += '\nDiff:\n'
-            email_body += diff
-
         self.email_info = email_info
         self.email_to = email_to
         self.email_subject = email_subject
         self.email_body = email_body
+        self.diff = diff
         self.send_to_filer = send_to_filer
+        self.filer_cmd = filer_cmd
         self.author = author
         self.ref_name = ref_name
         self.old_rev = old_rev
@@ -191,14 +186,18 @@ class Email(object):
         EmailQueue().enqueue(self)
 
     def send(self):
-        """Send this email.
+        """Perform all send operations related to this email...
+
+        These consists in:
+            - send the notification email;
+            - call self.filer_cmd if not None.
 
         REMARKS
             If the GIT_HOOKS_TESTSUITE_MODE environment variable
             is set, then a trace of the email is printed, instead
             of sending it.  This is for testing purposes.
         """
-        e_msg = MIMEText(self.email_body)
+        e_msg = MIMEText(self.__email_body_with_diff)
 
         # Create the email's header.
         e_msg['From'] = self.email_info.email_from
@@ -232,3 +231,58 @@ class Email(object):
         else:  # pragma: no cover (do not want real emails during testing)
             sendmail(self.email_info.email_from, email_recipients,
                      e_msg.as_string(), 'localhost')
+
+        if self.filer_cmd is not None:
+            self.__call_filer_cmd()
+
+    @property
+    def __email_body_with_diff(self):
+        """Return self.email_body with the diff at the end (if any).
+
+        This attributes returns self.email_body augmentted with
+        self.diff (if not None), possibly truncated to fit the
+        hooks.max-email-diff-size limit, with a "diff marker"
+        between email_body and diff.  The diff marker is meant
+        to be used by scripts processing the contents of those
+        emails but not wanting to include the diff as part of
+        their processing.
+        """
+        email_body = self.email_body
+        if self.diff is not None:
+            # Append the "Diff:" marker to email_body, followed by
+            # the diff. Truncate the patch if necessary.
+            diff = self.diff
+            max_diff_size = git_config('hooks.max-email-diff-size')
+            if len(diff) > max_diff_size:
+                diff = diff[:max_diff_size]
+                diff += ('[...]\n\n[diff truncated at %d bytes]\n'
+                         % max_diff_size)
+
+            email_body += '\nDiff:\n'
+            email_body += diff
+        return email_body
+
+    def __call_filer_cmd(self):
+        """Call self.filer_cmd to get self.email_body filed.
+
+        The contents that gets filed is a slightly augmented version
+        of self.email to provide a little context of what's being
+        changed.
+
+        Prints a message on stdout in case of error returned during
+        the call.
+        """
+        ref_name = self.ref_name
+        if ref_name.startswith('refs/heads/'):
+            # Replace the reference name by something a little more
+            # intelligible for normal users.
+            ref_name = 'The %s branch' % ref_name[11:]
+        to_be_filed = ('%s has been updated by %s:'
+                       % (ref_name, self.email_info.email_from)
+                       + '\n\n'
+                       + self.email_body)
+
+        p = Popen(self.filer_cmd, stdin=PIPE, stdout=PIPE, stderr=STDOUT)
+        out, _ = p.communicate(to_be_filed)
+        if p.returncode != 0:
+            print out

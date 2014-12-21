@@ -7,8 +7,10 @@ refs/heads/master).
 """
 from argparse import ArgumentParser
 from collections import OrderedDict
+from subprocess import Popen, PIPE, STDOUT
 import sys
 
+from config import git_config
 from daemon import run_in_daemon
 from git import git_show_ref
 from updates.emails import EmailQueue
@@ -69,6 +71,22 @@ def post_receive(updated_refs, submitter_email):
         run_in_daemon(email_queue.flush)
 
 
+def maybe_post_receive_hook(post_receive_data):
+    """Call the post-receive-hook is required.
+
+    This function implements supports for the hooks.post-receive-hook
+    config variable, by calling this function if the config variable
+    is defined.
+    """
+    hook_exe = git_config('hooks.post-receive-hook')
+    if hook_exe is None:
+        return
+    p = Popen([hook_exe], stdin=PIPE, stdout=sys.stdout, stderr=STDOUT)
+    p.communicate(post_receive_data)
+    if p.returncode != 0:
+        warn('!!! WARNING: %s returned code: %d.' % (hook_exe, p.returncode))
+
+
 def parse_command_line(args):
     """Return a namespace built after parsing the command line.
 
@@ -99,9 +117,11 @@ def parse_command_line(args):
 
 
 if __name__ == '__main__':
+    stdin = sys.stdin.read()
     refs_data = OrderedDict()
-    for line in sys.stdin:
+    for line in stdin.splitlines():
         stdin_argv = line.strip().split() + sys.argv[1:]
         args = parse_command_line(stdin_argv)
         refs_data[args.ref_name] = (args.old_rev, args.new_rev)
     post_receive(refs_data, args.submitter_email)
+    maybe_post_receive_hook(stdin)

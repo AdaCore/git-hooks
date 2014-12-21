@@ -1,0 +1,12 @@
+#! /usr/bin/env bash
+
+echo '-----[ post-receive-hook args ]-----'
+for i in "$@"
+do
+   echo "'$i'"
+done
+echo '-----[ post-receive-hook stdin ]-----'
+cat -
+echo '-----[ post-recieve-hook end ]-----'
+
+exit 1

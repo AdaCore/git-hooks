@@ -14,6 +14,7 @@ from gnatpython.fileutils import *
 TEST_DIR = os.path.dirname(sys.modules['__main__'].__file__)
 TEST_DIR = os.path.abspath(TEST_DIR)
 
+
 class TestCase(unittest.TestCase):
     def setUp(self):
         # Export GIT_HOOKS_TESTSUITE_MODE so that the hooks know
@@ -89,10 +90,10 @@ class TestCase(unittest.TestCase):
         """
         from distutils.version import LooseVersion
         p = gnatpython.ex.Run(['git', '--version'])
-        assert (p.status == 0)
+        assert p.status == 0
         out = p.out.splitlines()
-        assert (len (out) > 0)
-        assert (out[0].startswith('git version '))
+        assert len(out) > 0
+        assert out[0].startswith('git version ')
         version_str = out[0].replace('git version ', '')
         return LooseVersion(version_str)
 

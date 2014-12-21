@@ -345,6 +345,36 @@ def check_filename_collisions(rev):
         raise InvalidUpdate(*info)
 
 
+MERGE_NOT_ALLOWED_ERROR_MSG = """\
+Merge commits are not allowed on %(ref_name)s.
+The commit that caused this error is:
+
+    commit %(rev)s
+    Subject: %(subject)s
+
+Hint: Consider using "git cherry-pick" instead of "git merge",
+      or "git pull --rebase" instead of "git pull".
+"""
+
+
+def reject_commit_if_merge(commit, ref_name):
+    """Raise InvalidUpdate if commit is a merge commit.
+
+    Raises an assertion failure if commit.parent_revs is not None
+    (see PARAMETERS for meore info on this parameter's type).
+
+    PARAMETERS
+        commit: A CommitInfo object.
+        ref_name: The name of the reference being updated.
+    """
+    assert commit.parent_revs is not None
+    if commit.parent_revs:
+        raise InvalidUpdate(*(MERGE_NOT_ALLOWED_ERROR_MSG
+                              % {'ref_name': ref_name,
+                                 'rev': commit.rev,
+                                 'subject': commit.subject}).splitlines())
+
+
 def check_commit(old_rev, new_rev, project_name):
     """Call check_file for every file changed between old_rev and new_rev.
 

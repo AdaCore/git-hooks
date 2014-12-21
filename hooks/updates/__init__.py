@@ -6,7 +6,8 @@ from git import (git, get_object_type, is_null_rev, commit_parents,
                  commit_rev)
 from os.path import expanduser, isfile, getmtime
 from pre_commit_checks import (check_revision_history, check_commit,
-                               check_filename_collisions)
+                               check_filename_collisions,
+                               reject_commit_if_merge)
 import re
 import shlex
 from syslog import syslog
@@ -258,6 +259,13 @@ class AbstractUpdate(object):
             for commit in added:
                 if not commit.pre_existing_p:
                     check_revision_history(commit.rev)
+
+        reject_merge_commits = (
+            self.search_config_option_list('hooks.reject-merge-commits')
+            is not None)
+        if reject_merge_commits:
+            for commit in added:
+                reject_commit_if_merge(commit, self.ref_name)
 
         # Perform the filename-collision checks.  These collisions
         # can cause a lot of confusion and fustration to the users,

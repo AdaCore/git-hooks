@@ -29,6 +29,7 @@ GIT_CONFIG_OPTS = \
      'hooks.no-precommit-check':          {'default': '',     'type': tuple},
      'hooks.no-rh-style-checks':          {'default': '',     'type': tuple},
      'hooks.post-receive-hook':           {'default': None},
+     'hooks.reject-merge-commits':        {'default': '',     'type': tuple},
      'hooks.style-checker':               {'default': 'cvs_check'},
      'hooks.tn-required':                 {'default': False,  'type': bool},
 

@@ -27,6 +27,7 @@ GIT_CONFIG_OPTS = \
      'hooks.no-emails':                   {'default': '',     'type': tuple},
      'hooks.no-precommit-check':          {'default': '',     'type': tuple},
      'hooks.no-rh-style-checks':          {'default': '',     'type': tuple},
+     'hooks.post-receive-hook':           {'default': None},
      'hooks.style-checker':               {'default': 'cvs_check'},
      'hooks.tn-required':                 {'default': False,  'type': bool},
 

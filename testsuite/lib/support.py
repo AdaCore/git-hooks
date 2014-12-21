@@ -14,8 +14,14 @@ from gnatpython.fileutils import *
 TEST_DIR = os.path.dirname(sys.modules['__main__'].__file__)
 TEST_DIR = os.path.abspath(TEST_DIR)
 
+
 class TestCase(unittest.TestCase):
     def setUp(self):
+        # Override the global git user name, to help making sure
+        # the output does not depend on who is running the testsuite.
+        os.environ['GIT_AUTHOR_EMAIL'] = 'hooks-tester@example.com'
+        os.environ['GIT_AUTHOR_NAME'] = 'hooks tester'
+
         # Export GIT_HOOKS_TESTSUITE_MODE so that the hooks know
         # that we are in testsuite mode, thus replacing certain
         # features, such as email, by simple traces.
@@ -89,10 +95,10 @@ class TestCase(unittest.TestCase):
         """
         from distutils.version import LooseVersion
         p = gnatpython.ex.Run(['git', '--version'])
-        assert (p.status == 0)
+        assert p.status == 0
         out = p.out.splitlines()
-        assert (len (out) > 0)
-        assert (out[0].startswith('git version '))
+        assert len(out) > 0
+        assert out[0].startswith('git version ')
         version_str = out[0].replace('git version ', '')
         return LooseVersion(version_str)
 

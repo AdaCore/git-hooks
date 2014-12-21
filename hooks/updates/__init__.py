@@ -327,7 +327,15 @@ class AbstractUpdate(object):
         # Prevent this from happening by putting an artificial
         # character at the start of the format string, and then
         # by stripping it from the output.
+
         body = git.log(commit.rev, max_count="1") + '\n'
+        if git_config('hooks.commit-url') is not None:
+            url_info = {'rev': commit.rev,
+                        'ref_name': self.ref_name}
+            body = (git_config('hooks.commit-url') % url_info
+                    + '\n\n'
+                    + body)
+
         diff = git.show(commit.rev, p=True, M=True, stat=True,
                         pretty="format:|")[1:]
 

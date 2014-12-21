@@ -10,6 +10,13 @@
 #
 #  aa453216d1b3e49e7f6f98441fa56946ddcd6a20 68f7abf4e6f922807889f52bc043ecd31b79f814 refs/heads/master
 
+# The following is sourceware-specific.  Some of the tools installed
+# on that machine are too old, causing some really interesting features
+# to be missing (Eg: python's OrderedDict, for instance, or git's %B
+# format placeholder). So, local installs of more recent versions have
+# been placed at the following location.
+export PATH=/home/gdbadmin/git-hooks-support/bin:$PATH
+
 # The following is AdaCore-specific: It allows us to make sure that
 # we are not running a random version of Python, but rather the
 # baseline version installed in /gnatmail.

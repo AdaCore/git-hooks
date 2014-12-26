@@ -26,8 +26,13 @@ fi
 # on that machine are too old, causing some really interesting features
 # to be missing (Eg: python's OrderedDict, for instance, or git's %B
 # format placeholder). So, local installs of more recent versions have
-# been placed at the following location.
-export PATH=/home/gdbadmin/git-hooks-support/bin:$PATH
+# been placed in /opt/rh/[...].
+for tool in git19 python27
+do
+  if [ -f /opt/rh/$tool/enable ]; then
+    . /opt/rh/$tool/enable
+  fi
+done
 
 # The following is AdaCore-specific: It allows us to make sure that
 # we are not running a random version of Python, but rather the

@@ -368,7 +368,7 @@ def reject_commit_if_merge(commit, ref_name):
         ref_name: The name of the reference being updated.
     """
     assert commit.parent_revs is not None
-    if commit.parent_revs:
+    if len(commit.parent_revs) > 1:
         raise InvalidUpdate(*(MERGE_NOT_ALLOWED_ERROR_MSG
                               % {'ref_name': ref_name,
                                  'rev': commit.rev,

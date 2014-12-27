@@ -127,7 +127,7 @@ remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
-remote: To: gdb-cvs@example.com, bfd-cvs@example.com
+remote: To: bfd-cvs@example.com, gdb-cvs@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Add filename in struct bfd, and add README in GDB.
 remote: X-Act-Checkin: repo
@@ -183,7 +183,7 @@ remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
-remote: To: gdb-cvs@example.com, bfd-cvs@example.com
+remote: To: bfd-cvs@example.com, gdb-cvs@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] Call AC_INIT in configure.ac
 remote: X-Act-Checkin: repo
@@ -453,7 +453,7 @@ remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
-remote: To: gdb-cvs@example.com, bfd-cvs@example.com
+remote: To: bfd-cvs@example.com, gdb-cvs@example.com
 remote: Bcc: file-ci@gnat.com
 remote: Subject: [repo] notes update for 4c7588eee23d6d42e8d50ba05343e3d0f31dd286
 remote: X-Act-Checkin: repo

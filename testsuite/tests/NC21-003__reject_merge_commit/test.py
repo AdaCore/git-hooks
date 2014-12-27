@@ -11,8 +11,8 @@ class TestRun(TestCase):
 remote: *** Merge commits are not allowed on refs/heads/master.
 remote: *** The commit that caused this error is:
 remote: ***
-remote: ***     commit 6d62250fdaed631cb170c0fc19c338accdba14ec
-remote: ***     Subject: New file README. Update a.
+remote: ***     commit ffb05b4a606fdb7b2919b209c725fe3b71880c00
+remote: ***     Subject: Merge topic branch fsf-head.
 remote: ***
 remote: *** Hint: Consider using "git cherry-pick" instead of "git merge",
 remote: ***       or "git pull --rebase" instead of "git pull".
@@ -30,8 +30,8 @@ error: failed to push some refs to '../bare/repo.git'
 remote: *** Merge commits are not allowed on refs/heads/gdb-7.8-branch.
 remote: *** The commit that caused this error is:
 remote: ***
-remote: ***     commit 6d62250fdaed631cb170c0fc19c338accdba14ec
-remote: ***     Subject: New file README. Update a.
+remote: ***     commit ffb05b4a606fdb7b2919b209c725fe3b71880c00
+remote: ***     Subject: Merge topic branch fsf-head.
 remote: ***
 remote: *** Hint: Consider using "git cherry-pick" instead of "git merge",
 remote: ***       or "git pull --rebase" instead of "git pull".

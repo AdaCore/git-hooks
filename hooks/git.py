@@ -397,6 +397,7 @@ def commit_parents(rev):
 
 def commit_subject(rev):
     """Return the commit's subject.
+
     PARAMETERS
         rev: A commit revision.
     """

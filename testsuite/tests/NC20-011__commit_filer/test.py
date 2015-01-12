@@ -141,8 +141,7 @@ remote: + Some stuff about a.
 remote: + Hello world.
 remote: -----[ commit-filer start ]-----
 remote: '-G'
-remote: 'gdb'
-remote: 'binutils'
+remote: 'gdb binutils'
 remote: -----[ commit-filer body ]-----
 remote: The master branch has been updated by Test Suite <testsuite@adacore.com>:
 remote:

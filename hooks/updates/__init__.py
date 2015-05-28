@@ -344,8 +344,11 @@ class AbstractUpdate(object):
                     + '\n\n'
                     + body)
 
-        diff = git.show(commit.rev, p=True, M=True, stat=True,
-                        pretty="format:|")[1:]
+        if git_config('hooks.disable-email-diff'):
+            diff = None
+        else:
+            diff = git.show(commit.rev, p=True, M=True, stat=True,
+                            pretty="format:|")[1:]
 
         filer_cmd = git_config('hooks.file-commit-cmd')
         if filer_cmd is not None:

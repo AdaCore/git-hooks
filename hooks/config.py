@@ -18,6 +18,7 @@ GIT_CONFIG_OPTS = \
      'hooks.combined-style-checking':     {'default': False,  'type': bool},
      'hooks.commit-url':                  {'default': None},
      'hooks.debug-level':                 {'default': 0,      'type': int},
+     'hooks.disable-email-diff':          {'default': False,  'type': bool},
      'hooks.disable-merge-commit-checks': {'default': False,  'type': bool},
      'hooks.file-commit-cmd':             {'default': None},
      'hooks.from-domain':                 {'default': None},

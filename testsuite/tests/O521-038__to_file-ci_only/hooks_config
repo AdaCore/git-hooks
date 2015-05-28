@@ -1,0 +1,9 @@
+[hooks]
+        from-domain = adacore.com
+        # We want the emails to go to file-ci only, which is normally
+        # always Bcc'ed. To achieve that, we set the mailing-list to
+        # file-ci, and then disable the Bcc-file-ci mechanism to avoid
+        # sending two copies of the same email to the same destination.
+        mailinglist = file-ci@example.com
+        bcc-file-ci = False
+

@@ -1,8 +1,9 @@
 """Email helpers for sending update-related emails."""
 
 from config import git_config
+from email.header import Header
 from email.mime.text import MIMEText
-from email.utils import getaddresses
+from email.utils import getaddresses, parseaddr
 from errors import InvalidUpdate
 from git import get_module_name
 import os
@@ -200,13 +201,14 @@ class Email(object):
         e_msg = MIMEText(self.__email_body_with_diff)
 
         # Create the email's header.
-        e_msg['From'] = self.email_info.email_from
-        e_msg['To'] = ', '.join(map(strip, self.email_to))
+        e_msg['From'] = sanitized_email_address(self.email_info.email_from)
+        e_msg['To'] = ', '.join(map(sanitized_email_address, self.email_to))
         if self.send_to_filer and git_config('hooks.bcc-file-ci'):
             e_msg['Bcc'] = FILER_EMAIL
-        e_msg['Subject'] = self.email_subject
+        e_msg['Subject'] = sanitized_email_header_field(self.email_subject)
         e_msg['X-Act-Checkin'] = self.email_info.project_name
-        e_msg['X-Git-Author'] = self.author or self.email_info.email_from
+        e_msg['X-Git-Author'] = sanitized_email_address(
+            self.author or self.email_info.email_from)
         e_msg['X-Git-Refname'] = self.ref_name
         e_msg['X-Git-Oldrev'] = self.old_rev
         e_msg['X-Git-Newrev'] = self.new_rev
@@ -279,3 +281,73 @@ class Email(object):
         out, _ = p.communicate(to_be_filed)
         if p.returncode != 0:
             print out
+
+
+def sanitized_email_header_field(field_body):
+    """Return an RFC2047-encoded version of field_body (if necessary)
+
+    If field_body contains characters that are not printable ASCII,
+    return an RFC2047-encoded version of this string.  Otherwise,
+    that string untouched.
+
+    PARAMETERS
+        field_body: A string, to be used as the value of a field
+            in an email's header.
+    """
+    if not any(c for c in field_body if ord(c) < 32 or ord(c) > 126):
+        # The field body has only ASCII characters in the range 32-126.
+        # So no encoding required.
+        return field_body
+
+    encoding = None
+    for potential_encoding in ('UTF-8', 'iso-8859-1'):
+        # Note: It looks like iso-8859-1 accepts any sequence of bytes.
+        # So, always place it last in the list above, so as to try all
+        # the other encodings before defaulting to that one.  We do try
+        # it before using it, though, just in case it starts failing
+        # for some reason.
+        try:
+            field_body.decode(potential_encoding)
+            encoding = potential_encoding
+            break
+        except:
+            pass
+
+    if encoding is None:  # pragma: no cover (see explanation above)
+        # Should never happen, since iso-8859-1 encoding should accept
+        # any byte stream.  But, just in case, do the best we can in
+        # that situation, and just send the header as is.
+        return field_body
+
+    return Header(field_body, encoding).encode()
+
+
+def sanitized_email_address(email_address):
+    """Return an RFC2047-encoded version of the email_address (if necessary)
+
+    This function splits the email_address into a (gecos, email_spec)
+    tuple, and then RFC2047-encodes the gecos portion of the email
+    when necessary (using sanitized_email_header_field).  The sanitized
+    version of the email address (gecos + email_spec) is then returned.
+
+    PARAMETERS
+        email_address: A string containing an email address.
+    """
+    email_address = strip(email_address)
+    gecos, email_spec = parseaddr(email_address)
+    if not gecos:
+        # There is no GECOS, so the email address is made of only
+        # the email-spec portion, which should not require any encoding.
+        # So return the email_address as is.
+        return email_address
+    if not email_spec:  # pragma: no cover (see below)
+        # Does not seem to be possible, because (1) Git seems to verify
+        # the format of all email addresses before accepting them; and
+        # (2) even when feeding an invalid email address such as
+        # "invalid <inv', parseaddr above still returns an email_spec.
+        # But be robust, just in case, and return the email_address
+        # untouched if parseaddr ever returns no email_spec... That's
+        # probably the best we can do.
+        return email_address
+
+    return '%s <%s>' % (sanitized_email_header_field(gecos), email_spec)

@@ -717,5 +717,32 @@ class AbstractUpdate(object):
         included_refs = git.rev_list(self.new_rev, *exclude,
                                      _split_lines=True)
 
+        # Also, we always send emails for first-parent commits.
+        # This is useful in the following scenario:
+        #
+        #   - The repository has a topic/feature branch for which
+        #     there is a no-email configuration;
+        #   - When ready to "merge" his topic/feature branch to master,
+        #     the user first rebases it, and pushes the new topic/feature
+        #     branch. Because the push is for a no-emails branch, commit
+        #     emails are turned off (as expected).
+        #   - The user then merges the topic/feature branch into
+        #     master, and pushes the new master branch.
+        #
+        # Unless we ignore the hooks.no-emails config for first-parent
+        # commits, we end up never sending any commit emails for the
+        # commits being pushed on master. This is not what we want,
+        # here, because the commits aren't really comming from an
+        # external source.  We want to disable commit emails while
+        # the commits are being worked on the topic/feature branch,
+        # but as soon as they make it to tracked branches, a commit
+        # email should be sent.
+        first_parents_expr = [self.new_rev]
+        if base_rev is not None:
+            first_parents_expr.append('^%s' % base_rev)
+        first_parents = git.rev_list(*first_parents_expr, first_parent=True,
+                                     _split_lines=True)
+
         for commit in commit_list:
-            commit.send_email_p = commit.rev in included_refs
+            commit.send_email_p = (commit.rev in included_refs or
+                                   commit.rev in first_parents)

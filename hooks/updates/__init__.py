@@ -140,8 +140,7 @@ class AbstractUpdate(object):
             return
         # This phase needs all added commits to have certain attributes
         # to be computed.  Do it now.
-        self.__set_commits_attr(self.added_commits, 'send_email_p',
-                                'hooks.no-emails')
+        self.__set_send_email_p_attr(self.added_commits)
         self.__email_ref_update()
         self.__email_new_commits()
 
@@ -656,8 +655,7 @@ class AbstractUpdate(object):
         # We know that commit emails would only be sent for commits which
         # are new for the repository, so we count those.
 
-        self.__set_commits_attr(self.added_commits, 'send_email_p',
-                                'hooks.no-emails')
+        self.__set_send_email_p_attr(self.added_commits)
         nb_emails = len([commit for commit in self.added_commits
                          if commit.send_email_p])
         max_emails = git_config('hooks.max-commit-emails')
@@ -698,8 +696,7 @@ class AbstractUpdate(object):
             if commit.send_email_p:
                 self.email_commit(commit)
 
-    def __set_commits_attr(self, commit_list, attr_name,
-                           exclude_config_name):
+    def __set_send_email_p_attr(self, commit_list):
         # Make sure we have at least one commit in the list.  Otherwise,
         # nothing to do.
         if not commit_list:
@@ -707,11 +704,11 @@ class AbstractUpdate(object):
 
         # Determine the list of commits accessible from NEW_REV, after
         # having excluded all commits accessible from the branches
-        # matching the exclude_config_name option.  These are the
+        # matching the hooks.no-emails hooks config.  These are the
         # non-excluded commits, ie the comments whose attribute
         # should be set to True.
         exclude = ['^%s' % ref_name for ref_name
-                   in self.get_refs_matching_config(exclude_config_name)]
+                   in self.get_refs_matching_config('hooks.no-emails')]
         base_rev = commit_list[0].base_rev_for_display()
         if base_rev is not None:
             # Also reduce the list already present in this branch
@@ -721,4 +718,4 @@ class AbstractUpdate(object):
                                      _split_lines=True)
 
         for commit in commit_list:
-            setattr(commit, attr_name, commit.rev in included_refs)
+            commit.send_email_p = commit.rev in included_refs

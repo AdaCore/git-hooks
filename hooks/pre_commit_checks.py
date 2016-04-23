@@ -390,6 +390,14 @@ def check_commit(old_rev, new_rev, project_name):
     """
     debug('check_commit(old_rev=%s, new_rev=%s)' % (old_rev, new_rev))
 
+    # We allow users to explicitly disable pre-commit checks for
+    # specific commits via the use of a special keyword placed anywhere
+    # in the revision log. If found, then return immediately.
+    raw_revlog = git.log('-1', new_rev, pretty='format:%B')
+    if '(no-precommit-check)' in raw_revlog:
+        debug('pre-commit checks explicity disabled for commit %s' % new_rev)
+        return
+
     all_changes = git.diff_tree('-r', old_rev, new_rev, _split_lines=True)
     for item in all_changes:
         (old_mode, new_mode, old_sha1, new_sha1, status, filename) \

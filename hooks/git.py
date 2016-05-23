@@ -54,17 +54,21 @@ def git_run(command, *args, **kwargs):
            <name>=True => --<name>
            <name>='<str>' => --<name>=<str>
         Special keyword arguments:
+           _cwd=<str>: Run the git command from the given directory.
            _input=<str>: Feed <str> to stdinin of the command
            _outfile=<file): Use <file> as the output file descriptor
            _split_lines: Return an array with one string per returned line
     """
     to_run = ['git', command.replace("_", "-")]
 
+    cwd = None
     input = None
     outfile = None
     do_split_lines = False
     for (k, v) in kwargs.iteritems():
-        if k == '_input':
+        if k == '_cwd':
+            cwd = v
+        elif k == '_input':
             input = v
         elif k == '_outfile':
             outfile = v
@@ -83,7 +87,7 @@ def git_run(command, *args, **kwargs):
     stdout = outfile if outfile else PIPE
     stdin = None if input is None else PIPE
 
-    process = Popen(to_run, stdout=stdout, stderr=STDOUT, stdin=stdin)
+    process = Popen(to_run, stdout=stdout, stderr=STDOUT, stdin=stdin, cwd=cwd)
     output, error = process.communicate(input)
     # We redirected stderr to the same fd as stdout, so error should
     # not contain anything.

@@ -29,13 +29,6 @@ def check_file(filename, sha1, commit_rev, project_name):
     """
     debug("check_file (filename=`%s', sha1=%s)" % (filename, sha1), level=3)
 
-    # Determine whether this file has the no-precommit-check attribute
-    # set, in which case style-checks should not be performed.
-    if git_attribute(commit_rev, filename, 'no-precommit-check') == 'set':
-        debug('no-precommit-check: %s commit_rev=%s'
-              % (filename, commit_rev))
-        return
-
     # Get a copy of the file and save it in our scratch dir.
     # In order to allow us to call the style-checker using
     # the full path (from the project's root directory) of
@@ -391,8 +384,10 @@ def check_commit(old_rev, new_rev, project_name):
         debug('pre-commit checks explicity disabled for commit %s' % new_rev)
         return
 
-    all_changes = git.diff_tree('-r', old_rev, new_rev, _split_lines=True)
-    for item in all_changes:
+    diff_tree = git.diff_tree('-r', old_rev, new_rev, _split_lines=True)
+    files_to_check = []
+
+    for item in diff_tree:
         (old_mode, new_mode, old_sha1, new_sha1, status, filename) \
             = item.split(None, 5)
         debug('diff-tree entry: %s %s %s %s %s %s'
@@ -410,4 +405,13 @@ def check_commit(old_rev, new_rev, project_name):
             # This is why we did not tell the `git diff-tree' command
             # above to detect renames, and why we do not have a special
             # branch for status values starting with `R'.
-            check_file(filename, new_sha1, new_rev, project_name)
+            files_to_check.append((filename, new_sha1))
+
+    no_style_check_map = git_attribute(new_rev,
+                                       [e[0] for e in files_to_check],
+                                       'no-precommit-check')
+    for filename, new_sha1 in files_to_check:
+        if no_style_check_map[filename] == 'set':
+            debug('no-precommit-check: %s commit_rev=%s' % (filename, new_rev))
+            continue
+        check_file(filename, new_sha1, new_rev, project_name)

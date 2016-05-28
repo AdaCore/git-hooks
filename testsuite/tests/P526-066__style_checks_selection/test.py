@@ -13,9 +13,6 @@ class TestRun(TestCase):
         expected_out = """\
 remote: *** cvs_check: `trunk/repo/gprbuild_utils.py'
 remote: *** cvs_check: `trunk/repo/tests/ada_project_path/test.py'
-remote: SYSLOG: cvs_check: Pre-commit checks disabled for 9bfa2aca2c44fe8bc8c8eb5ddd30de2b559d5f2b on repo (README) by repo attribute
-remote: SYSLOG: cvs_check: Pre-commit checks disabled for 066a446c102f69611ad7f753b1c30b6d54efeeed on repo (support/gnat.xml) by repo attribute
-remote: SYSLOG: cvs_check: Pre-commit checks disabled for 1aebd34a7405e945b53d4d2a80b6f4d3b458917a on repo (tests/ada_project_path/test.opt) by repo attribute
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

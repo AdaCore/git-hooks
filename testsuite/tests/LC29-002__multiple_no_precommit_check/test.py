@@ -13,7 +13,6 @@ class TestRun(TestCase):
         #     so if it gets called, the update will be rejected.
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: SYSLOG: cvs_check: Pre-commit checks disabled for e7007066aeb5fefeba7d226e5a31c70971b67cdb on repo by hooks.no-precommit-check config (refs/heads/master)
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

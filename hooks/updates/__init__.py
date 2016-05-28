@@ -223,12 +223,6 @@ class AbstractUpdate(object):
             if re.match(exp, self.ref_name):
                 # Pre-commit checks are explicitly disabled on this branch.
                 debug("(hooks.no-precommit-check match: `%s')" % exp)
-                syslog('Pre-commit checks disabled for %(rev)s on %(repo)s'
-                       ' by hooks.no-precommit-check config (%(ref_name)s)'
-                       % {'rev': self.new_rev,
-                          'repo': self.email_info.project_name,
-                          'ref_name': self.ref_name,
-                          })
                 return
 
         if self.__no_cvs_check_user_override():

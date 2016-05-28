@@ -104,7 +104,6 @@ To ../bare/repo.git
         # with no-precommit-checks, so it should be accepted anyway.
         p = Run('git push origin not-ok-77:third-party'.split())
         expected_out = """\
-remote: SYSLOG: cvs_check: Pre-commit checks disabled for a80d278157a3a10c955360723b6520614f3c717c on repo by hooks.no-precommit-check config (refs/heads/third-party)
 remote: ----------------------------------------------------------------------
 remote: --  The hooks.no-emails config option contains `refs/heads/third-party',
 remote: --  which matches the name of the reference being updated

@@ -16,7 +16,6 @@ class TestRun(TestCase):
         p = Run('git push origin master'.split())
         expected_out = """\
 remote: *** cvs_check: `trunk/repo/testsuite/tests/.gitattributes'
-remote: SYSLOG: cvs_check: Pre-commit checks disabled for 775e4cfe60b5e700de7ca59e0c3e2c97c824a5cd on repo (testsuite/tests/test_001/test.py) by repo attribute
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

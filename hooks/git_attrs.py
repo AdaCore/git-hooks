@@ -129,13 +129,16 @@ def git_attribute(commit_rev, filename_list, attr_name):
     for filename in filename_list:
         assert not os.path.isabs(filename)
         dir_path = filename
+        dir_created = False
         while dir_path:
             dir_path = os.path.dirname(dir_path)
             if dir_path in dirs_with_changes:
                 continue
             gitattributes_rel_file = os.path.join(dir_path, '.gitattributes')
             if cached_file_exists(commit_rev, gitattributes_rel_file):
-                os.makedirs(os.path.join(tmp_checkout_dir, dir_path))
+                if not dir_created:
+                    os.makedirs(os.path.join(tmp_checkout_dir, dir_path))
+                    dir_created = True
                 git.show("%s:%s" % (commit_rev, gitattributes_rel_file),
                          _outfile=os.path.join(tmp_checkout_dir,
                                                gitattributes_rel_file))

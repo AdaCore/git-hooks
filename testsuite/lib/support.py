@@ -41,7 +41,7 @@ class TestCase(unittest.TestCase):
         # By default, the testcase's cvs_check script is called
         # cvs_check.py and is located at the root of the testcase
         # directory.
-        os.environ['GIT_HOOKS_STYLE_CHECKER'] = '%s/cvs_check.py' % os.getcwd()
+        os.environ['GIT_HOOKS_STYLE_CHECKER'] = '%s/cvs_check.py' % TEST_DIR
 
         # Create a directory to be used as tmp by this testcase.
         # We want that directory to be inside the testsuite's

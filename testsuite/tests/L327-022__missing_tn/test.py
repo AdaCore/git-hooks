@@ -11,8 +11,8 @@ class TestRun(TestCase):
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently
 remote: *** minor that a ticket number is not meaningful, please use
-remote: *** either the word "Minor" or the "(no-tn-check)" string
-remote: *** in place of a ticket number.
+remote: *** either the word "Minor" or "no-tn-check" in place of
+remote: *** a ticket number.
 remote: ***
 remote: *** commit a60540361d47901d3fe254271779f380d94645f7
 remote: *** Subject: Updated a.

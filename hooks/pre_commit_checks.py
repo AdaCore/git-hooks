@@ -89,8 +89,8 @@ def check_file(filename, sha1, commit_rev, project_name):
         debug(str(E), level=4)
         info = (
             ["pre-commit check failed for file `%s' at commit: %s"
-             % (filename, commit_rev)]
-            + E.output.splitlines())
+             % (filename, commit_rev)] +
+            E.output.splitlines())
         raise InvalidUpdate(*info)
 
 
@@ -117,10 +117,10 @@ def ensure_empty_line_after_subject(rev, raw_rh):
              'The first line should be the subject of the commit,',
              'followed by an empty line.',
              '',
-             'Below are the first few lines of the revision history:']
-            + ['| %s' % line for line in raw_rh[:5]]
-            + ['',
-               "Please amend the commit's revision history and try again."])
+             'Below are the first few lines of the revision history:'] +
+            ['| %s' % line for line in raw_rh[:5]] +
+            ['',
+             "Please amend the commit's revision history and try again."])
         raise InvalidUpdate(*info)
 
 

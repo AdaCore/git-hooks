@@ -380,13 +380,34 @@ def git_show_ref(*args):
             as a pattern.
 
     RETURN VALUE
-        A dictionary of references that matched the given patterns.
+        A dictionary of references that matched the given patterns,
+        minus the references matching the hooks.ignore-refs config.
     """
+    # We cannot import that at module level, because module config
+    # actually depends on this module.  So we import it here instead.
+    from config import git_config
+
     matching_refs = git.show_ref(*args, _split_lines=True)
     result = {}
     for ref_info in matching_refs:
         rev, ref = ref_info.split(None, 2)
         result[ref] = rev
+
+    # Remove all references which matching the hooks.ignore-refs config.
+    #
+    # It would probably have been more efficient to check the reference
+    # against the exclusion list before adding them to the dictionary.
+    # I felt that the resulting code was harder to read.  Given the
+    # typical number of entries, the impact should be barely measurable.
+    ignore_refs_list = [regex.strip()
+                        for regex in git_config('hooks.ignore-refs')]
+
+    for ref_name in result.keys():
+        for ignore_ref_re in ignore_refs_list:
+            if re.match(ignore_ref_re, ref_name):
+                del result[ref_name]
+                break
+
     return result
 
 

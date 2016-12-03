@@ -6,6 +6,17 @@ import os
 from tempfile import mkstemp
 import sys
 
+# A list of regular expressions matching reference names created internally
+# by gerrit.
+# For instance, we know that gerrit creates creates a reference whose name
+# is (quoting Gerrit's manual) "refs/changes/XX/YYYY/ZZ where YYYY is the
+# numeric change number, ZZ is the patch set number and XX is the last two
+# digits of the numeric change number", e.g.  refs/changes/20/884120/1
+# This reference is just a kind of staging area. In this case, it ensures
+# the newly-created commit has a reference, and therefore never ends up
+# being garbage-collected.
+GERRIT_INTERNAL_REFS = ('refs/changes/.*', )
+
 # A dictionary of all git config names that this module can query.
 #   - The key used for this table is the config name.
 #   - The value is another dictionary containing the following keys.
@@ -22,6 +33,8 @@ GIT_CONFIG_OPTS = \
      'hooks.disable-merge-commit-checks': {'default': False,  'type': bool},
      'hooks.file-commit-cmd':             {'default': None},
      'hooks.from-domain':                 {'default': None},
+     'hooks.ignore-refs':                 {'default': GERRIT_INTERNAL_REFS,
+                                           'type': tuple},
      'hooks.mailinglist':                 {'default': None,   'type': tuple},
      'hooks.max-commit-emails':           {'default': 100,    'type': int},
      'hooks.max-email-diff-size':         {'default': 100000, 'type': int},

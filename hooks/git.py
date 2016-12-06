@@ -125,8 +125,8 @@ class Git:
                 # If a string _outfile parameter was given, turn it
                 # into a file descriptor.
                 tmp_fd = None
-                if (('_outfile' in kwargs
-                     and isinstance(kwargs['_outfile'], basestring))):
+                if (('_outfile' in kwargs and
+                     isinstance(kwargs['_outfile'], basestring))):
                     tmp_fd = open(kwargs['_outfile'], 'w')
                     kwargs['_outfile'] = tmp_fd
                 return git_run(command, *args, **kwargs)

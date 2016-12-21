@@ -15,7 +15,9 @@ import sys
 # This reference is just a kind of staging area. In this case, it ensures
 # the newly-created commit has a reference, and therefore never ends up
 # being garbage-collected.
-GERRIT_INTERNAL_REFS = ('refs/changes/.*', )
+GERRIT_INTERNAL_REFS = ('refs/changes/.*',
+                        'refs/users/.*/edit-.*',
+                        )
 
 # A dictionary of all git config names that this module can query.
 #   - The key used for this table is the config name.

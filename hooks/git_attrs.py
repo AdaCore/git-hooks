@@ -146,7 +146,7 @@ def git_attribute(commit_rev, filename_list, attr_name):
 
     check_attr_input = '\n'.join(['%s/%s' % (checkout_subdir, filename)
                                   for filename in filename_list])
-    attr_info = git.check_attr(attr_name, '--stdin', 'no-precommit-check',
+    attr_info = git.check_attr('--stdin', attr_name,
                                _cwd=tmp_git_dir, _env=tmp_git_dir_env,
                                _input=check_attr_input, _split_lines=True)
 

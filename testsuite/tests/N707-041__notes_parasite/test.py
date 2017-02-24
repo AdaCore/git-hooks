@@ -42,20 +42,10 @@ remote: --- /dev/null
 remote: +++ b/52/393869d6041893f83a32692f31313997125d5b
 remote: @@ -0,0 +1 @@
 remote: +Annotating the first commit...
-remote: diff --git a/d9/eeeaff972e85dd086c8abe8491440cca74104b b/d9/eeeaff972e85dd086c8abe8491440cca74104b
-remote: new file mode 100644
-remote: index 0000000..3ac3e81
-remote: --- /dev/null
-remote: +++ b/d9/eeeaff972e85dd086c8abe8491440cca74104b
-remote: @@ -0,0 +1 @@
-remote: +First note (on latest commit)
-remote: diff --git a/d9eeeaff972e85dd086c8abe8491440cca74104b b/d9eeeaff972e85dd086c8abe8491440cca74104b
-remote: deleted file mode 100644
-remote: index 3ac3e81..0000000
-remote: --- a/d9eeeaff972e85dd086c8abe8491440cca74104b
-remote: +++ /dev/null
-remote: @@ -1 +0,0 @@
-remote: -First note (on latest commit)
+remote: diff --git a/d9eeeaff972e85dd086c8abe8491440cca74104b b/d9/eeeaff972e85dd086c8abe8491440cca74104b
+remote: similarity index 100%
+remote: rename from d9eeeaff972e85dd086c8abe8491440cca74104b
+remote: rename to d9/eeeaff972e85dd086c8abe8491440cca74104b
 To ../bare/repo.git
    a1debe2..a137508  refs/notes/commits -> refs/notes/commits
 """

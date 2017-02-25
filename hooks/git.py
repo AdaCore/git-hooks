@@ -434,3 +434,73 @@ def commit_subject(rev):
     info = git.rev_list(rev, max_count='1', oneline=True)
     _, subject = info.split(None, 1)
     return subject
+
+
+def diff_tree(*args, **kwargs):
+    """Same as git.diff_tree, but handling weird filenames properly.
+
+    When the diff-tree output lists some files whose name contain
+    some unusual characters (double-quote, tabs, newlines, backslashes),
+    the filename is quoted, and those special characters are
+    escaped. This function provides an interface to "git diff-tree"
+    which handles everything.
+
+    PARAMETERS
+        Same as with git.diff_tree.
+        *** NOTE *** Do not use _split_lines. It is useless in this case,
+            and would likely interfere with this implementation.
+
+    RETURN VALUE
+        A list, with one element per file modified. Each element
+        is a 6-element tuple, organized as follow:
+            (old_mode, new_mode, old_sha1, new_sha1, status, filename)
+    """
+    assert '_split_lines' not in kwargs, \
+        'git.py::diff_tree should never be called with _split_lines'
+
+    # To avoid having to deal with the parsing of quoted filenames,
+    # we use the -z option of "git diff-tree". What this does is
+    # that it separates the filename from the rest of the data
+    # using the NUL character instead of a space or newline.
+    #
+    # To parse the output, we split it at each NUL character.
+    # This means that the output gets split into a sequence of
+    # pairs of lines, with the first line containing the information
+    # about a given file, and the line following it containing
+    # the name of the file.
+    diff_data = git.diff_tree('-z', *args, **kwargs).split('\x00')
+
+    # When doing a "git diff-tree" with a single tree-ish, the output
+    # starts with the hash of what is being compared. We're not
+    # interested in this piece of information, so strip it.
+    if diff_data and diff_data[0] and not diff_data[0].startswith(':'):
+        assert re.match('[0-9a-fA-F]+$', diff_data[0]) is not None
+        diff_data.pop(0)
+
+    if len(diff_data) % 2 == 1 and not diff_data[-1]:
+        # Each filename ends with a NUL character, so the terminating
+        # NUL character in the last entry caused the split to add
+        # one empty element at the end. This is expected, so just
+        # remove it.
+        diff_data.pop()
+
+    # As per the above, we should now have an even number of elements
+    # in our list.
+    assert len(diff_data) % 2 == 0
+
+    result = []
+    while diff_data:
+        stats = diff_data.pop(0)
+        filename = diff_data.pop(0)
+
+        # The stats line should start with a colon and then be followed
+        # by space-separated information about the changes made to our
+        # file.  Strip that colon before we do the splitting.
+        assert stats.startswith(':')
+        stats = stats[1:]
+
+        (old_mode, new_mode, old_sha1, new_sha1, status) = stats.split(None, 4)
+        result.append((old_mode, new_mode, old_sha1, new_sha1, status,
+                       filename))
+
+    return result

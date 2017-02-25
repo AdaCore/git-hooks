@@ -1,6 +1,6 @@
 """Git Notes updates root module."""
 
-from git import git, CalledProcessError
+from git import git, CalledProcessError, diff_tree
 
 
 class GitNotes(object):
@@ -56,13 +56,12 @@ class GitNotes(object):
         # Look at the files modified by the git notes commit via
         # diff-tree. There should be only one, pointing us towards
         # the annotated commit.
-        all_changes = git.diff_tree('-r', notes_rev, _split_lines=True)
+        all_changes = diff_tree('-r', notes_rev)
         if not all_changes:
             # notes_rev is probably the root commit.  Just use the empty
             # tree's sha1 as the reference.
             empty_tree_rev = git.mktree(_input='')
-            all_changes = git.diff_tree('-r', empty_tree_rev, notes_rev,
-                                        _split_lines=True)
+            all_changes = diff_tree('-r', empty_tree_rev, notes_rev)
 
         # The output should be 2 lines...
         #   - The first line contains the hash of what is being compared,
@@ -72,18 +71,18 @@ class GitNotes(object):
         # a parent (first note).  In that case, we diff-tree'ed against
         # the empty tree rev, and the first line is omitted.
         #
-        # There is also another situation where the output is more than
-        # two lines: Newer version of git sometimes rename some of the
+        # Normally, there should only be one entry returned by diff_tree.
+        # However, there is a situation where the output is more than
+        # one entry: Newer version of git sometimes rename some of the
         # files created by older versions of "git notes" during notes
         # updates, and bunches those renamings together with a note
         # update, thus creating commits that actually touch multiple
         # files (N707-041). In that situation, it appears as though
         # the first entry is always the one corresponding to the commit
-        # being annotated, so discard anything past the second line.
-        all_changes = all_changes[:2]
+        # being annotated, so discard anything past the first line.
         assert all_changes
 
-        (_, _, _, _, _, filename) = all_changes[-1].split(None, 5)
+        (_, _, _, _, _, filename) = all_changes[0]
         return filename
 
     @classmethod

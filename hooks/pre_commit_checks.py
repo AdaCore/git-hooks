@@ -6,7 +6,7 @@ from subprocess import check_output, STDOUT
 
 from config import git_config
 from errors import InvalidUpdate
-from git import git
+from git import git, diff_tree
 from git_attrs import git_attribute
 import utils
 from utils import debug, warn
@@ -384,12 +384,11 @@ def check_commit(old_rev, new_rev, project_name):
         debug('pre-commit checks explicity disabled for commit %s' % new_rev)
         return
 
-    diff_tree = git.diff_tree('-r', old_rev, new_rev, _split_lines=True)
+    changes = diff_tree('-r', old_rev, new_rev)
     files_to_check = []
 
-    for item in diff_tree:
-        (old_mode, new_mode, old_sha1, new_sha1, status, filename) \
-            = item.split(None, 5)
+    for item in changes:
+        (old_mode, new_mode, old_sha1, new_sha1, status, filename) = item
         debug('diff-tree entry: %s %s %s %s %s %s'
               % (old_mode, new_mode, old_sha1, new_sha1, status, filename),
               level=5)

@@ -1,6 +1,6 @@
 """Management of git commits during updates..."""
 
-from git import git, commit_parents, empty_tree_rev
+from git import git, commit_parents, empty_tree_rev, diff_tree
 from updates.mailinglists import expanded_mailing_list
 from utils import debug
 
@@ -66,11 +66,10 @@ class CommitInfo(object):
         """
         if self.__files_changed is None:
             self.__files_changed = []
-            all_changes = git.diff_tree('-r', self.base_rev_for_git(),
-                                        self.rev, _split_lines=True)
+            all_changes = diff_tree('-r', self.base_rev_for_git(), self.rev)
             for item in all_changes:
                 (old_mode, new_mode, old_sha1, new_sha1, status, filename) \
-                    = item.split(None, 5)
+                    = item
                 debug('diff-tree entry: %s %s %s %s %s %s'
                       % (old_mode, new_mode, old_sha1, new_sha1, status,
                          filename),

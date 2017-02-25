@@ -10,7 +10,6 @@ from os.path import isfile
 from shutil import copy
 
 from git import git, file_exists
-import re
 from tempfile import mkdtemp
 import utils
 
@@ -144,20 +143,39 @@ def git_attribute(commit_rev, filename_list, attr_name):
                                                gitattributes_rel_file))
             dirs_with_changes[dir_path] = True
 
-    check_attr_input = '\n'.join(['%s/%s' % (checkout_subdir, filename)
-                                  for filename in filename_list])
-    attr_info = git.check_attr('--stdin', attr_name,
+    # To avoid having to deal with the parsing of quoted filenames,
+    # we use the -z option of "git check-attr". What this does is
+    # that each of the 3 elements of each line is now separated by
+    # a NUL character. Also, each line now ends with a NUL character
+    # as well, instead of LF.
+    #
+    # To parse the output, we split it at each NUL character.
+    # This means that the output gets split into a sequence of
+    # lines which go 3 by 3, with the first line containing
+    # the filename, the second being the name of the attribute
+    # being queried, and the third being the attribute's value
+    # for that file.
+    check_attr_input = '\x00'.join(['%s/%s' % (checkout_subdir, filename)
+                                    for filename in filename_list])
+    attr_info = git.check_attr('-z', '--stdin', attr_name,
                                _cwd=tmp_git_dir, _env=tmp_git_dir_env,
-                               _input=check_attr_input, _split_lines=True)
+                               _input=check_attr_input).split('\x00')
+    if len(attr_info) % 3 == 1 and not attr_info[-1]:
+        # The attribute information for each filename ends with
+        # a NUL character, so the terminating NUL character in
+        # the last entry caused the split to add one empty element
+        # at the end. This is expected, so just remove it.
+        attr_info.pop()
 
-    attr_line_re = re.compile(r'(.*):\s*%s:\s*(.*)$' % attr_name)
+    # As per the above, we should now have a number of lines that's
+    # a multiple of 3.
+    assert len(attr_info) % 3 == 0
+
     result = {}
-    for file_attr_info in attr_info:
-        m = re.match(attr_line_re, file_attr_info)
-        assert m is not None, \
-            'cannot parse output from git-check-attr:\n%s' % file_attr_info
-        filename = m.group(1)
-        attr_val = m.group(2)
+    while attr_info:
+        filename = attr_info.pop(0)
+        attr_info.pop(0)  # Ignore the attribute name...
+        attr_val = attr_info.pop(0)
 
         assert filename.startswith(checkout_subdir + '/')
         filename = filename[len(checkout_subdir) + 1:]

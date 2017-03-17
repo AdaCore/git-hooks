@@ -10,7 +10,7 @@ class TestRun(TestCase):
         # a couple of rules (empty line after subject, missing TN),
         # but the "(no-rh-check)" keyword/tag in the revision log
         # should turn all rh-checks to be accepted.
-        p = Run('git push origin 67091e2b3fd5b0b072f4cb6f6f8b5d58fac891a3:master'.split())
+        p = Run('git push origin c16481a7e16f7d1632319922e84a9cc32dcf876b:master'.split())
         expected_out = """\
 remote: *** cvs_check: `trunk/repo/a'
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
@@ -24,9 +24,9 @@ remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: d065089ff184d97934c010ccd0e7e8ed94cb7165
-remote: X-Git-Newrev: 67091e2b3fd5b0b072f4cb6f6f8b5d58fac891a3
+remote: X-Git-Newrev: c16481a7e16f7d1632319922e84a9cc32dcf876b
 remote:
-remote: commit 67091e2b3fd5b0b072f4cb6f6f8b5d58fac891a3
+remote: commit c16481a7e16f7d1632319922e84a9cc32dcf876b
 remote: Author: Joel Brobecker <brobecker@adacore.com>
 remote: Date:   Fri Apr 27 13:08:29 2012 -0700
 remote:
@@ -36,7 +36,7 @@ remote:
 remote:     Just added a little bit of text inside file a.
 remote:     Thought about doing something else, but not really necessary.
 remote:
-remote:     (no-rh-check)
+remote:     no-rh-check
 remote:
 remote: Diff:
 remote: ---
@@ -55,7 +55,7 @@ remote: +In the middle too!
 remote:  Third line.
 remote: +
 To ../bare/repo.git
-   d065089..67091e2  67091e2b3fd5b0b072f4cb6f6f8b5d58fac891a3 -> master
+   d065089..c16481a  c16481a7e16f7d1632319922e84a9cc32dcf876b -> master
 """
 
         self.assertEqual(p.status, 0, p.image)
@@ -67,7 +67,7 @@ To ../bare/repo.git
 
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** pre-commit check failed for file `b' at commit: af07c14c3d6be423c86bbe3d4ac5327b2cdd78b9
+remote: *** pre-commit check failed for file `b' at commit: 7b299989f3305ad611c2c9774cc0e587571beb84
 remote: *** cvs_check: `trunk/repo/b'
 remote: *** *** cvs_check: some style errors in: trunk/repo/b
 remote: error: hook declined to update refs/heads/master

@@ -15,35 +15,35 @@ class TestRun(TestCase):
         # by the hooks.
         self.set_debug_level(1)
 
-        # Push master to the `origin' remote.  The delta should be one
+        # Push gdb-head to the `origin' remote.  The delta should be one
         # commit with one file being modified.
         p = Run('git push origin gdb-head'.split())
         expected_out = """\
-remote: DEBUG: validate_ref_update (refs/heads/gdb-head, 2c2cd0d654cc6cf460024feb845ee7ea760290c4, 82f09a220fc59bcdb40896e910bce208c3810b60)
+remote: DEBUG: validate_ref_update (refs/heads/gdb-head, 2c2cd0d654cc6cf460024feb845ee7ea760290c4, 8da5e84724007accbaf409022c3c9f07776a8c8b)
 remote: DEBUG: update base: 2c2cd0d654cc6cf460024feb845ee7ea760290c4
 remote: DEBUG: (commit-per-commit style checking)
-remote: DEBUG: check_commit(old_rev=2c2cd0d654cc6cf460024feb845ee7ea760290c4, new_rev=82f09a220fc59bcdb40896e910bce208c3810b60)
-remote: DEBUG: pre-commit checks explicity disabled for commit 82f09a220fc59bcdb40896e910bce208c3810b60
+remote: DEBUG: check_commit(old_rev=2c2cd0d654cc6cf460024feb845ee7ea760290c4, new_rev=8da5e84724007accbaf409022c3c9f07776a8c8b)
+remote: DEBUG: pre-commit checks explicity disabled for commit 8da5e84724007accbaf409022c3c9f07776a8c8b
 remote: DEBUG: post_receive_one(ref_name=refs/heads/gdb-head
 remote:                         old_rev=2c2cd0d654cc6cf460024feb845ee7ea760290c4
-remote:                         new_rev=82f09a220fc59bcdb40896e910bce208c3810b60)
+remote:                         new_rev=8da5e84724007accbaf409022c3c9f07776a8c8b)
 remote: DEBUG: update base: 2c2cd0d654cc6cf460024feb845ee7ea760290c4
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: nowhere@example.com
-remote: Subject: [repo/gdb-head] (2 commits) Resync from fsf-master as of today
-remote:  (no-precommit-check)
+remote: Subject: [repo/gdb-head] (2 commits) Resync from fsf-master as of today --
+remote:  no-precommit-check
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Test Suite <testsuite@adacore.com>
 remote: X-Git-Refname: refs/heads/gdb-head
 remote: X-Git-Oldrev: 2c2cd0d654cc6cf460024feb845ee7ea760290c4
-remote: X-Git-Newrev: 82f09a220fc59bcdb40896e910bce208c3810b60
+remote: X-Git-Newrev: 8da5e84724007accbaf409022c3c9f07776a8c8b
 remote:
 remote: The branch 'gdb-head' was updated to point to:
 remote:
-remote:  82f09a2... Resync from fsf-master as of today (no-precommit-check)
+remote:  8da5e84... Resync from fsf-master as of today -- no-precommit-check
 remote:
 remote: It previously pointed to:
 remote:
@@ -54,19 +54,19 @@ remote:
 remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:
-remote:   82f09a2... Resync from fsf-master as of today (no-precommit-check)
+remote:   8da5e84... Resync from fsf-master as of today -- no-precommit-check
 remote:   6a9155b... 2016 copyright header yearly update. (*)
 remote:
 remote: (*) This commit exists in a branch whose name matches
 remote:     the hooks.noemail config option. No separate email
 remote:     sent.
 remote:
-remote: commit 82f09a220fc59bcdb40896e910bce208c3810b60
+remote: commit 8da5e84724007accbaf409022c3c9f07776a8c8b
 remote: Merge: 2c2cd0d 6a9155b
 remote: Author: Joel Brobecker <brobecker@adacore.com>
 remote: Date:   Sat Apr 23 19:17:33 2016 -0400
 remote:
-remote:     Resync from fsf-master as of today (no-precommit-check)
+remote:     Resync from fsf-master as of today -- no-precommit-check
 remote:
 remote: commit 6a9155bcd8882eda829932d5b2f7630a32ff9d1e
 remote: Author: Joel Brobecker <brobecker@adacore.com>
@@ -80,20 +80,20 @@ remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: nowhere@example.com
 remote: Bcc: file-ci@gnat.com
-remote: Subject: [repo/gdb-head] Resync from fsf-master as of today
-remote:  (no-precommit-check)
+remote: Subject: [repo/gdb-head] Resync from fsf-master as of today --
+remote:  no-precommit-check
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/gdb-head
 remote: X-Git-Oldrev: 2c2cd0d654cc6cf460024feb845ee7ea760290c4
-remote: X-Git-Newrev: 82f09a220fc59bcdb40896e910bce208c3810b60
+remote: X-Git-Newrev: 8da5e84724007accbaf409022c3c9f07776a8c8b
 remote:
-remote: commit 82f09a220fc59bcdb40896e910bce208c3810b60
+remote: commit 8da5e84724007accbaf409022c3c9f07776a8c8b
 remote: Merge: 2c2cd0d 6a9155b
 remote: Author: Joel Brobecker <brobecker@adacore.com>
 remote: Date:   Sat Apr 23 19:17:33 2016 -0400
 remote:
-remote:     Resync from fsf-master as of today (no-precommit-check)
+remote:     Resync from fsf-master as of today -- no-precommit-check
 remote:
 remote: Diff:
 remote:
@@ -113,7 +113,7 @@ remote:
 remote:   This is bcd, with lots of interesting stuff it in.
 remote:  +And then this is an AdaCore-specific change.
 To ../bare/repo.git
-   2c2cd0d..82f09a2  gdb-head -> gdb-head
+   2c2cd0d..8da5e84  gdb-head -> gdb-head
 """
 
         self.assertEqual(p.status, 0, p.image)

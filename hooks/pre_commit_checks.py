@@ -284,7 +284,7 @@ def check_revision_history(rev):
                        _split_lines=True)
 
     for line in raw_body:
-        if '(no-rh-check)' in line:
+        if 'no-rh-check' in line:
             return
 
     # Various checks on the revision history...
@@ -380,7 +380,7 @@ def check_commit(old_rev, new_rev, project_name):
     # specific commits via the use of a special keyword placed anywhere
     # in the revision log. If found, then return immediately.
     raw_revlog = git.log('-1', new_rev, pretty='format:%B')
-    if '(no-precommit-check)' in raw_revlog:
+    if 'no-precommit-check' in raw_revlog:
         debug('pre-commit checks explicity disabled for commit %s' % new_rev)
         return
 

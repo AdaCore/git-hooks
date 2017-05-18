@@ -54,7 +54,7 @@ error: failed to push some refs to '../bare/repo.git'
 remote: DEBUG: validate_ref_update (refs/heads/master, d065089ff184d97934c010ccd0e7e8ed94cb7165, a60540361d47901d3fe254271779f380d94645f7)
 remote: DEBUG: update base: d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: DEBUG: %(TEST_DIR)s/.no_cvs_check found - pre-commit checks disabled
-remote: SYSLOG: cvs_check: Pre-commit checks disabled for a60540361d47901d3fe254271779f380d94645f7 on repo by user testsuite using %(TEST_DIR)s/.no_cvs_check
+remote: SYSLOG: style_checker: Pre-commit checks disabled for a60540361d47901d3fe254271779f380d94645f7 on repo by user testsuite using %(TEST_DIR)s/.no_cvs_check
 remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote:                         new_rev=a60540361d47901d3fe254271779f380d94645f7)

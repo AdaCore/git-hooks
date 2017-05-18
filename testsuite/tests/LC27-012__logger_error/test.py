@@ -26,7 +26,7 @@ class TestRun(TestCase):
         expected_out = """\
 remote: *** Failed to file the following syslog entry:
 remote: ***   - message: Pre-commit checks disabled for a60540361d47901d3fe254271779f380d94645f7 on repo by user testsuite using %(TEST_DIR)s/.no_cvs_check
-remote: ***   - tag: cvs_check
+remote: ***   - tag: style_checker
 remote: ***   - priority: local0.warn
 remote: ***
 remote: *** logger returned with error code 1:

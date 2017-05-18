@@ -28,8 +28,8 @@ def syslog(message, tag='cvs_check', priority='local0.warn'):
                  '  - tag: %s' % tag,
                  '  - priority: %s' % priority,
                  '',
-                 'logger returned with error code %d:' % p.returncode]
-                + out.splitlines())
+                 'logger returned with error code %d:' % p.returncode] +
+                out.splitlines())
         warn(*info)
 
     elif out.rstrip():

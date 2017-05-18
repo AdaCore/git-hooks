@@ -7,7 +7,7 @@ from subprocess import Popen, PIPE, STDOUT
 from utils import warn
 
 
-def syslog(message, tag='cvs_check', priority='local0.warn'):
+def syslog(message, tag='style_checker', priority='local0.warn'):
     """Add the given entry to the syslog file.
 
     PARAMETERS

@@ -8,5 +8,4 @@ import sys
 
 # To help with testing, print a trace containing the name of the file
 # that is being checked.
-print "alt_style_checker: `%s'" % sys.argv[1]
-
+print "alt_style_checker: `%s' `%s'" % (sys.argv[1], sys.argv[2])

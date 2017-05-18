@@ -7,4 +7,6 @@ for the correct files.
 """
 import sys
 
-print "cvs_check: `%s'" % sys.argv[1]
+# To help with testing, print a trace containing the name of the module
+# and the name of the file being checked.
+print "cvs_check: `%s' `%s'" % (sys.argv[1], sys.argv[2])

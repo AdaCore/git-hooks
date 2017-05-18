@@ -13,10 +13,10 @@ class TestRun(TestCase):
 
         p = Run('git push origin release-0.1-branch'.split())
         expected_out = """\
-remote: *** cvs_check: `trunk/repo/b'
-remote: *** cvs_check: `trunk/repo/a'
+remote: *** cvs_check: `repo' `b'
+remote: *** cvs_check: `repo' `a'
 remote: *** pre-commit check failed for file `c' at commit: 4205e52273adad6b014e19fb1cf1fe1c9b8b4089
-remote: *** cvs_check: `trunk/repo/c'
+remote: *** cvs_check: `repo' `c'
 remote: *** ERROR: style-check error detected.
 remote: *** ERROR: Copyright year in header is not up to date
 remote: error: hook declined to update refs/heads/release-0.1-branch

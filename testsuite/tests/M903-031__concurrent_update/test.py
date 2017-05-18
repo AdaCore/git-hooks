@@ -60,7 +60,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** cvs_check: `trunk/repo/a'
+remote: *** cvs_check: `repo' `a'
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

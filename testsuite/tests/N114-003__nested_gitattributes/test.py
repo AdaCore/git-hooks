@@ -15,7 +15,7 @@ class TestRun(TestCase):
         # commit with one file being modified.
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** cvs_check: `trunk/repo/testsuite/tests/.gitattributes'
+remote: *** cvs_check: `repo' `testsuite/tests/.gitattributes'
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

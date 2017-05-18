@@ -6,6 +6,6 @@ to verify that the script was called with the correct arguments.
 """
 import sys
 
-if sys.argv[1] == 'trunk/repo/b':
-    print >>sys.stderr, "cvs_check: style check violation in %s" % sys.argv[1]
+if sys.argv[2] == 'b':
+    print >>sys.stderr, "cvs_check: style check violation in %s" % sys.argv[2]
     sys.exit(1)

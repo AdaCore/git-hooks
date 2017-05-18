@@ -26,7 +26,7 @@ remote: DEBUG: validate_ref_update (refs/heads/master, 128c4380beb275f9002a42e0b
 remote: DEBUG: update base: 128c4380beb275f9002a42e0b5da3618e00c11a9
 remote: DEBUG: (combined style checking)
 remote: DEBUG: check_commit(old_rev=128c4380beb275f9002a42e0b5da3618e00c11a9, new_rev=7277e89f8909d7279357489ccf0de81c7c0f3286)
-remote: *** cvs_check: trunk/repo/foo.c
+remote: *** cvs_check: `repo' `foo.c'
 remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=128c4380beb275f9002a42e0b5da3618e00c11a9
 remote:                         new_rev=7277e89f8909d7279357489ccf0de81c7c0f3286)

@@ -22,7 +22,7 @@ remote: DEBUG: update base: a60540361d47901d3fe254271779f380d94645f7
 remote: DEBUG: (commit-per-commit style checking)
 remote: DEBUG: check_commit(old_rev=a60540361d47901d3fe254271779f380d94645f7, new_rev=6a48cdab9b100506a387a8398af4751b33a4bfd0)
 remote:   DEBUG: deleted file ignored: a
-remote: *** cvs_check: `trunk/repo/b'
+remote: *** cvs_check: `repo' `b'
 remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=a60540361d47901d3fe254271779f380d94645f7
 remote:                         new_rev=6a48cdab9b100506a387a8398af4751b33a4bfd0)

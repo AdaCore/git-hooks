@@ -23,7 +23,7 @@ remote: DEBUG: (commit-per-commit style checking)
 remote: DEBUG: check_commit(old_rev=a60540361d47901d3fe254271779f380d94645f7, new_rev=6a48cdab9b100506a387a8398af4751b33a4bfd0)
 remote:   DEBUG: deleted file ignored: a
 remote: *** pre-commit check failed for file `b' at commit: 6a48cdab9b100506a387a8398af4751b33a4bfd0
-remote: *** cvs_check: `trunk/repo/b'
+remote: *** cvs_check: `repo' `b'
 remote: *** ERROR: style-check error detected.
 remote: *** ERROR: Copyright year in header is not up to date
 remote: error: hook declined to update refs/heads/master

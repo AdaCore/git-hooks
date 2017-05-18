@@ -12,9 +12,9 @@ class TestRun(TestCase):
 
         p = Run('git push origin head'.split())
         expected_out = """\
-remote: *** cvs_check: `trunk/repo/.gitignore'
-remote: *** cvs_check: `trunk/repo/source.c'
-remote: *** cvs_check: `trunk/repo/use_source.c'
+remote: *** cvs_check: `repo' `.gitignore'
+remote: *** cvs_check: `repo' `source.c'
+remote: *** cvs_check: `repo' `use_source.c'
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

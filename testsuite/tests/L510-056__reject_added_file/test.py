@@ -10,11 +10,11 @@ class TestRun(TestCase):
         # refuse one of the updates.
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** cvs_check: `trunk/repo/b'
-remote: *** cvs_check: `trunk/repo/pck.adb'
+remote: *** cvs_check: `repo' `b'
+remote: *** cvs_check: `repo' `pck.adb'
 remote: *** pre-commit check failed for file `pck.ads' at commit: 16c509ed1a0f8b558f8ed9664a06b8cf905fc6b2
-remote: *** cvs_check: `trunk/repo/pck.ads'
-remote: *** ERROR: style-check error detected for file: `trunk/repo/pck.ads'.
+remote: *** cvs_check: `repo' `pck.ads'
+remote: *** ERROR: style-check error detected for file: `pck.ads'.
 remote: *** ERROR: Copyright year in header is not up to date
 remote: error: hook declined to update refs/heads/master
 To ../bare/repo.git

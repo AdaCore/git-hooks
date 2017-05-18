@@ -11,8 +11,8 @@ class TestRun(TestCase):
 
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** cvs_check: `trunk/repo/gprbuild_utils.py'
-remote: *** cvs_check: `trunk/repo/tests/ada_project_path/test.py'
+remote: *** cvs_check: `repo' `gprbuild_utils.py'
+remote: *** cvs_check: `repo' `tests/ada_project_path/test.py'
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

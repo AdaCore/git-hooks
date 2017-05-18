@@ -21,7 +21,7 @@ class TestRun(TestCase):
         # commit with one file being modified.
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** alt_style_checker: `trunk/repo/a'
+remote: *** alt_style_checker: `repo' `a'
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

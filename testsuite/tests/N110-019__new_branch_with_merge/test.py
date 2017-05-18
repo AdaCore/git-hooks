@@ -9,7 +9,7 @@ class TestRun(TestCase):
 
         p = Run('git push origin wavefront'.split())
         expected_out = """\
-remote: *** cvs_check: `trunk/repo/c.txt'
+remote: *** cvs_check: `repo' `c.txt'
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

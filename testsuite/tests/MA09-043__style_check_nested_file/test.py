@@ -11,7 +11,7 @@ class TestRun(TestCase):
         p = Run('git push origin master'.split())
         expected_out = """\
 remote: *** pre-commit check failed for file `path/to/file' at commit: d402899ac1ae2b5896c2b1558cdf1564ffa54d01
-remote: *** cvs_check: `trunk/repo/path/to/file' `path/to/file'
+remote: *** cvs_check: `repo' `path/to/file'
 remote: *** File `path/to/file' contains:
 remote: *** New file.
 remote: *** A second line.

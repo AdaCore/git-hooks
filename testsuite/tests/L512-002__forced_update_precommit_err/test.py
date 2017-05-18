@@ -10,9 +10,9 @@ class TestRun(TestCase):
         expected_out = """\
 remote: *** !!! WARNING: This is *NOT* a fast-forward update.
 remote: *** !!! WARNING: You may have removed some important commits.
-remote: *** cvs_check: `trunk/repo/a'
+remote: *** cvs_check: `repo' `a'
 remote: *** pre-commit check failed for file `b' at commit: 14d1fa28493dd548753d11729a117dadaa9905fe
-remote: *** cvs_check: `trunk/repo/b'
+remote: *** cvs_check: `repo' `b'
 remote: *** ERROR: style-check error detected.
 remote: *** ERROR: Copyright header is missing from this file
 remote: error: hook declined to update refs/heads/topic/new-feature

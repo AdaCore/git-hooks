@@ -65,7 +65,7 @@ To ../bare/repo.git
         p = Run('git push origin master'.split())
         expected_out = """\
 remote: *** pre-commit check failed for file `b' at commit: e4dede9e45c3b88fd57aab5edbce1cd4d1da0850
-remote: *** cvs_check: style check violation in trunk/repo/b
+remote: *** cvs_check: style check violation in b
 remote: error: hook declined to update refs/heads/master
 To ../bare/repo.git
  ! [remote rejected] master -> master (hook declined)

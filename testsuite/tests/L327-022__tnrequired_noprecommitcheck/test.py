@@ -59,7 +59,7 @@ To ../bare/repo.git
         # so should not go through the pre-commit-checks again.
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** cvs_check: `repo' `top'
+remote: *** cvs_check: `repo' < `top'
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

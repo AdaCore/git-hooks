@@ -12,7 +12,7 @@ class TestRun(TestCase):
         # should turn all rh-checks to be accepted.
         p = Run('git push origin c16481a7e16f7d1632319922e84a9cc32dcf876b:master'.split())
         expected_out = """\
-remote: *** cvs_check: `repo' `a'
+remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -67,8 +67,8 @@ To ../bare/repo.git
 
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** pre-commit check failed for file `b' at commit: 7b299989f3305ad611c2c9774cc0e587571beb84
-remote: *** cvs_check: `repo' `b'
+remote: *** pre-commit check failed for commit: 7b299989f3305ad611c2c9774cc0e587571beb84
+remote: *** cvs_check: `repo' < `b'
 remote: *** *** cvs_check: some style errors in: b
 remote: error: hook declined to update refs/heads/master
 To ../bare/repo.git

@@ -38,7 +38,7 @@ remote: ***
 remote: *** This is not a fatal issue, but please contact your repository's
 remote: *** administrator to set your project.config file up.
 remote: *** -----------------------------------------------------------------
-remote: *** cvs_check: `repo' `project.config'
+remote: *** cvs_check: `repo' < `project.config'
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

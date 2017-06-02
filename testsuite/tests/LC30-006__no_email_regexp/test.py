@@ -8,13 +8,13 @@ class TestRun(TestCase):
 
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** cvs_check: `repo' `a'
-remote: *** cvs_check: `repo' `b'
-remote: *** cvs_check: `repo' `c'
-remote: *** cvs_check: `repo' `c'
-remote: *** cvs_check: `repo' `d'
-remote: *** cvs_check: `repo' `c'
-remote: *** cvs_check: `repo' `d'
+remote: *** cvs_check: `repo' < `a'
+remote: *** cvs_check: `repo' < `b'
+remote: *** cvs_check: `repo' < `c'
+remote: *** cvs_check: `repo' < `c'
+remote: *** cvs_check: `repo' < `d'
+remote: *** cvs_check: `repo' < `c'
+remote: *** cvs_check: `repo' < `d'
 remote: ----------------------------------------------------------------------
 remote: --  The hooks.no-emails config option contains `refs/heads/mas.*',
 remote: --  which matches the name of the reference being updated

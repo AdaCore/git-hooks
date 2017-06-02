@@ -38,7 +38,7 @@ remote: ***
 remote: *** This is not a fatal issue, but please contact your repository's
 remote: *** administrator to set your project.config file up.
 remote: *** -----------------------------------------------------------------
-remote: *** cvs_check: `repo' `a'
+remote: *** cvs_check: `repo' < `a'
 remote: *** -----------------------------------------------------------------
 remote: *** Unable to find file project.config from branch refs/meta/config
 remote: *** Using your repository's config file instead.

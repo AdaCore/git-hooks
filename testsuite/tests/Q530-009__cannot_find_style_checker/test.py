@@ -10,20 +10,16 @@ class TestRun(TestCase):
         # commit with one file being modified.
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** pre-commit check failed for commit: d402899ac1ae2b5896c2b1558cdf1564ffa54d01
-remote: *** cvs_check: `repo' < `path/to/file'
-remote: *** File `path/to/file' contains:
-remote: *** New file.
-remote: *** A second line.
-remote: ***
-remote: *** --- Done ---
+remote: *** failed to execute style checker (commit a60540361d47901d3fe254271779f380d94645f7):
+remote: *** $ %s/cvs_check.py repo
+remote: *** [Errno 2] No such file or directory
 remote: error: hook declined to update refs/heads/master
 To ../bare/repo.git
  ! [remote rejected] master -> master (hook declined)
 error: failed to push some refs to '../bare/repo.git'
-"""
+""" % TEST_DIR
 
-        self.assertEqual(p.status, 1, p.image)
+        self.assertNotEqual(p.status, 0, p.image)
         self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':

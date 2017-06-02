@@ -16,16 +16,16 @@ remote: DEBUG: validate_ref_update (refs/heads/master, 426fba3571947f6de7f967e88
 remote: DEBUG: update base: 426fba3571947f6de7f967e885a3168b9df7004a
 remote: DEBUG: (commit-per-commit style checking)
 remote: DEBUG: check_commit(old_rev=426fba3571947f6de7f967e885a3168b9df7004a, new_rev=4f0f08f46daf6f5455cf90cdc427443fe3b32fa3)
-remote: *** cvs_check: `repo' `a'
-remote: *** cvs_check: `repo' `b'
-remote: *** cvs_check: `repo' `c'
+remote: *** cvs_check: `repo' < `a'
+remote: *** cvs_check: `repo' < `b'
+remote: *** cvs_check: `repo' < `c'
 remote: DEBUG: check_commit(old_rev=4f0f08f46daf6f5455cf90cdc427443fe3b32fa3, new_rev=4a325b31f594b1dc2c66ac15c4b6b68702bd0cdf)
-remote: *** cvs_check: `repo' `c'
-remote: *** cvs_check: `repo' `d'
+remote: *** cvs_check: `repo' < `c'
+remote: *** cvs_check: `repo' < `d'
 remote: DEBUG: check_commit(old_rev=4a325b31f594b1dc2c66ac15c4b6b68702bd0cdf, new_rev=cc8d2c2637bda27f0bc2125181dd2f8534d16222)
-remote: *** cvs_check: `repo' `c'
+remote: *** cvs_check: `repo' < `c'
 remote: DEBUG: check_commit(old_rev=cc8d2c2637bda27f0bc2125181dd2f8534d16222, new_rev=dd6165c96db712d3e918fb5c61088b171b5e7cab)
-remote: *** cvs_check: `repo' `d'
+remote: *** cvs_check: `repo' < `d'
 remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=426fba3571947f6de7f967e885a3168b9df7004a
 remote:                         new_rev=dd6165c96db712d3e918fb5c61088b171b5e7cab)

@@ -1,8 +1,7 @@
 import os
 from pipes import quote
 import re
-import subprocess
-from subprocess import check_output, STDOUT
+from subprocess import Popen, PIPE, STDOUT
 
 from config import git_config
 from errors import InvalidUpdate
@@ -61,31 +60,28 @@ def check_file(filename, sha1, commit_rev, project_name):
     else:
         style_checker = git_config('hooks.style-checker')
 
-    style_checker_args = [project_name, filename]
-
+    checker_cmd = [style_checker, project_name]
     try:
-        # In order to allow the style-checker to be a script, we need to
-        # run it through a shell.  But when we do so, the Popen class no
-        # longer allows us to pass the arguments as a list.  In order to
-        # avoid problems with spaces or special characters, we quote the
-        # arguments as needed.
-        quoted_args = [quote(arg) for arg in style_checker_args]
-        out = check_output('%s %s' % (style_checker, ' '.join(quoted_args)),
-                           shell=True, cwd=utils.scratch_dir, stderr=STDOUT)
-
-        # If we reach this point, it means that the style-checker returned
-        # zero (success). Print any output, it might be a non-fatal
-        # warning.
-        if out:
-            warn(*out.splitlines())
-
-    except subprocess.CalledProcessError, E:
-        debug(str(E), level=4)
-        info = (
-            ["pre-commit check failed for file `%s' at commit: %s"
-             % (filename, commit_rev)] +
-            E.output.splitlines())
+        p = Popen(checker_cmd, stdin=PIPE, stdout=PIPE, stderr=STDOUT,
+                  cwd=utils.scratch_dir)
+    except OSError as E:
+        info = (['failed to execute style checker (commit %s):' % commit_rev,
+                 '$ %s' % ' '.join([quote(arg) for arg in checker_cmd])] +
+                str(E).splitlines())
         raise InvalidUpdate(*info)
+
+    filename_list = [filename]
+    out, _ = p.communicate('\n'.join(filename_list))
+
+    if p.returncode != 0:
+        info = (["pre-commit check failed for commit: %s" % commit_rev] +
+                out.splitlines())
+        raise InvalidUpdate(*info)
+
+    # If we reach this point, it means that the style-checker returned
+    # zero (success). Print any output, it might be a non-fatal warning.
+    if out:
+        warn(*out.splitlines())
 
 
 def ensure_empty_line_after_subject(rev, raw_rh):

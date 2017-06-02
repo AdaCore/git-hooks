@@ -23,9 +23,9 @@ remote: DEBUG: validate_ref_update (refs/tags/version-0.1a, 00000000000000000000
 remote: DEBUG: update base: 426fba3571947f6de7f967e885a3168b9df7004a
 remote: DEBUG: (commit-per-commit style checking)
 remote: DEBUG: check_commit(old_rev=426fba3571947f6de7f967e885a3168b9df7004a, new_rev=4f0f08f46daf6f5455cf90cdc427443fe3b32fa3)
-remote: *** cvs_check: `repo' `a'
-remote: *** cvs_check: `repo' `b'
-remote: *** cvs_check: `repo' `c'
+remote: *** cvs_check: `repo' < `a'
+remote: *** cvs_check: `repo' < `b'
+remote: *** cvs_check: `repo' < `c'
 remote: DEBUG: post_receive_one(ref_name=refs/tags/version-0.1a
 remote:                         old_rev=0000000000000000000000000000000000000000
 remote:                         new_rev=b03c3952e1cd29c6ec0cad2590689c0b22d02197)

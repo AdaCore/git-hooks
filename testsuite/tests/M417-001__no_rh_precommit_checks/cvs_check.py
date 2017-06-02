@@ -6,6 +6,10 @@ to verify that the script was called with the correct arguments.
 """
 import sys
 
-if sys.argv[2] == 'b':
-    print >>sys.stderr, "cvs_check: style check violation in %s" % sys.argv[2]
-    sys.exit(1)
+filenames = sys.stdin.read().splitlines(False)
+
+for filename in filenames:
+    if filename == 'b':
+        print >>sys.stderr, \
+            "cvs_check: style check violation in %s" % filename
+        sys.exit(1)

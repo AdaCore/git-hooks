@@ -8,7 +8,7 @@ class TestRun(TestCase):
 
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** cvs_check: `repo' `pck.ads'
+remote: *** cvs_check: `repo' < `pck.ads'
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

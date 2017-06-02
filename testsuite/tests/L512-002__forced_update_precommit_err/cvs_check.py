@@ -6,13 +6,18 @@ to verify that the script was called with the correct arguments.
 """
 import sys
 
-# To help with testing, print a trace containing the name of the file
-# that is being checked.
-print >> sys.stderr, "cvs_check: `%s' `%s'" % (sys.argv[1], sys.argv[2])
+filenames = sys.stdin.read().splitlines(False)
+
+# To help with testing, print a trace containing the name of the module
+# and the names of the files being checked.
+print >> sys.stderr, "cvs_check: %s < %s" % (
+    ' '.join(["`%s'" % arg for arg in sys.argv[1:]]),
+    ' '.join(["`%s'" % arg for arg in filenames]))
 
 # Fail the style-check for the following files:
-if sys.argv[2] == 'b':
-    print >> sys.stderr, 'ERROR: style-check error detected.'
-    print >> sys.stderr, 'ERROR: Copyright header is missing from this file'
-    sys.exit(1)
+for filename in filenames:
+    if filename == 'b':
+        print >> sys.stderr, 'ERROR: style-check error detected.'
+        print >> sys.stderr, 'ERROR: Copyright header is missing from this file'
+        sys.exit(1)
 

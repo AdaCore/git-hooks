@@ -11,7 +11,7 @@ class TestRun(TestCase):
         self.assertTrue(p.status == 0, p.image)
 
         expected_out = """\
-remote: *** cvs_check: `repo' `a'
+remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

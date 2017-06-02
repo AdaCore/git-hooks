@@ -26,7 +26,7 @@ class TestRun(TestCase):
         p = Run('git push origin master'.split())
         expected_out = """\
 remote: *** %(TEST_DIR)s/.no_cvs_check is too old and will be ignored.
-remote: *** pre-commit check failed for file `a' at commit: a60540361d47901d3fe254271779f380d94645f7
+remote: *** pre-commit check failed for commit: a60540361d47901d3fe254271779f380d94645f7
 remote: *** ERROR: style-check error detected.
 remote: *** ERROR: Copyright year in header is not up to date
 remote: error: hook declined to update refs/heads/master

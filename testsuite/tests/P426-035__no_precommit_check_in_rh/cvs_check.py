@@ -5,5 +5,6 @@
 # be called. Return an error if it happens.
 import sys
 
-print('ERROR: cvs_check called for file: %s' % sys.argv[1])
+print('ERROR: cvs_check called for file(s): %s' %
+      ' '.join(["`%s'" % arg for arg in sys.stdin.read().splitlines(False)]))
 sys.exit(1)

@@ -10,29 +10,7 @@ class TestRun(TestCase):
         # commit with one file being modified.
         p = Run('git push origin master'.split())
         expected_out = r"""
-remote: *** cvs_check: `repo' < `"full-double"'
-remote: *** cvs_check: `repo' < `'full-single''
-remote: *** cvs_check: `repo' < ``backtick`'
-remote: *** cvs_check: `repo' < `bad\dir/"two"'
-remote: *** cvs_check: `repo' < `bad\dir/'one''
-remote: *** cvs_check: `repo' < `bad\dir/`lish'
-remote: *** cvs_check: `repo' < `bad\dir/nasa esa'
-remote: *** cvs_check: `repo' < `bad\dir/normal_filename'
-remote: *** cvs_check: `repo' < `bad\dir/one'two"3'
-remote: *** cvs_check: `repo' < `bad\dir/pet`ular'
-remote: *** cvs_check: `repo' < `front`tick'
-remote: *** cvs_check: `repo' < `one space'
-remote: *** cvs_check: `repo' < `subdir/"double"'
-remote: *** cvs_check: `repo' < `subdir/'single''
-remote: *** cvs_check: `repo' < `subdir/another\bs.txt'
-remote: *** cvs_check: `repo' < `subdir/automa`'
-remote: *** cvs_check: `repo' < `subdir/hello:world'
-remote: *** cvs_check: `repo' < `subdir/sp ace'
-remote: *** cvs_check: `repo' < `subdir/time`tock'
-remote: *** cvs_check: `repo' < `weird:colon.h'
-remote: *** cvs_check: `repo' < `weird\backslash.c'
-remote: *** cvs_check: `repo' < `with"double-quote'
-remote: *** cvs_check: `repo' < `with'single-quote'
+remote: *** cvs_check: `repo' < `"full-double"' `'full-single'' ``backtick`' `bad\dir/"two"' `bad\dir/'one'' `bad\dir/`lish' `bad\dir/nasa esa' `bad\dir/normal_filename' `bad\dir/one'two"3' `bad\dir/pet`ular' `front`tick' `one space' `subdir/"double"' `subdir/'single'' `subdir/another\bs.txt' `subdir/automa`' `subdir/hello:world' `subdir/sp ace' `subdir/time`tock' `weird:colon.h' `weird\backslash.c' `with"double-quote' `with'single-quote'
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

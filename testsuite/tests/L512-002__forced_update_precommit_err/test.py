@@ -13,8 +13,7 @@ remote: *** !!! WARNING: You may have removed some important commits.
 remote: *** cvs_check: `repo' < `a'
 remote: *** pre-commit check failed for commit: 14d1fa28493dd548753d11729a117dadaa9905fe
 remote: *** cvs_check: `repo' < `b'
-remote: *** ERROR: style-check error detected.
-remote: *** ERROR: Copyright header is missing from this file
+remote: *** ERROR: b: Copyright header is missing from this file
 remote: error: hook declined to update refs/heads/topic/new-feature
 To ../bare/repo.git
  ! [remote rejected] topic/new-feature -> topic/new-feature (hook declined)

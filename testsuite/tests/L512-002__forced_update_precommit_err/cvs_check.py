@@ -17,7 +17,7 @@ print >> sys.stderr, "cvs_check: %s < %s" % (
 # Fail the style-check for the following files:
 for filename in filenames:
     if filename == 'b':
-        print >> sys.stderr, 'ERROR: style-check error detected.'
-        print >> sys.stderr, 'ERROR: Copyright header is missing from this file'
+        print >> sys.stderr, \
+            'ERROR: %s: Copyright header is missing from this file' % filename
         sys.exit(1)
 

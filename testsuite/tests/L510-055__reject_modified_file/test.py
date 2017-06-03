@@ -13,8 +13,7 @@ class TestRun(TestCase):
 remote: *** cvs_check: `repo' < `a'
 remote: *** pre-commit check failed for commit: 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3
 remote: *** cvs_check: `repo' < `b'
-remote: *** ERROR: style-check error detected.
-remote: *** ERROR: Copyright year in header is not up to date
+remote: *** ERROR: b: Copyright year in header is not up to date
 remote: error: hook declined to update refs/heads/master
 To ../bare/repo.git
  ! [remote rejected] master -> master (hook declined)

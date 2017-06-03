@@ -17,7 +17,7 @@ print >> sys.stderr, "cvs_check: %s < %s" % (
 # Fail the style-check for the following files:
 for filename in filenames:
     if filename == 'b':
-        print >> sys.stderr, 'ERROR: style-check error detected.'
-        print >> sys.stderr, 'ERROR: Copyright year in header is not up to date'
+        print >> sys.stderr, \
+            'ERROR: %s: Copyright year in header is not up to date' % filename
         sys.exit(1)
 

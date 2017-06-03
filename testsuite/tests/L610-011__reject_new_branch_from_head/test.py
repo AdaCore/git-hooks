@@ -18,8 +18,7 @@ remote: *** cvs_check: `repo' < `d'
 remote: *** cvs_check: `repo' < `a'
 remote: *** pre-commit check failed for commit: dcc477c258baf8cf59db378fcc344dc962ad9a29
 remote: *** cvs_check: `repo' < `b'
-remote: *** ERROR: style-check error detected.
-remote: *** ERROR: Copyright year in header is not up to date
+remote: *** ERROR: b: Copyright year in header is not up to date
 remote: error: hook declined to update refs/heads/release-0.1-branch
 To ../bare/repo.git
  ! [remote rejected] release-0.1-branch -> release-0.1-branch (hook declined)

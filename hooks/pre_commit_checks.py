@@ -11,28 +11,30 @@ import utils
 from utils import debug, warn
 
 
-def check_file(filename, sha1, commit_rev, project_name):
+def check_files(filename_list, commit_rev, project_name):
     """Check a file for style violations if appropriate.
 
     Raise InvalidUpdate if one or more style violations are detected.
 
     PARAMETERS
-        filename: The name of the file to check.
-        sha1: The sha1 of the file to be checked.
+        filename_list: The name of the file to check.
         commit_rev: The associated commit sha1.  This piece of information
-            helps us find the correct version of the .gitattributes files,
-            in order to determine whether pre-commit-checks should be
-            applied or not.
+            helps us find the correct version of the files to be checked,
+            as well as the .gitattributes files which are used to determine
+            whether pre-commit-checks should be applied or not.
         project_name: The name of the project (same as the attribute
             in updates.emails.EmailInfo).
     """
-    debug("check_file (filename=`%s', sha1=%s)" % (filename, sha1), level=3)
+    debug("check_files (commit_rev=%s):\n%s"
+          % (commit_rev,
+             '\n'.join([" - `%s'" % fname for fname in filename_list])),
+          level=3)
 
-    # Get a copy of the file and save it in our scratch dir.
+    # Get a copy of all the files and save them in our scratch dir.
     # In order to allow us to call the style-checker using
     # the full path (from the project's root directory) of
-    # the file being checked, we re-create the path to that
-    # filename, and then copy the file at that same path.
+    # the files being checked, we re-create the path to those
+    # filenames, and then copy the files at the same path.
     #
     # Providing the path as part of the filename argument is useful,
     # because it allows the messages printed by the style-checker
@@ -41,11 +43,13 @@ def check_file(filename, sha1, commit_rev, project_name):
     # it can also be useful to quickly locate a file in the project
     # when trying to make the needed corrections outlined by the
     # style-checker.
-    path_to_filename = "%s/%s" % (utils.scratch_dir,
-                                  os.path.dirname(filename))
-    if not os.path.exists(path_to_filename):
-        os.makedirs(path_to_filename)
-    git.show(sha1, _outfile="%s/%s" % (utils.scratch_dir, filename))
+    for filename in filename_list:
+        path_to_filename = "%s/%s" % (utils.scratch_dir,
+                                      os.path.dirname(filename))
+        if not os.path.exists(path_to_filename):
+            os.makedirs(path_to_filename)
+        git.show("%s:%s" % (commit_rev, filename),
+                 _outfile="%s/%s" % (utils.scratch_dir, filename))
 
     # Call the style-checker.
 
@@ -70,7 +74,6 @@ def check_file(filename, sha1, commit_rev, project_name):
                 str(E).splitlines())
         raise InvalidUpdate(*info)
 
-    filename_list = [filename]
     out, _ = p.communicate('\n'.join(filename_list))
 
     if p.returncode != 0:
@@ -394,13 +397,27 @@ def check_commit(old_rev, new_rev, project_name):
             # This is why we did not tell the `git diff-tree' command
             # above to detect renames, and why we do not have a special
             # branch for status values starting with `R'.
-            files_to_check.append((filename, new_sha1))
+            files_to_check.append(filename)
 
     no_style_check_map = git_attribute(new_rev,
-                                       [e[0] for e in files_to_check],
+                                       [fname for fname in files_to_check],
                                        'no-precommit-check')
-    for filename, new_sha1 in files_to_check:
+
+    def needs_style_check_p(filename):
+        """Return True if the file should be style-checked, False otherwise.
+
+        In addition to returning True/False, it generates a debug log
+        when the file does have a no-precommit-check attribute.
+        """
         if no_style_check_map[filename] == 'set':
             debug('no-precommit-check: %s commit_rev=%s' % (filename, new_rev))
-            continue
-        check_file(filename, new_sha1, new_rev, project_name)
+            return False
+        else:
+            return True
+
+    files_to_check = filter(needs_style_check_p, files_to_check)
+    if not files_to_check:
+        debug('check_commit: no files to style-check')
+        return
+
+    check_files(files_to_check, new_rev, project_name)

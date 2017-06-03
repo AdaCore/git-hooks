@@ -10,8 +10,7 @@ class TestRun(TestCase):
         expected_out = """\
 remote: *** !!! WARNING: This is *NOT* a fast-forward update.
 remote: *** !!! WARNING: You may have removed some important commits.
-remote: *** cvs_check: `repo' < `a'
-remote: *** cvs_check: `repo' < `b'
+remote: *** cvs_check: `repo' < `a' `b'
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

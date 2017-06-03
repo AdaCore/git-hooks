@@ -22,9 +22,7 @@ remote: DEBUG: validate_ref_update (refs/heads/headless, 00000000000000000000000
 remote: DEBUG: update base: None
 remote: DEBUG: (combined style checking)
 remote: DEBUG: check_commit(old_rev=4b825dc642cb6eb9a060e54bf8d69288fbee4904, new_rev=902092ffe1cf61b28e28c86949a447b9fc2591a4)
-remote: *** cvs_check: `repo' < `that.txt'
-remote: *** cvs_check: `repo' < `there'
-remote: *** cvs_check: `repo' < `this.txt'
+remote: *** cvs_check: `repo' < `that.txt' `there' `this.txt'
 remote: DEBUG: post_receive_one(ref_name=refs/heads/headless
 remote:                         old_rev=0000000000000000000000000000000000000000
 remote:                         new_rev=902092ffe1cf61b28e28c86949a447b9fc2591a4)
@@ -171,8 +169,7 @@ remote: DEBUG: validate_ref_update (refs/heads/one-commit, 000000000000000000000
 remote: DEBUG: update base: None
 remote: DEBUG: (combined style checking)
 remote: DEBUG: check_commit(old_rev=4b825dc642cb6eb9a060e54bf8d69288fbee4904, new_rev=ef3ab848df2bef804d5bd0880475d40cb6aab0bf)
-remote: *** cvs_check: `repo' < `contents.txt'
-remote: *** cvs_check: `repo' < `stuff'
+remote: *** cvs_check: `repo' < `contents.txt' `stuff'
 remote: DEBUG: post_receive_one(ref_name=refs/heads/one-commit
 remote:                         old_rev=0000000000000000000000000000000000000000
 remote:                         new_rev=ef3ab848df2bef804d5bd0880475d40cb6aab0bf)

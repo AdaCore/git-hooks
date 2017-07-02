@@ -1,0 +1,7 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+[gerrit]
+        description = a multiline description\n\
+of my project which should be\n\
+handled properly by the git-hooks.

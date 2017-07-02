@@ -163,11 +163,16 @@ def initialize_git_config_map():
         # Use "--file <cfg_file>" to make sure that we only parse
         # the file we just retrieved. Otherwise, git also parses
         # the user's config file.
-        all_configs = git.config('-l', '--file', cfg_file, _split_lines=True)
+        #
+        # Also, use the nul character as the separator between each
+        # entry (-z option) so as to not confuse them with potential
+        # newlines being used inside the value of an option.
+        all_configs = git.config('-z', '-l', '--file', cfg_file).split('\x00')
     finally:
         os.unlink(tmp_file)
 
-    all_configs_map = dict([config.split('=', 1) for config in all_configs])
+    all_configs_map = dict([config.split('\n', 1) for config in all_configs
+                            if config])
 
     # Populate the __git_config_map dictionary...
     __git_config_map = {}

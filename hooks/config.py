@@ -171,8 +171,28 @@ def initialize_git_config_map():
     finally:
         os.unlink(tmp_file)
 
-    all_configs_map = dict([config.split('\n', 1) for config in all_configs
-                            if config])
+    all_configs_map = {}
+    for config in all_configs:
+        if not config:
+            # "git config -z" adds a nul character at the end of its output,
+            # which cause all_configs to end with an empty entry. Just ignore
+            # those.
+            continue
+        config_name, config_val = config.split('\n', 1)
+        if config_name in GIT_CONFIG_OPTS and \
+                'type' in GIT_CONFIG_OPTS[config_name] and \
+                GIT_CONFIG_OPTS[config_name]['type'] == tuple:
+            # This config is a list of potentially multiple values, and
+            # therefore multiple entries with the same config name can be
+            # provided for each value. Just save them in a list.
+            if config_name not in all_configs_map:
+                all_configs_map[config_name] = ()
+            # Also, at least for now, we support coma-separated entries
+            # for this multiple-value configs. So split each entry as well...
+            config_val = to_type(config_val, tuple)
+            all_configs_map[config_name] += config_val
+        else:
+            all_configs_map[config_name] = config_val
 
     # Populate the __git_config_map dictionary...
     __git_config_map = {}

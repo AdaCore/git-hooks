@@ -118,6 +118,7 @@ class AbstractUpdate(object):
         """
         debug('validate_ref_update (%s, %s, %s)'
               % (self.ref_name, self.old_rev, self.new_rev))
+        self.__reject_frozen_ref_update()
         self.validate_ref_update()
         self.__check_max_commit_emails()
         self.pre_commit_checks()
@@ -740,3 +741,37 @@ class AbstractUpdate(object):
         for commit in commit_list:
             commit.send_email_p = (commit.rev in included_refs or
                                    commit.rev in first_parents)
+
+    def __reject_frozen_ref_update(self):
+        """Raise InvalidUpdate if trying to update a frozen branch.
+
+        PARAMETERS:
+            short_ref_name: The reference's short name (see short_ref_name
+                attribute in class AbstractUpdate).
+
+        REMARKS
+            Frozen and retired mean the same thing, in this case, except
+            we use a project.config-based approach to determining whether
+            updates are allowed on this branch or not. Eventually, we
+            might probably retire reject_retired_branch_update...
+        """
+        frozen_refs = git_config('hooks.frozen-ref')
+        for frozen_ref in frozen_refs:
+            if self.ref_name != frozen_ref.strip():
+                continue
+            # Reject the update. Try to provide a more user-friendly
+            # message for the majority of the cases where the user
+            # is trying to update a branch, but still handle the case
+            # where the user is updating an arbitrary reference.
+            if self.ref_name.startswith('refs/heads/'):
+                info = {'who': 'the %s branch' % self.short_ref_name,
+                        'what': 'branch'}
+            else:
+                info = {'who': self.ref_name,
+                        'what': 'reference'}
+            raise InvalidUpdate(
+                'Updates to %(who)s are no longer allowed because' % info,
+                'this %(what)s is now frozen (see "hooks.frozen-ref" in file'
+                % info,
+                'project.config, from the special branch'
+                ' refs/meta/config).')

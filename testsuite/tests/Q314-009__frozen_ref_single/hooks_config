@@ -1,0 +1,4 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+        frozen-ref = refs/heads/gdb-7.5

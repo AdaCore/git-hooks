@@ -35,6 +35,7 @@ GIT_CONFIG_OPTS = \
      'hooks.disable-merge-commit-checks': {'default': False,  'type': bool},
      'hooks.file-commit-cmd':             {'default': None},
      'hooks.from-domain':                 {'default': None},
+     'hooks.frozen-ref':                  {'default': '',     'type': tuple},
      'hooks.ignore-refs':                 {'default': GERRIT_INTERNAL_REFS,
                                            'type': tuple},
      'hooks.mailinglist':                 {'default': None,   'type': tuple},

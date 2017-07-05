@@ -333,9 +333,9 @@ class AbstractUpdate(object):
         if git_config('hooks.commit-url') is not None:
             url_info = {'rev': commit.rev,
                         'ref_name': self.ref_name}
-            body = (git_config('hooks.commit-url') % url_info
-                    + '\n\n'
-                    + body)
+            body = (git_config('hooks.commit-url') % url_info +
+                    '\n\n' +
+                    body)
 
         if git_config('hooks.disable-email-diff'):
             diff = None

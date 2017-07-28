@@ -6,54 +6,26 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
+        # The revision log of the commit we are trying to push
+        # has the word "minor" in it, which used to be a valid
+        # substitute for a TN, but this is no longer the case
+        # as of 2017-07-28, so the push should now be rejected.
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** cvs_check: `repo' < `a'
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: From: Test Suite <testsuite@adacore.com>
-remote: To: git-hooks-ci@example.com
-remote: Bcc: file-ci@gnat.com
-remote: Subject: [repo] Minor update to file a.
-remote: X-Act-Checkin: repo
-remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
-remote: X-Git-Refname: refs/heads/master
-remote: X-Git-Oldrev: d065089ff184d97934c010ccd0e7e8ed94cb7165
-remote: X-Git-Newrev: 4076043f3bfa9fb473e1788ba4356c99135fc071
-remote:
-remote: commit 4076043f3bfa9fb473e1788ba4356c99135fc071
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Fri Apr 27 13:08:29 2012 -0700
-remote:
-remote:     Minor update to file a.
-remote:
-remote:     Just added a little bit of text inside file a.
-remote:     Thought about doing something else, but not really necessary.
-remote:
-remote:     No TN necessary.
-remote:
-remote: Diff:
-remote: ---
-remote:  a | 4 +++-
-remote:  1 file changed, 3 insertions(+), 1 deletion(-)
-remote:
-remote: diff --git a/a b/a
-remote: index 01d0f12..a90d851 100644
-remote: --- a/a
-remote: +++ b/a
-remote: @@ -1,3 +1,5 @@
-remote:  Some file.
-remote: -Second line.
-remote: +Second line, in the middle.
-remote: +In the middle too!
-remote:  Third line.
-remote: +
+remote: *** The following commit is missing a ticket number inside
+remote: *** its revision history.  If the change is sufficiently
+remote: *** minor that a ticket number is not meaningful, please use
+remote: *** the word "no-tn-check" in place of a ticket number.
+remote: ***
+remote: *** commit 4076043f3bfa9fb473e1788ba4356c99135fc071
+remote: *** Subject: Minor update to file a.
+remote: error: hook declined to update refs/heads/master
 To ../bare/repo.git
-   d065089..4076043  master -> master
+ ! [remote rejected] master -> master (hook declined)
+error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertEqual(p.status, 0, p.image)
+        self.assertNotEqual(p.status, 0, p.image)
         self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':

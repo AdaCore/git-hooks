@@ -66,8 +66,7 @@ To ../bare/repo.git
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently
 remote: *** minor that a ticket number is not meaningful, please use
-remote: *** either the word "Minor" or "no-tn-check" in place of
-remote: *** a ticket number.
+remote: *** the word "no-tn-check" in place of a ticket number.
 remote: ***
 remote: *** commit 4745a4f1ab22602a78540b16d45e37f0f5c95574
 remote: *** Subject: Updated a.
@@ -90,8 +89,7 @@ error: failed to push some refs to '../bare/repo.git'
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently
 remote: *** minor that a ticket number is not meaningful, please use
-remote: *** either the word "Minor" or "no-tn-check" in place of
-remote: *** a ticket number.
+remote: *** the word "no-tn-check" in place of a ticket number.
 remote: ***
 remote: *** commit fd9612bc6e944313396198fe9a7361bdae032e52
 remote: *** Subject: Updated a.

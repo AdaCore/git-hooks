@@ -240,11 +240,8 @@ def check_missing_ticket_number(rev, raw_rh):
         return
 
     tn_re = [  # Satisfy pep8's 2-spaces before inline comment.
-        # The word 'minor' (as in "Minor reformatting")
-        # anywhere in the RH removes the need for a TN
-        # in the RH.
-        r'\bminor\b',
-        # Same for 'no-tn-check'.
+        # The word 'no-tn-check' anywhere in the RH removes the need
+        # for a TN in the RH.
         r'\bno-tn-check\b',
         # TN regexp.
         '[0-9A-Z][0-9A-Z][0-9][0-9]-[0-9A-Z][0-9][0-9]',
@@ -257,8 +254,7 @@ def check_missing_ticket_number(rev, raw_rh):
         'The following commit is missing a ticket number inside',
         'its revision history.  If the change is sufficiently',
         'minor that a ticket number is not meaningful, please use',
-        'either the word "Minor" or "no-tn-check" in place of',
-        'a ticket number.',
+        'the word "no-tn-check" in place of a ticket number.',
         '',
         'commit %s' % rev,
         'Subject: %s' % raw_rh[0],

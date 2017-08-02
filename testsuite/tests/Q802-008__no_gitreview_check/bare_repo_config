@@ -1,0 +1,6 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+[remote "origin"]
+	url = /home/brobecke/act/git-hooks/adacore/testsuite/tests/P426-022__gitreview_branch_check/bare/../repo

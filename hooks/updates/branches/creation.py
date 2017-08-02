@@ -84,6 +84,12 @@ class BranchCreation(BranchUpdate):
         if not self.ref_name.startswith('refs/heads/'):
             return
 
+        if self.search_config_option_list('hooks.no-gitreview-check')\
+                is not None:
+            # The user explicitly disabled the .gitreview check
+            # on this branch.
+            return
+
         # If the file doesn't exist for that branch, then there is
         # no problem.
         if not file_exists(self.new_rev, GITREVIEW_FILENAME):

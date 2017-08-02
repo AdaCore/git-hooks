@@ -84,7 +84,7 @@ class BranchCreation(BranchUpdate):
         if not self.ref_name.startswith('refs/heads/'):
             return
 
-        if self.search_config_option_list('hooks.no-gitreview-check')\
+        if self.search_config_option_list('hooks.no-precommit-check')\
                 is not None:
             # The user explicitly disabled the .gitreview check
             # on this branch.

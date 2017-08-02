@@ -1,5 +1,4 @@
 [hooks]
         from-domain = adacore.com
         mailinglist = git-hooks-ci@example.com
-        no-emails = refs/heads/github/pull/.*
-        no-gitreview-check = refs/heads/github/pull/.*
+        no-precommit-check = refs/heads/github/pull/.*

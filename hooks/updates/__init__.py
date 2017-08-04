@@ -644,6 +644,12 @@ class AbstractUpdate(object):
                 "to generate this many commit emails.")
 
     def __do_style_checks(self):
+        if self.search_config_option_list('hooks.no-style-checks') is not None:
+            # The respository has been configured to disable all style
+            # checks on this branch.
+            debug('no style check on this branch (hooks.no-style-checks)')
+            return
+
         added = self.__added_commits
         if git_config('hooks.combined-style-checking'):
             # This project prefers to perform the style check on

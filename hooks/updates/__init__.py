@@ -270,27 +270,7 @@ class AbstractUpdate(object):
             if not commit.pre_existing_p:
                 check_filename_collisions(commit.rev)
 
-        if git_config('hooks.combined-style-checking'):
-            # This project prefers to perform the style check on
-            # the cumulated diff, rather than commit-per-commit.
-            # Behave as if the update only added one commit (new_rev),
-            # with a single parent being old_rev.  If old_rev is nul
-            # (branch creation), then use the first parent of the oldest
-            # added commit.
-            debug('(combined style checking)')
-            if not added[-1].pre_existing_p:
-                base_rev = (
-                    added[0].base_rev_for_git() if is_null_rev(self.old_rev)
-                    else self.old_rev)
-                style_check_commit(base_rev, self.new_rev,
-                                   self.email_info.project_name)
-        else:
-            debug('(commit-per-commit style checking)')
-            # Perform the pre-commit checks, as needed...
-            for commit in added:
-                if not commit.pre_existing_p:
-                    style_check_commit(commit.base_rev_for_git(), commit.rev,
-                                       self.email_info.project_name)
+        self.__do_style_checks()
 
     def email_commit(self, commit):
         """Send an email describing the given commit.
@@ -662,6 +642,30 @@ class AbstractUpdate(object):
                 " current limit (%d)." % max_emails,
                 "Contact your repository adminstrator if you really meant",
                 "to generate this many commit emails.")
+
+    def __do_style_checks(self):
+        added = self.__added_commits
+        if git_config('hooks.combined-style-checking'):
+            # This project prefers to perform the style check on
+            # the cumulated diff, rather than commit-per-commit.
+            # Behave as if the update only added one commit (new_rev),
+            # with a single parent being old_rev.  If old_rev is nul
+            # (branch creation), then use the first parent of the oldest
+            # added commit.
+            debug('(combined style checking)')
+            if not added[-1].pre_existing_p:
+                base_rev = (
+                    added[0].base_rev_for_git() if is_null_rev(self.old_rev)
+                    else self.old_rev)
+                style_check_commit(base_rev, self.new_rev,
+                                   self.email_info.project_name)
+        else:
+            debug('(commit-per-commit style checking)')
+            # Perform the pre-commit checks, as needed...
+            for commit in added:
+                if not commit.pre_existing_p:
+                    style_check_commit(commit.base_rev_for_git(), commit.rev,
+                                       self.email_info.project_name)
 
     def __email_ref_update(self):
         """Send the email describing to the reference update.

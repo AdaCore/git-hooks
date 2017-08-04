@@ -29,7 +29,7 @@ remote: *** -- notifying all known users of the update is recommended.
 remote: *** ---------------------------------------------------------------
 remote: DEBUG: update base: 354383fa06047ef8053782410c221341e4b07ec4
 remote: DEBUG: (commit-per-commit style checking)
-remote: DEBUG: check_commit(old_rev=354383fa06047ef8053782410c221341e4b07ec4, new_rev=8c0b4151f9f41efcaeb70ea6f91158e4605aaeda)
+remote: DEBUG: style_check_commit(old_rev=354383fa06047ef8053782410c221341e4b07ec4, new_rev=8c0b4151f9f41efcaeb70ea6f91158e4605aaeda)
 remote: *** cvs_check: `repo' < `bar.c' `foo'
 remote: DEBUG: post_receive_one(ref_name=refs/tags/full-tag
 remote:                         old_rev=a69eaaba59ea6d7574a9c5437805a628ea652c8e

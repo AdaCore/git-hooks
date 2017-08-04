@@ -22,7 +22,7 @@ class TestRun(TestCase):
 remote: DEBUG: validate_ref_update (refs/heads/gdb-head, 2c2cd0d654cc6cf460024feb845ee7ea760290c4, 8da5e84724007accbaf409022c3c9f07776a8c8b)
 remote: DEBUG: update base: 2c2cd0d654cc6cf460024feb845ee7ea760290c4
 remote: DEBUG: (commit-per-commit style checking)
-remote: DEBUG: check_commit(old_rev=2c2cd0d654cc6cf460024feb845ee7ea760290c4, new_rev=8da5e84724007accbaf409022c3c9f07776a8c8b)
+remote: DEBUG: style_check_commit(old_rev=2c2cd0d654cc6cf460024feb845ee7ea760290c4, new_rev=8da5e84724007accbaf409022c3c9f07776a8c8b)
 remote: DEBUG: pre-commit checks explicity disabled for commit 8da5e84724007accbaf409022c3c9f07776a8c8b
 remote: DEBUG: post_receive_one(ref_name=refs/heads/gdb-head
 remote:                         old_rev=2c2cd0d654cc6cf460024feb845ee7ea760290c4

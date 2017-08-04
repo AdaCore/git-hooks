@@ -11,7 +11,7 @@ import utils
 from utils import debug, warn
 
 
-def check_files(filename_list, commit_rev, project_name):
+def style_check_files(filename_list, commit_rev, project_name):
     """Check a file for style violations if appropriate.
 
     Raise InvalidUpdate if one or more style violations are detected.
@@ -25,7 +25,7 @@ def check_files(filename_list, commit_rev, project_name):
         project_name: The name of the project (same as the attribute
             in updates.emails.EmailInfo).
     """
-    debug("check_files (commit_rev=%s):\n%s"
+    debug("style_check_files (commit_rev=%s):\n%s"
           % (commit_rev,
              '\n'.join([" - `%s'" % fname for fname in filename_list])),
           level=3)
@@ -350,7 +350,7 @@ def reject_commit_if_merge(commit, ref_name):
                                  'subject': commit.subject}).splitlines())
 
 
-def check_commit(old_rev, new_rev, project_name):
+def style_check_commit(old_rev, new_rev, project_name):
     """Call check_file for every file changed between old_rev and new_rev.
 
     Raise InvalidUpdate if one or more style violation are detected.
@@ -363,7 +363,7 @@ def check_commit(old_rev, new_rev, project_name):
         project_name: The name of the project (same as the attribute
             in updates.emails.EmailInfo).
     """
-    debug('check_commit(old_rev=%s, new_rev=%s)' % (old_rev, new_rev))
+    debug('style_check_commit(old_rev=%s, new_rev=%s)' % (old_rev, new_rev))
 
     # We allow users to explicitly disable pre-commit checks for
     # specific commits via the use of a special keyword placed anywhere
@@ -413,7 +413,7 @@ def check_commit(old_rev, new_rev, project_name):
 
     files_to_check = filter(needs_style_check_p, files_to_check)
     if not files_to_check:
-        debug('check_commit: no files to style-check')
+        debug('style_check_commit: no files to style-check')
         return
 
-    check_files(files_to_check, new_rev, project_name)
+    style_check_files(files_to_check, new_rev, project_name)

@@ -26,7 +26,7 @@ remote: *** -- notifying all known users of the update is recommended.
 remote: *** ---------------------------------------------------------------
 remote: DEBUG: update base: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e
 remote: DEBUG: (commit-per-commit style checking)
-remote: DEBUG: check_commit(old_rev=8b9a0d6bf08d7a983affbee3c187adadaaedec9e, new_rev=8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5)
+remote: DEBUG: style_check_commit(old_rev=8b9a0d6bf08d7a983affbee3c187adadaaedec9e, new_rev=8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5)
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: post_receive_one(ref_name=refs/tags/some-tag
 remote:                         old_rev=8b9a0d6bf08d7a983affbee3c187adadaaedec9e

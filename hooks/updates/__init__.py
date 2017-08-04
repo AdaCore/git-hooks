@@ -5,7 +5,7 @@ from errors import InvalidUpdate
 from git import (git, get_object_type, is_null_rev, commit_parents,
                  commit_rev)
 from os.path import expanduser, isfile, getmtime
-from pre_commit_checks import (check_revision_history, check_commit,
+from pre_commit_checks import (check_revision_history, style_check_commit,
                                check_filename_collisions,
                                reject_commit_if_merge)
 import re
@@ -282,15 +282,15 @@ class AbstractUpdate(object):
                 base_rev = (
                     added[0].base_rev_for_git() if is_null_rev(self.old_rev)
                     else self.old_rev)
-                check_commit(base_rev, self.new_rev,
-                             self.email_info.project_name)
+                style_check_commit(base_rev, self.new_rev,
+                                   self.email_info.project_name)
         else:
             debug('(commit-per-commit style checking)')
             # Perform the pre-commit checks, as needed...
             for commit in added:
                 if not commit.pre_existing_p:
-                    check_commit(commit.base_rev_for_git(), commit.rev,
-                                 self.email_info.project_name)
+                    style_check_commit(commit.base_rev_for_git(), commit.rev,
+                                       self.email_info.project_name)
 
     def email_commit(self, commit):
         """Send an email describing the given commit.

@@ -1,0 +1,5 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+        tn-required = true
+        no-style-checks = refs/heads/fsf-.*

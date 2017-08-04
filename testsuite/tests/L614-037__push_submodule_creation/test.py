@@ -66,7 +66,7 @@ remote:   DEBUG: check_update(ref_name=refs/heads/master, old_rev=7a373b536b65b6
 remote: DEBUG: validate_ref_update (refs/heads/master, 7a373b536b65b600a449b5c739c137301f6fd364, %(subm_rev)s)
 remote: DEBUG: update base: 7a373b536b65b600a449b5c739c137301f6fd364
 remote: DEBUG: (commit-per-commit style checking)
-remote: DEBUG: check_commit(old_rev=7a373b536b65b600a449b5c739c137301f6fd364, new_rev=%(subm_rev)s)
+remote: DEBUG: style_check_commit(old_rev=7a373b536b65b600a449b5c739c137301f6fd364, new_rev=%(subm_rev)s)
 remote:   DEBUG: subproject entry ignored: subm
 remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=7a373b536b65b600a449b5c739c137301f6fd364

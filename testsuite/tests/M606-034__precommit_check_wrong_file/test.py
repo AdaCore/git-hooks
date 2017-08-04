@@ -34,9 +34,9 @@ class TestRun(TestCase):
 remote: DEBUG: validate_ref_update (refs/heads/master, 128c4380beb275f9002a42e0b5da3618e00c11a9, 7277e89f8909d7279357489ccf0de81c7c0f3286)
 remote: DEBUG: update base: 128c4380beb275f9002a42e0b5da3618e00c11a9
 remote: DEBUG: (commit-per-commit style checking)
-remote: DEBUG: check_commit(old_rev=007bd39b476d596fbc140227f31a73247272d281, new_rev=1091f4333e5842fe4e17bd6b445f5899f13cc7e9)
+remote: DEBUG: style_check_commit(old_rev=007bd39b476d596fbc140227f31a73247272d281, new_rev=1091f4333e5842fe4e17bd6b445f5899f13cc7e9)
 remote: *** cvs_check: `repo' < `foo.c'
-remote: DEBUG: check_commit(old_rev=128c4380beb275f9002a42e0b5da3618e00c11a9, new_rev=7277e89f8909d7279357489ccf0de81c7c0f3286)
+remote: DEBUG: style_check_commit(old_rev=128c4380beb275f9002a42e0b5da3618e00c11a9, new_rev=7277e89f8909d7279357489ccf0de81c7c0f3286)
 remote: *** cvs_check: `repo' < `foo.c'
 remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=128c4380beb275f9002a42e0b5da3618e00c11a9

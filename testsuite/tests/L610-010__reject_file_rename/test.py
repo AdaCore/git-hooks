@@ -20,7 +20,7 @@ remote:   DEBUG: check_update(ref_name=refs/heads/master, old_rev=a60540361d4790
 remote: DEBUG: validate_ref_update (refs/heads/master, a60540361d47901d3fe254271779f380d94645f7, 6a48cdab9b100506a387a8398af4751b33a4bfd0)
 remote: DEBUG: update base: a60540361d47901d3fe254271779f380d94645f7
 remote: DEBUG: (commit-per-commit style checking)
-remote: DEBUG: check_commit(old_rev=a60540361d47901d3fe254271779f380d94645f7, new_rev=6a48cdab9b100506a387a8398af4751b33a4bfd0)
+remote: DEBUG: style_check_commit(old_rev=a60540361d47901d3fe254271779f380d94645f7, new_rev=6a48cdab9b100506a387a8398af4751b33a4bfd0)
 remote:   DEBUG: deleted file ignored: a
 remote: *** pre-commit check failed for commit: 6a48cdab9b100506a387a8398af4751b33a4bfd0
 remote: *** cvs_check: `repo' < `b'

@@ -3,7 +3,7 @@
 from config import git_config, SUBJECT_MAX_SUBJECT_CHARS
 from errors import InvalidUpdate
 from git import (git, get_object_type, is_null_rev, commit_parents,
-                 commit_rev)
+                 commit_rev, is_revert_commit)
 from os.path import expanduser, isfile, getmtime
 from pre_commit_checks import (check_revision_history, style_check_commit,
                                check_filename_collisions,
@@ -231,7 +231,18 @@ class AbstractUpdate(object):
             # handled by the __no_cvs_check_user_override method.
             return
 
+        # Create a list of commits that were added, but with revert
+        # commits being filtered out. We have decided that revert commits
+        # should not be subject to any check (QB08-047).  This allows
+        # users to quickly revert a commit if need be, without having
+        # to worry about bumping into any check of any kind.
         added = self.added_commits
+        for commit in added:
+            if is_revert_commit(commit.rev):
+                debug('revert commit detected,'
+                      ' all checks disabled for this commit: %s' % commit.rev)
+                added.remove(commit)
+
         if not added:
             # There are no new commits, so nothing further to check.
             return

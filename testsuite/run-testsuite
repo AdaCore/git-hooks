@@ -17,5 +17,7 @@ else
 fi
 export PYTHONPATH
 
+export LANG=C
+
 python ${root}/lib/testsuite.py "$@"
 

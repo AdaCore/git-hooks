@@ -244,7 +244,7 @@ def check_missing_ticket_number(rev, raw_rh):
         # for a TN in the RH.
         r'\bno-tn-check\b',
         # TN regexp.
-        '[0-9A-Z][0-9A-Z][0-9][0-9]-[0-9A-Z][0-9][0-9]',
+        r'\b[0-9A-Z][0-9A-Z][0-9][0-9]-[0-9A-Z][0-9][0-9]\b',
         ]
     for line in raw_rh:
         if re.search('|'.join(tn_re), line, re.IGNORECASE):

@@ -87,6 +87,43 @@ def style_check_files(filename_list, commit_rev, project_name):
         warn(*out.splitlines())
 
 
+def ensure_iso_8859_15_only(rev, raw_rh):
+    """Raise InvalidUpdate if the revsion log contains non-ISO-8859-15 chars.
+
+    The purpose of this check is make sure there are no unintended
+    characters that snuck in, particularly non-printable characters
+    accidently copy/pasted (this has been seen on MacOS X for instance,
+    where the <U+2069> character was copy/pasted without the user
+    even realizing it). This, in turn, can have serious unintended
+    consequences, for instance when checking for ticket numbers, because
+    tickets numbers need to be on a word boundary, and such invisible
+    character prevents that.
+
+    PARAMETERS
+        rev: The revision of the commit being checked.
+        raw_rh: A list of lines corresponding to the raw revision
+            history (as opposed to the revision history as usually
+            displayed by git where the subject lines are wrapped).
+            See --pretty format option "%B" for more details.
+    """
+    for line in raw_rh:
+        try:
+            u = '\n'.join(raw_rh).decode('UTF-8')
+            u.encode('ISO-8859-15')
+        except UnicodeEncodeError as e:
+            raise InvalidUpdate(
+                'Invalid revision history for commit %s:' % rev,
+                'It contains characters not in the ISO-8859-15 charset.',
+                '',
+                'Below is the first line where this was detected:',
+                '| ' + line,
+                '  ' + ' ' * e.start + '^',
+                '  ' + ' ' * e.start + '|',
+                '',
+                "Please amend the commit's revision history to remove it",
+                "and try again.")
+
+
 def ensure_empty_line_after_subject(rev, raw_rh):
     """Raise InvalidUpdate if there is no empty line after the subject.
 
@@ -277,6 +314,7 @@ def check_revision_history(rev):
             return
 
     # Various checks on the revision history...
+    ensure_iso_8859_15_only(rev, raw_body)
     ensure_empty_line_after_subject(rev, raw_body)
     reject_lines_too_long(rev, raw_body)
     reject_unedited_merge_commit(rev, raw_body)

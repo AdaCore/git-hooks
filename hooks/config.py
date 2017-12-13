@@ -49,6 +49,7 @@ GIT_CONFIG_OPTS = \
      'hooks.post-receive-hook':           {'default': None},
      'hooks.reject-merge-commits':        {'default': '',     'type': tuple},
      'hooks.style-checker':               {'default': 'style_checker'},
+     'hooks.style-checker-config-file':   {'default': None},
      'hooks.tn-required':                 {'default': False,  'type': bool},
 
      # The following options are for testing purposes only, and should

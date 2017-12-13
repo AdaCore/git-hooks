@@ -5,10 +5,21 @@ from subprocess import Popen, PIPE, STDOUT
 
 from config import git_config
 from errors import InvalidUpdate
-from git import git, diff_tree
+from git import git, diff_tree, file_exists
 from git_attrs import git_attribute
 import utils
 from utils import debug, warn
+
+STYLE_CHECKER_CONFIG_FILE_MISSING_ERR_MSG = """\
+Cannot file style_checker config file: `%(config_filename)s'.
+
+Your repository is configured to provide a configuration file to
+the style_checker; however, I cannot find this configuration file
+(%(config_filename)s) in commit %(commit_rev)s.
+
+Perhaps you haven't added this configuration file to this branch
+yet?
+"""
 
 
 def style_check_files(filename_list, commit_rev, project_name):
@@ -30,6 +41,19 @@ def style_check_files(filename_list, commit_rev, project_name):
              '\n'.join([" - `%s'" % fname for fname in filename_list])),
           level=3)
 
+    config_file = git_config('hooks.style-checker-config-file')
+
+    # Auxilary list of files we need to fetch from the same reference
+    # for purposes other than checking their contents.
+    aux_files = []
+    if config_file is not None and config_file not in filename_list:
+        if not file_exists(commit_rev, config_file):
+            info = (STYLE_CHECKER_CONFIG_FILE_MISSING_ERR_MSG
+                    % {'config_filename': config_file,
+                       'commit_rev': commit_rev}).splitlines()
+            raise InvalidUpdate(*info)
+        aux_files.append(config_file)
+
     # Get a copy of all the files and save them in our scratch dir.
     # In order to allow us to call the style-checker using
     # the full path (from the project's root directory) of
@@ -43,7 +67,7 @@ def style_check_files(filename_list, commit_rev, project_name):
     # it can also be useful to quickly locate a file in the project
     # when trying to make the needed corrections outlined by the
     # style-checker.
-    for filename in filename_list:
+    for filename in filename_list + aux_files:
         path_to_filename = "%s/%s" % (utils.scratch_dir,
                                       os.path.dirname(filename))
         if not os.path.exists(path_to_filename):
@@ -64,7 +88,11 @@ def style_check_files(filename_list, commit_rev, project_name):
     else:
         style_checker = git_config('hooks.style-checker')
 
-    checker_cmd = [style_checker, project_name]
+    checker_cmd = [style_checker]
+    if config_file is not None:
+        checker_cmd.extend(['--config', config_file])
+    checker_cmd.append(project_name)
+
     try:
         p = Popen(checker_cmd, stdin=PIPE, stdout=PIPE, stderr=STDOUT,
                   cwd=utils.scratch_dir)

@@ -134,16 +134,17 @@ def ensure_iso_8859_15_only(rev, raw_rh):
             displayed by git where the subject lines are wrapped).
             See --pretty format option "%B" for more details.
     """
-    for line in raw_rh:
+    for lineno, line in enumerate(raw_rh, start=1):
         try:
-            u = '\n'.join(raw_rh).decode('UTF-8')
+            u = line.decode('UTF-8')
             u.encode('ISO-8859-15')
         except UnicodeEncodeError as e:
             raise InvalidUpdate(
                 'Invalid revision history for commit %s:' % rev,
                 'It contains characters not in the ISO-8859-15 charset.',
                 '',
-                'Below is the first line where this was detected:',
+                'Below is the first line where this was detected'
+                ' (line %d):' % lineno,
                 '| ' + line,
                 '  ' + ' ' * e.start + '^',
                 '  ' + ' ' * e.start + '|',

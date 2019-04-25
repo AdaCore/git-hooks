@@ -11,11 +11,11 @@ import utils
 from utils import debug, warn
 
 STYLE_CHECKER_CONFIG_FILE_MISSING_ERR_MSG = """\
-Cannot file style_checker config file: `%(config_filename)s'.
+Cannot find style_checker config file: `%(config_filename)s'.
 
 Your repository is configured to provide a configuration file to
-the style_checker; however, I cannot find this configuration file
-(%(config_filename)s) in commit %(commit_rev)s.
+the style_checker; however, this configuration file (%(config_filename)s)
+cannot be found in commit %(commit_rev)s.
 
 Perhaps you haven't added this configuration file to this branch
 yet?

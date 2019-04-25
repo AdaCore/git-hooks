@@ -55,11 +55,11 @@ To ../bare/repo.git
 
         p = Run('git push origin step-1/checker_config_missing:master'.split())
         expected_out = """\
-remote: *** Cannot file style_checker config file: `style.yaml'.
+remote: *** Cannot find style_checker config file: `style.yaml'.
 remote: ***
 remote: *** Your repository is configured to provide a configuration file to
-remote: *** the style_checker; however, I cannot find this configuration file
-remote: *** (style.yaml) in commit 555923ece17519f0afeed78625afc6ab7e64e592.
+remote: *** the style_checker; however, this configuration file (style.yaml)
+remote: *** cannot be found in commit 555923ece17519f0afeed78625afc6ab7e64e592.
 remote: ***
 remote: *** Perhaps you haven't added this configuration file to this branch
 remote: *** yet?

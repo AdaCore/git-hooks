@@ -1,0 +1,5 @@
+[gerrit]
+host = git.adacore.com
+project = git-hooks
+defaultbranch = master
+defaultremote = origin

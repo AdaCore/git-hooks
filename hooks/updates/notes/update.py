@@ -39,7 +39,7 @@ class NotesUpdate(AbstractUpdate):
     """
     def self_sanity_check(self):
         """See AbstractUpdate.self_sanity_check."""
-        assert self.ref_name == 'refs/notes/commits'
+        assert self.ref_name.startswith('refs/notes/')
 
     def validate_ref_update(self):
         """See AbstractUpdate.validate_ref_update."""

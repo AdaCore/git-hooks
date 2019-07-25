@@ -383,14 +383,14 @@ remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: bfd-cvs@example.com
 remote: Bcc: file-ci@gnat.com
-remote: Subject: [repo] notes update for 4207b94cadc3c1be0edb4f6df5670f0311c267f3
+remote: Subject: [notes][repo] A binutils change.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/notes/commits
 remote: X-Git-Oldrev:
 remote: X-Git-Newrev: f92c5af7ed4374d7174b8e7c25cd89cea5c1b6c3
 remote:
-remote: A Git Notes has been updated; it now contains:
+remote: A Git note has been updated; it now contains:
 remote:
 remote:     A bfd note.
 remote:
@@ -420,14 +420,14 @@ remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: gdb-cvs@example.com
 remote: Bcc: file-ci@gnat.com
-remote: Subject: [repo] notes update for cd2f5d40776eee5a47dc821eddd9a7c6c0ed436d
+remote: Subject: [notes][repo] Add start_mainloop declaration in top.h.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/notes/commits
 remote: X-Git-Oldrev: f92c5af7ed4374d7174b8e7c25cd89cea5c1b6c3
 remote: X-Git-Newrev: dc30675096eb6cc1fc91f14286582387dd0d5183
 remote:
-remote: A Git Notes has been updated; it now contains:
+remote: A Git note has been updated; it now contains:
 remote:
 remote:     A short GDB note.
 remote:
@@ -455,14 +455,14 @@ remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: bfd-cvs@example.com, gdb-cvs@example.com
 remote: Bcc: file-ci@gnat.com
-remote: Subject: [repo] notes update for 4c7588eee23d6d42e8d50ba05343e3d0f31dd286
+remote: Subject: [notes][repo] Add filename in struct bfd, and add README in GDB.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/notes/commits
 remote: X-Git-Oldrev: dc30675096eb6cc1fc91f14286582387dd0d5183
 remote: X-Git-Newrev: 83820cec54feb2b77847ddab68534eeed84c2d0d
 remote:
-remote: A Git Notes has been updated; it now contains:
+remote: A Git note has been updated; it now contains:
 remote:
 remote:     Synchronized change between binutils and GDB.
 remote:

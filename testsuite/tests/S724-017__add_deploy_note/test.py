@@ -14,14 +14,14 @@ remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
-remote: Subject: [repo] notes update for d065089ff184d97934c010ccd0e7e8ed94cb7165
+remote: Subject: [notes(deploy)][repo] New file: a.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/notes/deploy
 remote: X-Git-Oldrev: bbcc356176bb7f3104788323566c4fcef70650fc
 remote: X-Git-Newrev: 58e8efaaf0dee13edea66b1abbd4b669132b3d77
 remote:
-remote: A Git Notes has been updated; it now contains:
+remote: A Git note has been updated; it now contains:
 remote:
 remote:     This is my new note.
 remote:

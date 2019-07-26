@@ -14,14 +14,14 @@ remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
-remote: Subject: [repo] notes update for a60540361d47901d3fe254271779f380d94645f7
+remote: Subject: [notes][repo] Updated a.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/notes/commits
 remote: X-Git-Oldrev: 58e8efaaf0dee13edea66b1abbd4b669132b3d77
 remote: X-Git-Newrev: da34a4b05e4d30a714577a9cc46c199df1634838
 remote:
-remote: A Git Notes has been updated; it now contains:
+remote: A Git note has been updated; it now contains:
 remote:
 remote:     This is my first note.
 remote:     Add some information about my first note.
@@ -53,14 +53,14 @@ remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
-remote: Subject: [repo] notes update for a60540361d47901d3fe254271779f380d94645f7
+remote: Subject: [notes][repo] Updated a.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/notes/commits
 remote: X-Git-Oldrev: da34a4b05e4d30a714577a9cc46c199df1634838
 remote: X-Git-Newrev: 827773c6b58569e16fbb3bd0f639a9d804687fc4
 remote:
-remote: The Git Notes annotating the following commit has been deleted.
+remote: Git notes annotating the following commit have been deleted.
 remote:
 remote: commit a60540361d47901d3fe254271779f380d94645f7
 remote: Author: Joel Brobecker <brobecker@adacore.com>

@@ -14,14 +14,14 @@ remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
-remote: Subject: [repo] notes update for a60540361d47901d3fe254271779f380d94645f7
+remote: Subject: [notes][repo] Updated a.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/notes/commits
 remote: X-Git-Oldrev: 58e8efaaf0dee13edea66b1abbd4b669132b3d77
 remote: X-Git-Newrev: da34a4b05e4d30a714577a9cc46c199df1634838
 remote:
-remote: A Git Notes has been updated; it now contains:
+remote: A Git note has been updated; it now contains:
 remote:
 remote:     This is my first note.
 remote:     Add some information about my first note.
@@ -53,14 +53,14 @@ remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: file-ci@gnat.com
-remote: Subject: [repo] notes update for a60540361d47901d3fe254271779f380d94645f7
+remote: Subject: [notes][repo] Updated a.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/notes/commits
 remote: X-Git-Oldrev: da34a4b05e4d30a714577a9cc46c199df1634838
 remote: X-Git-Newrev: d10873b25a129aa60cdd2dcfbbae9331cef7d677
 remote:
-remote: A Git Notes has been updated; it now contains:
+remote: A Git note has been updated; it now contains:
 remote:
 remote:     This is my first note.
 remote:     Rewrite a little bit how I added some information.

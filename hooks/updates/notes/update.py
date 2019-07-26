@@ -3,7 +3,7 @@
 from errors import InvalidUpdate
 from git import git, is_null_rev, is_valid_commit
 from updates import AbstractUpdate
-from updates.commits import CommitInfo
+from updates.commits import commit_info_list
 from updates.emails import Email
 from updates.notes import GitNotes
 from utils import indent
@@ -11,22 +11,22 @@ from utils import indent
 # The template to be used as the body of the email to be sent
 # for a notes commit which either adds, or modifies a git notes.
 UPDATED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE = """\
-A Git Notes has been updated; it now contains:
+A Git note has been updated; it now contains:
 
 %(notes_contents)s
 
 This note annotates the following commit:
 
-%(annotated_rev_info)s
+%(annotated_rev_log)s
 """
 
 
 # The template to be used as the body of the email to be sent
 # for a notes commit which deletes a git notes.
 DELETED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE = """\
-The Git Notes annotating the following commit has been deleted.
+Git notes annotating the following commit have been deleted.
 
-%(annotated_rev_info)s
+%(annotated_rev_log)s
 """
 
 
@@ -81,10 +81,8 @@ class NotesUpdate(AbstractUpdate):
         """See AbstractUpdate.email_commit."""
         notes = GitNotes(commit.rev)
 
-        # Create a partial CommitInfo object for the commit that
-        # our note annotates.  We create a partial one in order
-        # to avoid computing some info we do not need...
-        annotated_commit = CommitInfo(notes.annotated_rev, None, None, None)
+        # Get commit info for the annotated commit
+        annotated_commit = commit_info_list("-1", notes.annotated_rev)[0]
 
         # Get a description of the annotated commit (a la "git show"),
         # except that we do not want the diff.
@@ -94,19 +92,30 @@ class NotesUpdate(AbstractUpdate):
         # whereas what we needs is the contents at the commit.rev.
         # This makes a difference when a single push updates the notes
         # of the same commit multiple times.
-        annotated_rev_info = git.log(annotated_commit.rev, no_notes=True,
-                                     max_count="1")
+        annotated_rev_log = git.log(annotated_commit.rev, no_notes=True,
+                                    max_count="1")
         notes_contents = (None if notes.contents is None
                           else indent(notes.contents, ' ' * 4))
 
-        subject = '[%s] notes update for %s' % (self.email_info.project_name,
-                                                notes.annotated_rev)
+        # Determine subject tag based on ref name:
+        #   * remove "refs/notes" prefix
+        #   * remove entire tag if remaining component is "commits"
+        #     (case of the default refs/notes/commits ref)
+        notes_ref = self.ref_name.split('/', 2)[2]
+        if notes_ref == "commits":
+            subject_tag = ""
+        else:
+            subject_tag = "(%s)" % notes_ref
+
+        subject = '[notes%s][%s] %s' % (subject_tag,
+                                        self.email_info.project_name,
+                                        annotated_commit.subject)
 
         body_template = (
             DELETED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE if notes_contents is None
             else UPDATED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE)
         body = body_template % {
-            'annotated_rev_info': annotated_rev_info,
+            'annotated_rev_log': annotated_rev_log,
             'notes_contents': notes_contents,
             }
 

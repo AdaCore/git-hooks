@@ -21,10 +21,34 @@ from errors import InvalidUpdate
 from git import git
 from utils import warn
 
-# A list of regular expressions that match the branches where
+# A list of regular expressions that match the references where
 # it will always be OK to do a non-fast-forward update (aka
 # a "forced update").
-FORCED_UPDATE_OK_BRANCHES = ("topic/.*",)
+FORCED_UPDATE_OK_REFS = ("refs/heads/topic/.*",)
+
+# The error message shown to the user when rejecting a non-fast-forward
+# update.
+NON_FAST_FORWARD_ERROR_MESSAGE = """\
+Non-fast-forward updates are not allowed for this reference.
+Please rebase your changes on top of the latest HEAD,
+and then try pushing again."""
+
+# A warning added at the end of the NON_FAST_FORWARD_ERROR_MESSAGE
+# when we believe the user is trying to push a non-fast-forward update
+# to a branch that looks like it should be allowed, and yet isn't,
+# because this repository's hooks.non-fast-forward configuration
+# appears to be following the previous (now defunct) semantics.
+
+OLD_STYLE_CONFIG_WARNING = """\
+Note: It looks like the hooks.non-fast-forward configuration
+for your repository is set to only match the name of the branch
+being updated (e.g. "master"), which is how this configuration
+option was originally interpreted. However, the semantics of
+this option has since been changed and its values must now match
+the reference name (e.g. "refs/heads/master"). If you believe
+this non-fast-forward update should be allowed on this branch,
+contact your repository adminstrator to review the repository's
+hooks.non-fast-forward option configuration."""
 
 
 def check_fast_forward(ref_name, old_rev, new_rev):
@@ -44,13 +68,12 @@ def check_fast_forward(ref_name, old_rev, new_rev):
         # This is a fast-forward update.
         return
 
-    # Non-fast-forward update.  See if this is one of the branches where
-    # such an update is allowed.
-    ok_branches = git_config('hooks.allow-non-fast-forward')
+    # Non-fast-forward update.  See if this is one of the references
+    # where such an update is allowed.
+    ok_refs = git_config('hooks.allow-non-fast-forward')
 
-    for branch in ["refs/heads/" + branch.strip()
-                   for branch in ok_branches + FORCED_UPDATE_OK_BRANCHES]:
-        if re.match(branch, ref_name) is not None:
+    for ok_ref_re in ok_refs + FORCED_UPDATE_OK_REFS:
+        if re.match(ok_ref_re, ref_name) is not None:
             # This is one of the branches where a non-fast-forward update
             # is allowed.  Allow the update, but print a warning for
             # the user, just to make sure he is completely aware of
@@ -60,10 +83,29 @@ def check_fast_forward(ref_name, old_rev, new_rev):
             return
 
     # This non-fast-forward update is not allowed.
-    raise InvalidUpdate(
-        'Non-fast-forward updates are not allowed on this branch;',
-        'Please rebase your changes on top of the latest HEAD,',
-        'and then try pushing again.')
+    err_msg = NON_FAST_FORWARD_ERROR_MESSAGE
+
+    # In the previous version of these hooks, the allow-non-fast-forward
+    # config was assuming that all such updates would be on references
+    # whose name starts with 'refs/heads/'. This is no longer the case.
+    # For repositories using this configuration option with the old
+    # semantics, non-fast-forward updates will now start getting rejected.
+    #
+    # To help users facing this situation understand what's going on,
+    # see if this non-fast-forward update would have been accepted
+    # when interpreting the config option the old way; if yes, then
+    # we are probably in a situation where it's the config rather than
+    # the update that's a problem. Add some additional information
+    # to the error message in order to help him understand what's
+    # is likely happening.
+    if ref_name.startswith('refs/heads/'):
+        for ok_ref_re in ['refs/heads/' + branch.strip()
+                          for branch in ok_refs]:
+            if re.match(ok_ref_re, ref_name) is not None:
+                err_msg += '\n\n' + OLD_STYLE_CONFIG_WARNING
+                break
+
+    raise InvalidUpdate(*err_msg.splitlines())
 
 
 if __name__ == '__main__':

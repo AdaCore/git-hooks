@@ -124,13 +124,12 @@ The following config options are available for general use:
 
 * **`hooks.allow-non-fast-forward`** [list]:
 
-  A list of regular expressions matching branch names (NOT reference
-  names; therefore `master`, not ~~`refs/heads/master`~~).
+  A list of regular expressions matching reference names.
 
   By default, non-fast-forward updates are only allowed on 'topic'
-  branches (ie branches whose name start with `topic/`.  This option
-  allows us to extend the list of branches where non-fast-forward
-  updates are allowed.
+  branches (ie references whose name start with `refs/heads/topic/`).
+  This option allows us to extend the list of references where
+  non-fast-forward updates are allowed.
 
 * **`hooks.allow-lightweight-tag`** (default value: **false**):
 

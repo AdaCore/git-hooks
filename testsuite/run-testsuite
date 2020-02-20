@@ -19,5 +19,17 @@ export PYTHONPATH
 
 export LANG=C
 
+# Make sure user's global .gitconfig does not affect test output.
+#
+# This means that the user.name and user.email configuration aren't
+# set, triggering warnings when using git. So export this information
+# via environment variables instead.
+
+unset HOME
+export GIT_AUTHOR_NAME='Manu Script'
+export GIT_AUTHOR_EMAIL='script@example.com'
+export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+
 python ${root}/lib/testsuite.py "$@"
 

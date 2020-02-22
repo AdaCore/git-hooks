@@ -199,5 +199,6 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details."""
             expected_out: A string containing the expected output.
         """
         diff_str = diff(expected_out.splitlines(),
-                        self.cmd_out.splitlines())
+                        self.cmd_out.splitlines(),
+                        ignore_white_chars=False)
         return '%s\n\nDiff:\n\n%s' % (self.image, diff_str)

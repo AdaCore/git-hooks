@@ -1,6 +1,6 @@
 """Management of git commits during updates..."""
 
-from git import git, commit_parents, empty_tree_rev, diff_tree
+from git import git, empty_tree_rev, diff_tree
 from updates.mailinglists import expanded_mailing_list
 from utils import debug
 
@@ -80,10 +80,16 @@ class CommitInfo(object):
     def base_rev_for_display(self):
         """The rev as reference to determine what changed in this commit.
 
+        This method assumes that self.parent_revs is not None, and raises
+        an assertion failure if the assumption is not met.  Users can call
+        function `commit_parents' to set it if needed.
+
         RETURN VALUE
             The reference commit's SHA1, or None if this commit does not
             have a parent (root commit).
         """
+        assert self.parent_revs is not None
+
         # Make sure we use each commits's first parent as the base
         # commit.  This is important for merge commits, or commits
         # imported by merges.
@@ -112,8 +118,7 @@ class CommitInfo(object):
         # Similarly, we would be checking M4 against B2,
         # whereas it makes more sense in that case to be
         # checking it against C3.
-        if self.parent_revs is None:
-            self.parent_revs = commit_parents(self.rev)
+
         if self.parent_revs:
             return self.parent_revs[0]
         else:

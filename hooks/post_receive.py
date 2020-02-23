@@ -89,41 +89,28 @@ def maybe_post_receive_hook(post_receive_data):
                  % (hook_exe, p.returncode))
 
 
-def parse_command_line(args):
-    """Return a namespace built after parsing the command line.
-
-    PARAMETERS
-        args: A sequence of arguments to be used as the command-line.
-    """
+def parse_command_line():
+    """Return a namespace built after parsing the command line."""
     # The command-line interface is very simple, so we could possibly
     # handle it by hand.  But it's nice to have features such as
     # -h/--help switches which come for free if we use argparse.
-    #
-    # We use ArgumentParser, which means that we are requiring
-    # Python version 2.7 or later, because it handles mandatory
-    # command-line arguments for us as well.
-    ap = ArgumentParser(description='Git "update" hook.')
+    ap = ArgumentParser(description='Git "post-receive" hook.')
     ap.add_argument('--submitter-email',
-                    help=('Use this email address instead as the sender'
+                    help=('Use this email address as the sender'
                           ' of email notifications instead of using the'
                           ' email address of the user calling this'
                           ' script'))
-    ap.add_argument('old_rev',
-                    help='the SHA1 before update')
-    ap.add_argument('new_rev',
-                    help='the new SHA1, if the update is accepted')
-    ap.add_argument('ref_name',
-                    help='the name of the reference being updated')
-
-    return ap.parse_args(args)
+    return ap.parse_args()
 
 
 if __name__ == '__main__':
+    args = parse_command_line()
+
     stdin = sys.stdin.read()
     refs_data = OrderedDict()
     for line in stdin.splitlines():
-        stdin_argv = line.strip().split() + sys.argv[1:]
-        args = parse_command_line(stdin_argv)
-        refs_data[args.ref_name] = (args.old_rev, args.new_rev)
+        old_rev, new_rev, ref_name = line.strip().split()
+        refs_data[ref_name] = (old_rev, new_rev)
+
     post_receive(refs_data, args.submitter_email)
     maybe_post_receive_hook(stdin)

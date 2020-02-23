@@ -388,6 +388,30 @@ The following config options are available for general use:
   This requirement can be by-passed by using the word `no-tn-check` in the
   revision history, in lieu of the Ticket Number.
 
+* **`hooks.update-hook`**:
+
+  If defined, this is the name of a script to be called during
+  the validation phase of a reference update. The purpose of this script
+  is to provide support for customized validation rules.
+
+  The script is called once for each reference to be updated, and takes
+  three parameters:
+  - The name of the reference being updated;
+  - the old object name stored in the reference;
+  - and the new object name to be stored in the reference.
+
+  The script should return 0 if the update is accepted, or nonzero
+  if the update is rejected.
+
+  The script's output is always redirected to the user (stdout and
+  stderr, both). While this can obviously be used to relay error
+  messages when an update is rejected, some scripts may find it
+  useful in cases where the update is accepted as well.
+
+  :warning: The current working directory (cwd) when this script gets
+  called is undefined, so it is recommended to provide a full path to
+  that script.
+
 Configuration Options for Debugging
 -----------------------------------
 

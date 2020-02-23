@@ -7,15 +7,13 @@ refs/heads/master).
 """
 from argparse import ArgumentParser
 from collections import OrderedDict
-from subprocess import Popen, PIPE, STDOUT
 import sys
 
-from config import git_config
 from daemon import run_in_daemon
 from git import git_show_ref
 from updates.emails import EmailQueue
 from updates.factory import new_update
-from utils import (debug, warn)
+from utils import debug, warn, maybe_call_thirdparty_hook
 
 
 def post_receive_one(ref_name, old_rev, new_rev, refs, submitter_email):
@@ -78,13 +76,17 @@ def maybe_post_receive_hook(post_receive_data):
     config variable, by calling this function if the config variable
     is defined.
     """
-    hook_exe = git_config('hooks.post-receive-hook')
-    if hook_exe is None:
-        return
-    p = Popen([hook_exe], stdin=PIPE, stdout=sys.stdout, stderr=STDOUT)
-    p.communicate(post_receive_data)
-    if p.returncode != 0:
-        warn('!!! WARNING: %s returned code: %d.' % (hook_exe, p.returncode))
+    result = maybe_call_thirdparty_hook(
+        'hooks.post-receive-hook', hook_input=post_receive_data)
+    if result is not None:
+        hook_exe, p, out = result
+        sys.stdout.write(out)
+        # Flush stdout now, to make sure the script's output is printed
+        # ahead of the warning below, which is directed to stderr.
+        sys.stdout.flush()
+        if p.returncode != 0:
+            warn('!!! WARNING: %s returned code: %d.'
+                 % (hook_exe, p.returncode))
 
 
 def parse_command_line(args):

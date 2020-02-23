@@ -1,0 +1,10 @@
+#! /usr/bin/env bash
+
+echo '-----[ update-hook args ]-----'
+for i in "$@"
+do
+   echo "'$i'"
+done
+echo '-----[ update-hook stdin ]-----'
+cat -
+echo '-----[ update-hook end ]-----'

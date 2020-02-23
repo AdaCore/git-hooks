@@ -4,7 +4,8 @@ import sys
 
 from errors import InvalidUpdate
 from git import get_object_type, git_show_ref
-from utils import debug, warn, create_scratch_dir, FileLock
+from utils import debug, warn, create_scratch_dir, FileLock, \
+    maybe_call_thirdparty_hook
 # We have to import utils, because we cannot import scratch_dir
 # directly into this module.  Otherwise, our scratch_dir seems
 # to not see the update when create_scratch_dir is called.
@@ -31,6 +32,33 @@ def parse_command_line():
     ap.add_argument('new_rev',
                     help='the new SHA1, if the update is accepted')
     return ap.parse_args()
+
+
+def maybe_update_hook(ref_name, old_rev, new_rev):
+    """Call the update-hook if set in the repository's configuration.
+
+    Raises InvalidUpdate if the hook returned nonzero, indicating
+    that the update should be rejected.
+
+    PARAMETERS
+        ref_name: The name of the reference being update (Eg:
+            refs/heads/master).
+        old_rev: The commit SHA1 of the reference before the update.
+        new_rev: The new commit SHA1 that the reference will point to
+            if the update is accepted.
+    """
+    result = maybe_call_thirdparty_hook(
+        'hooks.update-hook', hook_args=(ref_name, old_rev, new_rev))
+    if result is not None:
+        hook_exe, p, out = result
+        if p.returncode != 0:
+            raise InvalidUpdate(
+                "Update rejected by this repository's hooks.update-hook"
+                " script",
+                '({}):'.format(hook_exe),
+                *out.splitlines())
+        else:
+            sys.stdout.write(out)
 
 
 def check_update(ref_name, old_rev, new_rev):
@@ -60,6 +88,7 @@ def check_update(ref_name, old_rev, new_rev):
             % (ref_name, get_object_type(new_rev)))
     with FileLock('git-hooks::update.token'):
         update_cls.validate()
+        maybe_update_hook(ref_name, old_rev, new_rev)
 
 
 if __name__ == "__main__":

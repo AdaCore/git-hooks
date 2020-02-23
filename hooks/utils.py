@@ -1,3 +1,5 @@
+from subprocess import Popen, PIPE, STDOUT
+
 from datetime import datetime
 from os import environ
 import os
@@ -204,3 +206,49 @@ class FileLock(object):
 
     def __exit__(self, type, value, traceback):
         os.unlink(self.lock_filename)
+
+
+def maybe_call_thirdparty_hook(hook_option_name, hook_input=None,
+                               hook_args=None):
+    """Call the script specified via hook_option_name if defined.
+
+    This function checks the repository's configuration for the given
+    hook_option_name. If defined, it uses that configuration as
+    the name of a script that it calls with the given arguments.
+
+    Raises InvalidUpdate if the hook is defined, but points to
+    a non-existing file.
+
+    PARAMETERS
+        hook_option_name: The name of the git config option to query
+            in order to get the name of the thirdparty script to call.
+        hook_input: A string, containing the data to be sent to
+            the script via its stdin stream. None if no data needs
+            to be sent.
+        hook_args: An iterable of command-line arguments to pass to
+            the script. None if no arguments are needed.
+
+    RETURN VALUE
+        If the hook is defined, returns a tuple with the following elements:
+          - The name of the script called as a hook;
+          - The Popen object corresponding the script's execution
+            (which, by the time this function returns, has finished
+            executing);
+          - The output of the script (stdout + stderr combined).
+        Otherwise, returns None.
+    """
+    hook_exe = git_config(hook_option_name)
+    if hook_exe is None:
+        return
+    if not os.path.isfile(hook_exe):
+        raise InvalidUpdate(
+            'Invalid {} configuration, no such file:'.format(hook_option_name),
+            hook_exe)
+    hook_cmd = [hook_exe]
+    if hook_args is not None:
+        hook_cmd.extend(hook_args)
+    p = Popen(hook_cmd, stdin=PIPE if hook_input is not None else None,
+              stdout=PIPE, stderr=STDOUT)
+    out, _ = p.communicate(hook_input)
+
+    return (hook_exe, p, out)

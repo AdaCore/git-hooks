@@ -1,0 +1,14 @@
+#! /usr/bin/env bash
+
+echo '-----[ update-hook args ]-----'
+for i in "$@"
+do
+   echo "'$i'"
+done
+echo '-----[ update-hook stdin ]-----'
+cat -
+echo '-----[ update-hook end ]-----'
+
+# Always reject update requests, after printing a message explaining why.
+echo "Error: Updates of this branch ($1) are not allowed."
+exit 1

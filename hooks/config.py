@@ -51,6 +51,7 @@ GIT_CONFIG_OPTS = \
      'hooks.style-checker':               {'default': 'style_checker'},
      'hooks.style-checker-config-file':   {'default': None},
      'hooks.tn-required':                 {'default': False,  'type': bool},
+     'hooks.update-hook':                 {'default': None},
 
      # The following options are for testing purposes only, and should
      # never be used in an operational repository.

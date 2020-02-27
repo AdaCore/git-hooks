@@ -33,15 +33,6 @@ remote: !!! WARNING: THE FOLLOWING COMMITS ARE NO LONGER ACCESSIBLE (LOST):
 remote: -------------------------------------------------------------------
 remote:
 remote:   a605403... Updated a.
-remote:
-remote: commit a60540361d47901d3fe254271779f380d94645f7
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Fri Apr 27 13:08:29 2012 -0700
-remote:
-remote:     Updated a.
-remote:
-remote:     Just added a little bit of text inside file a.
-remote:     Thought about doing something else, but not really necessary.
 To ../bare/repo.git
  - [deleted]         topic/experiment1
 """

@@ -317,7 +317,7 @@ def sanitized_email_header_field(field_body):
             field_body.decode(potential_encoding)
             encoding = potential_encoding
             break
-        except:
+        except Exception:
             pass
 
     if encoding is None:  # pragma: no cover (see explanation above)

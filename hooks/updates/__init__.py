@@ -387,6 +387,28 @@ class AbstractUpdate(object):
     def summary_of_changes(self):
         """A summary of changes to be added at the end of the ref-update email.
 
+        Note that we used to display the list of commits twice:
+        First in a list of one-line representations, as an overview;
+        and then a second time, displaying the same list where each
+        commit is printed in full (minus the diff itself).
+
+        We found that the second list made the emails much too large,
+        for information that wasn't considered useful in general,
+        and easily reconstructed on demand if needed.  So we dropped
+        the second list entirely.
+
+        We could have kept a shorter version of the second list, but
+        the only potentially useful info that we would have gotten
+        out of it is really the author and committer of each email.
+        Since this has been considered marginal in usefulness,
+        we did not choose this option.
+
+        One option for the future is to make this email entirely
+        configurable, one way or the other. We are not providing
+        this functionality for now, because there hasn't been
+        any demand for it. There is also value in having a certain
+        amount of consistency across projects.
+
         PARAMETERS
             None.
 
@@ -405,10 +427,10 @@ class AbstractUpdate(object):
                            '-----------------------------')
             summary.append('')
             for commit in reversed(self.lost_commits):
+                # Note: See this function's description for the reasons
+                # behind only displaying the list of commits using
+                # their oneline representation.
                 summary.append('  ' + commit.oneline_str())
-            for commit in reversed(self.lost_commits):
-                summary.append('')
-                summary.append(git.log('-n1', commit.rev, pretty='medium'))
 
         if self.added_commits:
             has_silent = False
@@ -426,6 +448,9 @@ class AbstractUpdate(object):
                 else:
                     marker = ' (*)'
                     has_silent = True
+                # Note: See this function's description for the reasons
+                # behind only displaying the list of commits using
+                # their oneline representation.
                 summary.append('  ' + commit.oneline_str() + marker)
 
             # If we added a ' (*)' marker to at least one commit,
@@ -436,27 +461,6 @@ class AbstractUpdate(object):
                     '(*) This commit exists in a branch whose name matches',
                     '    the hooks.noemail config option. No separate email',
                     '    sent.'])
-
-            # Print a more verbose description of the added commits.
-            #
-            # We do this by calling "git log -n1" for each and every
-            # commit in self.added_commits. This not ideal, as this list
-            # can be pretty long. We still do it this way, because
-            # it's very simple, and allows us to be certain that
-            # the list of commits in the "verbose" section is the exact
-            # same as the "short" list above.
-            #
-            # If it turns out to be unnacceptable, we can try producing
-            # the full log using a single git command. Because of
-            # merge commits, it's not sufficient to only exclude
-            # the parent of the base commit. One must exclude all
-            # parents which are not in self.added_commits.  Otherwise,
-            # the log will be including commits accessible from
-            # the merge's other parents.
-
-            for commit in reversed(self.added_commits):
-                summary.append('')
-                summary.append(git.log('-n1', '--pretty=medium', commit.rev))
 
         # We do not want that summary to be used for filing purposes.
         # So add a "Diff:" marker.

@@ -38,25 +38,6 @@ remote:
 remote: (*) This commit exists in a branch whose name matches
 remote:     the hooks.noemail config option. No separate email
 remote:     sent.
-remote:
-remote: commit 3373422d2112eb335512f72cfbc59df0ae78506f
-remote: Merge: 17edc77 3d11ecb
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Fri Jan 10 16:44:24 2014 +0400
-remote:
-remote:     today's resync from fsf-master. Mostly to get c.txt.
-remote:
-remote: commit 3d11ecb94f8aee9d7d0c3738d9b3631d93d70234
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Fri Jan 10 16:39:53 2014 +0400
-remote:
-remote:     c.txt: Explain why it's a great file.
-remote:
-remote: commit e4f4d535b25d6a258a9fe50d8c09a35f078067fc
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Fri Jan 10 16:39:17 2014 +0400
-remote:
-remote:     New file: c.txt (currently nearly empty).
 remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0

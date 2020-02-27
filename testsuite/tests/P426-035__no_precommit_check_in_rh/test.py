@@ -60,19 +60,6 @@ remote:
 remote: (*) This commit exists in a branch whose name matches
 remote:     the hooks.noemail config option. No separate email
 remote:     sent.
-remote:
-remote: commit 8da5e84724007accbaf409022c3c9f07776a8c8b
-remote: Merge: 2c2cd0d 6a9155b
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Sat Apr 23 19:17:33 2016 -0400
-remote:
-remote:     Resync from fsf-master as of today -- no-precommit-check
-remote:
-remote: commit 6a9155bcd8882eda829932d5b2f7630a32ff9d1e
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Sat Apr 23 19:16:57 2016 -0400
-remote:
-remote:     2016 copyright header yearly update.
 remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0

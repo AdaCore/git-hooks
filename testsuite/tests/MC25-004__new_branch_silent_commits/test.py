@@ -44,34 +44,6 @@ remote:
 remote: (*) This commit exists in a branch whose name matches
 remote:     the hooks.noemail config option. No separate email
 remote:     sent.
-remote:
-remote: commit 53ec7dc719ba973a33490a696250b2bdeb931e7b
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Wed Dec 25 11:11:03 2013 +0400
-remote:
-remote:     Add file use_source.c.
-remote:
-remote: commit 07e4909783876d0b2372da64eab2996c2460f67d
-remote: Merge: a878a56 c877d1a
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Wed Dec 25 11:08:53 2013 +0400
-remote:
-remote:     Resync with fsf-master as of now.
-remote:
-remote:     There is a change that we need in order to implement the new feature
-remote:     that will bring this program to another level.
-remote:
-remote: commit c877d1a74ceff69ce93fa4dbd5eba3a9058f348e
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Wed Dec 25 11:07:09 2013 +0400
-remote:
-remote:     New file: source.c.
-remote:
-remote: commit a878a5637be2c5ccf3186729825d96d2c9d50a7b
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Wed Dec 25 11:05:54 2013 +0400
-remote:
-remote:     Add .gitignore file.
 remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0

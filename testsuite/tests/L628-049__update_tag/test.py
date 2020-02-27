@@ -67,12 +67,6 @@ remote: Summary of changes (added commits):
 remote: -----------------------------------
 remote:
 remote:   8c0b415... Added bar.c, and updated foo.
-remote:
-remote: commit 8c0b4151f9f41efcaeb70ea6f91158e4605aaeda
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Thu Jun 28 11:24:42 2012 -0700
-remote:
-remote:     Added bar.c, and updated foo.
 remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0

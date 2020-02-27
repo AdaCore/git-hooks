@@ -251,19 +251,6 @@ remote:
 remote: (*) This commit exists in a branch whose name matches
 remote:     the hooks.noemail config option. No separate email
 remote:     sent.
-remote:
-remote: commit 5884482fa14bb5ae552cd601f78d6b5de6ed1c40
-remote: Merge: 0ed035c 1ef49af
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Sun Dec 14 09:06:50 2014 -0500
-remote:
-remote:     Merge new feature from branch contrib/new-feature.
-remote:
-remote: commit 1ef49afce41abac67643fe549e9e42a9cac10566
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Sat Dec 13 19:09:43 2014 -0500
-remote:
-remote:     Implement new GDB feature.
 remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0

@@ -9,7 +9,11 @@ import unittest
 # The imports below are not necessarily used by this module.
 # They are just being re-exported here for the benefit of
 # the testcases, as they tend to be used often.
-from gnatpython.fileutils import *
+from gnatpython.fileutils import cd
+
+# Artificial uses of some of those symbols above that we are re-exporting
+# but not using here. Otherwise, this causes pyflakes errors.
+[cd]
 
 TEST_DIR = os.path.dirname(sys.modules['__main__'].__file__)
 TEST_DIR = os.path.abspath(TEST_DIR)

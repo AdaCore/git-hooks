@@ -61,39 +61,6 @@ remote:
 remote: (*) This commit exists in a branch whose name matches
 remote:     the hooks.noemail config option. No separate email
 remote:     sent.
-remote:
-remote: commit ffb05b4a606fdb7b2919b209c725fe3b71880c00
-remote: Merge: 33e7556 b4bfa84
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Thu Dec 20 13:50:25 2012 +0400
-remote:
-remote:     Merge topic branch fsf-head.
-remote:
-remote:     ChangeLog:
-remote:
-remote:             * a: Add stuff.
-remote:             * c: New file.
-remote:             * README: New file.
-remote:
-remote: commit b4bfa84ef414162de60ff93005c5528f68b4c755
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Thu Dec 20 13:41:24 2012 +0400
-remote:
-remote:     New file `c', update README accordingly.
-remote:
-remote:     README new refers to file `c'.
-remote:     ChangeLog:
-remote:
-remote:             * c: New file.
-remote:             * README: Add reference to new file `c'.
-remote:
-remote: commit 6d62250fdaed631cb170c0fc19c338accdba14ec
-remote: Author: Joel Brobecker <brobecker@adacore.com>
-remote: Date:   Thu Dec 20 13:40:33 2012 +0400
-remote:
-remote:     New file README. Update a.
-remote:
-remote:     Some revision history info.
 remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0

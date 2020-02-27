@@ -1,4 +1,5 @@
 """A module providing an AbstractUpdate factory."""
+from enum import Enum
 
 from git import is_null_rev, get_object_type
 from updates.branches.creation import BranchCreation
@@ -14,39 +15,44 @@ from updates.tags.ltag_creation import LightweightTagCreation
 from updates.tags.ltag_update import LightweightTagUpdate
 from updates.tags.ltag_deletion import LightweightTagDeletion
 
-# The different types of reference updates:
-#    - CREATE: The reference is new and has just been created;
-#    - DELETE: The reference has just been deleted;
-#    - UPDATE: The reference already existed before and its value
-#              has just been udpated.
-# These constants act as poor-man's enumerations.
-(CREATE, DELETE, UPDATE) = range(3)
+
+# The different types of reference updates.
+class UpdateKind(Enum):
+    # A new reference being created;
+    create = 1
+    # An existing reference being deleted;
+    delete = 2
+    # An existing reference being updated (it already existed before,
+    # and its value is being changed).
+    update = 3
+
 
 REF_CHANGE_MAP = {
-    ('refs/heads/',   CREATE, 'commit'): BranchCreation,
-    ('refs/heads/',   DELETE, 'commit'): BranchDeletion,
-    ('refs/heads/',   UPDATE, 'commit'): BranchUpdate,
-    ('refs/for/',     CREATE, 'commit'): BranchCreation,
-    ('refs/for/',     DELETE, 'commit'): BranchDeletion,
-    ('refs/for/',     UPDATE, 'commit'): BranchUpdate,
-    ('refs/meta/',    CREATE, 'commit'): BranchCreation,
-    ('refs/meta/',    UPDATE, 'commit'): BranchUpdate,
-    ('refs/meta/',    DELETE, 'commit'): None,  # Not allowed for now.
-    ('refs/publish/', CREATE, 'commit'): BranchCreation,
-    ('refs/publish/', DELETE, 'commit'): BranchDeletion,
-    ('refs/publish/', UPDATE, 'commit'): BranchUpdate,
-    ('refs/drafts/',  CREATE, 'commit'): BranchCreation,
-    ('refs/drafts/',  DELETE, 'commit'): BranchDeletion,
-    ('refs/drafts/',  UPDATE, 'commit'): BranchUpdate,
-    ('refs/notes/',   CREATE, 'commit'): NotesCreation,
-    ('refs/notes/',   DELETE, 'commit'): NotesDeletion,
-    ('refs/notes/',   UPDATE, 'commit'): NotesUpdate,
-    ('refs/tags/',    CREATE, 'tag'):    AnnotatedTagCreation,
-    ('refs/tags/',    DELETE, 'tag'):    AnnotatedTagDeletion,
-    ('refs/tags/',    UPDATE, 'tag'):    AnnotatedTagUpdate,
-    ('refs/tags/',    CREATE, 'commit'): LightweightTagCreation,
-    ('refs/tags/',    DELETE, 'commit'): LightweightTagDeletion,
-    ('refs/tags/',    UPDATE, 'commit'): LightweightTagUpdate,
+    ('refs/heads/',   UpdateKind.create, 'commit'): BranchCreation,
+    ('refs/heads/',   UpdateKind.delete, 'commit'): BranchDeletion,
+    ('refs/heads/',   UpdateKind.update, 'commit'): BranchUpdate,
+    ('refs/for/',     UpdateKind.create, 'commit'): BranchCreation,
+    ('refs/for/',     UpdateKind.delete, 'commit'): BranchDeletion,
+    ('refs/for/',     UpdateKind.update, 'commit'): BranchUpdate,
+    ('refs/meta/',    UpdateKind.create, 'commit'): BranchCreation,
+    ('refs/meta/',    UpdateKind.update, 'commit'): BranchUpdate,
+    # Do not allow refs/meta/.* branch deletion for now.
+    ('refs/meta/',    UpdateKind.delete, 'commit'): None,
+    ('refs/publish/', UpdateKind.create, 'commit'): BranchCreation,
+    ('refs/publish/', UpdateKind.delete, 'commit'): BranchDeletion,
+    ('refs/publish/', UpdateKind.update, 'commit'): BranchUpdate,
+    ('refs/drafts/',  UpdateKind.create, 'commit'): BranchCreation,
+    ('refs/drafts/',  UpdateKind.delete, 'commit'): BranchDeletion,
+    ('refs/drafts/',  UpdateKind.update, 'commit'): BranchUpdate,
+    ('refs/notes/',   UpdateKind.create, 'commit'): NotesCreation,
+    ('refs/notes/',   UpdateKind.delete, 'commit'): NotesDeletion,
+    ('refs/notes/',   UpdateKind.update, 'commit'): NotesUpdate,
+    ('refs/tags/',    UpdateKind.create, 'tag'):    AnnotatedTagCreation,
+    ('refs/tags/',    UpdateKind.delete, 'tag'):    AnnotatedTagDeletion,
+    ('refs/tags/',    UpdateKind.update, 'tag'):    AnnotatedTagUpdate,
+    ('refs/tags/',    UpdateKind.create, 'commit'): LightweightTagCreation,
+    ('refs/tags/',    UpdateKind.delete, 'commit'): LightweightTagDeletion,
+    ('refs/tags/',    UpdateKind.update, 'commit'): LightweightTagUpdate,
 }
 
 
@@ -63,13 +69,13 @@ def new_update(ref_name, old_rev, new_rev, all_refs, submitter_email):
     assert not (is_null_rev(old_rev) and is_null_rev(new_rev))
 
     if is_null_rev(old_rev):
-        change_type = CREATE
+        change_type = UpdateKind.create
         object_type = get_object_type(new_rev)
     elif is_null_rev(new_rev):
-        change_type = DELETE
+        change_type = UpdateKind.delete
         object_type = get_object_type(old_rev)
     else:
-        change_type = UPDATE
+        change_type = UpdateKind.update
         object_type = get_object_type(new_rev)
 
     new_cls = None

@@ -187,7 +187,7 @@ class FileLock(object):
             with open(self.lock_filename, 'w') as f:
                 f.write('locked by user %s at %s (pid = %d)\n'
                         % (get_user_name(), str(datetime.now()), os.getpid()))
-        except:
+        except Exception:
             # It would be better if the warning was part of the InvalidUpdate
             # exception date, since a client handling the lock failure
             # might have prefered to silence the warning???  But that would

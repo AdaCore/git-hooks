@@ -337,9 +337,9 @@ The following config options are available for general use:
 
 * **`hooks.post-receive-hook`**:
 
-  If defined, this is the name of a script to be called at the end ofo
-  the `post-received` hook. The script is called exactly the same way
-  the post-received hooks is called, and therefore should allow customized
+  If defined, this is the name of a script to be called at the end of
+  the `post-receive` hook. The script is called exactly the same way
+  the post-receive hooks is called, and therefore should allow customized
   post-receive processing.
 
   :warning: The current working directory (cwd) when this script gets

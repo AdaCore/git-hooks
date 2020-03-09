@@ -1,6 +1,6 @@
 """The updates root module."""
 
-from config import git_config, SUBJECT_MAX_SUBJECT_CHARS
+from config import git_config, SUBJECT_MAX_SUBJECT_CHARS, CONFIG_REF
 from errors import InvalidUpdate
 from git import (git, get_object_type, is_null_rev, commit_parents,
                  commit_rev, is_revert_commit)
@@ -798,5 +798,5 @@ class AbstractUpdate(object):
                 'Updates to %(who)s are no longer allowed because' % info,
                 'this %(what)s is now frozen (see "hooks.frozen-ref" in file'
                 % info,
-                'project.config, from the special branch'
-                ' refs/meta/config).')
+                'project.config, from the special branch {CONFIG_REF}).'
+                .format(CONFIG_REF=CONFIG_REF))

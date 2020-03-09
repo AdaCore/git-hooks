@@ -1,0 +1,25 @@
+#! /usr/bin/env bash
+
+# Reject any reference update outside of refs/meta/config.
+ok='yes'
+
+echo '-----[ pre-receive-hook args ]-----'
+for i in "$@"
+do
+   echo "'$i'"
+done
+echo '-----[ pre-receive-hook stdin ]-----'
+while read line
+do
+   echo "$line"
+   case "$line" in
+      *refs/meta/config*) ;;
+      *) ok='no' ;;
+   esac
+done
+echo '-----[ pre-recieve-hook end ]-----'
+
+if [ "$ok" != "yes" ]; then
+   echo "A clear error message explaining why this change is not allowed."
+   exit 1
+fi

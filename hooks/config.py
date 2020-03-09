@@ -19,6 +19,10 @@ GERRIT_INTERNAL_REFS = ('refs/changes/.*',
                         'refs/users/.*/edit-.*',
                         )
 
+# The name of the reference we use to store the repository-specific
+# configuration for these hooks.
+CONFIG_REF = 'refs/meta/config'
+
 # A dictionary of all git config names that this module can query.
 #   - The key used for this table is the config name.
 #   - The value is another dictionary containing the following keys.
@@ -46,6 +50,7 @@ GIT_CONFIG_OPTS = \
      'hooks.no-precommit-check':          {'default': '',     'type': tuple},
      'hooks.no-rh-style-checks':          {'default': '',     'type': tuple},
      'hooks.no-style-checks':             {'default': '',     'type': tuple},
+     'hooks.pre-receive-hook':            {'default': None},
      'hooks.post-receive-hook':           {'default': None},
      'hooks.reject-merge-commits':        {'default': '',     'type': tuple},
      'hooks.style-checker':               {'default': 'style_checker'},
@@ -80,13 +85,13 @@ __git_config_map = None
 
 NO_REFS_META_CONFIG_WARNING = """\
 -----------------------------------------------------------------
-Unable to find file project.config from branch refs/meta/config
+Unable to find file project.config from branch {CONFIG_REF}
 Using your repository's config file instead.
 
 This is not a fatal issue, but please contact your repository's
 administrator to set your project.config file up.
 -----------------------------------------------------------------\
-"""
+""".format(CONFIG_REF=CONFIG_REF)
 
 
 def git_config(option_name):
@@ -132,14 +137,14 @@ def initialize_git_config_map():
     """
     global __git_config_map
 
-    # The hooks' configuration is stored on a special branch called
-    # refs/meta/config, inside a file called project.config.  Get
+    # The hooks' configuration is stored in a special reference
+    # (see CONFIG_REF), inside a file called project.config.  Get
     # that file.
     (tmp_fd, tmp_file) = mkstemp('tmp-git-hooks-')
     try:
         cfg_file = tmp_file
         try:
-            git.show('refs/meta/config:project.config', _outfile=tmp_fd)
+            git.show(CONFIG_REF + ':project.config', _outfile=tmp_fd)
         except CalledProcessError:
             # Most likely a project that still uses the repository's
             # config file to store the hooks configuration, rather

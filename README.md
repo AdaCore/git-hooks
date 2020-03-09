@@ -85,6 +85,15 @@ you will need to do the following:
   $ git push origin HEAD:refs/meta/config
   ```
 
+### Limitations When Updating the Configuration File
+
+These hooks do not allow pushes trying to combine multiple reference
+updates if `refs/meta/config` is one of those references.
+In other words, updates to the configuration file must be pushed
+on their own, independently of any other reference updates. Otherwise,
+the entire push operation is rejected with an error message.
+
+
 Note About [list] Options
 -------------------------
 
@@ -334,6 +343,23 @@ The following config options are available for general use:
   attribute for all files; this configuration option has the advantage of
   not creating a local change in the repository sources, as it is stored
   in the repository's configuration instead.
+
+* **`hooks.pre-receive-hook`**:
+
+  If defined, this is the name of a script to be called at the end of
+  the `pre-receive` hook. The script is called exactly the same way
+  git itself calls the pre-receive hook, and therefore should allow
+  customized pre-receive processing. The script should return non-zero
+  to reject the entire update.
+
+  The script's output is always redirected to the user (both stdout
+  and stderr). While this can obviously be used to relay error
+  messages when an update is rejected, some scripts may find it
+  useful in cases where the update is accepted as well.
+
+  :warning: The current working directory (cwd) when this script gets
+  called is undefined, so it is recommended to provide a full path to
+  that script.
 
 * **`hooks.post-receive-hook`**:
 

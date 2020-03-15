@@ -9,6 +9,7 @@ import sys
 
 from config import CONFIG_REF
 from errors import InvalidUpdate
+from init import init_all_globals
 from utils import maybe_call_thirdparty_hook, warn
 
 
@@ -93,6 +94,7 @@ if __name__ == '__main__':
         refs_data[ref_name] = (old_rev, new_rev)
 
     try:
+        init_all_globals(refs_data)
         pre_receive(refs_data)
         maybe_pre_receive_hook(stdin)
     except InvalidUpdate as e:

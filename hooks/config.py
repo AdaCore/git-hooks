@@ -27,6 +27,14 @@ CONFIG_REF = 'refs/meta/config'
 # root directory.
 CONFIG_FILENAME = 'project.config'
 
+# The commit to use in order to access the respository-specific
+# configuration for these hooks. By default, it is CONFIG_REF.
+# However, when a push is updating this reference, this global
+# variable should be changed to the reference's new value, so
+# telling this module to use the configuration using the latest
+# commit, rather than the existing one.
+config_commit = CONFIG_REF
+
 # A dictionary of all git config names that this module can query.
 #   - The key used for this table is the config name.
 #   - The value is another dictionary containing the following keys.
@@ -147,7 +155,7 @@ def initialize_git_config_map():
     try:
         cfg_file = tmp_file
         try:
-            git.show(CONFIG_REF + ':' + CONFIG_FILENAME, _outfile=tmp_fd)
+            git.show(config_commit + ':' + CONFIG_FILENAME, _outfile=tmp_fd)
         except CalledProcessError:
             # Either the CONFIG_REF reference does not exist, or
             # the config file itself does not exist. Either way,

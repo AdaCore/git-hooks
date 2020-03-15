@@ -1,9 +1,11 @@
 from argparse import ArgumentParser
+from collections import OrderedDict
 from shutil import rmtree
 import sys
 
 from errors import InvalidUpdate
 from git import get_object_type, git_show_ref
+from init import init_all_globals
 from utils import debug, warn, create_scratch_dir, FileLock, \
     maybe_call_thirdparty_hook
 # We have to import utils, because we cannot import scratch_dir
@@ -94,6 +96,8 @@ def check_update(ref_name, old_rev, new_rev):
 if __name__ == "__main__":
     args = parse_command_line()
     try:
+        init_all_globals(OrderedDict([(args.ref_name,
+                                       (args.old_rev, args.new_rev))]))
         create_scratch_dir()
         check_update(args.ref_name, args.old_rev, args.new_rev)
     except InvalidUpdate, E:

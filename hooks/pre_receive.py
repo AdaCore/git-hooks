@@ -9,6 +9,7 @@ import sys
 
 from config import CONFIG_REF
 from errors import InvalidUpdate
+from git import is_null_rev
 from init import init_all_globals
 from utils import maybe_call_thirdparty_hook, warn
 
@@ -60,6 +61,21 @@ def pre_receive(refs_data):
             'on their own. Please push this reference first, and then',
             'retry pushing the remaining references.'])
         raise InvalidUpdate(*err_msg)
+
+    # Verify that we are not trying to delete the CONFIG_REF reference.
+    # This is not allowed, because this would delete the repository's
+    # configuration. We do this extra early so as to provide the user
+    # with a clear message rather than hitting an error later on, when
+    # we may not have enough context to generate a clear error message.
+    if CONFIG_REF in refs_data:
+        _, new_rev = refs_data[CONFIG_REF]
+        if is_null_rev(new_rev):
+            raise InvalidUpdate(
+                'Deleting the reference {CONFIG_REF} is not allowed.'
+                .format(CONFIG_REF=CONFIG_REF),
+                '',
+                'This reference provides important configuration information',
+                'and thus must not be deleted.')
 
 
 def maybe_pre_receive_hook(pre_receive_data):

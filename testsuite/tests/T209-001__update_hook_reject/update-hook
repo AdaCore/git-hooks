@@ -9,6 +9,11 @@ echo '-----[ update-hook stdin ]-----'
 cat -
 echo '-----[ update-hook end ]-----'
 
-# Always reject update requests, after printing a message explaining why.
-echo "Error: Updates of this branch ($1) are not allowed."
-exit 1
+# Always reject update requests, after printing a message explaining why
+# (except for the refs/meta/config reference, because our testcase needs
+# to push configuration updates).
+ref_name="$1"
+if [ "$ref_name" != "refs/meta/config" ]; then
+   echo "Error: Updates of this branch ($ref_name) are not allowed."
+   exit 1
+fi

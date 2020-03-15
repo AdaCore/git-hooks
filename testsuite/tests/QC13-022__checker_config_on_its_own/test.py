@@ -6,10 +6,39 @@ class TestRun(TestCase):
         cd('%s/repo' % TEST_DIR)
 
         # Push the commit adding the style-checker-config-file option
-        # to the refs/meta/config branch.
+        # to the refs/meta/config branch. However, the file it points
+        # to does not exist in that reference, nor is is added by
+        # the commit we're pusing. So this should be rejected.
+
+        p = Run('git push origin meta-config-missing:refs/meta/config'.split())
+        expected_out = """\
+remote: *** Cannot find style_checker config file: `style.yaml'.
+remote: ***
+remote: *** Your repository is configured to provide a configuration file to
+remote: *** the style_checker; however, this configuration file (style.yaml)
+remote: *** cannot be found in commit b2657ce03d358899ce2c779ecf68ac7e8e670dd0.
+remote: ***
+remote: *** Perhaps you haven't added this configuration file to this branch
+remote: *** yet?
+remote: error: hook declined to update refs/meta/config
+To ../bare/repo.git
+ ! [remote rejected] meta-config-missing -> refs/meta/config (hook declined)
+error: failed to push some refs to '../bare/repo.git'
+"""
+
+        self.assertNotEqual(p.status, 0, p.image)
+        self.assertRunOutputEqual(p, expected_out)
+
+        # Do the same as above, but this time with a commit which
+        # provides both the config file at the same time it adds
+        # the style-checker-config-file option.  This time, the update
+        # should be accepted.
+
         p = Run('git push origin meta-config:refs/meta/config'.split())
         expected_out = """\
-remote: *** cvs_check: `repo' < `project.config'
+remote: *** cvs_check: `--config' `style.yaml' `repo' < `project.config' `style.yaml'
+remote: *** # A YaML file (with nothing in it)
+remote: ***
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -21,9 +50,9 @@ remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/meta/config
 remote: X-Git-Oldrev: a6817570d8c09b1f07446e75eced8a5c337c8b8a
-remote: X-Git-Newrev: b2657ce03d358899ce2c779ecf68ac7e8e670dd0
+remote: X-Git-Newrev: da1ac955c54687142c885c2c5b211cd035c7d53e
 remote:
-remote: commit b2657ce03d358899ce2c779ecf68ac7e8e670dd0
+remote: commit da1ac955c54687142c885c2c5b211cd035c7d53e
 remote: Author: Joel Brobecker <brobecker@adacore.com>
 remote: Date:   Sat Dec 9 07:29:59 2017 +0100
 remote:
@@ -32,7 +61,8 @@ remote:
 remote: Diff:
 remote: ---
 remote:  project.config | 1 +
-remote:  1 file changed, 1 insertion(+)
+remote:  style.yaml     | 1 +
+remote:  2 files changed, 2 insertions(+)
 remote:
 remote: diff --git a/project.config b/project.config
 remote: index 93a508c..790a7b5 100644
@@ -43,8 +73,15 @@ remote:  [hooks]
 remote:          from-domain = adacore.com
 remote:          mailinglist = git-hooks-ci@example.com
 remote: +        style-checker-config-file = style.yaml
+remote: diff --git a/style.yaml b/style.yaml
+remote: new file mode 100644
+remote: index 0000000..b3fcae2
+remote: --- /dev/null
+remote: +++ b/style.yaml
+remote: @@ -0,0 +1 @@
+remote: +# A YaML file (with nothing in it)
 To ../bare/repo.git
-   a681757..b2657ce  meta-config -> refs/meta/config
+   a681757..da1ac95  meta-config -> refs/meta/config
 """
 
         self.assertEqual(p.status, 0, p.image)

@@ -11,6 +11,7 @@ import sys
 
 from daemon import run_in_daemon
 from git import git_show_ref
+from init import init_all_globals
 from updates.emails import EmailQueue
 from updates.factory import new_update
 from utils import debug, warn, maybe_call_thirdparty_hook
@@ -112,5 +113,6 @@ if __name__ == '__main__':
         old_rev, new_rev, ref_name = line.strip().split()
         refs_data[ref_name] = (old_rev, new_rev)
 
+    init_all_globals(refs_data)
     post_receive(refs_data, args.submitter_email)
     maybe_post_receive_hook(stdin)

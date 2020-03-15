@@ -1,6 +1,7 @@
 from support import *
 
 import os
+from shutil import copy
 
 
 class TestRun(TestCase):
@@ -24,12 +25,46 @@ class TestRun(TestCase):
                  'project.config'])
         self.assertTrue(p.status == 0, p.image)
 
+        # If we try to push this commit to refs/meta/config,
+        # it should be rejected, since it introduces a config to
+        # an invalid hook.
+        p = Run(['git', 'push', 'origin',
+                 'refs/heads/meta/config:refs/meta/config'])
+        expected_out = """\
+remote: *** Invalid hooks.update-hook configuration, no such file:
+remote: *** {hook_filename}
+remote: error: hook declined to update refs/meta/config
+To ../bare/repo.git
+ ! [remote rejected] meta/config -> refs/meta/config (hook declined)
+error: failed to push some refs to '../bare/repo.git'
+""".format(hook_filename=bad_update_hook_filename)
+
+        self.assertTrue(p.status != 0, p.image)
+        self.assertRunOutputEqual(p, expected_out)
+
+        # Now, simulate the situation where the script exists
+        # at the time the configuration change is pushed, but
+        # then later removed by someone who does not realized
+        # that the script is still being used...
+
+        # For that, we need a script; re-use 'cvs_check.py', which
+        # does nothing.
+        copy(os.path.join(TEST_DIR, 'cvs_check.py'), bad_update_hook_filename)
+        assert os.path.exists(bad_update_hook_filename)
+
+        # Try pushing the config update again. This time, it should work.
+
         p = Run(['git', 'push', 'origin',
                  'refs/heads/meta/config:refs/meta/config'])
         self.assertTrue(p.status == 0, p.image)
 
-        p = Run('git checkout master'.split())
-        self.assertTrue(p.status == 0, p.image)
+        # And now that the configuration change is in, let's delete
+        # bad_update_hook_filename, to see what happens when it's missing...
+
+        os.remove(bad_update_hook_filename)
+        assert not os.path.exists(bad_update_hook_filename)
+
+        # Try to push master. It should be rejected.
 
         p = Run('git push origin master'.split())
         expected_out = """\

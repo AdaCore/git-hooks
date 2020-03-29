@@ -6,7 +6,7 @@ from updates.branches import branch_summary_of_changes_needed
 from updates.branches.update import BranchUpdate
 
 BRANCH_CREATION_EMAIL_BODY_TEMPLATE = """\
-The branch '%(short_ref_name)s' was created%(in_namespace)s pointing to:
+The branch %(human_readable_ref_name)s pointing to:
 
  %(commit_oneline)s"""
 
@@ -31,21 +31,14 @@ class BranchCreation(BranchUpdate):
     def get_update_email_contents(self):
         """See AbstractUpdate.get_update_email_contents.
         """
-        # For branches, reference names normally start with refs/heads/.
-        # If that's not the case, make the branch's namespace explicit.
-        if self.ref_namespace in (None, 'refs/heads'):
-            in_namespace = ''
-        else:
-            in_namespace = " in namespace '%s'" % self.ref_namespace
+        subject = "[%s] Created branch %s" % (
+            self.email_info.project_name, self.human_readable_ref_name())
 
-        subject = "[%s] Created branch '%s'%s" % (self.email_info.project_name,
-                                                  self.short_ref_name,
-                                                  in_namespace,)
-
-        update_info = {'short_ref_name': self.short_ref_name,
-                       'commit_oneline': commit_oneline(self.new_rev),
-                       'in_namespace': in_namespace,
-                       }
+        update_info = {
+            'human_readable_ref_name': self.human_readable_ref_name(
+                action='was created'),
+            'commit_oneline': commit_oneline(self.new_rev),
+            }
         body = BRANCH_CREATION_EMAIL_BODY_TEMPLATE % update_info
         if branch_summary_of_changes_needed(self.added_commits,
                                             self.lost_commits):

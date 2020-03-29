@@ -350,6 +350,40 @@ class AbstractUpdate(object):
     # --  Useful methods.  --
     # -----------------------
 
+    def human_readable_ref_name(self, action=None,
+                                default_namespace='refs/heads'):
+        """Return a human-readable image (string) of our reference.
+
+        This function returns a string describing self.ref_name
+        in a way that's easier for users to grasp:
+
+          "'" {short_name} "'" [ action ] [ "in namespace '" {namespace} "'" ]
+
+        PARAMETERS
+            action: If not None, the "action" part of the returned image.
+                Otherwise, the "action" section of the return image
+                is simply skipped.
+            default_namespace: The namespace that is used by default
+                for the kind of reference that self.ref_name is.
+                We use this to determine whether or not the returned
+                image needs to specify the namespace of our reference,
+                or whether it can be omitted.
+        """
+        if action is None:
+            action = ''
+        else:
+            action = ' {}'.format(action)
+
+        # For branches, reference names normally start with refs/heads/.
+        # If that's not the case, make the branch's namespace explicit.
+        if self.ref_namespace in (None, 'refs/heads'):
+            loc = ''
+        else:
+            loc = " in namespace '{}'".format(self.ref_namespace)
+
+        return "'{short_ref_name}'{action}{loc}".format(
+            short_ref_name=self.short_ref_name, action=action, loc=loc)
+
     def search_config_option_list(self, option_name, ref_name=None):
         """Search the hooks.no-emails list, and returns the first match.
 

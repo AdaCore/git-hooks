@@ -2,6 +2,7 @@
 from enum import Enum
 
 from git import is_null_rev, get_object_type
+from errors import InvalidUpdate
 from updates.branches.creation import BranchCreation
 from updates.branches.deletion import BranchDeletion
 from updates.branches.update import BranchUpdate
@@ -65,8 +66,17 @@ def new_update(ref_name, old_rev, new_rev, all_refs, submitter_email):
     RETURN VALUE
         An object of the correct AbstractUpdate (child) class.
     """
-    # At least one of the references must be non-null...
-    assert not (is_null_rev(old_rev) and is_null_rev(new_rev))
+    if is_null_rev(old_rev) and is_null_rev(new_rev):
+        # This happens when the user is trying to delete a specific
+        # reference which does not exist in the repository.
+        #
+        # Note that this seems to only happen when the user passes
+        # the full reference name in the delete-push. When using
+        # a branch name (i.e. 'master' instead of 'refs/heads/master'),
+        # git itself notices that the branch doesn't exist and returns
+        # an error even before calling the hooks for validation.
+        raise InvalidUpdate("unable to delete '{}': remote ref does not exist"
+                            .format(ref_name))
 
     if is_null_rev(old_rev):
         change_type = UpdateKind.create

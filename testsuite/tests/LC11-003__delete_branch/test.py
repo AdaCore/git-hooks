@@ -30,5 +30,34 @@ To ../bare/repo.git
         self.assertEqual(p.status, 0, p.image)
         self.assertRunOutputEqual(p, expected_out)
 
+        # Same as above: Delete a branch, but passing the branch's
+        # full reference name to the push command, instead of using
+        # the (short) branch name (i.e 'refs/heads/other-old-branch'
+        # instead of just 'other-old-branch').
+
+        p = Run('git push origin :refs/heads/other-old-branch'.split())
+        expected_out = """\
+remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: 7bit
+remote: From: Test Suite <testsuite@adacore.com>
+remote: To: git-hooks-ci@example.com
+remote: Subject: [repo] Deleted branch 'other-old-branch'
+remote: X-Act-Checkin: repo
+remote: X-Git-Author: Test Suite <testsuite@adacore.com>
+remote: X-Git-Refname: refs/heads/other-old-branch
+remote: X-Git-Oldrev: cc8d2c2637bda27f0bc2125181dd2f8534d16222
+remote: X-Git-Newrev: 0000000000000000000000000000000000000000
+remote:
+remote: The branch 'other-old-branch' was deleted.
+remote: It previously pointed to:
+remote:
+remote:  cc8d2c2... Modify `c', delete `b'.
+To ../bare/repo.git
+ - [deleted]         other-old-branch
+"""
+        self.assertEqual(p.status, 0, p.image)
+        self.assertRunOutputEqual(p, expected_out)
+
 if __name__ == '__main__':
     runtests()

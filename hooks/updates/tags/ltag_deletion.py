@@ -3,17 +3,16 @@
 from config import git_config
 from errors import InvalidUpdate
 from git import commit_oneline
-from updates import AbstractUpdate
-from updates.tags import tag_summary_of_changes_needed
+from updates.tags import AbstractTagUpdate, tag_summary_of_changes_needed
 
 LTAG_DELETION_EMAIL_BODY_TEMPLATE = """\
-The lightweight tag '%(short_ref_name)s' was deleted.
+The lightweight tag %(tag_name)s was deleted.
 It previously pointed to:
 
  %(commit_oneline)s"""
 
 
-class LightweightTagDeletion(AbstractUpdate):
+class LightweightTagDeletion(AbstractTagUpdate):
     """Update object for lightweight tag deletion.
 
     REMARKS
@@ -48,10 +47,10 @@ class LightweightTagDeletion(AbstractUpdate):
     def get_update_email_contents(self):
         """See AbstractUpdate.get_update_email_contents."""
         subject = '[%s] Deleted tag %s' % (self.email_info.project_name,
-                                           self.short_ref_name)
+                                           self.human_readable_tag_name())
 
         body = (LTAG_DELETION_EMAIL_BODY_TEMPLATE
-                % {'short_ref_name': self.short_ref_name,
+                % {'tag_name': self.human_readable_tag_name(),
                    'commit_oneline': commit_oneline(self.old_rev),
                    })
         if tag_summary_of_changes_needed(self.added_commits,

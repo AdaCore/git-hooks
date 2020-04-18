@@ -18,7 +18,7 @@ remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@example.com>
 remote: To: testsuite@example.com
 remote: Bcc: file-ci@gnat.com
-remote: Subject: [repo] Created tag v0.1
+remote: Subject: [repo] Created tag 'v0.1'
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Test Suite <testsuite@example.com>
 remote: X-Git-Refname: refs/tags/v0.1

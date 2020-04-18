@@ -5,7 +5,7 @@ from updates.tags.atag_update import AnnotatedTagUpdate
 from git import commit_oneline, parse_tag_object
 
 ATAG_CREATION_EMAIL_BODY_TEMPLATE = """\
-The %(tag_kind)s tag '%(short_ref_name)s' was created pointing to:
+The %(tag_kind)s tag %(tag_name)s was created pointing to:
 
  %(commit_oneline)s
 
@@ -37,14 +37,14 @@ class AnnotatedTagCreation(AnnotatedTagUpdate):
     def get_update_email_contents(self):
         """See AbstractUpdate.get_update_email_contents."""
         subject = '[%s] Created tag %s' % (self.email_info.project_name,
-                                           self.short_ref_name)
+                                           self.human_readable_tag_name())
 
         tag_info = parse_tag_object(self.ref_name)
         # Augment tag_info with some of other elements that will be
         # provided in the mail body.  This is just to make it easier
         # to format the message body...
         tag_info['tag_kind'] = 'signed' if tag_info['signed_p'] else 'unsigned'
-        tag_info['short_ref_name'] = self.short_ref_name
+        tag_info['tag_name'] = self.human_readable_tag_name()
         tag_info['commit_oneline'] = commit_oneline(self.new_rev)
 
         body = ATAG_CREATION_EMAIL_BODY_TEMPLATE % tag_info

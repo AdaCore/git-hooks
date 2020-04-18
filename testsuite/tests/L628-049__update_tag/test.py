@@ -19,7 +19,7 @@ remote: DEBUG: validate_ref_update (refs/tags/full-tag, a69eaaba59ea6d7574a9c543
 remote: *** ---------------------------------------------------------------
 remote: *** --  IMPORTANT NOTICE:
 remote: *** --
-remote: *** --  You just updated the "full-tag" tag as follow:
+remote: *** --  You just updated the tag 'full-tag' as follow:
 remote: *** --    old SHA1: a69eaaba59ea6d7574a9c5437805a628ea652c8e
 remote: *** --    new SHA1: 17b9d4acf8505cd1da487ad62e37819b93779a27
 remote: *** --
@@ -41,7 +41,7 @@ remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@example.com>
 remote: To: repo@example.com
 remote: Bcc: file-ci@gnat.com
-remote: Subject: [repo] Updated tag full-tag
+remote: Subject: [repo] Updated tag 'full-tag'
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Test Suite <testsuite@example.com>
 remote: X-Git-Refname: refs/tags/full-tag

@@ -16,7 +16,7 @@ remote: DEBUG: validate_ref_update (refs/tags/some-tag, 8b9a0d6bf08d7a983affbee3
 remote: *** ---------------------------------------------------------------
 remote: *** --  IMPORTANT NOTICE:
 remote: *** --
-remote: *** --  You just updated the "some-tag" tag as follow:
+remote: *** --  You just updated the tag 'some-tag' as follow:
 remote: *** --    old SHA1: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e
 remote: *** --    new SHA1: 8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5
 remote: *** --
@@ -37,7 +37,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@example.com>
 remote: To: something-ci@example.com
-remote: Subject: [repo] Updated tag some-tag
+remote: Subject: [repo] Updated tag 'some-tag'
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Test Suite <testsuite@example.com>
 remote: X-Git-Refname: refs/tags/some-tag

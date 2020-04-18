@@ -21,7 +21,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@example.com>
 remote: To: commits@example.com
-remote: Subject: [repo] Created tag new-tag
+remote: Subject: [repo] Created tag 'new-tag'
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Test Suite <testsuite@example.com>
 remote: X-Git-Refname: refs/tags/new-tag

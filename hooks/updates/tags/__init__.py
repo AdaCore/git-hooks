@@ -1,5 +1,6 @@
 """tags root module."""
 
+from updates import AbstractUpdate
 from utils import warn
 
 
@@ -14,7 +15,7 @@ def warn_about_tag_update(tag_name, old_rev, new_rev):
     warn('---------------------------------------------------------------',
          '--  IMPORTANT NOTICE:',
          '--',
-         '--  You just updated the "%s" tag as follow:' % tag_name,
+         '--  You just updated the tag %s as follow:' % tag_name,
          '--    old SHA1: %s' % old_rev,
          '--    new SHA1: %s' % new_rev,
          '--',
@@ -59,3 +60,17 @@ def tag_summary_of_changes_needed(added_commits, lost_commits):
         return True
 
     return False
+
+
+class AbstractTagUpdate(AbstractUpdate):
+    def human_readable_tag_name(self, action=None):
+        """AbstractUpdate.human_readable_ref_name for tag references.
+
+        This is a simple wrapper around self.def human_readable_ref_name
+        where default_namespace is set to 'refs/tags'.
+
+        PARAMETERS:
+            action: Same as with AbstractUpdate.human_readable_ref_name.
+        """
+        return self.human_readable_ref_name(action=action,
+                                            default_namespace='refs/tags')

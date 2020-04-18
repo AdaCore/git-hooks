@@ -24,7 +24,7 @@ class TestRun(TestCase):
         self.assertNotEqual(p.status, 0, p.image)
 
         expected_out = """\
-remote: *** Lightweight tags (new-tag) are not allowed in this repository.
+remote: *** Lightweight tags ('new-tag') are not allowed in this repository.
 remote: *** Use 'git tag [ -a | -s ]' for tags you want to propagate.
 remote: error: hook declined to update refs/tags/new-tag
 To ../bare/repo.git

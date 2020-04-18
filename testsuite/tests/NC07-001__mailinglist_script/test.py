@@ -291,7 +291,7 @@ remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: bfd-cvs@example.com, gdb-cvs@example.com
 remote: Bcc: file-ci@gnat.com
-remote: Subject: [repo] Created tag bfd-tag
+remote: Subject: [repo] Created tag 'bfd-tag'
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Test Suite <testsuite@adacore.com>
 remote: X-Git-Refname: refs/tags/bfd-tag
@@ -320,7 +320,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: bfd-cvs@example.com, gdb-cvs@example.com
-remote: Subject: [repo] Created tag gdb-tag
+remote: Subject: [repo] Created tag 'gdb-tag'
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Test Suite <testsuite@adacore.com>
 remote: X-Git-Refname: refs/tags/gdb-tag
@@ -344,7 +344,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: bfd-cvs@example.com, gdb-cvs@example.com
-remote: Subject: [repo] Created tag common-tag
+remote: Subject: [repo] Created tag 'common-tag'
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Test Suite <testsuite@adacore.com>
 remote: X-Git-Refname: refs/tags/common-tag

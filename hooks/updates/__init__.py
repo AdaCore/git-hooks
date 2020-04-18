@@ -374,9 +374,9 @@ class AbstractUpdate(object):
         else:
             action = ' {}'.format(action)
 
-        # For branches, reference names normally start with refs/heads/.
-        # If that's not the case, make the branch's namespace explicit.
-        if self.ref_namespace in (None, 'refs/heads'):
+        # For references that are ourside the given default_namespace,
+        # make the namespace explicit.
+        if self.ref_namespace in (None, default_namespace):
             loc = ''
         else:
             loc = " in namespace '{}'".format(self.ref_namespace)

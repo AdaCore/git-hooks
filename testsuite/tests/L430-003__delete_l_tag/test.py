@@ -15,7 +15,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@example.com>
 remote: To: something-ci@example.com
-remote: Subject: [repo] Deleted tag some-tag
+remote: Subject: [repo] Deleted tag 'some-tag'
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Test Suite <testsuite@example.com>
 remote: X-Git-Refname: refs/tags/some-tag

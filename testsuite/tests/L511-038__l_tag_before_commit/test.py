@@ -34,7 +34,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
-remote: Subject: [repo] Created tag version-0.1a
+remote: Subject: [repo] Created tag 'version-0.1a'
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Test Suite <testsuite@adacore.com>
 remote: X-Git-Refname: refs/tags/version-0.1a

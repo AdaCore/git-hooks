@@ -39,7 +39,7 @@ class AnnotatedTagCreation(AnnotatedTagUpdate):
         subject = '[%s] Created tag %s' % (self.email_info.project_name,
                                            self.short_ref_name)
 
-        tag_info = parse_tag_object(self.short_ref_name)
+        tag_info = parse_tag_object(self.ref_name)
         # Augment tag_info with some of other elements that will be
         # provided in the mail body.  This is just to make it easier
         # to format the message body...

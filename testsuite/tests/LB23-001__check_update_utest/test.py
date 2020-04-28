@@ -11,8 +11,8 @@ class TestRun(TestCase):
 
         with self.assertRaisesRegexp(
             InvalidUpdate,
-            r'This type of update \(some/dummy_refname,commit\) is '
-                'currently unsupported\.'):
+            r'Unable to determine the type of reference for: '
+                'some/dummy_refname'):
             check_update('some/dummy_refname',
                          '8ef2d60c830f70e70268ce886209805f5010db1f',
                          'd065089ff184d97934c010ccd0e7e8ed94cb7165')

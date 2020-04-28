@@ -1,0 +1,9 @@
+[hooks]
+        from-domain = example.com
+        mailinglist = repo@example.com
+        allow-delete-tag = true
+
+        # Allow custom naming for tag references.
+        use-standard-tag-ref-namespace = false
+        tag-ref-namespace = refs/vendor/.*/tags/.*
+        tag-ref-namespace = refs/user/.*/tags/.*

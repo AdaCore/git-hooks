@@ -85,8 +85,14 @@ def check_update(ref_name, old_rev, new_rev):
     update_cls = new_update(ref_name, old_rev, new_rev, git_show_ref(),
                             submitter_email=None)
     if update_cls is None:
+        # Report an error. We could look more precisely into what
+        # might be the reason behind this error, and print more precise
+        # diagnostics, but it does not seem like this would be worth
+        # the effort: It requires some pretty far-fetched scenarios
+        # for this to trigger; so, this should happen only very seldomly,
+        # and when a user does something very unusual.
         raise InvalidUpdate(
-            "This type of update (%s,%s) is currently unsupported."
+            "This type of update (%s,%s) is not valid."
             % (ref_name, get_object_type(new_rev)))
     with FileLock('git-hooks::update.token'):
         update_cls.validate()

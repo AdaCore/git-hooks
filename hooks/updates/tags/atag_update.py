@@ -32,7 +32,6 @@ class AnnotatedTagUpdate(AbstractTagUpdate):
     """
     def self_sanity_check(self):
         """See AbstractUpdate.self_sanity_check."""
-        assert self.ref_name.startswith('refs/tags/')
         assert self.new_rev_type == 'tag'
 
     def validate_ref_update(self):

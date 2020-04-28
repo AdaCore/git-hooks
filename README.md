@@ -146,6 +146,23 @@ The following config options are available for general use:
   to be shared, and thus the hooks will reject updates that create a new
   lightweight tag, unless this config option is defined to `true`.
 
+* **`hooks.branch-ref-namespace`** [list]:
+
+  A list of regular expressions matching reference names which
+  are considered to be branches.  Each entry in this list extends
+  the list of references that are recognized as branches by
+  this repository.
+
+  Note that the regular expression must match the entire reference name
+  for the reference to be considered a branch. For instance, to allow
+  branches whose reference name starts with `refs/vendor/`, the associated
+  namespace entry should be `refs/vendor/.*` (the `.*` is important).
+
+  Unless the `hooks.use-standard-branch-ref-namespace` option is set to
+  `false`, this namespace implicitly includes the necessary information
+  to recognize all standard branches, as well as branches used by
+  Gerrit.
+
 * **`hooks.combined-style-checking`** (default value: **false**):
 
   By default, the pre-commit checks are performed on each commit
@@ -403,6 +420,14 @@ The following config options are available for general use:
   configuration file (passed via the `--config CONFIG_FILENAME`
   command-line option).
 
+* **`hooks.tag-ref-namespace`** [list]:
+
+  Same as `hooks.branch-ref-namespace`, but for tags.
+
+  Unless the `hooks.use-standard-tag-ref-namespace` option is set to
+  `false`, this namespace implicitly includes the necessary information
+  to recognize all standard tag reference names.
+
 * **`hooks.tn-required`** (default value: **false**):
 
   *[This is an AdaCore-specifc option]*
@@ -437,6 +462,24 @@ The following config options are available for general use:
   :warning: The current working directory (cwd) when this script gets
   called is undefined, so it is recommended to provide a full path to
   that script.
+
+* **`hooks.use-standard-branch-ref-namespace`** (default value: **true**):
+
+  If `true`, the `hooks.branch-ref-namespace` implicitly includes
+  the necessary information to recognize all standard branches,
+  as well as branches used by Gerrit. If set to `false`, then
+  `hooks.branch-ref-namespace` starts empty.
+
+  This option is useful in the case where repositories want to restrict
+  the list of branches allowed in the standard namespace. These repositories
+  then start by setting this option to `false`, and then specify
+  the exact namespace that they want to allow and enforce via
+  the `hooks.branch-ref-namespace` option.
+
+* **`hooks.use-standard-tag-ref-namespace`** (default value: **true**):
+
+  Same as `hooks.use-standard-branch-ref-namespace`, but affecting
+  the `hooks.tag-ref-namespace` configuration.
 
 Configuration Options for Debugging
 -----------------------------------

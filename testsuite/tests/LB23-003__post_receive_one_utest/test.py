@@ -16,14 +16,14 @@ class TestRun(TestCase):
         from post_receive import post_receive_one
 
         post_receive_one(
-            'bogus/heads/master',
+            'refs/heads/v1',
             '0000000000000000000000000000000000000000',
-            'd065089ff184d97934c010ccd0e7e8ed94cb7165',
+            '30242ad9fa3091c81e55a7b1349ab83f8c1b04e7',
             None, None)
         expected_out = """\
-*** post-receive: Unsupported reference update: bogus/heads/master (ignored).
+*** post-receive: Unsupported reference update: refs/heads/v1 (ignored).
 ***               old_rev = 0000000000000000000000000000000000000000
-***               new_rev = d065089ff184d97934c010ccd0e7e8ed94cb7165
+***               new_rev = 30242ad9fa3091c81e55a7b1349ab83f8c1b04e7
 """
         self.assertEqual(sys.stderr.getvalue(), expected_out)
 

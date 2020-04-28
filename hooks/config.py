@@ -44,6 +44,7 @@ GIT_CONFIG_OPTS = \
     {'hooks.allow-delete-tag':            {'default': False,  'type': bool},
      'hooks.allow-non-fast-forward':      {'default': '',     'type': tuple},
      'hooks.allow-lightweight-tag':       {'default': False,  'type': bool},
+     'hooks.branch-ref-namespace':        {'default': '',     'type': tuple},
      'hooks.combined-style-checking':     {'default': False,  'type': bool},
      'hooks.commit-url':                  {'default': None},
      'hooks.debug-level':                 {'default': 0,      'type': int},
@@ -67,8 +68,12 @@ GIT_CONFIG_OPTS = \
      'hooks.reject-merge-commits':        {'default': '',     'type': tuple},
      'hooks.style-checker':               {'default': 'style_checker'},
      'hooks.style-checker-config-file':   {'default': None},
+     'hooks.tag-ref-namespace':           {'default': '',     'type': tuple},
      'hooks.tn-required':                 {'default': False,  'type': bool},
      'hooks.update-hook':                 {'default': None},
+     'hooks.use-standard-branch-ref-namespace': {'default': True,
+                                                 'type': bool},
+     'hooks.use-standard-tag-ref-namespace': {'default': True, 'type': bool},
 
      # The following options are for testing purposes only, and should
      # never be used in an operational repository.

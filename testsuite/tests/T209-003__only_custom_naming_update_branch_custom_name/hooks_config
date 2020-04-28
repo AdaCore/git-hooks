@@ -1,0 +1,9 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+
+        use-standard-branch-ref-namespace = false
+        branch-ref-namespace = refs/heads/master
+        branch-ref-namespace = refs/heads/branches/.*
+        branch-ref-namespace = refs/vendor/.*
+        branch-ref-namespace = refs/user/.*

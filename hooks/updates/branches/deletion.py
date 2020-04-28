@@ -15,7 +15,8 @@ class BranchDeletion(AbstractUpdate):
     """Update object for branch creation/update."""
     def self_sanity_check(self):
         """See AbstractUpdate.self_sanity_check."""
-        assert self.ref_name.startswith('refs/heads/')
+        # No assumption needed.
+        pass
 
     def validate_ref_update(self):
         """See AbstractUpdate.validate_ref_update."""

@@ -1,1 +1,0 @@
-ALL  XFAIL  expected failure until we make hooks.filer-email empty by default

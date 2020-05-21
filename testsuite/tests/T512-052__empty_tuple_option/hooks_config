@@ -1,0 +1,10 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+        # Empty mailing-list option added deliberately.
+        # Since this is a "list" option, it should have no effect.
+        # The purpose of this is to verify our handling of this kind
+        # of situation with an option whose contents we can easily
+        # observe from testing.
+        mailinglist =
+        mailinglist = him-too@example.com

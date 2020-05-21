@@ -35,6 +35,22 @@ CONFIG_FILENAME = 'project.config'
 # commit, rather than the existing one.
 config_commit = CONFIG_REF
 
+# A tuple providing the default list of email addresses to use as the filer.
+#
+# ??? This is a temporary constant used while we transition away
+# from the old hooks.bcc-file-ci (true/false) option to the new
+# option called hooks.filer-email (a tuple of addresses). The end
+# goal is for this option's default to be an empty list.
+# In the meantime, having this default here allows us to make
+# all the changes needed to support this option without affecting
+# the actual behavior of the hooks (yet). The advantage is that
+# this allows us to separate the changes, mostly in the hooks
+# themselves, that introduce this option, from the changes that
+# come from changing the default to the empty list (those changes
+# will be mostly visible in the testsuite, and will mimick what
+# real repositories will have to do when that default changes).
+DEFAULT_FILER_EMAILS = ('file-ci@gnat.com', )
+
 # A dictionary of all git config names that this module can query.
 #   - The key used for this table is the config name.
 #   - The value is another dictionary containing the following keys.
@@ -51,6 +67,8 @@ GIT_CONFIG_OPTS = \
      'hooks.disable-email-diff':          {'default': False,  'type': bool},
      'hooks.disable-merge-commit-checks': {'default': False,  'type': bool},
      'hooks.file-commit-cmd':             {'default': None},
+     'hooks.filer-email':                 {'default': DEFAULT_FILER_EMAILS,
+                                           'type': tuple},
      'hooks.from-domain':                 {'default': None},
      'hooks.frozen-ref':                  {'default': (),     'type': tuple},
      'hooks.ignore-refs':                 {'default': GERRIT_INTERNAL_REFS,
@@ -74,10 +92,6 @@ GIT_CONFIG_OPTS = \
      'hooks.use-standard-branch-ref-namespace': {'default': True,
                                                  'type': bool},
      'hooks.use-standard-tag-ref-namespace': {'default': True, 'type': bool},
-
-     # The following options are for testing purposes only, and should
-     # never be used in an operational repository.
-     'hooks.bcc-file-ci':              {'default': True,   'type': bool},
      }
 
 # The maximum number of characters from a commit's subject

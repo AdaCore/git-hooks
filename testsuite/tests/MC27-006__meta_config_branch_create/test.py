@@ -33,26 +33,26 @@ remote: X-Act-Checkin: repo
 remote: X-Git-Author: Test Suite <testsuite@adacore.com>
 remote: X-Git-Refname: refs/meta/config
 remote: X-Git-Oldrev: 0000000000000000000000000000000000000000
-remote: X-Git-Newrev: 85d4247731f5fb93305b733053bc7e2c665f2fb5
+remote: X-Git-Newrev: 7dcb1b7cb71d09ed70b3d64c8ddd993ec1d2d017
 remote:
 remote: The branch 'config' was created in namespace 'refs/meta' pointing to:
 remote:
-remote:  85d4247... Initial config for project
+remote:  7dcb1b7... Initial config for project
 remote: DEBUG: inter-email delay...
 remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
 remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
-remote: Bcc: file-ci@gnat.com
+remote: Bcc: filer@example.com
 remote: Subject: [repo(refs/meta/config)] Initial config for project
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/meta/config
 remote: X-Git-Oldrev:
-remote: X-Git-Newrev: 85d4247731f5fb93305b733053bc7e2c665f2fb5
+remote: X-Git-Newrev: 7dcb1b7cb71d09ed70b3d64c8ddd993ec1d2d017
 remote:
-remote: commit 85d4247731f5fb93305b733053bc7e2c665f2fb5
+remote: commit 7dcb1b7cb71d09ed70b3d64c8ddd993ec1d2d017
 remote: Author: Joel Brobecker <brobecker@adacore.com>
 remote: Date:   Fri Dec 27 15:32:11 2013 +0400
 remote:
@@ -60,18 +60,19 @@ remote:     Initial config for project
 remote:
 remote: Diff:
 remote: ---
-remote:  project.config | 3 +++
-remote:  1 file changed, 3 insertions(+)
+remote:  project.config | 4 ++++
+remote:  1 file changed, 4 insertions(+)
 remote:
 remote: diff --git a/project.config b/project.config
 remote: new file mode 100644
-remote: index 0000000..93a508c
+remote: index 0000000..e565530
 remote: --- /dev/null
 remote: +++ b/project.config
-remote: @@ -0,0 +1,3 @@
+remote: @@ -0,0 +1,4 @@
 remote: +[hooks]
 remote: +        from-domain = adacore.com
 remote: +        mailinglist = git-hooks-ci@example.com
+remote: +        filer-email = filer@example.com
 To ../bare/repo.git
  * [new branch]      meta/config -> refs/meta/config
 """

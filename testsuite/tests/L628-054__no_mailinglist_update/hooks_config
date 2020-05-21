@@ -1,2 +1,3 @@
 [hooks]
         from-domain = example.com
+	filer-email = filer@example.com

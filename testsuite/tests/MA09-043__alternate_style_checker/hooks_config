@@ -2,3 +2,4 @@
         from-domain = adacore.com
         mailinglist = git-hooks-ci@example.com
         style-checker = alt_style_checker.py
+	filer-email = filer@example.com

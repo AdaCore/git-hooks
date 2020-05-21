@@ -4,3 +4,4 @@
         # Set the max-commit-emails value to a ridiculously low value
         # for testing purposes.
         max-commit-emails = 3
+	filer-email = filer@example.com

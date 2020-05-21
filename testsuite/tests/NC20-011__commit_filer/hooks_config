@@ -3,3 +3,4 @@
         mailinglist = git-hooks-ci@example.com
         no-emails = refs/heads/fsf-.*
         file-commit-cmd = "%(TEST_DIR)s/commit-filer -G 'gdb binutils'"
+        filer-email = filer@example.com

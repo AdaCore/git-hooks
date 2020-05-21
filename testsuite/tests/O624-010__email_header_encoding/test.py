@@ -13,7 +13,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 8bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com, =?utf-8?b?TcOibsO8IFNjcmlwdA==?= <ms@example.com>
-remote: Bcc: file-ci@gnat.com
+remote: Bcc: filer@example.com
 remote: Subject: [repo] Expand contents of file A.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: =?utf-8?b?SsOpcsO0bWUgTsOvbcO4?= <nimo@nowhere.com>
@@ -46,7 +46,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 8bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com, =?utf-8?b?TcOibsO8IFNjcmlwdA==?= <ms@example.com>
-remote: Bcc: file-ci@gnat.com
+remote: Bcc: filer@example.com
 remote: Subject: [repo] Remove useless comment in "b"
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: =?iso-8859-1?q?M=E3n=FC_Script?= <script@example.com>

@@ -16,7 +16,7 @@ remote: *** Cannot find style_checker config file: `style.yaml'.
 remote: ***
 remote: *** Your repository is configured to provide a configuration file to
 remote: *** the style_checker; however, this configuration file (style.yaml)
-remote: *** cannot be found in commit b2657ce03d358899ce2c779ecf68ac7e8e670dd0.
+remote: *** cannot be found in commit adcecf2c1d321ff7e35dae44c41f46b885925bd0.
 remote: ***
 remote: *** Perhaps you haven't added this configuration file to this branch
 remote: *** yet?
@@ -44,15 +44,15 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
-remote: Bcc: file-ci@gnat.com
+remote: Bcc: filer@example.com
 remote: Subject: [repo(refs/meta/config)] Add style-checker-config-file option
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/meta/config
-remote: X-Git-Oldrev: a6817570d8c09b1f07446e75eced8a5c337c8b8a
-remote: X-Git-Newrev: da1ac955c54687142c885c2c5b211cd035c7d53e
+remote: X-Git-Oldrev: e7b927eb2e249cf2aed16c3da9c6ebcaa0f768b9
+remote: X-Git-Newrev: 0cfbca7db5e102b2cbb6deeec0d951ee258b40e1
 remote:
-remote: commit da1ac955c54687142c885c2c5b211cd035c7d53e
+remote: commit 0cfbca7db5e102b2cbb6deeec0d951ee258b40e1
 remote: Author: Joel Brobecker <brobecker@adacore.com>
 remote: Date:   Sat Dec 9 07:29:59 2017 +0100
 remote:
@@ -65,13 +65,13 @@ remote:  style.yaml     | 1 +
 remote:  2 files changed, 2 insertions(+)
 remote:
 remote: diff --git a/project.config b/project.config
-remote: index 93a508c..790a7b5 100644
+remote: index 05e3cbe..f24e088 100644
 remote: --- a/project.config
 remote: +++ b/project.config
-remote: @@ -1,3 +1,4 @@
-remote:  [hooks]
+remote: @@ -2,3 +2,4 @@
 remote:          from-domain = adacore.com
 remote:          mailinglist = git-hooks-ci@example.com
+remote:  	filer-email = filer@example.com
 remote: +        style-checker-config-file = style.yaml
 remote: diff --git a/style.yaml b/style.yaml
 remote: new file mode 100644
@@ -81,7 +81,7 @@ remote: +++ b/style.yaml
 remote: @@ -0,0 +1 @@
 remote: +# A YaML file (with nothing in it)
 To ../bare/repo.git
-   a681757..da1ac95  meta-config -> refs/meta/config
+   e7b927e..0cfbca7  meta-config -> refs/meta/config
 """
 
         self.assertEqual(p.status, 0, p.image)
@@ -122,7 +122,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
-remote: Bcc: file-ci@gnat.com
+remote: Bcc: filer@example.com
 remote: Subject: [repo] Add style.yaml (auxillary config file for the style_checker)
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
@@ -169,7 +169,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
-remote: Bcc: file-ci@gnat.com
+remote: Bcc: filer@example.com
 remote: Subject: [repo] b.adb: Print message when done.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
@@ -225,7 +225,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
-remote: Bcc: file-ci@gnat.com
+remote: Bcc: filer@example.com
 remote: Subject: [repo] style.yaml: Set "hello" to "world".
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
@@ -279,7 +279,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
-remote: Bcc: file-ci@gnat.com
+remote: Bcc: filer@example.com
 remote: Subject: [repo] set Global_Var's initial value to 20 and adapt style.yaml
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>

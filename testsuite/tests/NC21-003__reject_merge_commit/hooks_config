@@ -2,3 +2,4 @@
         from-domain = adacore.com
         mailinglist = git-hooks-ci@example.com
         reject-merge-commits = refs/heads/master, refs/heads/gdb-.*
+	filer-email = filer@example.com

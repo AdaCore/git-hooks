@@ -3,3 +3,4 @@
         mailinglist = git-hooks-ci@example.com, user@example.com
         no-emails = refs/heads/fsf-.*
         post-receive-hook = %(TEST_DIR)s/post-receive-hook
+	filer-email = filer@example.com

@@ -2,3 +2,4 @@
         from-domain = example.com
         mailinglist = repo@example.com
         allow-delete-tag = true
+	filer-email = filer@example.com

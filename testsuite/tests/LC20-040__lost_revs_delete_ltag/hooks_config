@@ -2,3 +2,4 @@
         from-domain = adacore.com
         mailinglist = git-hooks-ci@example.com
         allow-delete-tag = true
+	filer-email = filer@example.com

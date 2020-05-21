@@ -3,3 +3,4 @@
     mailinglist = nowhere@example.com
     no-emails = .*/fsf.*
     no-precommit-check = .*/fsf.*
+	filer-email = filer@example.com

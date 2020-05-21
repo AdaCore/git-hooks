@@ -6,3 +6,4 @@
         # combined-style-checking is true.
         combined-style-checking = true
         tn-required = true
+	filer-email = filer@example.com

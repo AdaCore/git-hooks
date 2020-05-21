@@ -4,3 +4,4 @@
         # Invalid value for combined-style-checking, simulating
         # a typo.
         combined-style-checking = frue
+	filer-email = filer@example.com

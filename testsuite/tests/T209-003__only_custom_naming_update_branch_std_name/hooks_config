@@ -7,3 +7,4 @@
         branch-ref-namespace = refs/heads/branches/.*
         branch-ref-namespace = refs/vendor/.*
         branch-ref-namespace = refs/user/.*
+	filer-email = filer@example.com

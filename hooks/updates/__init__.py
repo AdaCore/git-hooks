@@ -340,8 +340,11 @@ class AbstractUpdate(object):
         if filer_cmd is not None:
             filer_cmd = shlex.split(filer_cmd)
 
+        email_bcc = git_config('hooks.filer-email')
+
         email = Email(self.email_info,
-                      commit.email_to, subject, body, commit.author,
+                      commit.email_to, email_bcc,
+                      subject, body, commit.author,
                       self.ref_name, commit.base_rev_for_display(),
                       commit.rev, diff, filer_cmd=filer_cmd)
         email.enqueue()
@@ -534,7 +537,7 @@ class AbstractUpdate(object):
 
     @property
     def send_cover_email_to_filer(self):
-        """True iff the cover email should be sent to FILER_EMAIL.
+        """True iff the cover email should be sent to hooks.filer-email
 
         By default, the cover email is just an informational email
         which is not specific to any particular TN, and thus should
@@ -738,10 +741,11 @@ class AbstractUpdate(object):
 
         if update_email_contents is not None:
             (email_to, subject, body) = update_email_contents
+            email_bcc = (git_config('hooks.filer-email')
+                         if self.send_cover_email_to_filer else None)
             update_email = Email(self.email_info,
-                                 email_to, subject, body, None,
-                                 self.ref_name, self.old_rev, self.new_rev,
-                                 send_to_filer=self.send_cover_email_to_filer)
+                                 email_to, email_bcc, subject, body, None,
+                                 self.ref_name, self.old_rev, self.new_rev)
             update_email.enqueue()
 
     def __email_new_commits(self):

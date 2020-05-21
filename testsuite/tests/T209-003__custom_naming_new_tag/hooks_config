@@ -5,3 +5,4 @@
         # Custom namespaces for tags.
         tag-ref-namespace = refs/vendor/.*/tags/.*
         tag-ref-namespace = refs/user/.*/tags/.*
+	filer-email = filer@example.com

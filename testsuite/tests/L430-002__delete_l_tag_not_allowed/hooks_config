@@ -1,3 +1,4 @@
 [hooks]
         from-domain = act-europe.fr
         mailinglist = git-hooks-ci@example.com
+	filer-email = filer@example.com

@@ -3,3 +3,4 @@
         from-domain = example.com
         mailinglist = commits@example.com
         no-emails = refs/tags/new-tag
+	filer-email = filer@example.com

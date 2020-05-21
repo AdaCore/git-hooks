@@ -3,3 +3,4 @@
         mailinglist = git-hooks-ci@example.com
 
         reject-merge-commits = refs/heads/master
+	filer-email = filer@example.com

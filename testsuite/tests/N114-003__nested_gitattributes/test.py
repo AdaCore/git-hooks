@@ -21,7 +21,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
-remote: Bcc: file-ci@gnat.com
+remote: Bcc: filer@example.com
 remote: Subject: [repo] Do not perform precommit checks on test.py files in
 remote:  testsuite/tests.
 remote: X-Act-Checkin: repo
@@ -54,7 +54,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
-remote: Bcc: file-ci@gnat.com
+remote: Bcc: filer@example.com
 remote: Subject: [repo] Add comment in test_001/test.py, create test_001/test.out.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>

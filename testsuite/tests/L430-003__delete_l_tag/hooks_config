@@ -2,3 +2,4 @@
         allow-delete-tag = true
         from-domain = example.com
         mailinglist = something-ci@example.com
+	filer-email = filer@example.com

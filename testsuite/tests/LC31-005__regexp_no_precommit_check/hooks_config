@@ -5,3 +5,4 @@
         # in no-precommit-check work. But we might as well test
         # that providing a list of regexps work...
         no-precommit-check = refs/heads/extern.*, refs/heads/mas.*
+	filer-email = filer@example.com

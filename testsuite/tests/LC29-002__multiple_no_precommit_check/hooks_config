@@ -2,3 +2,4 @@
         from-domain = adacore.com
         mailinglist = git-hooks-ci@example.com
         no-precommit-check = refs/heads/bogus,refs/heads/master
+	filer-email = filer@example.com

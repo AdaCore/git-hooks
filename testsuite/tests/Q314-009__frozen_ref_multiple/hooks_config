@@ -4,3 +4,4 @@
         frozen-ref = refs/heads/gdb-7.5
         frozen-ref = refs/heads/gdb-7.6
         frozen-ref = refs/tags/gdb-7.5-release
+	filer-email = filer@example.com

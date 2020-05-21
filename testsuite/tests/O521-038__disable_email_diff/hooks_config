@@ -2,3 +2,4 @@
         from-domain = adacore.com
         mailinglist = git-hooks-ci@example.com
         disable-email-diff = True
+	filer-email = filer@example.com

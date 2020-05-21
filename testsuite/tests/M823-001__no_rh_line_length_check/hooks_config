@@ -9,3 +9,4 @@
         # We want to disable RH line-length checks for this repository.
         # This is done by setting max-rh-line-length to zero.
         max-rh-line-length = 0
+	filer-email = filer@example.com

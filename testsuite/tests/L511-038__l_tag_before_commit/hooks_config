@@ -2,3 +2,4 @@
         from-domain = adacore.com
         mailinglist = git-hooks-ci@example.com
         allow-lightweight-tag = true
+	filer-email = filer@example.com

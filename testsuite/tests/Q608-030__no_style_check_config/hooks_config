@@ -3,3 +3,4 @@
         mailinglist = git-hooks-ci@example.com
         tn-required = true
         no-style-checks = refs/heads/fsf-.*
+	filer-email = filer@example.com

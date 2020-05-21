@@ -13,7 +13,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
-remote: Bcc: file-ci@gnat.com
+remote: Bcc: filer@example.com
 remote: Subject: [notes][repo] Updated a.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>

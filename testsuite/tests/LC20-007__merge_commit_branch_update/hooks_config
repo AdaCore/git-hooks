@@ -2,3 +2,4 @@
         from-domain = adacore.com
         mailinglist = git-hooks-ci@example.com
         no-emails = refs/heads/fsf-.*
+	filer-email = filer@example.com

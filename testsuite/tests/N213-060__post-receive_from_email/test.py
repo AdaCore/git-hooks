@@ -19,7 +19,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 From: Dave Smith <ds@example.com>
 To: git-hooks-ci@example.com
-Bcc: file-ci@gnat.com
+Bcc: filer@example.com
 Subject: [repo] Updated a.
 X-Act-Checkin: repo
 X-Git-Author: Joel Brobecker <brobecker@adacore.com>

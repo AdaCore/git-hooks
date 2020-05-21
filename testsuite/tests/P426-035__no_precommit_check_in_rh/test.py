@@ -66,7 +66,7 @@ remote: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: nowhere@example.com
-remote: Bcc: file-ci@gnat.com
+remote: Bcc: filer@example.com
 remote: Subject: [repo/gdb-head] Resync from fsf-master as of today --
 remote:  no-precommit-check
 remote: X-Act-Checkin: repo

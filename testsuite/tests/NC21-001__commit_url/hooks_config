@@ -6,3 +6,4 @@
         # to contain multiple recipient.
         mailinglist = git-hooks-ci@example.com, user@example.com
         commit-url = "https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=%(rev)s"
+	filer-email = filer@example.com

@@ -1,3 +1,5 @@
 [hooks]
         from-domain = adacore.com
         mailinglist = git-hooks-ci@example.com
+        filer-email = filer1@example.com
+        filer-email = filer2@example.com

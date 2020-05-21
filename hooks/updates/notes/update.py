@@ -1,5 +1,6 @@
 """Handling of Git Notes updates."""
 
+from config import git_config
 from errors import InvalidUpdate
 from git import git, is_null_rev, is_valid_commit
 from updates import AbstractUpdate
@@ -126,7 +127,9 @@ class NotesUpdate(AbstractUpdate):
         # by stripping it from the output.
         diff = git.show(commit.rev, pretty="format:|", p=True)[1:]
 
-        email = Email(self.email_info, annotated_commit.email_to,
+        email_bcc = git_config('hooks.filer-email')
+
+        email = Email(self.email_info, annotated_commit.email_to, email_bcc,
                       subject, body, commit.author, self.ref_name,
                       commit.base_rev_for_display(), commit.rev, diff)
         email.enqueue()

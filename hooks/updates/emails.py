@@ -13,10 +13,6 @@ from time import sleep
 from updates.sendmail import sendmail
 from utils import debug, get_user_name, get_user_full_name
 
-# All commit emails should be sent to the following email address
-# for filing/archiving purposes...
-FILER_EMAIL = 'file-ci@gnat.com'
-
 # The delay (in seconds) between each email being sent out.
 # The purpose of the delay is to help separate each email
 # in time, in order to increase our chances of having each
@@ -130,13 +126,12 @@ class Email(object):
         email_info: An EmailInfo object.
         email_to: A list of email addresses, in RFC 822 format,
             whom to send this email to.
+        email_bcc: An iterable of email addresses, in RFC 822 format,
+            whom to Bcc this email on. None indicates no Bcc needed.
         email_subject: The email's subject.
         email_body: The email's body, NOT including the diff.
         diff: A diff to be included at the end of the email being
             sent out.
-        send_to_filer: A boolean, True if the email should be sent to
-            FILER_EMAIL, False otherwise.  The default should always
-            be to copy FILER_EMAIL, unless proven otherwise.
         filer_cmd: If not None, sending this email also results
             in this command being called with the contents of the
             email_body parameter (and therefore, no diff).
@@ -147,14 +142,16 @@ class Email(object):
         old_rev: See AbstractUpdate.old_rev attribute.
         new_rev: See AbstractUpdate.new_rev attribute.
     """
-    def __init__(self, email_info, email_to, email_subject, email_body,
+    def __init__(self, email_info, email_to, email_bcc,
+                 email_subject, email_body,
                  author, ref_name, old_rev, new_rev, diff=None,
-                 send_to_filer=True, filer_cmd=None):
+                 filer_cmd=None):
         """The constructor.
 
         PARAMETERS
             email_info: Same as the attribute.
             email_to: Same as the attribute.
+            email_bcc: Same as the attribute.
             email_subject: Same as the attribute.
             email_body: Same as the attribute.
             author: Same as the attribute.
@@ -164,14 +161,13 @@ class Email(object):
             diff: A diff string, if applicable.  Otherwise None.
                 When not None, the diff is appended at the end
                 of the email's body - truncated if necessary.
-            send_to_filer: Same as the attribute.
         """
         self.email_info = email_info
         self.email_to = email_to
+        self.email_bcc = email_bcc
         self.email_subject = email_subject
         self.email_body = email_body
         self.diff = diff
-        self.send_to_filer = send_to_filer
         self.filer_cmd = filer_cmd
         self.author = author
         self.ref_name = ref_name
@@ -203,8 +199,9 @@ class Email(object):
         # Create the email's header.
         e_msg['From'] = sanitized_email_address(self.email_info.email_from)
         e_msg['To'] = ', '.join(map(sanitized_email_address, self.email_to))
-        if self.send_to_filer and git_config('hooks.bcc-file-ci'):
-            e_msg['Bcc'] = FILER_EMAIL
+        if self.email_bcc:
+            e_msg['Bcc'] = ', '.join(map(sanitized_email_address,
+                                         self.email_bcc))
         e_msg['Subject'] = sanitized_email_header_field(self.email_subject)
         e_msg['X-Act-Checkin'] = self.email_info.project_name
         e_msg['X-Git-Author'] = sanitized_email_address(

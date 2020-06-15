@@ -1,5 +1,5 @@
 [gerrit]
 host = git.adacore.com
 project = git-hooks
-defaultbranch = master
+defaultbranch = adacore-legacy-T128-015
 defaultremote = origin

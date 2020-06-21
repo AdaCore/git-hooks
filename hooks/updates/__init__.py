@@ -388,7 +388,7 @@ class AbstractUpdate(object):
             short_ref_name=self.short_ref_name, action=action, loc=loc)
 
     def search_config_option_list(self, option_name, ref_name=None):
-        """Search the hooks.no-emails list, and returns the first match.
+        """Search the given config option as a list, and return the first match.
 
         This function first extracts the value of the given config,
         expecting it to be a list of regular expressions.  It then

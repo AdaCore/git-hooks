@@ -208,7 +208,7 @@ The following config options are available for general use:
   If set to True, disable the precommit-check in charge of detecting
   unintentional merge commits (see [Pre-commit Checks on the Revision
   History](#pre-commit-checks-on-the-revision-history) for more
-  information on this check.
+  information on this check).
 
   :warning: The use of this option is **strongly discouraged**, as
   it helps catch mistakes that are easily done, especially by git users

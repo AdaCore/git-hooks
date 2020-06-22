@@ -121,6 +121,24 @@ that configuration option can be specified with either:
       no-emails = refs/heads/fsf-.*, refs/heads/thirdparty
   ```
 
+Note About Reference Name Matching
+----------------------------------
+
+For any configuration option which provides the ability to use regular
+expressions to match references by name, the regular expression must match
+the entire reference name.
+
+For instance, consider the following configuration:
+
+```
+    no-emails = refs/heads/master
+```
+
+The `no-emails` configuration matches the reference
+`refs/heads/master`, but **not** `refs/heads/master-two` because
+the suffix `-two` in `master-two` is not covered by the regular
+expression used in the `no-emails` configuration.
+
 Configuration Options for General Use
 -------------------------------------
 
@@ -152,11 +170,6 @@ The following config options are available for general use:
   are considered to be branches.  Each entry in this list extends
   the list of references that are recognized as branches by
   this repository.
-
-  Note that the regular expression must match the entire reference name
-  for the reference to be considered a branch. For instance, to allow
-  branches whose reference name starts with `refs/vendor/`, the associated
-  namespace entry should be `refs/vendor/.*` (the `.*` is important).
 
   Unless the `hooks.use-standard-branch-ref-namespace` option is set to
   `false`, this namespace implicitly includes the necessary information

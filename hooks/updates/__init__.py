@@ -16,7 +16,7 @@ import time
 from updates.commits import commit_info_list
 from updates.emails import EmailInfo, Email
 from updates.mailinglists import expanded_mailing_list
-from utils import debug, warn, get_user_name
+from utils import debug, warn, get_user_name, ref_matches_regexp
 
 
 class AbstractUpdate(object):
@@ -409,7 +409,7 @@ class AbstractUpdate(object):
         ref_re_list = git_config(option_name)
         for ref_re in ref_re_list:
             ref_re = ref_re.strip()
-            if re.match(ref_re, ref_name):
+            if ref_matches_regexp(ref_name, ref_re):
                 return ref_re
         return None
 

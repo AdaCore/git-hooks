@@ -1,7 +1,6 @@
 """A module providing an AbstractUpdate factory."""
 from collections import namedtuple
 from enum import Enum
-import re
 
 from config import git_config
 from git import is_null_rev, get_object_type
@@ -18,6 +17,7 @@ from updates.tags.atag_deletion import AnnotatedTagDeletion
 from updates.tags.ltag_creation import LightweightTagCreation
 from updates.tags.ltag_update import LightweightTagUpdate
 from updates.tags.ltag_deletion import LightweightTagDeletion
+from utils import ref_matches_regexp
 
 
 # The different kinds of references we handle.
@@ -136,31 +136,6 @@ def get_namespace_info(ref_kind):
     return namespace_info
 
 
-def ref_matches_namespace_pattern(ref_name, namespace_re):
-    """Return true iff a reference's name mactches the given namespace pattern.
-
-    PARAMETERS
-        ref_name: The name of the reference we want to match against
-            namespace_re.
-        namespace_re: A regular expression.
-
-    RETURN VALUE
-        True if ref_name matches namespace_re. False otherwise.
-    """
-    m = re.match(namespace_re, ref_name)
-    if m is None:
-        return False
-    # We also need to verify that the namespace pattern matches
-    # the whole reference name (i.e. we do not want a reference
-    # named 'refs/heads/master2' be considered part of a namespace
-    # whose regexp is 'refs/heads/master').
-    #
-    # With Python 2.7, the simplest is to just verify the extent
-    # of the string being matched. Once we transition to Python 3,
-    # we can simplify this by using re.fullmatch instead of re.match.
-    return m.end() - m.start() == len(ref_name)
-
-
 def get_ref_kind(ref_name):
     """Return the kind of reference ref_name is (None if unrecognized).
 
@@ -189,7 +164,7 @@ def get_ref_kind(ref_name):
     for ref_kind in RefKind:
         namespace_info = get_namespace_info(ref_kind)
         for ref_re in namespace_info:
-            if ref_matches_namespace_pattern(ref_name, ref_re):
+            if ref_matches_regexp(ref_name, ref_re):
                 return ref_kind
 
     return None

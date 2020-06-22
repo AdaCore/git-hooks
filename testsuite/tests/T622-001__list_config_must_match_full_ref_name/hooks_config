@@ -1,5 +1,5 @@
 [hooks]
         mailinglist = commits@example.com
         from-domain = example.com
-        no-emails = refs/heads/fsf-.*
+        no-emails = refs/heads/master
 	filer-email = filer@example.com

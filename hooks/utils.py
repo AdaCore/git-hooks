@@ -157,6 +157,30 @@ def indent(text, indentation):
     return ''.join(indented)
 
 
+def ref_matches_regexp(ref_name, ref_re):
+    """Return true iff a reference's name matches the given pattern.
+
+    PARAMETERS
+        ref_name: The name of the reference we want to match against ref_re.
+        ref_re: A regular expression.
+
+    RETURN VALUE
+        True if ref_name matches ref_re. False otherwise.
+    """
+    m = re.match(ref_re, ref_name)
+    if m is None:
+        return False
+    # We also need to verify that the namespace pattern matches
+    # the whole reference name (i.e. we do not want a reference
+    # named 'refs/heads/master2' be considered part of a namespace
+    # whose regexp is 'refs/heads/master').
+    #
+    # With Python 2.7, the simplest is to just verify the extent
+    # of the string being matched. Once we transition to Python 3,
+    # we can simplify this by using re.fullmatch instead of re.match.
+    return m.end() - m.start() == len(ref_name)
+
+
 class FileLock(object):
     """An object implementing file locking (work in "with" statement only).
 

@@ -12,6 +12,14 @@ It previously pointed to:
 
  %(commit_oneline)s"""
 
+DEFAULT_REJECTED_BRANCH_DELETION_TIP = """\
+If you are trying to delete a branch which was created
+by mistake, contact an administrator, and ask him to
+temporarily change the repository's configuration
+so the branch can be deleted (he may elect to delete
+the branch himself to avoid the need to coordinate
+the operation)."""
+
 
 class BranchDeletion(AbstractUpdate):
     """Update object for branch creation/update."""
@@ -56,17 +64,11 @@ class BranchDeletion(AbstractUpdate):
                     + ["    {}".format(allowed) for allowed in allowed_list]
                 )
 
-            err.extend(
-                [
-                    "",
-                    "If you are trying to delete a branch which was created",
-                    "by mistake, contact an administrator, and ask him to",
-                    "temporarily change the repository's configuration",
-                    "so the branch can be deleted (he may elect to delete",
-                    "the branch himself to avoid the need to coordinate",
-                    "the operation).",
-                ]
-            )
+            tip = git_config('hooks.rejected-branch-deletion-tip')
+            if tip is None:
+                tip = DEFAULT_REJECTED_BRANCH_DELETION_TIP
+            err.append("")
+            err.extend(tip.splitlines())
 
             raise InvalidUpdate(*err)
 

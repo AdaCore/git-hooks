@@ -68,6 +68,7 @@ GIT_CONFIG_OPTS = \
      'hooks.pre-receive-hook':            {'default': None},
      'hooks.post-receive-hook':           {'default': None},
      'hooks.reject-merge-commits':        {'default': (),     'type': tuple},
+     'hooks.rejected-branch-deletion-tip': {'default': None},
      'hooks.restrict-branch-deletion':    {'default': False,  'type': bool},
      'hooks.style-checker':               {'default': 'style_checker'},
      'hooks.style-checker-config-file':   {'default': None},

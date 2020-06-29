@@ -1,0 +1,15 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+
+        branch-ref-namespace = refs/vendor/.*
+        branch-ref-namespace = refs/user/.*
+        filer-email = filer@example.com
+
+        # Do not allow any branch deletion.
+        restrict-branch-deletion = True
+
+        rejected-branch-deletion-tip = \
+If you are trying to delete a branch which was created\n\
+by accident, then please contact your favorite admin\n\
+and he will take care of removing the branch for you.

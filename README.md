@@ -423,6 +423,29 @@ The following config options are available for general use:
       reject-merge-commits = refs/heads/gdb-.*
   ```
 
+* **`hooks.rejected-branch-deletion-tip`**:
+
+  This option is used when a developer tries to delete a branch, and
+  the deletion is rejected (see `hooks.restrict-branch-deletion`).
+  When this happens, the hooks print an error message explaining
+  why the deletion was rejected, and concludes with a paragraph
+  providing some generic suggestions on how to move forward.
+
+  When defined, this option provides some text which is printed
+  in lieu of the generic instructions on how to move forward.
+  This option therefore allows projects to provide instructions
+  which are completely specific to the project, as a way to be
+  more helpful to their developers.
+
+  Example:
+  ```
+  [hooks]
+      rejected-branch-deletion-tip = \
+      If you are trying to delete a branch which was created\n\
+      by accident, then please contact your favorite admin\n\
+      and he will take care of removing the branch for you.
+  ```
+
 * **`hooks.restrict-branch-deletion`** (default value: **false**):
 
   When set to `true`, the only branches that can be deleted are

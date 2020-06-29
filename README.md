@@ -786,12 +786,12 @@ as we want to prevent any replies from being sent there.
 
 ### Using a Script in hooks.mailinglist
 
-For projects that share the same git repository but want separate email
-addresses for email notifications, it is possible to use a script in
-place of an email address in the `hooks.mailinglist` config. Script
-entries are indentified by the fact that the entry is an **absolute
-filename**, and that this filename points to a file on the server which
-is **an executable**.
+For projects that want to use separate email addresses based on
+a commit or the name of the reference being updated, it is possible
+to use a script in place of an email address in the `hooks.mailinglist`
+config.  Script entries are indentified by the fact that the entry is
+an **absolute filename**, and that this filename points to a file on
+the server which is **an executable**.
 
 :information_source: Note that the "term" script is used loosely here as,
 although we expect most users of that feature to indeed use a script,
@@ -804,9 +804,8 @@ This script is called by the hooks as follow:
 * The list of files being changed is passed via standard input, one file
   per line (this list may be empty);
 
-* NO ARGUMENT is currently being passed on the command line, but we
-  might use that in the future to provide info such as the reference
-  name, for instance.
+* The name of the reference being updated is passed as the script's
+  first argument.
 
 The hooks expects the script to return the list of email addresses on standard output, one email address per line.
 

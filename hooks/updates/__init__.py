@@ -343,7 +343,7 @@ class AbstractUpdate(object):
         email_bcc = git_config('hooks.filer-email')
 
         email = Email(self.email_info,
-                      commit.email_to, email_bcc,
+                      commit.email_to(self.ref_name), email_bcc,
                       subject, body, commit.author,
                       self.ref_name, commit.base_rev_for_display(),
                       commit.rev, diff, filer_cmd=filer_cmd)
@@ -515,7 +515,7 @@ class AbstractUpdate(object):
     def everyone_emails(self):
         """Return the list of email addresses listing everyone possible.
         """
-        return expanded_mailing_list(None)
+        return expanded_mailing_list(self.ref_name, None)
 
     # ------------------------
     # --  Private methods.  --

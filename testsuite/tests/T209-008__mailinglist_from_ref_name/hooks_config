@@ -1,0 +1,4 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = %(TEST_DIR)s/email_to.py
+        filer-email = filer@example.com

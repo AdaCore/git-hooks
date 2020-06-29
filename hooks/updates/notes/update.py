@@ -129,7 +129,8 @@ class NotesUpdate(AbstractUpdate):
 
         email_bcc = git_config('hooks.filer-email')
 
-        email = Email(self.email_info, annotated_commit.email_to, email_bcc,
+        email = Email(self.email_info,
+                      annotated_commit.email_to(self.ref_name), email_bcc,
                       subject, body, commit.author, self.ref_name,
                       commit.base_rev_for_display(), commit.rev, diff)
         email.enqueue()

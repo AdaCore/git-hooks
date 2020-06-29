@@ -23,8 +23,6 @@ class CommitInfo(object):
         send_email_p: True if a commit email should be sent for
             this commit, False otherwise. May be None, meaning that
             the value of that attribute has not been computed yet.
-        email_to: A list of email addresses, in RFC 822 format, of
-            the recipients of the email notification for this commit.
     """
     def __init__(self, rev, author, subject, parent_revs):
         self.rev = rev
@@ -34,10 +32,8 @@ class CommitInfo(object):
         self.pre_existing_p = None
         self.send_email_p = None
 
-        # Implement the "email_to" attribute as a property to allow
-        # us to compute it only when needed.  Once computed, we store
-        # its value in self.__email_to.
-        self.__email_to = None
+        # A cache for the "email_to" method.
+        self.__email_to = {}
 
         # A cache for the "files_changed" method.
         self.__files_changed = None
@@ -47,16 +43,21 @@ class CommitInfo(object):
         """
         return '%s... %s' % (self.rev[:7], self.subject[:59])
 
-    @property
-    def email_to(self):
-        """Return the email_to attribute.
+    def email_to(self, ref_name):
+        """Return this commit's list of email recipients.
+
+        Returns a list of email addresses, in RFC 822 format.
+
+        PARAMETERS
+            ref_name: The name of the reference being updated.
 
         Implemented as a property in order for its initialization
         to be performed only when required.
         """
-        if self.__email_to is None:
-            self.__email_to = expanded_mailing_list(self.files_changed)
-        return self.__email_to
+        if ref_name not in self.__email_to:
+            self.__email_to[ref_name] = expanded_mailing_list(
+                ref_name, self.files_changed)
+        return self.__email_to[ref_name]
 
     def files_changed(self):
         """Return the list of files changed by this commit.

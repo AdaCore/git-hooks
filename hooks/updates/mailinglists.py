@@ -20,7 +20,7 @@ def is_mailinglist_script(name):
     return os.path.isabs(name) and os.access(name, os.R_OK and os.X_OK)
 
 
-def get_emails_from_script(script_filename, changed_files):
+def get_emails_from_script(script_filename, ref_name, changed_files):
     """The list of emails addresses for the given list of changed files.
 
     This list is obtained by running the given script, and passing it
@@ -29,13 +29,14 @@ def get_emails_from_script(script_filename, changed_files):
     trigger the script to return all email addresses.
 
     PARAMETERS
+        ref_name: The name of the reference being updated.
         script_filename: The name of the script to execute.
         changed_files: A list of files to pass to the script (via stdin).
             None is also accepted in place of an empty list.
     """
     input_str = '' if changed_files is None else '\n'.join(changed_files)
 
-    p = Popen([script_filename], stdin=PIPE, stdout=PIPE)
+    p = Popen([script_filename, ref_name], stdin=PIPE, stdout=PIPE)
     (output, _) = p.communicate(input=input_str)
     if p.returncode != 0:
         warn('!!! %s failed with error code: %d.'
@@ -43,7 +44,7 @@ def get_emails_from_script(script_filename, changed_files):
     return output.splitlines()
 
 
-def expanded_mailing_list(get_files_changed_cb):
+def expanded_mailing_list(ref_name, get_files_changed_cb):
     """Return the list of emails after expanding the hooks.mailinglist config.
 
     This function iterates over all entries in hooks.mailinglist, and
@@ -51,6 +52,7 @@ def expanded_mailing_list(get_files_changed_cb):
     that script with the list of changed files.
 
     PARAMETERS
+        ref_name: The name of the reference being updated.
         get_files_changed_cb: A function to call in order to get
             the list of files changed, to be passed to mailinglist
             scripts.  This is a function rather than a list to allow
@@ -64,7 +66,9 @@ def expanded_mailing_list(get_files_changed_cb):
         if is_mailinglist_script(entry):
             if files_changed is None:
                 files_changed = get_files_changed_cb()
-            result.extend(get_emails_from_script(entry, files_changed))
+            result.extend(get_emails_from_script(entry,
+                                                 ref_name,
+                                                 files_changed))
         else:
             result.append(entry)
     return result

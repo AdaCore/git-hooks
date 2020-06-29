@@ -1,0 +1,16 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+
+        branch-ref-namespace = refs/vendor/.*
+        branch-ref-namespace = refs/user/.*
+        filer-email = filer@example.com
+
+        # Only allow branch deletion on some branches.
+        restrict-branch-deletion = True
+        allow-delete-branch = refs/user/myself/.*
+        allow-delete-branch = refs/heads/my-.*
+        # This line is to verify that allowing branch "to" to be deleted
+        # does not incidentally allow any branch whose name starts with "to"
+        # to be deleted.
+        allow-delete-branch = refs/heads/to

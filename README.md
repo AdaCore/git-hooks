@@ -144,6 +144,14 @@ Configuration Options for General Use
 
 The following config options are available for general use:
 
+* **`hooks.allow-delete-branch`** [list]:
+
+  A list of regular expressions matching reference names corresponding
+  to branches that are allowed to be deleted.
+
+  This option is only relevant when the `hooks.restrict-branch-deletion`
+  option is set to `true`. Otherwise, any branch can be deleted.
+
 * **`hooks.allow-delete-tag`** (default value: **false**):
 
   By default, deleting a tag is not allowed. To allow it, set
@@ -414,6 +422,14 @@ The following config options are available for general use:
       reject-merge-commits = refs/heads/master
       reject-merge-commits = refs/heads/gdb-.*
   ```
+
+* **`hooks.restrict-branch-deletion`** (default value: **false**):
+
+  When set to `true`, the only branches that can be deleted are
+  the branches listed in the repository's `hooks.allow-delete-branch`
+  configuration.
+
+  When `false`, branch deletion is not restricted.
 
 * **`hooks.style-checker`** (default value: `style_checker`):
 

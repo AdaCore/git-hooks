@@ -41,7 +41,8 @@ config_commit = CONFIG_REF
 #       + 'default': The default value for this config option.
 
 GIT_CONFIG_OPTS = \
-    {'hooks.allow-delete-tag':            {'default': False,  'type': bool},
+    {'hooks.allow-delete-branch':         {'default': (),     'type': tuple},
+     'hooks.allow-delete-tag':            {'default': False,  'type': bool},
      'hooks.allow-non-fast-forward':      {'default': (),     'type': tuple},
      'hooks.allow-lightweight-tag':       {'default': False,  'type': bool},
      'hooks.branch-ref-namespace':        {'default': (),     'type': tuple},
@@ -67,6 +68,7 @@ GIT_CONFIG_OPTS = \
      'hooks.pre-receive-hook':            {'default': None},
      'hooks.post-receive-hook':           {'default': None},
      'hooks.reject-merge-commits':        {'default': (),     'type': tuple},
+     'hooks.restrict-branch-deletion':    {'default': False,  'type': bool},
      'hooks.style-checker':               {'default': 'style_checker'},
      'hooks.style-checker-config-file':   {'default': None},
      'hooks.tag-ref-namespace':           {'default': (),     'type': tuple},

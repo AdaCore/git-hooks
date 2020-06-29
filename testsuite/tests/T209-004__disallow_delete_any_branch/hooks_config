@@ -1,0 +1,10 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+
+        branch-ref-namespace = refs/vendor/.*
+        branch-ref-namespace = refs/user/.*
+        filer-email = filer@example.com
+
+        # Do not allow any branch deletion.
+        restrict-branch-deletion = True

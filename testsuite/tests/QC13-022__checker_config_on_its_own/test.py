@@ -16,7 +16,7 @@ remote: *** Cannot find style_checker config file: `style.yaml'.
 remote: ***
 remote: *** Your repository is configured to provide a configuration file to
 remote: *** the style_checker; however, this configuration file (style.yaml)
-remote: *** cannot be found in commit adcecf2c1d321ff7e35dae44c41f46b885925bd0.
+remote: *** cannot be found in commit 3ff58556a322e274f56e7224b9ac74fae5011cc3.
 remote: ***
 remote: *** Perhaps you haven't added this configuration file to this branch
 remote: *** yet?
@@ -49,10 +49,10 @@ remote: Subject: [repo(refs/meta/config)] Add style-checker-config-file option
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/meta/config
-remote: X-Git-Oldrev: e7b927eb2e249cf2aed16c3da9c6ebcaa0f768b9
-remote: X-Git-Newrev: 0cfbca7db5e102b2cbb6deeec0d951ee258b40e1
+remote: X-Git-Oldrev: ac4cd5a2fc6c5da2e40978e188a8b015eaee6406
+remote: X-Git-Newrev: 9142bec495ff0a6d26ecd91a43214d3274ec98a6
 remote:
-remote: commit 0cfbca7db5e102b2cbb6deeec0d951ee258b40e1
+remote: commit 9142bec495ff0a6d26ecd91a43214d3274ec98a6
 remote: Author: Joel Brobecker <brobecker@adacore.com>
 remote: Date:   Sat Dec 9 07:29:59 2017 +0100
 remote:
@@ -65,13 +65,13 @@ remote:  style.yaml     | 1 +
 remote:  2 files changed, 2 insertions(+)
 remote:
 remote: diff --git a/project.config b/project.config
-remote: index 05e3cbe..f24e088 100644
+remote: index e565530..53aad56 100644
 remote: --- a/project.config
 remote: +++ b/project.config
 remote: @@ -2,3 +2,4 @@
 remote:          from-domain = adacore.com
 remote:          mailinglist = git-hooks-ci@example.com
-remote:  	filer-email = filer@example.com
+remote:          filer-email = filer@example.com
 remote: +        style-checker-config-file = style.yaml
 remote: diff --git a/style.yaml b/style.yaml
 remote: new file mode 100644
@@ -81,7 +81,7 @@ remote: +++ b/style.yaml
 remote: @@ -0,0 +1 @@
 remote: +# A YaML file (with nothing in it)
 To ../bare/repo.git
-   e7b927e..0cfbca7  meta-config -> refs/meta/config
+   ac4cd5a..9142bec  meta-config -> refs/meta/config
 """
 
         self.assertEqual(p.status, 0, p.image)

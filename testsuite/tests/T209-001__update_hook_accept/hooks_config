@@ -6,4 +6,4 @@
         # to contain multiple recipient.
         mailinglist = git-hooks-ci@example.com, user@example.com
         update-hook = %(TEST_DIR)s/update-hook
-	filer-email = filer@example.com
+        filer-email = filer@example.com

@@ -27,10 +27,10 @@ remote: Subject: [repo(refs/meta/config)] Change hooks.mailinglist config
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/meta/config
-remote: X-Git-Oldrev: 6998dc7254553c752c65e3f5ded4fbc364f7af13
-remote: X-Git-Newrev: f8be2d0a7b34c24146f28782a3fd0515c34a93ee
+remote: X-Git-Oldrev: adff0b9f9efecebd5a0d2e049e4251582bbb6bb9
+remote: X-Git-Newrev: e11c90acd878192c880d71a3426d094be4d64bf7
 remote:
-remote: commit f8be2d0a7b34c24146f28782a3fd0515c34a93ee
+remote: commit e11c90acd878192c880d71a3426d094be4d64bf7
 remote: Author: Joel Brobecker <brobecker@adacore.com>
 remote: Date:   Mon Dec 30 08:04:51 2013 +0400
 remote:
@@ -42,7 +42,7 @@ remote:  project.config | 2 +-
 remote:  1 file changed, 1 insertion(+), 1 deletion(-)
 remote:
 remote: diff --git a/project.config b/project.config
-remote: index 05e3cbe..f06455a 100644
+remote: index e565530..c85ce41 100644
 remote: --- a/project.config
 remote: +++ b/project.config
 remote: @@ -1,4 +1,4 @@
@@ -50,9 +50,9 @@ remote:  [hooks]
 remote:          from-domain = adacore.com
 remote: -        mailinglist = git-hooks-ci@example.com
 remote: +        mailinglist = super-ci@example.com
-remote:  	filer-email = filer@example.com
+remote:          filer-email = filer@example.com
 To ../bare/repo.git
-   6998dc7..f8be2d0  meta/config -> refs/meta/config
+   adff0b9..e11c90a  meta/config -> refs/meta/config
 """
 
         self.assertEqual(p.status, 0, p.image)

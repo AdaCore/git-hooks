@@ -106,10 +106,15 @@ def git_run(command, *args, **kwargs):
     if outfile:
         return None
     else:
+        # Strip any trailing whitespaces and newlines at the end of
+        # the output. This is because Git commands often add an extra
+        # newline at the end of the data we're querying.
+        output = output.rstrip()
+
         if do_split_lines:
-            return output.strip().splitlines()
+            return output.splitlines()
         else:
-            return output.strip()
+            return output
 
 
 class Git:

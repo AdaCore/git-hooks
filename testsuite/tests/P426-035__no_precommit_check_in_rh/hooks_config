@@ -1,6 +1,6 @@
 [hooks]
-    from-domain = adacore.com
-    mailinglist = nowhere@example.com
-    no-emails = .*/fsf.*
-    no-precommit-check = .*/fsf.*
-	filer-email = filer@example.com
+        from-domain = adacore.com
+        mailinglist = nowhere@example.com
+        no-emails = .*/fsf.*
+        no-precommit-check = .*/fsf.*
+        filer-email = filer@example.com

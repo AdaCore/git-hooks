@@ -7,4 +7,4 @@
         # We want no commit emails on master.  It should mean that
         # max-commit-emails has no influence over that branch.
         no-emails = refs/heads/master
-	filer-email = filer@example.com
+        filer-email = filer@example.com

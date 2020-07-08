@@ -8,4 +8,4 @@
         # observe from testing.
         mailinglist =
         mailinglist = him-too@example.com
-	filer-email = filer@example.com
+        filer-email = filer@example.com

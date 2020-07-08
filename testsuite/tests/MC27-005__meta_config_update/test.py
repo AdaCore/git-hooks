@@ -21,10 +21,10 @@ remote: Subject: [repo(refs/meta/config)] Add small comment.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/meta/config
-remote: X-Git-Oldrev: 674ac9d040601e16e4bc46fb8928398157c01232
-remote: X-Git-Newrev: 86eb705b95540efd0d2f303688098de8babc457a
+remote: X-Git-Oldrev: 87a3fc391a712ee33e313fad7dee60073dd46a52
+remote: X-Git-Newrev: 8be147281032266bc1287e30072c54e2942e09e8
 remote:
-remote: commit 86eb705b95540efd0d2f303688098de8babc457a
+remote: commit 8be147281032266bc1287e30072c54e2942e09e8
 remote: Author: Joel Brobecker <brobecker@adacore.com>
 remote: Date:   Mon Dec 30 08:04:51 2013 +0400
 remote:
@@ -36,7 +36,7 @@ remote:  project.config | 1 +
 remote:  1 file changed, 1 insertion(+)
 remote:
 remote: diff --git a/project.config b/project.config
-remote: index 05e3cbe..d0c3607 100644
+remote: index e565530..73f544e 100644
 remote: --- a/project.config
 remote: +++ b/project.config
 remote: @@ -1,4 +1,5 @@
@@ -44,9 +44,9 @@ remote:  [hooks]
 remote: +        # Standard minimum configuration.
 remote:          from-domain = adacore.com
 remote:          mailinglist = git-hooks-ci@example.com
-remote:  	filer-email = filer@example.com
+remote:          filer-email = filer@example.com
 To ../bare/repo.git
-   674ac9d..86eb705  meta/config -> refs/meta/config
+   87a3fc3..8be1472  meta/config -> refs/meta/config
 """
 
         self.assertEqual(p.status, 0, p.image)

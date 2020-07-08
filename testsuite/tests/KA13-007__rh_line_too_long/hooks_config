@@ -5,4 +5,4 @@
         # No pre-commit-checks and no emails on third-party...
         no-precommit-check = refs/heads/third-party
         no-emails = refs/heads/third-party
-	filer-email = filer@example.com
+        filer-email = filer@example.com

@@ -2,4 +2,4 @@
         allow-lightweight-tag = true
         from-domain = example.com
         mailinglist = something-ci@example.com
-	filer-email = filer@example.com
+        filer-email = filer@example.com

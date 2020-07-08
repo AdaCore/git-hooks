@@ -4,4 +4,4 @@
 
         branch-ref-namespace = refs/vendor/.*
         branch-ref-namespace = refs/user/.*
-	filer-email = filer@example.com
+        filer-email = filer@example.com

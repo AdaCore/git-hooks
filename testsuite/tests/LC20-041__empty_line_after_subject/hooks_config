@@ -3,4 +3,4 @@
         mailinglist = git-hooks-ci@example.com
         no-precommit-check = refs/heads/thirdparty
         no-emails = refs/heads/thirdparty
-	filer-email = filer@example.com
+        filer-email = filer@example.com

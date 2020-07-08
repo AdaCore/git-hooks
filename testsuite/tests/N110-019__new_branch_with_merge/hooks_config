@@ -2,4 +2,4 @@
         mailinglist = commits@example.com
         from-domain = example.com
         no-emails = refs/heads/fsf-.*
-	filer-email = filer@example.com
+        filer-email = filer@example.com

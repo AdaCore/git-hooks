@@ -5,4 +5,4 @@
         # to make sure that at least one testcase defines it
         # to contain multiple recipient.
         mailinglist = git-hooks-ci@example.com, user@example.com
-	filer-email = filer@example.com
+        filer-email = filer@example.com

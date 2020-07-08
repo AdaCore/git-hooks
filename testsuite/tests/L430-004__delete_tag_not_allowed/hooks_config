@@ -1,4 +1,4 @@
 [hooks]
         from-domain = gnat.com
         mailinglist = git-hooks-ci@example.com
-	filer-email = filer@example.com
+        filer-email = filer@example.com

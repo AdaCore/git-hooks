@@ -1,4 +1,4 @@
 [hooks]
         mailinglist = testsuite@example.com
         from-domain = example.com
-	filer-email = filer@example.com
+        filer-email = filer@example.com

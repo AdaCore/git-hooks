@@ -4,4 +4,4 @@
         no-emails = a multiline description\n\
 of my project which should be\n\
 handled properly by the git-hooks.
-	filer-email = filer@example.com
+        filer-email = filer@example.com

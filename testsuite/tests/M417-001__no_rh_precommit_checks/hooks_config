@@ -3,4 +3,4 @@
         mailinglist = git-hooks-ci@example.com
         # No RH style checking on any branch...
         no-rh-style-checks = refs/heads/.*
-	filer-email = filer@example.com
+        filer-email = filer@example.com

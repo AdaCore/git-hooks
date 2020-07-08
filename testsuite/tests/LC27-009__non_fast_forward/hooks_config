@@ -2,4 +2,4 @@
         from-domain = adacore.com
         mailinglist = git-hooks-ci@example.com
         allow-non-fast-forward = refs/heads/master
-	filer-email = filer@example.com
+        filer-email = filer@example.com

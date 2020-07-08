@@ -2,4 +2,4 @@
         from-domain = adacore.com
         mailinglist = git-hooks-ci@example.com
         disable-merge-commit-checks = true
-	filer-email = filer@example.com
+        filer-email = filer@example.com

@@ -2,4 +2,4 @@
         mailinglist = testsuite@example.com
         from-domain = example.com
         no-emails = refs/tags/v0.1
-	filer-email = filer@example.com
+        filer-email = filer@example.com

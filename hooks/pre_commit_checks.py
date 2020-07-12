@@ -115,8 +115,8 @@ def style_check_files(filename_list, commit_rev, project_name):
         warn(*out.splitlines())
 
 
-def ensure_iso_8859_15_only(rev, raw_rh):
-    """Raise InvalidUpdate if the revsion log contains non-ISO-8859-15 chars.
+def ensure_iso_8859_15_only(commit):
+    """Raise InvalidUpdate if the revision log contains non-ISO-8859-15 chars.
 
     The purpose of this check is make sure there are no unintended
     characters that snuck in, particularly non-printable characters
@@ -128,19 +128,15 @@ def ensure_iso_8859_15_only(rev, raw_rh):
     character prevents that.
 
     PARAMETERS
-        rev: The revision of the commit being checked.
-        raw_rh: A list of lines corresponding to the raw revision
-            history (as opposed to the revision history as usually
-            displayed by git where the subject lines are wrapped).
-            See --pretty format option "%B" for more details.
+        commit: A CommitInfo object corresponding to the commit being checked.
     """
-    for lineno, line in enumerate(raw_rh, start=1):
+    for lineno, line in enumerate(commit.raw_revlog_lines, start=1):
         try:
             u = line.decode('UTF-8')
             u.encode('ISO-8859-15')
         except UnicodeEncodeError as e:
             raise InvalidUpdate(
-                'Invalid revision history for commit %s:' % rev,
+                'Invalid revision history for commit %s:' % commit.rev,
                 'It contains characters not in the ISO-8859-15 charset.',
                 '',
                 'Below is the first line where this was detected'
@@ -153,47 +149,39 @@ def ensure_iso_8859_15_only(rev, raw_rh):
                 "and try again.")
 
 
-def ensure_empty_line_after_subject(rev, raw_rh):
+def ensure_empty_line_after_subject(commit):
     """Raise InvalidUpdate if there is no empty line after the subject.
 
     More precisely, verify that if there is some text besides
     the commit subject, both parts are separated by an empty line.
 
     PARAMETERS
-        rev: The revision of the commit being checked.
-        raw_rh: A list of lines corresponding to the raw revision
-            history (as opposed to the revision history as usually
-            displayed by git where the subject lines are wrapped).
-            See --pretty format option "%B" for more details.
+        commit: A CommitInfo object corresponding to the commit being checked.
     """
-    if len(raw_rh) < 2:
+    if len(commit.raw_revlog_lines) < 2:
         # No body other than the subject.  No violation possible.
         return
 
-    if not raw_rh[1].strip() == '':
+    if not commit.raw_revlog_lines[1].strip() == '':
         info = (
-            ['Invalid revision history for commit %s:' % rev,
+            ['Invalid revision history for commit %s:' % commit.rev,
              'The first line should be the subject of the commit,',
              'followed by an empty line.',
              '',
              'Below are the first few lines of the revision history:'] +
-            ['| %s' % line for line in raw_rh[:5]] +
+            ['| %s' % line for line in commit.raw_revlog_lines[:5]] +
             ['',
              "Please amend the commit's revision history and try again."])
         raise InvalidUpdate(*info)
 
 
-def reject_lines_too_long(rev, raw_rh):
-    """Raise InvalidUpdate if raw_rh contains a line that's too long.
+def reject_lines_too_long(commit):
+    """Raise InvalidUpdate if the commit's revlog has a line that's too long.
 
     Does nothing if the project was configured to skip this check.
 
     PARAMETERS
-        rev: The revision of the commit being checked.
-        raw_rh: A list of lines corresponding to the raw revision
-            history (as opposed to the revision history as usually
-            displayed by git where the subject lines are wrapped).
-            See --pretty format option "%B" for more details.
+        commit: A CommitInfo object corresponding to the commit being checked.
     """
     max_line_length = git_config('hooks.max-rh-line-length')
     if max_line_length <= 0:
@@ -201,10 +189,10 @@ def reject_lines_too_long(rev, raw_rh):
         # want this check to be applied.  Skip it.
         return
 
-    for line in raw_rh:
+    for line in commit.raw_revlog_lines:
         if len(line) > max_line_length:
             raise InvalidUpdate(
-                'Invalid revision history for commit %s:' % rev,
+                'Invalid revision history for commit %s:' % commit.rev,
                 '',
                 'The following line in the revision history is too long',
                 '(%d characters, when the maximum is %d characters):'
@@ -213,8 +201,8 @@ def reject_lines_too_long(rev, raw_rh):
                 '>>> %s' % line)
 
 
-def reject_unedited_merge_commit(rev, raw_rh):
-    """Raise InvalidUpdate if raw_rh looks like an unedited merge commit's RH.
+def reject_unedited_merge_commit(commit):
+    """Raise InvalidUpdate if the commit looks like an unedited merge commit.
 
     More precisely, we are trying to catch the cases where a merge
     was performed without the user being aware of it.  This can
@@ -228,11 +216,7 @@ def reject_unedited_merge_commit(rev, raw_rh):
     a non-default revision history, thus satisfying this check.
 
     PARAMETERS
-        rev: The revision of the commit being checked.
-        raw_rh: A list of lines corresponding to the raw revision
-            history (as opposed to the revision history as usually
-            displayed by git where the subject lines are wrapped).
-            See --pretty format option "%B" for more details.
+        commit: A CommitInfo object corresponding to the commit being checked.
     """
     if git_config('hooks.disable-merge-commit-checks'):
         # The users of this repository do not want this safety guard.
@@ -243,10 +227,10 @@ def reject_unedited_merge_commit(rev, raw_rh):
     # revision history for a merge commit is just: "Merge branch 'xxx'.".
     RH_PATTERN = "Merge branch '.*'"
 
-    for line in raw_rh:
+    for line in commit.raw_revlog_lines:
         if re.match(RH_PATTERN, line):
             info = ['Pattern "%s" has been detected.' % RH_PATTERN,
-                    '(in commit %s)' % rev,
+                    '(in commit %s)' % commit.rev,
                     '',
                     'This usually indicates an unintentional merge commit.',
                     'If you would really like to push a merge commit,'
@@ -255,8 +239,8 @@ def reject_unedited_merge_commit(rev, raw_rh):
             raise InvalidUpdate(*info)
 
 
-def reject_merge_conflict_section(rev, raw_rh):
-    """Raise InvalidUpdate if raw_rh contains "Conflicts:" in it.
+def reject_merge_conflict_section(commit):
+    """Raise InvalidUpdate if the commit's revlog contains "Conflicts:" in it.
 
     More precisely, we are trying to catch the cases where a user
     performed a merge which had conflicts, resolved them, but then
@@ -264,18 +248,14 @@ def reject_merge_conflict_section(rev, raw_rh):
     revision history when creating the commit.
 
     PARAMETERS
-        rev: The revision of the commit being checked.
-        raw_rh: A list of lines corresponding to the raw revision
-            history (as opposed to the revision history as usually
-            displayed by git where the subject lines are wrapped).
-            See --pretty format option "%B" for more details.
+        commit: A CommitInfo object corresponding to the commit being checked.
     """
     RH_PATTERN = "Conflicts:"
 
-    for line in raw_rh:
+    for line in commit.raw_revlog_lines:
         if line.strip() == RH_PATTERN:
             info = ['Pattern "%s" has been detected.' % RH_PATTERN,
-                    '(in commit %s)' % rev,
+                    '(in commit %s)' % commit.rev,
                     '',
                     'This usually indicates a merge commit where some'
                     ' merge conflicts',
@@ -290,17 +270,13 @@ def reject_merge_conflict_section(rev, raw_rh):
             raise InvalidUpdate(*info)
 
 
-def check_missing_ticket_number(rev, raw_rh):
-    """Raise InvalidUpdate if a TN in the RH is missing...
+def check_missing_ticket_number(commit):
+    """Raise InvalidUpdate if a TN in the commit's revlog is missing...
 
     Note: This only applies if the project is configured to require TNs.
 
     PARAMETERS
-        rev: The revision of the commit being checked.
-        raw_rh: A list of lines corresponding to the raw revision
-            history (as opposed to the revision history as usually
-            displayed by git where the subject lines are wrapped).
-            See --pretty format option "%B" for more details.
+        commit: A CommitInfo object corresponding to the commit being checked.
     """
     if not git_config('hooks.tn-required'):
         return
@@ -312,7 +288,7 @@ def check_missing_ticket_number(rev, raw_rh):
         # TN regexp.
         r'\b[0-9A-Z][0-9A-Z][0-9][0-9]-[0-9A-Z][0-9][0-9]\b',
         ]
-    for line in raw_rh:
+    for line in commit.raw_revlog_lines:
         if re.search('|'.join(tn_re), line, re.IGNORECASE):
             return
 
@@ -322,42 +298,38 @@ def check_missing_ticket_number(rev, raw_rh):
         'minor that a ticket number is not meaningful, please use',
         'the word "no-tn-check" in place of a ticket number.',
         '',
-        'commit %s' % rev,
-        'Subject: %s' % raw_rh[0],
+        'commit %s' % commit.rev,
+        'Subject: %s' % commit.subject,
         ])
 
 
-def check_revision_history(rev):
+def check_revision_history(commit):
     """Apply pre-commit checks to the commit's revision history.
 
     Raise InvalidUpdate if one or more style violation are detected.
 
     PARAMETERS
-        rev: The commit to be checked.
+        commit: A CommitInfo object representing the commit to be checked.
     """
-    raw_body = git.log(rev, max_count='1', pretty='format:%B',
-                       _split_lines=True)
-
-    for line in raw_body:
-        if 'no-rh-check' in line:
-            return
+    if 'no-rh-check' in commit.raw_revlog:
+        return
 
     # Various checks on the revision history...
-    ensure_iso_8859_15_only(rev, raw_body)
-    ensure_empty_line_after_subject(rev, raw_body)
-    reject_lines_too_long(rev, raw_body)
-    reject_unedited_merge_commit(rev, raw_body)
-    reject_merge_conflict_section(rev, raw_body)
-    check_missing_ticket_number(rev, raw_body)
+    ensure_iso_8859_15_only(commit)
+    ensure_empty_line_after_subject(commit)
+    reject_lines_too_long(commit)
+    reject_unedited_merge_commit(commit)
+    reject_merge_conflict_section(commit)
+    check_missing_ticket_number(commit)
 
 
-def check_filename_collisions(rev):
+def check_filename_collisions(commit):
     """raise InvalidUpdate if the name of two files only differ in casing.
 
     PARAMETERS
-        rev: The commit to be checked.
+        commit: A CommitInfo object representing the commit to be checked.
     """
-    all_files = git.ls_tree('--full-tree', '--name-only', '-r', rev,
+    all_files = git.ls_tree('--full-tree', '--name-only', '-r', commit.rev,
                             _split_lines=True)
     filename_map = {}
     for filename in all_files:
@@ -369,16 +341,14 @@ def check_filename_collisions(rev):
     collisions = [filename_map[k] for k in filename_map.keys()
                   if len(filename_map[k]) > 1]
     if collisions:
-        raw_body = git.log(rev, max_count='1', pretty='format:%B',
-                           _split_lines=True)
         info = [
             'The following filename collisions have been detected.',
             'These collisions happen when the name of two or more files',
             'differ in casing only (Eg: "hello.txt" and "Hello.txt").',
             'Please re-do your commit, chosing names that do not collide.',
             '',
-            '    Commit: %s' % rev,
-            '    Subject: %s' % raw_body[0],
+            '    Commit: %s' % commit.rev,
+            '    Subject: %s' % commit.subject,
             '',
             'The matching files are:']
         for matching_names in collisions:

@@ -32,6 +32,10 @@ class CommitInfo(object):
         self.pre_existing_p = None
         self.send_email_p = None
 
+        # A cache for the raw_revlog and the raw_revlog_lines methods.
+        self.__raw_revlog = None
+        self.__raw_revlog_lines = None
+
         # A cache for the "email_to" method.
         self.__email_to = {}
 
@@ -42,6 +46,34 @@ class CommitInfo(object):
         """A one-line string description of the commit.
         """
         return '%s... %s' % (self.rev[:7], self.subject[:59])
+
+    @property
+    def raw_revlog(self):
+        """Return the commit's raw revlog.
+
+        This is what Git calls the commit's "raw body (unwrapped subject
+        and lines)".
+
+        Note that the revlog is computed lazily and then cached.
+        """
+        if self.__raw_revlog is None:
+            self.__raw_revlog = git.log(self.rev, max_count='1',
+                                        pretty='format:%B')
+        return self.__raw_revlog
+
+    @property
+    def raw_revlog_lines(self):
+        """Return the commit's raw revlog split into lines.
+
+        This is what Git calls the commit's "raw body (unwrapped subject
+        and lines)".
+
+        Note that the revlog and its split into lines is computed
+        lazily and then cached.
+        """
+        if self.__raw_revlog_lines is None:
+            self.__raw_revlog_lines = self.raw_revlog.splitlines()
+        return self.__raw_revlog_lines
 
     def email_to(self, ref_name):
         """Return this commit's list of email recipients.
@@ -139,6 +171,20 @@ class CommitInfo(object):
         if base_rev is None:
             base_rev = empty_tree_rev()
         return base_rev
+
+    def is_revert(self):
+        """Return True if this commit appears to be a revert commit.
+
+        We detect such commits by searching for specific patterns that
+        the "git revert" command automatically includes in the default
+        revision log of such commits, hoping that a user is not deleting
+        them afterwards.
+        """
+        if 'This reverts commit' in self.raw_revlog:
+            return True
+
+        # No recognizable pattern. Probably not a revert commit.
+        return False
 
 
 def commit_info_list(*args):

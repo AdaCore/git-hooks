@@ -4,7 +4,7 @@ from config import (git_config, SUBJECT_MAX_SUBJECT_CHARS,
                     CONFIG_FILENAME, CONFIG_REF)
 from errors import InvalidUpdate
 from git import (git, get_object_type, is_null_rev, commit_parents,
-                 commit_rev, is_revert_commit)
+                 commit_rev)
 from os.path import expanduser, isfile, getmtime
 from pre_commit_checks import (check_revision_history, style_check_commit,
                                check_filename_collisions,
@@ -239,7 +239,7 @@ class AbstractUpdate(object):
         # to worry about bumping into any check of any kind.
         added = self.added_commits
         for commit in added:
-            if is_revert_commit(commit.rev):
+            if commit.is_revert():
                 debug('revert commit detected,'
                       ' all checks disabled for this commit: %s' % commit.rev)
                 added.remove(commit)
@@ -264,7 +264,7 @@ class AbstractUpdate(object):
         if do_rh_style_checks:
             for commit in added:
                 if not commit.pre_existing_p:
-                    check_revision_history(commit.rev)
+                    check_revision_history(commit)
 
         reject_merge_commits = (
             self.search_config_option_list('hooks.reject-merge-commits')
@@ -280,7 +280,7 @@ class AbstractUpdate(object):
         # Do it on all new commits.
         for commit in added:
             if not commit.pre_existing_p:
-                check_filename_collisions(commit.rev)
+                check_filename_collisions(commit)
 
         self.__do_style_checks()
 

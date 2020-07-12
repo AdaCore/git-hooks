@@ -509,22 +509,3 @@ def diff_tree(*args, **kwargs):
                        filename))
 
     return result
-
-
-def is_revert_commit(rev):
-    """Return True if the given commit appears to be a revert commit.
-
-    PARAMETERS
-        rev: A commit revision (string with the commit's SHA1 or reference
-            name).
-    """
-    # We detect such commits by searching for specific patterns that
-    # the "git revert" command automatically includes in the default
-    # revision log of such commits, hoping that a user is not deleting
-    # them afterwards.
-    raw_revlog = git.log('-1', rev, pretty='format:%B')
-    if 'This reverts commit' in raw_revlog:
-        return True
-
-    # No recognizable pattern. Probably not a revert commit.
-    return False

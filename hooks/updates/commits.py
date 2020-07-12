@@ -10,7 +10,8 @@ class CommitInfo(object):
 
     ATTRIBUTES
         rev: The commit's revision (SHA1).
-        author: The author of the commit.
+        author_name: The author of the commit.
+        author_email: The email address of the author of the commit.
         subject: The subject of the commit.
         parent_revs: A list of revisions (SHA1s) of the parents
             of this commit.  The empty list if the commit has
@@ -24,9 +25,10 @@ class CommitInfo(object):
             this commit, False otherwise. May be None, meaning that
             the value of that attribute has not been computed yet.
     """
-    def __init__(self, rev, author, subject, parent_revs):
+    def __init__(self, rev, author_name, author_email, subject, parent_revs):
         self.rev = rev
-        self.author = author
+        self.author_name = author_name
+        self.author_email = author_email
         self.subject = subject
         self.parent_revs = parent_revs
         self.pre_existing_p = None
@@ -46,6 +48,11 @@ class CommitInfo(object):
         """A one-line string description of the commit.
         """
         return '%s... %s' % (self.rev[:7], self.subject[:59])
+
+    @property
+    def author(self):
+        """Return the author's full email address (name and actual address)."""
+        return '{self.author_name} <{self.author_email}>'.format(self=self)
 
     @property
     def raw_revlog(self):
@@ -193,18 +200,20 @@ def commit_info_list(*args):
     PARAMETERS
         Same as in the "git rev-list" command.
     """
-    rev_info = git.rev_list(*args, pretty='format:%P%n%an <%ae>%n%s',
+    rev_info = git.rev_list(*args, pretty='format:%P%n%an%n%ae%n%s',
                             _split_lines=True, reverse=True)
-    # Each commit should generate 4 lines of output.
-    assert len(rev_info) % 4 == 0
+    # Each commit should generate 5 lines of output.
+    assert len(rev_info) % 5 == 0
 
     result = []
     while rev_info:
         commit_keyword, rev = rev_info.pop(0).split(None, 1)
         parents = rev_info.pop(0).split()
-        author = rev_info.pop(0)
+        author_name = rev_info.pop(0)
+        author_email = rev_info.pop(0)
         subject = rev_info.pop(0)
         assert commit_keyword == 'commit'
-        result.append(CommitInfo(rev, author, subject, parents))
+        result.append(CommitInfo(rev, author_name, author_email, subject,
+                                 parents))
 
     return result

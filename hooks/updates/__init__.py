@@ -344,7 +344,7 @@ class AbstractUpdate(object):
 
         email = Email(self.email_info,
                       commit.email_to(self.ref_name), email_bcc,
-                      subject, body, commit.author,
+                      subject, body, commit.full_author_email,
                       self.ref_name, commit.base_rev_for_display(),
                       commit.rev, diff, filer_cmd=filer_cmd)
         email.enqueue()

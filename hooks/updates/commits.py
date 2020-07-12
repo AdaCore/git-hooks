@@ -50,7 +50,7 @@ class CommitInfo(object):
         return '%s... %s' % (self.rev[:7], self.subject[:59])
 
     @property
-    def author(self):
+    def full_author_email(self):
         """Return the author's full email address (name and actual address)."""
         return '{self.author_name} <{self.author_email}>'.format(self=self)
 

@@ -131,7 +131,7 @@ class NotesUpdate(AbstractUpdate):
 
         email = Email(self.email_info,
                       annotated_commit.email_to(self.ref_name), email_bcc,
-                      subject, body, commit.author, self.ref_name,
+                      subject, body, commit.full_author_email, self.ref_name,
                       commit.base_rev_for_display(), commit.rev, diff)
         email.enqueue()
 

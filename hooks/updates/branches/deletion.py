@@ -3,7 +3,7 @@
 from config import git_config
 from errors import InvalidUpdate
 from git import commit_oneline
-from updates import AbstractUpdate
+from updates import AbstractUpdate, RefKind
 from updates.branches import branch_summary_of_changes_needed
 
 BRANCH_DELETION_EMAIL_BODY_TEMPLATE = """\
@@ -25,8 +25,8 @@ class BranchDeletion(AbstractUpdate):
     """Update object for branch creation/update."""
     def self_sanity_check(self):
         """See AbstractUpdate.self_sanity_check."""
-        # No assumption needed.
-        pass
+        assert self.ref_kind == RefKind.branch_ref \
+            and self.object_type == 'commit'
 
     def validate_ref_update(self):
         """See AbstractUpdate.validate_ref_update."""

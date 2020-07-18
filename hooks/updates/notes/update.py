@@ -3,7 +3,7 @@
 from config import git_config
 from errors import InvalidUpdate
 from git import git, is_null_rev, is_valid_commit
-from updates import AbstractUpdate
+from updates import AbstractUpdate, RefKind
 from updates.commits import commit_info_list
 from updates.emails import Email
 from updates.notes import GitNotes
@@ -40,6 +40,8 @@ class NotesUpdate(AbstractUpdate):
     """
     def self_sanity_check(self):
         """See AbstractUpdate.self_sanity_check."""
+        assert self.ref_kind == RefKind.notes_ref \
+            and self.object_type == 'commit'
         assert self.ref_name.startswith('refs/notes/')
 
     def validate_ref_update(self):

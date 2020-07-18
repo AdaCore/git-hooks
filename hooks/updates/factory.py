@@ -1,10 +1,10 @@
 """A module providing an AbstractUpdate factory."""
 from collections import namedtuple
-from enum import Enum
 
 from config import git_config
 from git import is_null_rev, get_object_type
 from errors import InvalidUpdate
+from updates import RefKind, UpdateKind
 from updates.branches.creation import BranchCreation
 from updates.branches.deletion import BranchDeletion
 from updates.branches.update import BranchUpdate
@@ -18,31 +18,6 @@ from updates.tags.ltag_creation import LightweightTagCreation
 from updates.tags.ltag_update import LightweightTagUpdate
 from updates.tags.ltag_deletion import LightweightTagDeletion
 from utils import ref_matches_regexp
-
-
-# The different kinds of references we handle.
-#
-# Note: We try to list the entries in order of frequency, with more
-# frequent updates first. That way, anytime some code iterates over
-# this enum, it'll get the more frequent update first.
-class RefKind(Enum):
-    # A branch. The vast majority of updates will be branch updates.
-    branch_ref = 1
-    # A special branch used to hold git notes.
-    notes_ref = 2
-    # A tag reference (either annotated or lightweight).
-    tag_ref = 3
-
-
-# The different types of reference updates.
-class UpdateKind(Enum):
-    # A new reference being created;
-    create = 1
-    # An existing reference being deleted;
-    delete = 2
-    # An existing reference being updated (it already existed before,
-    # and its value is being changed).
-    update = 3
 
 
 # A named tuple used to determine a repository's namespace information
@@ -235,5 +210,5 @@ def new_update(ref_name, old_rev, new_rev, all_refs, submitter_email):
     if new_cls is None:
         return None
 
-    return new_cls(ref_name, old_rev, new_rev, all_refs,
+    return new_cls(ref_name, ref_kind, object_type, old_rev, new_rev, all_refs,
                    submitter_email)

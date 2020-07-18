@@ -3,6 +3,7 @@
 from config import git_config
 from errors import InvalidUpdate
 from git import is_null_rev, commit_oneline
+from updates import RefKind
 from updates.tags import (
     AbstractTagUpdate, warn_about_tag_update, tag_summary_of_changes_needed)
 
@@ -29,7 +30,8 @@ class LightweightTagUpdate(AbstractTagUpdate):
     """
     def self_sanity_check(self):
         """See AbstractUpdate.self_sanity_check."""
-        assert self.new_rev_type == 'commit'
+        assert self.ref_kind == RefKind.tag_ref \
+            and self.object_type == 'commit'
 
     def validate_ref_update(self):
         """See AbstractUpdate.validate_ref_update.

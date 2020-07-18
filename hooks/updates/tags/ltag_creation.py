@@ -1,5 +1,6 @@
 """Handling of lightweight tag creation."""
 
+from updates import RefKind
 from updates.tags import tag_summary_of_changes_needed
 from updates.tags.ltag_update import LightweightTagUpdate
 from git import commit_oneline
@@ -18,6 +19,11 @@ class LightweightTagCreation(LightweightTagUpdate):
         some of the abstract methods would be identical.  So inherit
         from LightweightTagUpdate.
     """
+    def self_sanity_check(self):
+        """See AbstractUpdate.self_sanity_check."""
+        assert self.ref_kind == RefKind.tag_ref \
+            and self.object_type == 'commit'
+
     def get_update_email_contents(self):
         """See AbstractUpdate.get_update_email_contents."""
         subject = '[%s] Created tag %s' % (self.email_info.project_name,

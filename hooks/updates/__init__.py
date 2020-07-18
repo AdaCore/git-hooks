@@ -2,9 +2,9 @@
 
 from config import (git_config, SUBJECT_MAX_SUBJECT_CHARS,
                     CONFIG_FILENAME, CONFIG_REF)
+from enum import Enum
 from errors import InvalidUpdate
-from git import (git, get_object_type, is_null_rev, commit_parents,
-                 commit_rev)
+from git import git, is_null_rev, commit_parents, commit_rev
 from os.path import expanduser, isfile, getmtime
 from pre_commit_checks import (check_revision_history, style_check_commit,
                                check_filename_collisions,
@@ -17,6 +17,31 @@ from updates.commits import commit_info_list
 from updates.emails import EmailInfo, Email
 from updates.mailinglists import expanded_mailing_list
 from utils import debug, warn, get_user_name, ref_matches_regexp
+
+
+# The different kinds of references we handle.
+#
+# Note: We try to list the entries in order of frequency, with more
+# frequent updates first. That way, anytime some code iterates over
+# this enum, it'll get the more frequent update first.
+class RefKind(Enum):
+    # A branch. The vast majority of updates will be branch updates.
+    branch_ref = "branch"
+    # A special branch used to hold git notes.
+    notes_ref = "notes"
+    # A tag reference (either annotated or lightweight).
+    tag_ref = "tag"
+
+
+# The different types of reference updates.
+class UpdateKind(Enum):
+    # A new reference being created;
+    create = 1
+    # An existing reference being deleted;
+    delete = 2
+    # An existing reference being updated (it already existed before,
+    # and its value is being changed).
+    update = 3
 
 
 class AbstractUpdate(object):
@@ -32,12 +57,16 @@ class AbstractUpdate(object):
             It can be None if the namespace could not be parsed out of
             the ref_name, in which case short_ref_name should be equal
             to ref_name.
+        ref_kind: The kind of reference being updated (a RefKind object).
+        object_type: A string, indicating the type of object pointed at
+            by the reference being updated (using self.new_rev unless
+            the reference is being deleted, in which case we use
+            self.old_rev instead). See "git cat-file -t" for more
+            information.
         old_rev: The reference's revision (SHA1) prior to the update.
             A null revision means that this is a new reference.
         new_rev: The reference's revision (SHA1) after the update.
             A null revision means that this reference is being deleted.
-        new_rev_type: The type of commit that new_rev points to.
-            See git.get_object_type for more info.
         all_refs: A dictionary containing all references, as described
             in git_show_ref.
         email_info: An EmailInfo object.  See REMARKS below.
@@ -60,14 +89,16 @@ class AbstractUpdate(object):
                this required information, rather than recomputing it
                repeatedly.
     """
-    def __init__(self, ref_name, old_rev, new_rev, all_refs,
-                 submitter_email):
+    def __init__(self, ref_name, ref_kind, object_type, old_rev, new_rev,
+                 all_refs, submitter_email):
         """The constructor.
 
         Also calls self.auto_sanity_check() at the end.
 
         PARAMETERS
             ref_name: Same as the attribute.
+            ref_kind: Same as the attribute.
+            object_type: Same as the attribute.
             old_rev: Same as the attribute.
             new_rev: Same as the attribute.
             all_refs: Same as the attribute.
@@ -90,9 +121,10 @@ class AbstractUpdate(object):
         self.ref_name = ref_name
         self.short_ref_name = m.group(2) if m else ref_name
         self.ref_namespace = m.group(1) if m else None
+        self.ref_kind = ref_kind
+        self.object_type = object_type
         self.old_rev = old_rev
         self.new_rev = new_rev
-        self.new_rev_type = get_object_type(self.new_rev)
         self.all_refs = all_refs
         self.email_info = EmailInfo(email_from=submitter_email)
 

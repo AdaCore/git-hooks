@@ -3,6 +3,7 @@
 from config import git_config
 from errors import InvalidUpdate
 from git import commit_oneline
+from updates import RefKind
 from updates.tags import AbstractTagUpdate, tag_summary_of_changes_needed
 
 LTAG_DELETION_EMAIL_BODY_TEMPLATE = """\
@@ -26,12 +27,9 @@ class LightweightTagDeletion(AbstractTagUpdate):
         section.
     """
     def self_sanity_check(self):
-        """See AbstractUpdate.self_sanity_check.
-
-        REMARKS
-            This method handles both lightweight and annotated tags.
-        """
-        assert self.new_rev_type == 'delete'
+        """See AbstractUpdate.self_sanity_check."""
+        assert self.ref_kind == RefKind.tag_ref \
+            and self.object_type == 'commit'
 
     def validate_ref_update(self):
         """See AbstractUpdate.validate_ref_update.

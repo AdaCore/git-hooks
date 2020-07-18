@@ -1,6 +1,7 @@
 """Handling of annotated tag deletion."""
 
 from git import commit_oneline
+from updates import RefKind
 from updates.tags import tag_summary_of_changes_needed
 from updates.tags.ltag_deletion import LightweightTagDeletion
 
@@ -22,6 +23,11 @@ class AnnotatedTagDeletion(LightweightTagDeletion):
         identical for both.  This explains why we inherit from
         LightweightTagDeletion.
     """
+    def self_sanity_check(self):
+        """See AbstractUpdate.self_sanity_check."""
+        assert self.ref_kind == RefKind.tag_ref \
+            and self.object_type == 'tag'
+
     def get_update_email_contents(self):
         """See AbstractUpdate.get_update_email_contents."""
         subject = '[%s] Deleted tag %s' % (self.email_info.project_name,

@@ -13,7 +13,7 @@ class TestRun(TestCase):
         # are called in a child class that failed to provide new
         # implementations.
 
-        from updates import AbstractUpdate
+        from updates import AbstractUpdate, RefKind
 
         class MissingSelfSanityCheck(AbstractUpdate):
             pass
@@ -25,12 +25,16 @@ class TestRun(TestCase):
         with self.assertRaises(AssertionError):
             MissingSelfSanityCheck(
                 'refs/heads/master',
+                RefKind.branch_ref,
+                'commit',
                 '0000000000000000000000000000000000000000',
                 'd065089ff184d97934c010ccd0e7e8ed94cb7165',
                 None, None)
 
         bad_update = MissingOtherMethods(
             'refs/heads/master',
+            RefKind.branch_ref,
+            'commit',
             '0000000000000000000000000000000000000000',
             'd065089ff184d97934c010ccd0e7e8ed94cb7165',
             None, None)

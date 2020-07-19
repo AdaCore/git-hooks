@@ -7,11 +7,11 @@ name (Eg: refs/heads/master).
 from collections import OrderedDict
 import sys
 
-from config import CONFIG_REF
+from config import CONFIG_REF, ThirdPartyHook
 from errors import InvalidUpdate
 from git import is_null_rev
 from init import init_all_globals
-from utils import maybe_call_thirdparty_hook, warn
+from utils import warn
 
 
 def pre_receive(refs_data):
@@ -88,8 +88,8 @@ def maybe_pre_receive_hook(pre_receive_data):
     ARGUMENTS
         pre_receive_data: The data received via stdin by the pre-receive hook.
     """
-    result = maybe_call_thirdparty_hook(
-        'hooks.pre-receive-hook', hook_input=pre_receive_data)
+    result = ThirdPartyHook('hooks.pre-receive-hook').call_if_defined(
+        hook_input=pre_receive_data)
     if result is not None:
         hook_exe, p, out = result
         if p.returncode != 0:

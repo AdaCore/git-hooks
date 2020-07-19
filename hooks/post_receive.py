@@ -9,12 +9,13 @@ from argparse import ArgumentParser
 from collections import OrderedDict
 import sys
 
+from config import ThirdPartyHook
 from daemon import run_in_daemon
 from git import git_show_ref
 from init import init_all_globals
 from updates.emails import EmailQueue
 from updates.factory import new_update
-from utils import debug, warn, maybe_call_thirdparty_hook
+from utils import debug, warn
 
 
 def post_receive_one(ref_name, old_rev, new_rev, refs, submitter_email):
@@ -77,8 +78,8 @@ def maybe_post_receive_hook(post_receive_data):
     config variable, by calling this function if the config variable
     is defined.
     """
-    result = maybe_call_thirdparty_hook(
-        'hooks.post-receive-hook', hook_input=post_receive_data)
+    result = ThirdPartyHook('hooks.post-receive-hook').call_if_defined(
+        hook_input=post_receive_data)
     if result is not None:
         hook_exe, p, out = result
         sys.stdout.write(out)

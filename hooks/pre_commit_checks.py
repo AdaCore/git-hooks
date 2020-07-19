@@ -1,9 +1,7 @@
 import os
-from pipes import quote
 import re
-from subprocess import Popen, PIPE, STDOUT
 
-from config import git_config
+from config import git_config, ThirdPartyHook
 from errors import InvalidUpdate
 from git import git, diff_tree, file_exists
 from git_attrs import git_attribute
@@ -83,26 +81,19 @@ def style_check_files(filename_list, commit_rev, project_name):
     # and easily test all execution paths without having to maintain
     # some sources specifically designed to trigger the various
     # error conditions.
+    style_checker_hook = ThirdPartyHook("hooks.style-checker")
     if 'GIT_HOOKS_STYLE_CHECKER' in os.environ:
-        style_checker = os.environ['GIT_HOOKS_STYLE_CHECKER']
-    else:
-        style_checker = git_config('hooks.style-checker')
-
-    checker_cmd = [style_checker]
+        style_checker_hook.hook_exe = os.environ['GIT_HOOKS_STYLE_CHECKER']
+    style_checker_hook_args = []
     if config_file is not None:
-        checker_cmd.extend(['--config', config_file])
-    checker_cmd.append(project_name)
+        style_checker_hook_args.extend(['--config', config_file])
+    style_checker_hook_args.append(project_name)
 
-    try:
-        p = Popen(checker_cmd, stdin=PIPE, stdout=PIPE, stderr=STDOUT,
-                  cwd=utils.scratch_dir)
-    except OSError as E:
-        info = (['failed to execute style checker (commit %s):' % commit_rev,
-                 '$ %s' % ' '.join([quote(arg) for arg in checker_cmd])] +
-                str(E).splitlines())
-        raise InvalidUpdate(*info)
-
-    out, _ = p.communicate('\n'.join(filename_list))
+    _, p, out = style_checker_hook.call(
+        hook_input='\n'.join(filename_list),
+        hook_args=style_checker_hook_args,
+        cwd=utils.scratch_dir,
+    )
 
     if p.returncode != 0:
         info = (["pre-commit check failed for commit: %s" % commit_rev] +

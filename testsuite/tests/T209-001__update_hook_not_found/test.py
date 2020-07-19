@@ -31,8 +31,8 @@ class TestRun(TestCase):
         p = Run(['git', 'push', 'origin',
                  'refs/heads/meta/config:refs/meta/config'])
         expected_out = """\
-remote: *** Invalid hooks.update-hook configuration, no such file:
-remote: *** {hook_filename}
+remote: *** Invalid hooks.update-hook configuration ({hook_filename}):
+remote: [Errno 2] No such file or directory
 remote: error: hook declined to update refs/meta/config
 To ../bare/repo.git
  ! [remote rejected] meta/config -> refs/meta/config (hook declined)
@@ -68,8 +68,8 @@ error: failed to push some refs to '../bare/repo.git'
 
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** Invalid hooks.update-hook configuration, no such file:
-remote: *** {hook_filename}
+remote: *** Invalid hooks.update-hook configuration ({hook_filename}):
+remote: [Errno 2] No such file or directory
 remote: error: hook declined to update refs/heads/master
 To ../bare/repo.git
  ! [remote rejected] master -> master (hook declined)

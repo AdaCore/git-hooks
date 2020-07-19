@@ -3,11 +3,11 @@ from collections import OrderedDict
 from shutil import rmtree
 import sys
 
+from config import ThirdPartyHook
 from errors import InvalidUpdate
 from git import get_object_type, git_show_ref
 from init import init_all_globals
-from utils import debug, warn, create_scratch_dir, FileLock, \
-    maybe_call_thirdparty_hook
+from utils import debug, warn, create_scratch_dir, FileLock
 # We have to import utils, because we cannot import scratch_dir
 # directly into this module.  Otherwise, our scratch_dir seems
 # to not see the update when create_scratch_dir is called.
@@ -49,8 +49,8 @@ def maybe_update_hook(ref_name, old_rev, new_rev):
         new_rev: The new commit SHA1 that the reference will point to
             if the update is accepted.
     """
-    result = maybe_call_thirdparty_hook(
-        'hooks.update-hook', hook_args=(ref_name, old_rev, new_rev))
+    result = ThirdPartyHook('hooks.update-hook').call_if_defined(
+        hook_args=(ref_name, old_rev, new_rev))
     if result is not None:
         hook_exe, p, out = result
         if p.returncode != 0:

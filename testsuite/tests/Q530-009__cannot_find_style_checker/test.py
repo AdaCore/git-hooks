@@ -10,9 +10,8 @@ class TestRun(TestCase):
         # commit with one file being modified.
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: *** failed to execute style checker (commit a60540361d47901d3fe254271779f380d94645f7):
-remote: *** $ %s/cvs_check.py repo
-remote: *** [Errno 2] No such file or directory
+remote: *** Invalid hooks.style-checker configuration (%s/cvs_check.py):
+remote: [Errno 2] No such file or directory
 remote: error: hook declined to update refs/heads/master
 To ../bare/repo.git
  ! [remote rejected] master -> master (hook declined)

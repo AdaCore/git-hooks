@@ -3,6 +3,7 @@ from git import git, CalledProcessError
 from type_conversions import to_type
 
 import os
+from subprocess import Popen, PIPE, STDOUT
 from tempfile import mkstemp
 
 # A list of regular expressions matching reference names created internally
@@ -84,6 +85,101 @@ GIT_CONFIG_OPTS = \
 # to be used as part of the subject of emails describing
 # the commit.
 SUBJECT_MAX_SUBJECT_CHARS = 100
+
+
+class ThirdPartyHook(object):
+    """A script specified via a config option (and therefore project-specfic).
+
+    This class aims at centralizing the handling of such options, so
+    as to provide a consistent handling of these options.
+
+    ATTRIBUTES
+        hook_option_name: The name of the config option to use in order
+            to get the path of the hook (if defined).
+        hook_exe: The path to the hook itself (a string), or None if
+            the project does not define that option.
+    """
+    def __init__(self, hook_option_name):
+        """Initialize self.
+
+        PARAMETERS
+            hook_option_name: Same as the attribute.
+        """
+        self.hook_option_name = hook_option_name
+        self.hook_exe = git_config(hook_option_name)
+
+    @property
+    def defined_p(self):
+        """Return True if the project config set this hook, False if not."""
+        return self.hook_exe is not None
+
+    def call(self, hook_input=None, hook_args=None, cwd=None):
+        """Call the script specified via self.hook_option_name.
+
+        This method assumes that the repository's configuration
+        defines a hook via the self.hook_option_name option.
+
+        It calls that hook with the given argument.
+
+        Raises InvalidUpdate if we failed to call the hook for whatever
+        reason (typically, the hook's path does not exist, or we do not
+        have the right permissions for us to execute it).
+
+        PARAMETERS
+            hook_input: A string, containing the data to be sent to
+                the hook via its stdin stream. None if no data needs
+                to be sent.
+            hook_args: An iterable of command-line arguments to pass to
+                the hook. None if no arguments are needed.
+            cwd: The working directory from which to execute the hook.
+                If None, the hook is executed from the current working
+                directory.
+
+        RETURN VALUE
+            Return a tuple with the following elements:
+              - The name of the script called as a hook;
+              - The Popen object corresponding the script's execution
+                (which, by the time this function returns, has finished
+                executing);
+              - The output of the script (stdout + stderr combined).
+        """
+        hook_cmd = [self.hook_exe]
+        if hook_args is not None:
+            hook_cmd.extend(hook_args)
+        try:
+            p = Popen(hook_cmd, stdin=PIPE if hook_input is not None else None,
+                      stdout=PIPE, stderr=STDOUT, cwd=cwd)
+        except OSError as E:
+            raise InvalidUpdate(
+                'Invalid {self.hook_option_name} configuration'
+                ' ({self.hook_exe}):\n'
+                '{err_info}'.format(
+                    self=self, err_info=str(E)))
+
+        out, _ = p.communicate(hook_input)
+
+        return (self.hook_exe, p, out)
+
+    def call_if_defined(self, hook_input=None, hook_args=None, cwd=None):
+        """If defined, call the script specified via self.hook_option_name.
+
+        This is a convenience wrapper around self.call. This wrapper
+        first checks whether the self.hook_option_name config is defined,
+        and only then tries to call the associated hook. Otherwise,
+        this method does nothing.
+
+        PARAMETERS
+            hook_input: Same as self.call.
+            hook_args: Same as self.call.
+            cwd: Same as self.call.
+
+        RETURN VALUE
+            If the self.hook_option_name config is defined, then returns
+            the same as self.call. Otherwise, returns None.
+        """
+        if not self.defined_p:
+            return
+        return self.call(hook_input=hook_input, hook_args=hook_args, cwd=cwd)
 
 
 class UnsupportedOptionName(Exception):

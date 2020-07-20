@@ -71,8 +71,9 @@ class NotesUpdate(AbstractUpdate):
 
     def pre_commit_checks(self):
         """See AbstractUpdate.pre_commit_checks."""
-        # No pre-commit checks needed for Git Notes.
-        pass
+        # Notes are a bit special, and mostly handled automatically
+        # by Git, so most of the pre-commit checks don't apply.
+        self.call_project_specific_commit_checker()
 
     def get_update_email_contents(self):
         """See AbstractUpdate.get_update_email_contents."""

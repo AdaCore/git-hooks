@@ -48,6 +48,7 @@ GIT_CONFIG_OPTS = \
      'hooks.allow-lightweight-tag':       {'default': False,  'type': bool},
      'hooks.branch-ref-namespace':        {'default': (),     'type': tuple},
      'hooks.combined-style-checking':     {'default': False,  'type': bool},
+     'hooks.commit-extra-checker':        {'default': None},
      'hooks.commit-url':                  {'default': None},
      'hooks.debug-level':                 {'default': 0,      'type': int},
      'hooks.disable-email-diff':          {'default': False,  'type': bool},

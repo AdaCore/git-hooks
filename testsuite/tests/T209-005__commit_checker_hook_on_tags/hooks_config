@@ -1,0 +1,5 @@
+[hooks]
+        allow-lightweight-tag = true
+        from-domain = example.com
+        mailinglist = commits@example.com
+        filer-email = filer@example.com

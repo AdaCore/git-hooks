@@ -1,9 +1,10 @@
 """The updates root module."""
 
-from config import (git_config, SUBJECT_MAX_SUBJECT_CHARS,
+from config import (git_config, SUBJECT_MAX_SUBJECT_CHARS, ThirdPartyHook,
                     CONFIG_FILENAME, CONFIG_REF)
 from enum import Enum
 from errors import InvalidUpdate
+import json
 from git import git, is_null_rev, commit_parents, commit_rev
 from os.path import expanduser, isfile, getmtime
 from pre_commit_checks import (check_revision_history, style_check_commit,
@@ -11,6 +12,7 @@ from pre_commit_checks import (check_revision_history, style_check_commit,
                                reject_commit_if_merge)
 import re
 import shlex
+import sys
 from syslog import syslog
 import time
 from updates.commits import commit_info_list
@@ -314,6 +316,8 @@ class AbstractUpdate(object):
             if not commit.pre_existing_p:
                 check_filename_collisions(commit)
 
+        self.call_project_specific_commit_checker()
+
         self.__do_style_checks()
 
     def email_commit(self, commit):
@@ -576,6 +580,41 @@ class AbstractUpdate(object):
         not be filed. So return False by default.
         """
         return False
+
+    def call_project_specific_commit_checker(self):
+        """Call hooks.commit-extra-checker for all added commits (if set).
+
+        Raise InvalidUpdate with the associated error message if the hook
+        returned nonzero. Just print the hook's output otherwise.
+        """
+        commit_checker_hook = ThirdPartyHook("hooks.commit-extra-checker")
+        if not commit_checker_hook.defined_p:
+            return
+
+        for commit in self.added_commits:
+            commit_data = {
+                "rev": commit.rev,
+                "ref_name": self.ref_name,
+                "ref_kind": self.ref_kind.value,
+                "object_type": self.object_type,
+                "author_name": commit.author_name,
+                "author_email": commit.author_email,
+                "subject": commit.subject,
+                "body": commit.raw_revlog,
+            }
+            hook_exe, p, out = commit_checker_hook.call(
+                hook_input=json.dumps(commit_data),
+                hook_args=(self.ref_name, commit.rev),
+            )
+            if p.returncode != 0:
+                raise InvalidUpdate(
+                    "The following commit was rejected by your"
+                    " hooks.commit-extra-checker script"
+                    " (status: {p.returncode})".format(p=p),
+                    "commit: {commit.rev}".format(commit=commit),
+                    *out.splitlines())
+            else:
+                sys.stdout.write(out)
 
     def __get_added_commits(self):
         """Return a list of CommitInfo objects added by our update.

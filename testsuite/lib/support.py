@@ -86,6 +86,26 @@ class TestCase(unittest.TestCase):
         """
         os.environ['GIT_HOOKS_DEBUG_LEVEL'] = str(level)
 
+    def change_email_sending_verbosity(self, full_verbosity):
+        """Change the verbosity level of email sending.
+
+        PARAMETERS
+            full_verbosity: If True (the default unless this method
+                is called), the email traces printed by the git-hooks
+                provide a full dump of the email, allowing complete
+                verification of its contents. If False, the traces
+                are kept very compact, allowing the verification that
+                emails are being sent, but no more. The latter is useful
+                for testcase where the contents of the emails is not
+                important.
+        """
+        verbosity_varname = 'GIT_HOOKS_MINIMAL_EMAIL_DEBUG_TRACE'
+        if full_verbosity:
+            if verbosity_varname in os.environ:
+                del os.environ[verbosity_varname]
+        else:
+            os.environ["GIT_HOOKS_MINIMAL_EMAIL_DEBUG_TRACE"] = "set"
+
     def enable_unit_test(self):
         """Setup the environment in a way that allows us to perform unit test.
         """

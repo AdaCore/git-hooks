@@ -196,6 +196,54 @@ The following config options are available for general use:
   But to enable combined style-checking, set this config option to
   `true`.
 
+* **`hooks.commit-extra-check`**:
+
+  If defined, this is the name of a script to be called during
+  the validation phase of a reference update. The purpose of this script
+  is to provide support for customized validation rules.
+
+  The script is called once for each new commit of each reference
+  being updated, and takes two parameters:
+  - The name of the reference being updated;
+  - The SHA1 of the commit.
+
+  Additionally, the following information about the commit is passed
+  to the script via standard input as a JSON dictionary, with the following
+  information (key/value pairs):
+  - `"rev"`: The commit's revision (SHA1);
+  - `"ref_name"`: The name of the reference being updated;
+  - `"ref_kind"`: The kind of **reference** we are updating; either:
+    - `"branch"`: A branch;
+    - `"notes"`: A Git Notes branch;
+    - `"tag"`: A tag. Note that annotated tags can be distiguished
+      from lightweight tags by checking the `"object_type"` (`"tag"`
+      for annotated tags, and `"commit"` for lightweight tags).
+      :warning: Note also that this `"ref_kind"` can be misleading:
+      The commit being given is **not** some kind of tag, as the value
+      may suggest, but rather an actual commit (like a commit from
+      a branch) which hasn't been pushed yet. We are therefore called
+      in a very similar situation to a branch update, asked to validate
+      new commits. Projects may elect to reject these on the basis
+      that this is unusual, and might indicate the user made an error
+      somewhere.
+  - `"object_type"`: The commit's object type (see `git cat-file -t`);
+  - `"author_name"`: The name of the author of the commit;
+  - `"author_email"`: The email address of the author of the commit;
+  - `"subject"`: The commit's subject;
+  - `"body"`: The commit's raw body (unwrapped subject and body);
+
+  The script should return 0 if the update is accepted, or nonzero
+  if the update is rejected.
+
+  The script's output is always redirected to the user (stdout and
+  stderr, both). While this can obviously be used to relay error
+  messages when an update is rejected, some scripts may find it
+  useful in cases where the update is accepted as well.
+
+  :warning: The current working directory (cwd) when this script gets
+  called is undefined, so it is recommended to provide a full path to
+  that script.
+
 * **`hooks.commit-url`**:
 
   If defined, a URL to be provided at the start of every commit email

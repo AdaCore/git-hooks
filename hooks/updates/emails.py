@@ -194,7 +194,12 @@ class Email(object):
             is set, then a trace of the email is printed, instead
             of sending it.  This is for testing purposes.
         """
-        e_msg = MIMEText(self.__email_body_with_diff)
+        e_msg_body = self.__email_body_with_diff
+        e_msg_charset = guess_encoding(e_msg_body)
+
+        e_msg = MIMEText(e_msg_body)
+        if e_msg_charset is not None:
+            e_msg.set_charset(e_msg_charset)
 
         # Create the email's header.
         e_msg['From'] = sanitized_email_address(self.email_info.email_from)

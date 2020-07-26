@@ -8,9 +8,9 @@ class TestRun(TestCase):
 
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 8bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com, =?utf-8?b?TcOibsO8IFNjcmlwdA==?= <ms@example.com>
 remote: Bcc: filer@example.com
@@ -41,9 +41,9 @@ remote:  This is a file
 remote:  with a second line.
 remote: +And now a third line.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 8bit
+remote: Content-Type: text/plain; charset="iso-8859-1"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com, =?utf-8?b?TcOibsO8IFNjcmlwdA==?= <ms@example.com>
 remote: Bcc: filer@example.com

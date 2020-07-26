@@ -292,6 +292,41 @@ class Email(object):
             print out
 
 
+def guess_encoding(text):
+    """Try to guess the given string's encoding.
+
+    The guessing is done by simply trying to decode the string using
+    the more popular encodings.
+
+    PARAMETERS
+        text: The string whose encoding we are trying to guess.
+
+    RETURN VALUE
+        The name of the encoding (e.g. 'ascii', or 'UTF-8') if that
+        encoding is able to decode the given string. None otherwise.
+
+        Note that one of the encodings that this function tries is
+        the 'iso-8859-1' encoding which, as of this writing (using
+        Python 2.7.10), appears to be an encoding accepting any sequence
+        of bytes. So, as of now, the implementation of this function
+        is such that it should never return None. However, users of
+        this function should still be prepared for that as the above
+        may not last forever, since some codes are not legal with
+        that encoding.
+    """
+    for potential_encoding in ('ascii', 'UTF-8', 'iso-8859-1'):
+        # Note: It looks like iso-8859-1 accepts any sequence of bytes.
+        # So, always place it last in the list above, so as to try all
+        # the other encodings before defaulting to that one.  We do try
+        # it before using it, though, just in case it starts failing
+        # for some reason.
+        try:
+            text.decode(potential_encoding)
+            return potential_encoding
+        except Exception:
+            pass
+
+
 def sanitized_email_header_field(field_body):
     """Return an RFC2047-encoded version of field_body (if necessary)
 
@@ -303,29 +338,18 @@ def sanitized_email_header_field(field_body):
         field_body: A string, to be used as the value of a field
             in an email's header.
     """
-    if not any(c for c in field_body if ord(c) < 32 or ord(c) > 126):
+    encoding = guess_encoding(field_body)
+    if encoding == 'ascii' and \
+            not any(c for c in field_body if ord(c) < 32 or ord(c) > 126):
         # The field body has only ASCII characters in the range 32-126.
         # So no encoding required.
         return field_body
 
-    encoding = None
-    for potential_encoding in ('UTF-8', 'iso-8859-1'):
-        # Note: It looks like iso-8859-1 accepts any sequence of bytes.
-        # So, always place it last in the list above, so as to try all
-        # the other encodings before defaulting to that one.  We do try
-        # it before using it, though, just in case it starts failing
-        # for some reason.
-        try:
-            field_body.decode(potential_encoding)
-            encoding = potential_encoding
-            break
-        except Exception:
-            pass
-
-    if encoding is None:  # pragma: no cover (see explanation above)
-        # Should never happen, since iso-8859-1 encoding should accept
-        # any byte stream.  But, just in case, do the best we can in
-        # that situation, and just send the header as is.
+    if encoding is None:  # pragma: no cover (see explanation below)
+        # Should never happen, since guess_encoding tries the iso-8859-1
+        # encoding which apparently accepts any byte stream.
+        # Nevertheless, just in case, do the best we can in that situation,
+        # and just send the header as is.
         return field_body
 
     return Header(field_body, encoding).encode()

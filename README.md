@@ -196,7 +196,7 @@ The following config options are available for general use:
   But to enable combined style-checking, set this config option to
   `true`.
 
-* **`hooks.commit-extra-check`**:
+* **`hooks.commit-extra-checker`**:
 
   If defined, this is the name of a script to be called during
   the validation phase of a reference update. The purpose of this script

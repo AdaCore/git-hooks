@@ -581,6 +581,32 @@ class AbstractUpdate(object):
         """
         return False
 
+    def commit_data_for_hook(self, commit):
+        """Return a dict with information about the given commit.
+
+        The intention for this dictionary is to be passed to thirdparty
+        hooks written by repository owners (see, for instance, the
+        hooks.commit-extra-checker config option). We want to provide
+        all the information we already have, so the hook doesn't have
+        to recompute that information again.
+
+        The contents of this dictionary follows what's documented in
+        README.md for the hooks.commit-extra-checker config option.
+
+        PARAMETERS
+            commit: A CommitInfo object.
+        """
+        return {
+            "rev": commit.rev,
+            "ref_name": self.ref_name,
+            "ref_kind": self.ref_kind.value,
+            "object_type": self.object_type,
+            "author_name": commit.author_name,
+            "author_email": commit.author_email,
+            "subject": commit.subject,
+            "body": commit.raw_revlog,
+        }
+
     def call_project_specific_commit_checker(self):
         """Call hooks.commit-extra-checker for all added commits (if set).
 
@@ -592,18 +618,8 @@ class AbstractUpdate(object):
             return
 
         for commit in self.added_commits:
-            commit_data = {
-                "rev": commit.rev,
-                "ref_name": self.ref_name,
-                "ref_kind": self.ref_kind.value,
-                "object_type": self.object_type,
-                "author_name": commit.author_name,
-                "author_email": commit.author_email,
-                "subject": commit.subject,
-                "body": commit.raw_revlog,
-            }
             hook_exe, p, out = commit_checker_hook.call(
-                hook_input=json.dumps(commit_data),
+                hook_input=json.dumps(self.commit_data_for_hook(commit)),
                 hook_args=(self.ref_name, commit.rev),
             )
             if p.returncode != 0:

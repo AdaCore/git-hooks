@@ -2,6 +2,7 @@
 
 from config import (git_config, SUBJECT_MAX_SUBJECT_CHARS, ThirdPartyHook,
                     CONFIG_FILENAME, CONFIG_REF)
+from copy import deepcopy
 from enum import Enum
 from errors import InvalidUpdate
 import json
@@ -16,9 +17,9 @@ import sys
 from syslog import syslog
 import time
 from updates.commits import commit_info_list
-from updates.emails import EmailInfo, Email
+from updates.emails import EmailCustomContents, EmailInfo, Email
 from updates.mailinglists import expanded_mailing_list
-from utils import debug, warn, get_user_name, ref_matches_regexp
+from utils import debug, warn, get_user_name, indent, ref_matches_regexp
 
 
 # The different kinds of references we handle.
@@ -320,8 +321,15 @@ class AbstractUpdate(object):
 
         self.__do_style_checks()
 
-    def email_commit(self, commit):
-        """Send an email describing the given commit.
+    def get_standard_commit_email(self, commit):
+        """Return an Email object for the given commit.
+
+        Here, "standard" means that the Email returned corresponds
+        to the Email the git-hooks sends by default, before any
+        possible project-specific customization is applied.
+
+        Before sending this email, users of this method are expected
+        to apply those customizations as needed.
 
         PARAMETERS
             commit: A CommitInfo object.
@@ -378,12 +386,11 @@ class AbstractUpdate(object):
 
         email_bcc = git_config('hooks.filer-email')
 
-        email = Email(self.email_info,
-                      commit.email_to(self.ref_name), email_bcc,
-                      subject, body, commit.full_author_email,
-                      self.ref_name, commit.base_rev_for_display(),
-                      commit.rev, diff, filer_cmd=filer_cmd)
-        email.enqueue()
+        return Email(self.email_info,
+                     commit.email_to(self.ref_name), email_bcc,
+                     subject, body, commit.full_author_email,
+                     self.ref_name, commit.base_rev_for_display(),
+                     commit.rev, diff, filer_cmd=filer_cmd)
 
     # -----------------------
     # --  Useful methods.  --
@@ -835,12 +842,128 @@ class AbstractUpdate(object):
                                  self.ref_name, self.old_rev, self.new_rev)
             update_email.enqueue()
 
+    def __maybe_get_email_custom_contents(self, commit,
+                                          default_subject,
+                                          default_body,
+                                          default_diff):
+        """Return an EmailCustomContents for the given commit, if applicable.
+
+        For projects that define the hooks.commit-email-formatter config
+        option, this method calls the script it points to, and builds
+        an EmailCustomContents object from the data returned by the script.
+
+        Errors are handled as gracefully as possible, by returning
+        an EmailCustomContents which only changes the body of the email
+        by adding a warning section describing the error that occurred.
+
+        Returns None if the hooks.commit-email-formatter is not defined
+        by the project.
+
+        PARAMETERS
+            commit: A CommitInfo object.
+            default_subject: The email's subject to use by default
+                unless overriden by the commit-email-formatter hook.
+            default_body: The email's body to use by default, unless
+                overriden by the commit-email-formatter hook.
+            default_diff: The email's "Diff:" section to use by default,
+                unless overriden by the commit-email-formatter hook.
+        """
+        email_contents_hook = ThirdPartyHook("hooks.commit-email-formatter")
+        if not email_contents_hook.defined_p:
+            return None
+
+        hooks_data = self.commit_data_for_hook(commit)
+        hooks_data["email_default_subject"] = default_subject
+        hooks_data["email_default_body"] = default_body
+        hooks_data["email_default_diff"] = default_diff
+
+        hook_exe, p, out = email_contents_hook.call(
+            hook_input=json.dumps(hooks_data),
+            hook_args=(self.ref_name, commit.rev),
+        )
+
+        def standard_email_due_to_error(err_msg):
+            """Return an EmailCustomContents with the given err_msg.
+
+            This function allows us to perform consistent error handling
+            when trying to call the hooks.commit-email-formatter script.
+            It returns an EmailCustomContents where nothing is changed
+            (and therefore the standard email gets sent) except for
+            the addition of a warning section at the end of the email's
+            body (just before the "Diff:" section). This warning section
+            indicates that an error was detected, and provides information
+            about it.
+
+            PARAMETERS
+                err_msg: A description of the error that occurred (a string).
+            """
+            appendix = "WARNING:\n" \
+                "{err_msg}\n" \
+                "Falling back to default email format.\n" \
+                "\n" \
+                "$ {hook_exe} {update.ref_name}" \
+                " {commit.rev}\n" \
+                "{out}\n".format(
+                    err_msg=err_msg, hook_exe=hook_exe, update=self,
+                    commit=commit, out=out)
+            return EmailCustomContents(
+                appendix=indent(appendix, "| "),
+                diff=default_diff)
+
+        if p.returncode != 0:
+            return standard_email_due_to_error(
+                "hooks.commit-email-formatter returned nonzero:"
+                " {p.returncode}.".format(p=p))
+
+        try:
+            contents_data = json.loads(out)
+        except ValueError:
+            return standard_email_due_to_error(
+                "hooks.commit-email-formatter returned invalid JSON.")
+
+        if not isinstance(contents_data, dict):
+            return standard_email_due_to_error(
+                "hooks.commit-email-formatter output is not JSON dict.")
+
+        return EmailCustomContents(
+            subject=contents_data.get("email_subject"),
+            body=contents_data.get("email_body"),
+            diff=contents_data.get("diff", default_diff))
+
+    def __send_commit_email(self, commit, standard_email):
+        """Send the email for the given commit.
+
+        PARAMETERS
+            commit: A CommitInfo object.
+            standard_email: An Email object, containing the standard email
+                for the given commit (see self.get_standard_commit_email).
+        """
+        email = standard_email
+        custom_email_contents = self.__maybe_get_email_custom_contents(
+            commit=commit,
+            default_subject=email.email_subject,
+            default_body=email.email_body,
+            default_diff=email.diff)
+        if custom_email_contents is not None:
+            # Create a new Email object with the requested customizations.
+            email = deepcopy(standard_email)
+            if custom_email_contents.subject is not None:
+                email.email_subject = custom_email_contents.subject
+            if custom_email_contents.body is not None:
+                email.email_body = custom_email_contents.body
+            if custom_email_contents.appendix is not None:
+                email.email_body += "\n" + custom_email_contents.appendix
+            email.diff = custom_email_contents.diff
+
+        email.enqueue()
+
     def __email_new_commits(self):
         """Send one email per new (non-pre-existing) commit.
         """
         for commit in self.added_commits:
             if commit.send_email_p:
-                self.email_commit(commit)
+                self.__send_commit_email(
+                    commit, self.get_standard_commit_email(commit))
 
     def __set_send_email_p_attr(self, commit_list):
         # Make sure we have at least one commit in the list.  Otherwise,

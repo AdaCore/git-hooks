@@ -196,6 +196,54 @@ The following config options are available for general use:
   But to enable combined style-checking, set this config option to
   `true`.
 
+* **`hooks.commit-email-formatter`**:
+
+  If defined, this is the name of a script used to customize
+  the contents of the emails sent when new commits are pushed.
+
+  The script is called during the post-receive phase, once per commit
+  for which a commit email is to be sent. The script is called with
+  the following two arguments:
+  - The name of the reference being updated;
+  - The SHA1 of the commit.
+
+  Additionally, some extra information about the commit is passed
+  to the script via standard input, as a JSON directory, with
+  the following key/value pairs:
+    - `"email_default_subject"`: The email subject to be used by default,
+      if not overriden by this script.
+    - `"email_default_body"`: The email body to be used by default,
+      if not overriden by this script.
+    - `"email_default_diff"`: The patch to include in the email, unless
+      overriden by this script.
+    - The same key/value pairs as the ones provided to the
+      `hooks.commit-extra-checker` script.
+
+  This script is expected to return via standard output a dictionary
+  in JSON format, with the following key/value pairs:
+    - `"email_subject"` (optional): A string containing the subject of
+      the email to send for that commit.
+    - `"email_body"` (optional): A string containing the body of the email
+      to send for that commit. Note that handling of the "diff" part of
+      the email is handled separately (see `"include_diff"` key below).
+    - `"diff"` (optional): A string including the text to be included
+      in the "Diff:" Section of the email.
+
+  Omitting any of the keys in the return value indicates that the
+  project does not wish to customize the corresponding part of
+  the commit email, and the hooks will use the default contents
+  for that part of the email.
+
+  For instance, to change the email subject while keeping the same
+  email body and diff, the script should return a dictionary with
+  one element under the `"email_subject"` key, and all other keys
+  should be omitted.
+
+  If the script returns a nonzero status code (indicating a failure),
+  or returns data in an invalid format, the default email is sent out,
+  augmented with a warning showing the error that occured while calling
+  the script.
+
 * **`hooks.commit-extra-checker`**:
 
   If defined, this is the name of a script to be called during

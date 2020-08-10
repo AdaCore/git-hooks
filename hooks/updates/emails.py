@@ -116,6 +116,38 @@ class EmailQueue(object):
         self.queue = []
 
 
+class EmailCustomContents(object):
+    """An object used to describe email customizations.
+
+    This class is mostly a convenience class to store various
+    attributes, and objects of this class are only really meaningful
+    in conjunction with an Email object, as the attributes describe
+    how certain parts of the email are to be adapted.
+
+    ATTRIBUTES
+        subject: If not None, the new email subject.
+        body: If not None, the new email body (not including the "Diff:"
+            section.
+        appendix: If not None, some additional text to be added at
+            the end of the email's body.
+        diff: The contents of the "Diff:" section. If None, the "Diff:"
+            section is omitted.
+    """
+    def __init__(self, subject=None, body=None, appendix=None, diff=None):
+        """Initialize an EmailCustomContents object.
+
+        PARAMETERS
+            subject: Same as the attribute.
+            body: Same as the attribute.
+            appendix: Same as the attribute.
+            diff: Same as the attribute.
+        """
+        self.subject = subject
+        self.body = body
+        self.appendix = appendix
+        self.diff = diff
+
+
 class Email(object):
     """An email object.
 

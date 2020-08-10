@@ -81,8 +81,8 @@ class NotesUpdate(AbstractUpdate):
         # a fast-forward commit)...
         return None
 
-    def email_commit(self, commit):
-        """See AbstractUpdate.email_commit."""
+    def get_standard_commit_email(self, commit):
+        """See AbstractUpdate.get_standard_commit_email."""
         notes = GitNotes(commit.rev)
 
         # Get commit info for the annotated commit
@@ -132,11 +132,10 @@ class NotesUpdate(AbstractUpdate):
 
         email_bcc = git_config('hooks.filer-email')
 
-        email = Email(self.email_info,
-                      annotated_commit.email_to(self.ref_name), email_bcc,
-                      subject, body, commit.full_author_email, self.ref_name,
-                      commit.base_rev_for_display(), commit.rev, diff)
-        email.enqueue()
+        return Email(self.email_info,
+                     annotated_commit.email_to(self.ref_name), email_bcc,
+                     subject, body, commit.full_author_email, self.ref_name,
+                     commit.base_rev_for_display(), commit.rev, diff)
 
     def __ensure_fast_forward(self):
         """Raise InvalidUpdate if the update is not a fast-forward update.

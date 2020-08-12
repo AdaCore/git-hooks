@@ -780,8 +780,8 @@ behavior regarding this check:
   repository.
 
 * If the `no-precommit-check` string is found anywhere in the revision
-  log of that commit, pre-commit checks are also turned off entirely,
-  but only for that commit.
+  log of that commit, *style* checks are turned off entirely for that
+  commit only (all other precommit checks are preserved).
 
 * Setting the `hooks.combined-style-checking` config option tells the
   hooks that the second part of the pre-commit checks (operating on the

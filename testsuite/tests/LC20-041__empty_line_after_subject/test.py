@@ -50,6 +50,7 @@ error: failed to push some refs to '../bare/repo.git'
         p = Run('git push origin thirdparty'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/thirdparty, 52723db7f709396057df819f73e66b846858217e, 492fd2fae27c2f358c1d59c59a2e13ec2a3a880f)
+remote: DEBUG: update base: 52723db7f709396057df819f73e66b846858217e
 remote: DEBUG: (hooks.no-precommit-check match: `refs/heads/thirdparty')
 remote: DEBUG: post_receive_one(ref_name=refs/heads/thirdparty
 remote:                         old_rev=52723db7f709396057df819f73e66b846858217e

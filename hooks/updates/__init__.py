@@ -767,13 +767,6 @@ class AbstractUpdate(object):
     def __check_max_commit_emails(self):
         """Raise InvalidUpdate is this update will generate too many emails.
         """
-        # Check that the update wouldn't generate too many commit emails.
-
-        if self.search_config_option_list('hooks.no-emails') is not None:
-            # This repository was configured to skip emails on this branch.
-            # Nothing to do.
-            return
-
         # Determine the number of commit emails that would be sent if
         # we accept the update, and raise an error if it exceeds
         # the maximum number of emails.
@@ -970,6 +963,14 @@ class AbstractUpdate(object):
         # Make sure we have at least one commit in the list.  Otherwise,
         # nothing to do.
         if not commit_list:
+            return
+
+        # If the reference being updated matches the hooks.no-emails,
+        # send the send_email_p attribute to False for all commits
+        # and return.
+        if self.search_config_option_list('hooks.no-emails') is not None:
+            for commit in commit_list:
+                commit.send_email_p = False
             return
 
         # Determine the list of commits accessible from NEW_REV, after

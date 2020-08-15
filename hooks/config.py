@@ -52,6 +52,7 @@ GIT_CONFIG_OPTS = \
      'hooks.commit-extra-checker':        {'default': None},
      'hooks.commit-url':                  {'default': None},
      'hooks.debug-level':                 {'default': 0,      'type': int},
+     'hooks.email-new-commits-only':      {'default': (),     'type': tuple},
      'hooks.disable-email-diff':          {'default': False,  'type': bool},
      'hooks.disable-merge-commit-checks': {'default': False,  'type': bool},
      'hooks.file-commit-cmd':             {'default': None},

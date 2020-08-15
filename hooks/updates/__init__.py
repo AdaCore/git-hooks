@@ -537,11 +537,23 @@ class AbstractUpdate(object):
             # If we added a ' (*)' marker to at least one commit,
             # add a footnote explaining what it means.
             if has_silent:
-                summary.extend([
-                    '',
-                    '(*) This commit exists in a branch whose name matches',
-                    '    the hooks.noemail config option. No separate email',
-                    '    sent.'])
+                if self.search_config_option_list(
+                        'hooks.email-new-commits-only') is not None:
+                    summary.extend([
+                        "",
+                        "(*) This commit already exists in another branch.",
+                        "    Because the reference `{ref_name}' matches"
+                        .format(ref_name=self.ref_name),
+                        "    your hooks.email-new-commits-only configuration,",
+                        "    no separate email is sent for this commit."])
+                else:
+                    summary.extend([
+                        '',
+                        '(*) This commit exists in a branch whose name'
+                        ' matches',
+                        '    the hooks.noemail config option. No separate'
+                        ' email',
+                        '    sent.'])
 
         # We do not want that summary to be used for filing purposes.
         # So add a "Diff:" marker.
@@ -972,6 +984,30 @@ class AbstractUpdate(object):
             for commit in commit_list:
                 commit.send_email_p = False
             return
+
+        # If the reference being updated matches the
+        # hooks.email-new-commits-only config option, then only select
+        # the commits which are new to this repository.
+        if self.search_config_option_list('hooks.email-new-commits-only') \
+                is not None:
+            exclude = ['^%s' % ref_name
+                       for ref_name in self.all_refs.keys()
+                       if ref_name != self.ref_name]
+            base_rev = commit_list[0].base_rev_for_display()
+            if base_rev is not None:
+                exclude.append('^%s' % base_rev)
+            included_refs = git.rev_list(self.new_rev, *exclude,
+                                         _split_lines=True)
+
+            for commit in commit_list:
+                commit.send_email_p = commit.rev in included_refs
+
+            return
+
+        # If we reach this point, we are in the standard situation,
+        # where we want to send emails for commits which are new
+        # to the reference, minus the commits which are present in
+        # references matching the hooks.no-emails config option.
 
         # Determine the list of commits accessible from NEW_REV, after
         # having excluded all commits accessible from the branches

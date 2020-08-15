@@ -1,0 +1,8 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+        filer-email = filer@example.com
+
+        email-new-commits-only = refs/heads/feat.*
+        allow-non-fast-forward = refs/heads/feat.*
+        no-emails = refs/heads/.*no-emails.*

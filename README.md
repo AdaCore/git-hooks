@@ -318,6 +318,15 @@ The following config options are available for general use:
   it helps catch mistakes that are easily done, especially by git users
   who are less experimented.
 
+* **`hooks.email-new-commits-only`** [list]:
+
+  A list of regular expressions matching some reference names for which
+  commit emails should only be sent for the commits that are new to
+  the entire repository (as opposed to just being new to the branch
+  being updated). In other words, if performing an update to a reference
+  matching this config option, commits found in another pre-existing
+  reference will not trigger a commit email.
+
 * **`hooks.file-commit-cmd`**:
 
   A command called with each commit triggering a commit notification
@@ -426,6 +435,9 @@ The following config options are available for general use:
       no-emails = refs/heads/fsf-.*
       no-emails = refs/heads/thirdparty
   ```
+
+  *:information_source: Note that this option takes precendence over
+  the `hooks.email-new-commits-only` option.*
 
 * **`hooks.no-precommit-check`** [list]:
 

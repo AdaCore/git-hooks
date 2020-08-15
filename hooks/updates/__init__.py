@@ -774,8 +774,9 @@ class AbstractUpdate(object):
             # Nothing to do.
             return
 
-        # We know that commit emails would only be sent for commits which
-        # are new for the repository, so we count those.
+        # Determine the number of commit emails that would be sent if
+        # we accept the update, and raise an error if it exceeds
+        # the maximum number of emails.
 
         self.__set_send_email_p_attr(self.added_commits)
         nb_emails = len([commit for commit in self.added_commits

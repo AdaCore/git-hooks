@@ -34,7 +34,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Push bad-after-subject to the `origin' remote as branch master.
         # The delta should be one commit with one file being modified.
 
-        p = Run('git push origin bad-after-subject:master'.split())
+        p = Run('git push origin bad-after-subject'.split())
         expected_out = """\
 remote: *** Invalid revision history for commit 48f93aa312e5ae8b64589492730e4ee318368d7f:
 remote: *** It contains characters not in the ISO-8859-15 charset.
@@ -46,9 +46,9 @@ remote: ***                                       |
 remote: ***
 remote: *** Please amend the commit's revision history to remove it
 remote: *** and try again.
-remote: error: hook declined to update refs/heads/master
+remote: error: hook declined to update refs/heads/bad-after-subject
 To ../bare/repo.git
- ! [remote rejected] bad-after-subject -> master (hook declined)
+ ! [remote rejected] bad-after-subject -> bad-after-subject (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
 

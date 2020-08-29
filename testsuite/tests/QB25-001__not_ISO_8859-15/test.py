@@ -9,6 +9,7 @@ class TestRun(TestCase):
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
+
         p = Run('git push origin master'.split())
         expected_out = """\
 remote: *** Invalid revision history for commit cee1725c0a285a6e13bbb4536f44f097b6773783:
@@ -30,13 +31,9 @@ error: failed to push some refs to '../bare/repo.git'
         self.assertNotEqual(p.status, 0, p.image)
         self.assertRunOutputEqual(p, expected_out)
 
-    def test_push_bad_after_subject(self):
-        """Try pushing one single-file commit on master.
-        """
-        cd ('%s/repo' % TEST_DIR)
-
         # Push bad-after-subject to the `origin' remote as branch master.
         # The delta should be one commit with one file being modified.
+
         p = Run('git push origin bad-after-subject:master'.split())
         expected_out = """\
 remote: *** Invalid revision history for commit 48f93aa312e5ae8b64589492730e4ee318368d7f:

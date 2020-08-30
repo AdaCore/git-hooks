@@ -7,6 +7,10 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
+        # For this testcase, the contents of the emails being sent
+        # is not important, so reduce their verbosity.
+        self.change_email_sending_verbosity(full_verbosity=False)
+
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
 
@@ -54,6 +58,62 @@ error: failed to push some refs to '../bare/repo.git'
 
         self.assertNotEqual(p.status, 0, p.image)
         self.assertRunOutputEqual(p, expected_out)
+
+        ##############################################################
+        #
+        #  Phase 2 of this testcase, let's try to push the branches
+        #  above again, but after having configured the repository
+        #  to disable the character range check in revision logs.
+        #
+        ##############################################################
+
+        p = Run('git fetch origin refs/meta/config'.split())
+        self.assertEqual(p.status, 0, p.image)
+
+        p = Run('git checkout FETCH_HEAD'.split())
+        self.assertEqual(p.status, 0, p.image)
+
+        p = Run(['git', 'config', '-f', 'project.config',
+                 '--add', 'hooks.no-rh-character-range-check', 'True'])
+        self.assertEqual(p.status, 0, p.image)
+
+        p = Run(['git', 'commit',
+                 '-m', 'Set hooks.no-rh-character-range-check to True',
+                 'project.config'])
+        self.assertEqual(p.status, 0, p.image)
+
+        p = Run('git push origin HEAD:refs/meta/config'.split())
+        self.assertEqual(p.status, 0, p.image)
+
+        p = Run('git checkout master'.split())
+        self.assertEqual(p.status, 0, p.image)
+
+        # Try pushing branch "master". It should succeed, now.
+
+        p = Run('git push origin master'.split())
+        expected_out = """\
+remote: *** cvs_check: `repo' < `a'
+remote: DEBUG: Sending email: =?utf-8?q?=5Brepo=5D_Some_revision_history_with_bad_chars=E2=81=A9?=...
+To ../bare/repo.git
+   d065089..cee1725  master -> master
+"""
+
+        self.assertEqual(p.status, 0, p.image)
+        self.assertRunOutputEqual(p, expected_out)
+
+        # Try pushing branch "bad-after-subject". It should succeed as well.
+
+        p = Run('git push origin bad-after-subject'.split())
+        expected_out = """\
+remote: *** cvs_check: `repo' < `a'
+remote: DEBUG: Sending email: [repo/bad-after-subject] This is the subject....
+To ../bare/repo.git
+   d065089..48f93aa  bad-after-subject -> bad-after-subject
+"""
+
+        self.assertEqual(p.status, 0, p.image)
+        self.assertRunOutputEqual(p, expected_out)
+
 
 if __name__ == '__main__':
     runtests()

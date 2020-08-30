@@ -67,6 +67,7 @@ GIT_CONFIG_OPTS = \
      'hooks.max-rh-line-length':          {'default': 76,     'type': int},
      'hooks.no-emails':                   {'default': (),     'type': tuple},
      'hooks.no-precommit-check':          {'default': (),     'type': tuple},
+     'hooks.no-rh-character-range-check': {'default': False,  'type': bool},
      'hooks.no-rh-style-checks':          {'default': (),     'type': tuple},
      'hooks.no-style-checks':             {'default': (),     'type': tuple},
      'hooks.pre-receive-hook':            {'default': None},

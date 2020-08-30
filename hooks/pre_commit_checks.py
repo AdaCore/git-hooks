@@ -121,6 +121,12 @@ def ensure_iso_8859_15_only(commit):
     PARAMETERS
         commit: A CommitInfo object corresponding to the commit being checked.
     """
+    if git_config('hooks.no-rh-character-range-check'):
+        # The users of this repository explicitly requested that
+        # all characters be allowed in revision logs, so do not perform
+        # this verification.
+        return
+
     for lineno, line in enumerate(commit.raw_revlog_lines, start=1):
         try:
             u = line.decode('UTF-8')

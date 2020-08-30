@@ -457,6 +457,19 @@ The following config options are available for general use:
       no-precommit-check = refs/heads/thirdparty
   ```
 
+* **`hooks.no-rh-character-range-check`** (default value: **false**):
+
+  When set to `false` (the default), the hooks verify that all the characters
+  used in the revision log of new commits are within a certain range,
+  more specifically that all characters are within the ISO-8859-15 charset.
+
+  This check was introduced primarily to reject non-printable characters
+  in revision logs, with the understanding that it does have the side-effect
+  of limiting the characters that can be used to the Latin character set.
+  Projects that need to allow characters outside the Latin character set,
+  and/or want to allow non-printable characters in revision logs, should
+  set this configuration to `true`.
+
 * **`hooks.no-rh-style-checks`** [list]:
 
   A list of *regular expressions* matching some reference names for which

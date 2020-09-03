@@ -41,6 +41,9 @@ class CommitInfo(object):
         # A cache for the "email_to" method.
         self.__email_to = {}
 
+        # A cache for the "all_files" method.
+        self.__all_files = None
+
         # A cache for the "files_changed" method.
         self.__files_changed = None
 
@@ -98,8 +101,20 @@ class CommitInfo(object):
                 ref_name, self.files_changed)
         return self.__email_to[ref_name]
 
+    def all_files(self):
+        """Return the list of all files in the repository for this commit."""
+        if self.__all_files is None:
+            self.__all_files = git.ls_tree(
+                '--full-tree',
+                '--name-only',
+                '-r',
+                self.rev,
+                _split_lines=True,
+            )
+        return self.__all_files
+
     def files_changed(self):
-        """Return the list of files changed by this commit.
+        """Return the list of files changed by this commit (incl. new files).
 
         Cache the result in self.__files_changed so that subsequent
         calls to this method do not require calling git again.

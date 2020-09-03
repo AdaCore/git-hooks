@@ -326,10 +326,8 @@ def check_filename_collisions(commit):
     PARAMETERS
         commit: A CommitInfo object representing the commit to be checked.
     """
-    all_files = git.ls_tree('--full-tree', '--name-only', '-r', commit.rev,
-                            _split_lines=True)
     filename_map = {}
-    for filename in all_files:
+    for filename in commit.all_files():
         key = filename.lower()
         if key not in filename_map:
             filename_map[key] = [filename]

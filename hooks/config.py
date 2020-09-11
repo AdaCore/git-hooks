@@ -64,6 +64,7 @@ GIT_CONFIG_OPTS = \
      'hooks.mailinglist':                 {'default': (),     'type': tuple},
      'hooks.max-commit-emails':           {'default': 100,    'type': int},
      'hooks.max-email-diff-size':         {'default': 100000, 'type': int},
+     'hooks.max-filepath-length':         {'default': 150,    'type': int},
      'hooks.max-rh-line-length':          {'default': 76,     'type': int},
      'hooks.no-emails':                   {'default': (),     'type': tuple},
      'hooks.no-precommit-check':          {'default': (),     'type': tuple},

@@ -47,6 +47,9 @@ class CommitInfo(object):
         # A cache for the "files_changed" method.
         self.__files_changed = None
 
+        # A cache for the "added_files" method.
+        self.__added_files = None
+
     def oneline_str(self):
         """A one-line string description of the commit.
         """
@@ -104,13 +107,7 @@ class CommitInfo(object):
     def all_files(self):
         """Return the list of all files in the repository for this commit."""
         if self.__all_files is None:
-            self.__all_files = git.ls_tree(
-                '--full-tree',
-                '--name-only',
-                '-r',
-                self.rev,
-                _split_lines=True,
-            )
+            self.__all_files = self.__all_files_from_commit_rev(self.rev)
         return self.__all_files
 
     def files_changed(self):
@@ -131,6 +128,40 @@ class CommitInfo(object):
                       level=5)
                 self.__files_changed.append(filename)
         return self.__files_changed
+
+    def added_files(self):
+        """Return the list of files added by this commit.
+
+        This method assumes that self.parent_revs is not None, and raises
+        an assertion failure if the assumption is not met.  Users can call
+        function `commit_parents' to set it if needed.
+        """
+        assert self.parent_revs is not None
+
+        # One method we could use to compute the list of new files is
+        # to ask git, via the status code returned by the "git diff-tree"
+        # command. However, while the format of that code seems to be well
+        # documented, this method seems more difficult to test because
+        # of the copy-edit/rename-edit status codes. How Git decides
+        # whether a file comes from another one is a bit of a black box,
+        # and bound to change from version to version.
+        #
+        # So, to avoid this complexity, we rely on a different approach
+        # instead, which consists in simply getting the list of files
+        # in the parent commit, and compare it to the list of files
+        # in this commit. Any file not present in the parent is declared
+        # new.
+
+        base_rev = self.base_rev_for_display()
+        if base_rev is None:
+            prev_commit_all_files = set()
+        else:
+            prev_commit_all_files = set(
+                self.__all_files_from_commit_rev(base_rev))
+
+        # The list of files is returned in sorted alphabetical order,
+        # mostly to ensure predictability and stability in the result.
+        return sorted(set(self.all_files()) - prev_commit_all_files)
 
     def base_rev_for_display(self):
         """The rev as reference to determine what changed in this commit.
@@ -207,6 +238,16 @@ class CommitInfo(object):
 
         # No recognizable pattern. Probably not a revert commit.
         return False
+
+    @classmethod
+    def __all_files_from_commit_rev(cls, rev):
+        """Return the list of all files for the given commit revision.
+
+        Note that unlike in the all_files method, the result of
+        this method is not cached.
+        """
+        return git.ls_tree(
+            '--full-tree', '--name-only', '-r', rev, _split_lines=True)
 
 
 def commit_info_list(*args):

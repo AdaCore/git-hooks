@@ -10,6 +10,7 @@ from git import git, is_null_rev, commit_parents, commit_rev
 from os.path import expanduser, isfile, getmtime
 from pre_commit_checks import (check_revision_history, style_check_commit,
                                check_filename_collisions,
+                               check_filepath_length,
                                reject_commit_if_merge)
 import re
 import shlex
@@ -316,6 +317,14 @@ class AbstractUpdate(object):
         for commit in added:
             if not commit.pre_existing_p:
                 check_filename_collisions(commit)
+
+        # Perform the filepath length checks. File paths which
+        # are too long can cause trouble on some file systems,
+        # so check every single commit to avoid introducing
+        # any commits which would violate this check.
+        for commit in added:
+            if not commit.pre_existing_p:
+                check_filepath_length(commit)
 
         self.call_project_specific_commit_checker()
 

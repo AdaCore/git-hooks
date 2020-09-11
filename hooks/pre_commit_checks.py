@@ -352,6 +352,42 @@ def check_filename_collisions(commit):
         raise InvalidUpdate(*info)
 
 
+def check_filepath_length(commit):
+    """Raise InvalidUpdate if the commit introduces files with a name too long.
+
+    PARAMETERS
+        commit: A CommitInfo object representing the commit to be checked.
+    """
+    max_path_length = git_config('hooks.max-filepath-length')
+    if max_path_length <= 0:
+        # This means the project explicitly requested that this check
+        # be skipped.
+        return
+
+    too_long = [file_path for file_path in commit.added_files()
+                if len(file_path) > max_path_length]
+    if too_long:
+        info = [
+            "The following commit introduces some new files whose total",
+            "path length exceeds the maximum allowed for this repository.",
+            "Please re-do your commit choosing shorter paths for those new",
+            "files, or contact your repository administrator if you believe",
+            "the limit should be raised.",
+            "",
+            "    Commit: {commit.rev}".format(commit=commit),
+            "    Subject: {commit.subject}".format(commit=commit),
+            "",
+            "The problematic files are ({max_path_length} characters max):"
+            .format(max_path_length=max_path_length),
+            "",
+        ]
+        info.extend("    {path_name} ({path_len} characters)"
+                    .format(path_name=path_name, path_len=len(path_name))
+                    for path_name in too_long)
+        info.append("")
+        raise InvalidUpdate(*info)
+
+
 MERGE_NOT_ALLOWED_ERROR_MSG = """\
 Merge commits are not allowed on %(ref_name)s.
 The commit that caused this error is:

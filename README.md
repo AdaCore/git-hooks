@@ -410,6 +410,21 @@ The following config options are available for general use:
   gets truncated. A small note is added at the end of the truncated diff
   to indicate that the truncation took place.
 
+* **`hooks.max-filepath-length`** (default value: 150):
+
+  This config option helps ensuring that repositories do not include
+  files whose path length, relative to the root of the repository,
+  exceeds this value. This is aimed for users using filesystems
+  with tools which might have a very low limit in terms of maximum
+  path length (users on Windows, for instance).
+
+  The check is only performed for files being added (new files).
+  If a file already exists in the repository, future commits modifying
+  such a file will not trigger this check, even if the file's path
+  length exists the current maximum.
+
+  Setting this config option to zero turns this check off entirely.
+
 * **`hooks.max-rh-line-length`** (default value: 76):
 
   The maximum length for each line in the revision log. If any line

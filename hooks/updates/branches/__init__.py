@@ -1,7 +1,7 @@
 """Branch updates root module."""
 
 
-def branch_summary_of_changes_needed(added_commits, lost_commits):
+def branch_summary_of_changes_needed(new_commits_for_ref, lost_commits):
     """Return True iff the summary of changes is needed...
 
     Assuming a branch update  (in the general sense, meaning either
@@ -10,8 +10,8 @@ def branch_summary_of_changes_needed(added_commits, lost_commits):
     email should include a summary of changes.
 
     PARAMETERS
-        added_commits: A list of CommitInfo objects, corresponding to
-            the commits added by this update.
+        new_commits_for_ref: A list of CommitInfo objects, corresponding to
+            the commits added to the reference being updated.
         lost_commits: A list of CommitInfo objects, corresponding to
             the commits lost after this update.
     """
@@ -24,7 +24,7 @@ def branch_summary_of_changes_needed(added_commits, lost_commits):
     # Since the user is not going to see the commit email for those
     # commits, it's good to send a summary email in order to have
     # have a trace of that commit.
-    for commit in added_commits:
+    for commit in new_commits_for_ref:
         if not commit.send_email_p:
             return True
 

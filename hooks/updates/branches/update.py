@@ -79,7 +79,7 @@ class BranchUpdate(AbstractUpdate):
         """
         # For branch updates, we only send the update email when
         # the summary of changes is needed.
-        if not branch_summary_of_changes_needed(self.added_commits,
+        if not branch_summary_of_changes_needed(self.new_commits_for_ref,
                                                 self.lost_commits):
             return None
 
@@ -94,9 +94,9 @@ class BranchUpdate(AbstractUpdate):
                        }
         if self.short_ref_name == 'master':
             update_info['branch'] = ''
-        if len(self.added_commits) > 1:
+        if len(self.new_commits_for_ref) > 1:
             update_info['n_commits'] = \
-                ' (%d commits)' % len(self.added_commits)
+                ' (%d commits)' % len(self.new_commits_for_ref)
 
         subject = "[%(repo)s%(branch)s]%(n_commits)s %(subject)s" % update_info
 

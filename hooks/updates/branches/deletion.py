@@ -84,7 +84,7 @@ class BranchDeletion(AbstractUpdate):
             'commit_oneline': commit_oneline(self.old_rev),
             }
         body = BRANCH_DELETION_EMAIL_BODY_TEMPLATE % update_info
-        if branch_summary_of_changes_needed(self.added_commits,
+        if branch_summary_of_changes_needed(self.new_commits_for_ref,
                                             self.lost_commits):
             body += self.summary_of_changes()
 

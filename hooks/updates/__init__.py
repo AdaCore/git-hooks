@@ -74,7 +74,10 @@ class AbstractUpdate(object):
         all_refs: A dictionary containing all references, as described
             in git_show_ref.
         email_info: An EmailInfo object.  See REMARKS below.
-        added_commits: A list of CommitInfo objects added by our update.
+        new_commits_for_ref: A list of CommitInfo objects which are new
+            to the reference being updated.
+        commits_to_check: A list of CommitInfo that should be checked
+            prior to accept the update.
         lost_commits: A list of CommitInfo objects lost after our update.
 
     REMARKS
@@ -132,15 +135,18 @@ class AbstractUpdate(object):
         self.all_refs = all_refs
         self.email_info = EmailInfo(email_from=submitter_email)
 
-        # Implement the added_commits "attribute" as a property,
+        # Implement the new_commits_for_ref "attribute" as a property,
         # to allow for initialization only on-demand. This allows
         # us to avoid computing this list until the moment we
         # actually need it. To help caching its value, avoiding
         # the need to compute it multiple times, we introduce
-        # a private attribute named __added_commits.
+        # a private attribute named __new_commits_for_ref.
         #
-        # Same treatment for the lost_commits "attribute".
-        self.__added_commits = None
+        # Same treatment for the following other "attribute":
+        #  - commits_to_check
+        #  - lost_commits
+        self.__new_commits_for_ref = None
+        self.__commits_to_check = None
         self.__lost_commits = None
 
         self.self_sanity_check()
@@ -178,7 +184,7 @@ class AbstractUpdate(object):
             return
         # This phase needs all added commits to have certain attributes
         # to be computed.  Do it now.
-        self.__set_send_email_p_attr(self.added_commits)
+        self.__set_send_email_p_attr(self.new_commits_for_ref)
         self.__email_ref_update()
         self.__email_new_commits()
 
@@ -282,20 +288,11 @@ class AbstractUpdate(object):
             self.search_config_option_list('hooks.reject-merge-commits')
             is not None)
         if reject_merge_commits:
-            for commit in self.added_commits:
+            # See comment just above explaining why, for this check,
+            # we iterate over self.new_commits_for_ref rather than
+            # self.commits_to_check.
+            for commit in self.new_commits_for_ref:
                 reject_commit_if_merge(commit, self.ref_name)
-
-        # Create a list of commits that were added, but with revert
-        # commits being filtered out. We have decided that revert commits
-        # should not be subject to any check (QB08-047).  This allows
-        # users to quickly revert a commit if need be, without having
-        # to worry about bumping into any check of any kind.
-        added = self.added_commits
-        for commit in added:
-            if commit.is_revert():
-                debug('revert commit detected,'
-                      ' all checks disabled for this commit: %s' % commit.rev)
-                added.remove(commit)
 
         # Determine whether we should be doing RH style checking...
         do_rh_style_checks = (
@@ -311,26 +308,23 @@ class AbstractUpdate(object):
         # we do not want to forget checking the revision history
         # of some of the commits.
         if do_rh_style_checks:
-            for commit in added:
-                if not commit.pre_existing_p:
-                    check_revision_history(commit)
+            for commit in self.commits_to_check:
+                check_revision_history(commit)
 
         # Perform the filename-collision checks.  These collisions
         # can cause a lot of confusion and fustration to the users,
         # so do not provide the option of doing the check on the
         # final commit only (following hooks.combined-style-checking).
         # Do it on all new commits.
-        for commit in added:
-            if not commit.pre_existing_p:
-                check_filename_collisions(commit)
+        for commit in self.commits_to_check:
+            check_filename_collisions(commit)
 
         # Perform the filepath length checks. File paths which
         # are too long can cause trouble on some file systems,
         # so check every single commit to avoid introducing
         # any commits which would violate this check.
-        for commit in added:
-            if not commit.pre_existing_p:
-                check_filepath_length(commit)
+        for commit in self.commits_to_check:
+            check_filepath_length(commit)
 
         self.call_project_specific_commit_checker()
 
@@ -528,7 +522,7 @@ class AbstractUpdate(object):
                 # their oneline representation.
                 summary.append('  ' + commit.oneline_str())
 
-        if self.added_commits:
+        if self.new_commits_for_ref:
             has_silent = False
             summary.append('')
             summary.append('')
@@ -538,7 +532,7 @@ class AbstractUpdate(object):
             # Note that we want the summary to include all commits
             # now accessible from this reference, not just the new
             # ones.
-            for commit in reversed(self.added_commits):
+            for commit in reversed(self.new_commits_for_ref):
                 if commit.send_email_p:
                     marker = ''
                 else:
@@ -592,11 +586,21 @@ class AbstractUpdate(object):
     # ------------------------
 
     @property
-    def added_commits(self):
-        """The added_commits attribute, lazy initialized."""
-        if self.__added_commits is None:
-            self.__added_commits = self.__get_added_commits()
-        return self.__added_commits
+    def new_commits_for_ref(self):
+        """The new_commits_for_ref attribute, lazy-initialized."""
+        if self.__new_commits_for_ref is None:
+            self.__new_commits_for_ref = self.__get_added_commits()
+        return self.__new_commits_for_ref
+
+    @property
+    def commits_to_check(self):
+        """The commits_to_check attribute, lazy-initialized."""
+        if self.__commits_to_check is None:
+            self.__commits_to_check = [
+                commit for commit in self.new_commits_for_ref
+                if self.__check_commit_p(commit)
+            ]
+        return self.__commits_to_check
 
     @property
     def lost_commits(self):
@@ -651,10 +655,7 @@ class AbstractUpdate(object):
         if not commit_checker_hook.defined_p:
             return
 
-        for commit in self.added_commits:
-            if commit.pre_existing_p:
-                continue
-
+        for commit in self.commits_to_check:
             hook_exe, p, out = commit_checker_hook.call(
                 hook_input=json.dumps(self.commit_data_for_hook(commit)),
                 hook_args=(self.ref_name, commit.rev),
@@ -759,6 +760,40 @@ class AbstractUpdate(object):
 
         return commit_list
 
+    @staticmethod
+    def __check_commit_p(commit):
+        """Return True if checks on the commit should be done; False if not.
+
+        The purpose of this routine is to centralize the logic being used
+        to determine whether a given commit should be subject to the various
+        checks we apply to new commits, or not.
+
+        commit: A CommitInfo object.
+        """
+        if commit.pre_existing_p:
+            # This commit already exists in the repository, so we should
+            # not check it. Otherwise, we could run the risk of failing
+            # a check for a commit which was fine before but no longer
+            # follows more recent policies. This would cause problems
+            # when trying to create new branches, for instance.
+            #
+            # Also, if we started checking pre-existing commits, this could
+            # add up very quickly in situation where new branches are created
+            # from branches that already have many commits.
+            return False
+
+        if commit.is_revert():
+            # We have decided that revert commits should not be subject
+            # to any check (QB08-047). This allows users to quickly revert
+            # a commit if need be, without having to worry about bumping
+            # into any check of any kind.
+            debug('revert commit detected,'
+                  ' all checks disabled for this commit: %s' % commit.rev)
+            return False
+
+        # All other commits should be checked.
+        return True
+
     def __no_cvs_check_user_override(self):
         """Return True iff pre-commit-checks are turned off by user override...
 
@@ -801,8 +836,8 @@ class AbstractUpdate(object):
         # we accept the update, and raise an error if it exceeds
         # the maximum number of emails.
 
-        self.__set_send_email_p_attr(self.added_commits)
-        nb_emails = len([commit for commit in self.added_commits
+        self.__set_send_email_p_attr(self.new_commits_for_ref)
+        nb_emails = len([commit for commit in self.new_commits_for_ref
                          if commit.send_email_p])
         max_emails = git_config('hooks.max-commit-emails')
         if nb_emails > max_emails:
@@ -821,7 +856,7 @@ class AbstractUpdate(object):
             debug('no style check on this branch (hooks.no-style-checks)')
             return
 
-        added = self.__added_commits
+        added = self.commits_to_check
         if git_config('hooks.combined-style-checking'):
             # This project prefers to perform the style check on
             # the cumulated diff, rather than commit-per-commit.
@@ -840,9 +875,8 @@ class AbstractUpdate(object):
             debug('(commit-per-commit style checking)')
             # Perform the pre-commit checks, as needed...
             for commit in added:
-                if not commit.pre_existing_p:
-                    style_check_commit(commit.base_rev_for_git(), commit.rev,
-                                       self.email_info.project_name)
+                style_check_commit(commit.base_rev_for_git(), commit.rev,
+                                   self.email_info.project_name)
 
     def __email_ref_update(self):
         """Send the email describing to the reference update.
@@ -984,7 +1018,7 @@ class AbstractUpdate(object):
     def __email_new_commits(self):
         """Send one email per new (non-pre-existing) commit.
         """
-        for commit in self.added_commits:
+        for commit in self.new_commits_for_ref:
             if commit.send_email_p:
                 self.__send_commit_email(
                     commit, self.get_standard_commit_email(commit))

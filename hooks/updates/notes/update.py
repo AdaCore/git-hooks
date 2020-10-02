@@ -53,7 +53,7 @@ class NotesUpdate(AbstractUpdate):
         # the associated commit is available. We need these
         # associated commits in order to create the emails
         # to be sent for those notes.
-        for notes_commit in self.added_commits:
+        for notes_commit in self.new_commits_for_ref:
             notes = GitNotes(notes_commit.rev)
             if not is_valid_commit(notes.annotated_rev):
                 error_message = [

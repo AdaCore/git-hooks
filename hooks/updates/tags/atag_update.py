@@ -76,7 +76,7 @@ class AnnotatedTagUpdate(AbstractTagUpdate):
         tag_info['old_commit_oneline'] = commit_oneline(self.old_rev)
 
         body = ATAG_UPDATE_EMAIL_BODY_TEMPLATE % tag_info
-        if tag_summary_of_changes_needed(self.added_commits,
+        if tag_summary_of_changes_needed(self.new_commits_for_ref,
                                          self.lost_commits):
             body += self.summary_of_changes()
 

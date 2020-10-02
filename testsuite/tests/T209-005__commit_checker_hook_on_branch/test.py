@@ -100,43 +100,75 @@ error: failed to push some refs to '../bare/repo.git'
         # Push a branch which introduces more than one new commit,
         # which we expect the commit-extra-checker to accept.
         #
-        # Note that the remote repository was deliberately set up to have
-        # a branch named future-multiple-commits-accept which already
-        # includes two of the 3 commits this branch update. In other words,
-        # prior to the push, we have the following layout (left to right
-        # is parent to child):
+        # This push updates the branch with 3 new commits, and the 3 commits
+        # are completely new for the repository, meaning that the commits
+        # haven't already been pushed via other branches. As a result of
+        # these commits being completely new, the commit-extra-checker
+        # is expected to be called for each and every of these 3 commits.
+
+        p = Run('git push origin multiple-commits-accept-all-new'.split())
+        expected_out = """\
+remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-accept-all-new 4a250d3fd87947c594579e14b5688d1e60514883
+remote: -----[ stdin ]-----
+remote: {"ref_kind": "branch", "body": "Add b", "author_email": "brobecker@adacore.com", "subject": "Add b", "object_type": "commit", "rev": "4a250d3fd87947c594579e14b5688d1e60514883", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-accept-all-new"}
+remote: ---[ end stdin ]---
+remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-accept-all-new 97ce4ee0f0bbb3a56c5075b9037f4caf1ce5047f
+remote: -----[ stdin ]-----
+remote: {"ref_kind": "branch", "body": "Add c", "author_email": "brobecker@adacore.com", "subject": "Add c", "object_type": "commit", "rev": "97ce4ee0f0bbb3a56c5075b9037f4caf1ce5047f", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-accept-all-new"}
+remote: ---[ end stdin ]---
+remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-accept-all-new 309196cc8cf49451d8030e4c25013f3791f6a946
+remote: -----[ stdin ]-----
+remote: {"ref_kind": "branch", "body": "Remove a (not needed anymore)", "author_email": "brobecker@adacore.com", "subject": "Remove a (not needed anymore)", "object_type": "commit", "rev": "309196cc8cf49451d8030e4c25013f3791f6a946", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-accept-all-new"}
+remote: ---[ end stdin ]---
+remote: DEBUG: Sending email: [repo/multiple-commits-accept-all-new] Add b...
+remote: DEBUG: inter-email delay...
+remote: DEBUG: Sending email: [repo/multiple-commits-accept-all-new] Add c...
+remote: DEBUG: inter-email delay...
+remote: DEBUG: Sending email: [repo/multiple-commits-accept-all-new] Remove a (not needed anymore)...
+To ../bare/repo.git
+   1e1e706..309196c  multiple-commits-accept-all-new -> multiple-commits-accept-all-new
+"""
+
+        self.assertEqual(p.status, 0, p.image)
+        self.assertRunOutputEqual(p, expected_out)
+
+        # Push a branch which introduces more than one new commit,
+        # which we expect the commit-extra-checker to accept.
         #
-        #     A <-- origin/multiple-commits-accept
-        #       \__ B <-- C <-- origin/future-multiple-commits-accept
-        #                   \__ D <-- multiple-commits-accept
+        # Note that the remote repository was deliberately set up to have
+        # a branch named future-multiple-commits-accept-some-preexisting
+        # which already includes two of the 3 commits this branch updates.
+        # In other words, prior to the push, we have the following layout
+        # (left to right is parent to child):
+        #
+        #     A <-- origin/multiple-commits-accept-some-preexisting
+        #       \__ B <-- C <-- origin/future-multiple-commits-accept-some-preexisting
+        #                   \__ D <-- multiple-commits-accept-some-preexisting
         #
         # The push will add commits B, C and D to the remote's
-        # multiple-commits-accept branch. The fact the branch
-        # future-multiple-commits-accept already has commits B and C
-        # should not prevent the commit-extra-checker from being called
-        # to validates those commits.
+        # multiple-commits-accept-some-preexisting branch. The fact the branch
+        # future-multiple-commits-accept-some-preexisting already has commits
+        # B and C means that those commits shouldn't be checked. This is
+        # consistent with the policy that we follow for all the other checks
+        # on commits. One extreme example of why this is important is when
+        # creating a new branch from an existing one. If the existing branch
+        # had a very large number of commits (e.g. the GCC's master branch
+        # has ~180,000 commits as of 2020-10-02), it would be as many unwanted
+        # calls to the commit checkers!
 
-        p = Run('git push origin multiple-commits-accept'.split())
+        p = Run('git push origin multiple-commits-accept-some-preexisting'.split())
         expected_out = """\
-remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-accept 8bc12e9016e617b39ba7d75acfdcf21a21a3a8c4
+remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-accept-some-preexisting 25f07c061174291b3126b1df487937ea3408f291
 remote: -----[ stdin ]-----
-remote: {"ref_kind": "branch", "body": "Modify `a' and add `b'", "author_email": "brobecker@adacore.com", "subject": "Modify `a' and add `b'", "object_type": "commit", "rev": "8bc12e9016e617b39ba7d75acfdcf21a21a3a8c4", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-accept"}
+remote: {"ref_kind": "branch", "body": "Really fix `a' this time (I think?!?)", "author_email": "brobecker@adacore.com", "subject": "Really fix `a' this time (I think?!?)", "object_type": "commit", "rev": "25f07c061174291b3126b1df487937ea3408f291", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-accept-some-preexisting"}
 remote: ---[ end stdin ]---
-remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-accept 34c2dcf4b04413f47c98d6b05230d8bfd23a2814
-remote: -----[ stdin ]-----
-remote: {"ref_kind": "branch", "body": "Fix `a' and delete `b' (no longer needed, after all)", "author_email": "brobecker@adacore.com", "subject": "Fix `a' and delete `b' (no longer needed, after all)", "object_type": "commit", "rev": "34c2dcf4b04413f47c98d6b05230d8bfd23a2814", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-accept"}
-remote: ---[ end stdin ]---
-remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-accept 25f07c061174291b3126b1df487937ea3408f291
-remote: -----[ stdin ]-----
-remote: {"ref_kind": "branch", "body": "Really fix `a' this time (I think?!?)", "author_email": "brobecker@adacore.com", "subject": "Really fix `a' this time (I think?!?)", "object_type": "commit", "rev": "25f07c061174291b3126b1df487937ea3408f291", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-accept"}
-remote: ---[ end stdin ]---
-remote: DEBUG: Sending email: [repo/multiple-commits-accept] Modify `a' and add `b'...
+remote: DEBUG: Sending email: [repo/multiple-commits-accept-some-preexisting] Modify `a' and add `b'...
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Sending email: [repo/multiple-commits-accept] Fix `a' and delete `b' (no longer needed, after all)...
+remote: DEBUG: Sending email: [repo/multiple-commits-accept-some-preexisting] Fix `a' and delete `b' (no longer needed, after all)...
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Sending email: [repo/multiple-commits-accept] Really fix `a' this time (I think?!?)...
+remote: DEBUG: Sending email: [repo/multiple-commits-accept-some-preexisting] Really fix `a' this time (I think?!?)...
 To ../bare/repo.git
-   1e1e706..25f07c0  multiple-commits-accept -> multiple-commits-accept
+   1e1e706..25f07c0  multiple-commits-accept-some-preexisting -> multiple-commits-accept-some-preexisting
 """
 
         self.assertEqual(p.status, 0, p.image)

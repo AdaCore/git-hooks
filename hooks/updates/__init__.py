@@ -646,6 +646,9 @@ class AbstractUpdate(object):
             return
 
         for commit in self.added_commits:
+            if commit.pre_existing_p:
+                continue
+
             hook_exe, p, out = commit_checker_hook.call(
                 hook_input=json.dumps(self.commit_data_for_hook(commit)),
                 hook_args=(self.ref_name, commit.rev),

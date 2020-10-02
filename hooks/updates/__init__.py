@@ -268,6 +268,23 @@ class AbstractUpdate(object):
             # handled by the __no_cvs_check_user_override method.
             return
 
+        # Perform the check against merge commits early, for a couple
+        # of reasons: (1) this is a relatively inexpensive check to be
+        # performing, so might as well do it now and error out early
+        # if the update is violating this check; and (2) we want to
+        # perform this check on all commits new for this reference,
+        # including any commit that we would otherwise exclude for
+        # the other validation checks (such as revert commits, for instance).
+        # Otherwise, we cannot guaranty that a given reference which
+        # is configured to disallow merge commits stays free of merge
+        # commits.
+        reject_merge_commits = (
+            self.search_config_option_list('hooks.reject-merge-commits')
+            is not None)
+        if reject_merge_commits:
+            for commit in self.added_commits:
+                reject_commit_if_merge(commit, self.ref_name)
+
         # Create a list of commits that were added, but with revert
         # commits being filtered out. We have decided that revert commits
         # should not be subject to any check (QB08-047).  This allows
@@ -297,13 +314,6 @@ class AbstractUpdate(object):
             for commit in added:
                 if not commit.pre_existing_p:
                     check_revision_history(commit)
-
-        reject_merge_commits = (
-            self.search_config_option_list('hooks.reject-merge-commits')
-            is not None)
-        if reject_merge_commits:
-            for commit in added:
-                reject_commit_if_merge(commit, self.ref_name)
 
         # Perform the filename-collision checks.  These collisions
         # can cause a lot of confusion and fustration to the users,

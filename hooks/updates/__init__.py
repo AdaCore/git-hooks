@@ -280,10 +280,6 @@ class AbstractUpdate(object):
                       ' all checks disabled for this commit: %s' % commit.rev)
                 added.remove(commit)
 
-        if not added:
-            # There are no new commits, so nothing further to check.
-            return
-
         # Determine whether we should be doing RH style checking...
         do_rh_style_checks = (
             self.search_config_option_list('hooks.no-rh-style-checks')

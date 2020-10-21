@@ -109,10 +109,19 @@ To ../bare/repo.git
         self.assertTrue(p.status == 0, p.image)
         self.assertRunOutputEqual(p, expected_out)
 
-        # Next, push the changes. Make sure that the commit gets checked.
-        # ??? There is a limitation that causes the hooks to re-check
-        # a commit which is not new (accessible throught the tag created
-        # above, but not from any of the branches).
+        # Next, push the master branch which, from the point of view of
+        # that branch, adds a new commit. However, this commits is not new
+        # from the point of the repository itself, since the commit was
+        # pushed earlier when we pushed the tag that points to it.
+        #
+        # And since the commit is not new for the repository, it should
+        # *NOT* be the subject of any checks. Whatever checks that were
+        # to be done on that commit have already been done earlier, during
+        # the push of the tag.
+        #
+        # We can verify that style checks did not happen via the fact that
+        # we are seeing no traces printed by this testcase's style_checker.py
+        # in the output, confirming that the script was not called.
 
         p = Run('git push origin master'.split())
         expected_out = """\

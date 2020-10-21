@@ -857,6 +857,13 @@ class AbstractUpdate(object):
             return
 
         added = self.commits_to_check
+        if not added:
+            # There might be some new commits (e.g. it could be commits
+            # explicitly excluded, such as "revert" commits), but none
+            # of those commits need to be checked, and consequently
+            # no style-checking to be done.
+            return
+
         if git_config('hooks.combined-style-checking'):
             # This project prefers to perform the style check on
             # the cumulated diff, rather than commit-per-commit.

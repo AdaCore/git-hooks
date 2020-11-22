@@ -326,7 +326,7 @@ class Email(object):
         p = Popen(self.filer_cmd, stdin=PIPE, stdout=PIPE, stderr=STDOUT)
         out, _ = p.communicate(to_be_filed)
         if p.returncode != 0:
-            print out
+            print(out)
 
 
 def guess_encoding(text):

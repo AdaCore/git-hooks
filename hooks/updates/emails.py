@@ -1,5 +1,6 @@
 """Email helpers for sending update-related emails."""
 
+from __future__ import print_function
 from config import git_config
 from email.header import Header
 from email.mime.text import MIMEText
@@ -326,7 +327,7 @@ class Email(object):
         p = Popen(self.filer_cmd, stdin=PIPE, stdout=PIPE, stderr=STDOUT)
         out, _ = p.communicate(to_be_filed)
         if p.returncode != 0:
-            print out
+            print(out)
 
 
 def guess_encoding(text):

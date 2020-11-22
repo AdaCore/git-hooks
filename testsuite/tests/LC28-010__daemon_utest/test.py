@@ -1,3 +1,4 @@
+from __future__ import print_function
 from support import *
 import errno
 import os
@@ -33,7 +34,7 @@ def utest_fork():
 
 # A small function to use as argument for run_in_daemon.
 def hello_world():
-    print "Hello World!"
+    print("Hello World!")
 
 
 class TestRun(TestCase):

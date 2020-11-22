@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 import sys
 
 ML_MAP = {'bfd': 'bfd-cvs@example.com',
@@ -38,4 +39,4 @@ if not result:
     # No files given, return EVERYONE
     result = EVERYONE
 
-print '\n'.join(sorted(result))
+print('\n'.join(sorted(result)))

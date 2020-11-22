@@ -1,6 +1,7 @@
 """A module to handle daemonization...
 """
 
+from __future__ import print_function
 import os
 import sys
 from syslog import syslog
@@ -85,5 +86,5 @@ def run_in_daemon(fun):
         if daemon_pipe[0] is not None:
             os.close(daemon_pipe[1])
             daemon_stdout = os.fdopen(daemon_pipe[0])
-            print >> sys.stderr, daemon_stdout.read(),
+            print(daemon_stdout.read(), file=sys.stderr, end='')
             daemon_stdout.close()

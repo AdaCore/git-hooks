@@ -79,9 +79,9 @@ class TestRun(TestCase):
         # we handle the default properly.
 
         expected_out += """\
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -122,9 +122,9 @@ remote:  Hello.
 
         expected_out += """\
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -169,9 +169,9 @@ remote: +Hello. This is going to be a useful document.
 
         expected_out += """\
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -340,9 +340,9 @@ remote: +Let's start with some background: dark.
 
         expected_out += """\
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -596,9 +596,9 @@ remote: The branch 'hook-dump' was created pointing to:
 remote:
 remote:  c7642aa... Update a (dump_hook_data).
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -655,9 +655,9 @@ To ../bare/repo.git
 
         p = Run('git push origin notes/commits'.split())
         expected_out = """\
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com

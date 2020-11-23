@@ -5,6 +5,7 @@ This script is expected to be called from a testcase directory,
 and unpackes the archive expected to contain the git directories
 used by the testcase.
 """
+from __future__ import print_function
 
 from gnatpython.ex import Run
 from gnatpython.fileutils import mv
@@ -12,17 +13,19 @@ from os import unlink
 from os.path import exists, isdir, isfile
 from sys import exit, stderr
 
+
 def fatal(msg):
-    print >> stderr, 'ERROR: %s.' % msg
-    print >> stderr, 'Aborting.'
+    print('ERROR: %s.' % msg, file=stderr)
+    print('Aborting.', file=stderr)
     exit(1)
+
 
 # The infrastructure assumes that the repositories are archives
 # inside a tarball called git-repos.tar.gz.
-REPOS_TARBALL='git-repos.tar.bz2'
+REPOS_TARBALL = 'git-repos.tar.bz2'
 
 # The config file to be used in the bare repository...
-BARE_REPO_CONFIG='bare_repo_config'
+BARE_REPO_CONFIG = 'bare_repo_config'
 
 if not exists(REPOS_TARBALL):
     fatal("Cannot find repositories' tarball: %s" % REPOS_TARBALL)
@@ -33,8 +36,8 @@ if not exists(BARE_REPO_CONFIG):
 r = Run(['tar', 'xvfj', REPOS_TARBALL])
 if r.status != 0:
     # The packing operation failed. Print an error message, and exit.
-    print >> stderr, 'ERROR: tar failed to unpack repositories:'
-    print >> stderr, r.out
+    print('ERROR: tar failed to unpack repositories:', file=stderr)
+    print(r.out, file=stderr)
     exit(r.status)
 
 if not isdir('repo'):
@@ -47,9 +50,9 @@ if not isdir('bare/repo.git'):
 # Determine the location of the bare/repo.git's config file.
 # It depends on whether the repository is a bare repository or not.
 if isdir('bare/repo.git/.git'):
-    bare_repo_config_path='bare/repo.git/.git/config'
+    bare_repo_config_path = 'bare/repo.git/.git/config'
 else:
-    bare_repo_config_path='bare/repo.git/config'
+    bare_repo_config_path = 'bare/repo.git/config'
 
 # Move our config file in place, after having verified that we are not
 # about to overwrite one.

@@ -106,7 +106,7 @@ if __name__ == "__main__":
                                        (args.old_rev, args.new_rev))]))
         create_scratch_dir()
         check_update(args.ref_name, args.old_rev, args.new_rev)
-    except InvalidUpdate, E:
+    except InvalidUpdate as E:
         # The update was rejected.  Print the rejection reason, and
         # exit with a nonzero status.
         warn(*E)

@@ -17,6 +17,7 @@ REMARKS
     into a single archive whereas, with bundles, we'd have to recreate
     the entire infrastructure.
 """
+from __future__ import print_function
 
 from gnatpython.ex import Run
 from gnatpython.fileutils import mv
@@ -24,13 +25,15 @@ from os.path import isdir, isfile
 from shutil import rmtree
 from sys import exit, stderr
 
+
 def fatal(msg):
-    print >> stderr, 'ERROR: %s.' % msg
-    print >> stderr, 'Aborting.'
+    print('ERROR: %s.' % msg, file=stderr)
+    print('Aborting.', file=stderr)
     exit(1)
 
+
 # The config file to be used in the bare repository...
-BARE_REPO_CONFIG='bare_repo_config'
+BARE_REPO_CONFIG = 'bare_repo_config'
 
 if not isdir('repo'):
     fatal('Directory "repo" does not exist')
@@ -67,10 +70,9 @@ with open('hooks_config', 'w') as fd:
 r = Run('tar cvfj git-repos.tar.bz2 bare repo'.split())
 if r.status != 0:
     # The packing operation failed. Print an error message, and exit.
-    print >> stderr, 'ERROR: tar failed to pack repositories:'
-    print >> stderr, r.out
+    print('ERROR: tar failed to pack repositories:', file=stderr)
+    print(r.out, file=stderr)
     exit(r.status)
 
 rmtree('repo')
 rmtree('bare')
-

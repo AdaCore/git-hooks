@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 """Usage: stdout-logger [-p pri] [-t tag] message
 """
+from __future__ import print_function
+
 from argparse import ArgumentParser
+
 
 def stdout_logger():
     parser = ArgumentParser()
@@ -16,7 +19,7 @@ def stdout_logger():
         help='The message to be filed in the syslog.')
 
     args = parser.parse_args()
-    print "SYSLOG: %s: %s" % (args.tag, args.message)
+    print("SYSLOG: %s: %s" % (args.tag, args.message))
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@
 Driver for the git hooks testsuite.
 """
 
+from __future__ import print_function
 from gnatpython.fileutils import rm
 from gnatpython.main import Main
 from gnatpython.mainloop import (MainLoop, add_mainloop_options,
@@ -69,13 +70,13 @@ def print_testsuite_results_summary(metrics):
     ARGUMENTS
         metrics: Same as in gnatpython.mainloop.generate_collect_result.
     """
-    print """\
+    print("""\
 
 Testsuite Results Summary -- Out of %(run)d testscase(s) run in total:
 
     %(failed)4d testcase(s) failed
     %(crashed)4d testcase(s) crashed
-""" % metrics
+""" % metrics)
 
 
 def main():

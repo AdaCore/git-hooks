@@ -1,6 +1,7 @@
 """Handling of syslog-ing...
 """
 
+from __future__ import print_function
 from os import environ
 from subprocess import Popen, PIPE, STDOUT
 
@@ -33,4 +34,4 @@ def syslog(message, tag='style_checker', priority='local0.warn'):
         warn(*info)
 
     elif out.rstrip():
-        print out.rstrip()
+        print(out.rstrip())

@@ -1,6 +1,7 @@
 """A module providing some generally useful stuff.
 """
 
+from __future__ import print_function
 import sys
 
 def abort(exit_code=0):
@@ -26,7 +27,7 @@ def fatal_error(msg):
     PARAMETERS
       msg: The error message to print.
     """
-    print "*** Error: " + msg
+    print("*** Error: " + msg)
     abort(1)
 
 

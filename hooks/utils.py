@@ -1,3 +1,4 @@
+from __future__ import print_function
 from datetime import datetime
 from os import environ
 import os
@@ -130,7 +131,7 @@ def warn(*args, **kwargs):
     """
     prefix = kwargs['prefix'] if 'prefix' in kwargs else '*** '
     for arg in args:
-        print >> sys.stderr, "%s%s" % (prefix, arg)
+        print("%s%s" % (prefix, arg), file=sys.stderr)
 
 
 ############################################################################

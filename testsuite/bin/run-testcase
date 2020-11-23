@@ -3,6 +3,7 @@
 
 Run a git-hooks test located in test_dir.
 """
+from __future__ import print_function
 
 from gnatpython.ex import Run
 from gnatpython.fileutils import find, cd, mv
@@ -12,6 +13,7 @@ from gnatpython.testdriver import TestRunner, add_run_test_options
 import os
 from os.path import abspath, dirname, isdir
 import sys
+
 
 class TestGitHooks(TestRunner):
 
@@ -30,7 +32,7 @@ class TestGitHooks(TestRunner):
         p = Run(['%s/testsuite/bin/unpack-test-repos' % root_dir],
                 parse_shebang=True)
         if p.status != 0:
-            print >> sys.stderr, p.out
+            print(p.out, file=sys.stderr)
             sys.exit(p.status)
         cd(current_dir)
 
@@ -55,7 +57,6 @@ class TestGitHooks(TestRunner):
         # accessible once we reach that point.
         os.environ['GIT_HOOKS_LOGGER'] = \
             '%s/testsuite/bin/stdout-logger' % root_dir
-
 
     def apply_output_filter(self, str_list):
         """The test is succesful iff the output ends with `OK'.

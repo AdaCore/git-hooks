@@ -116,7 +116,7 @@ if __name__ == '__main__':
         sys.exit(1)
     try:
         check_fast_forward(sys.argv[1], sys.argv[2], sys.argv[3])
-    except InvalidUpdate, E:
+    except InvalidUpdate as E:
         # The update was rejected.  Print the rejection reason, and
         # exit with a nonzero status.
         warn(*E)

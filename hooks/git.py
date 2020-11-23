@@ -131,7 +131,7 @@ class Git:
                 # into a file descriptor.
                 tmp_fd = None
                 if (('_outfile' in kwargs and
-                     isinstance(kwargs['_outfile'], basestring))):
+                     isinstance(kwargs['_outfile'], str))):
                     tmp_fd = open(kwargs['_outfile'], 'w')
                     kwargs['_outfile'] = tmp_fd
                 return git_run(command, *args, **kwargs)

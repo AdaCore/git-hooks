@@ -24,7 +24,7 @@ def daemonize(output_fd=None):
         if pid > 0:
             # In the parent.  We can now return.
             return False
-    except OSError, e:
+    except OSError as e:
         sys.stderr.write("fork #1 failed: (%d) %s\n" % (e.errno, e.strerror))
         return False
 
@@ -39,7 +39,7 @@ def daemonize(output_fd=None):
         if pid > 0:
             # In the second parent. Exit.
             sys.exit(0)
-    except OSError, e:
+    except OSError as e:
         syslog("git-hooks: fork #2 failed: (%d) %s" % (e.errno, e.strerror))
         sys.exit(1)
 

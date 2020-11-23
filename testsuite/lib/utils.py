@@ -4,6 +4,7 @@
 from __future__ import print_function
 import sys
 
+
 def abort(exit_code=0):
     """Abort the execution of the current process.  Any cleanup that
     might be needed before aborting is guaranteed to be performed.
@@ -21,6 +22,7 @@ def abort(exit_code=0):
     """
     sys.exit(exit_code)
 
+
 def fatal_error(msg):
     """Print the given message on standard output and then exit immediately.
 
@@ -29,5 +31,3 @@ def fatal_error(msg):
     """
     print("*** Error: " + msg)
     abort(1)
-
-

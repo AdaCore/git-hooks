@@ -439,6 +439,53 @@ class Email(object):
                        + '\n\n'
                        + self.email_body)
 
+        # Popen.communicate expects a byte string as its input parameter.
+        #
+        # With Python 2.x, this only makes a difference when "to_be_filed"
+        # is a unicode string, which happens when the email body was
+        # overwritten by a commit-email-formatter hook. When that happens,
+        # Popen.communicate automatically tries to encode that string,
+        # and does so while using the default encoding, which is 'ascii'.
+        # This triggers a UnicodeEncodeError as soon as the strings has
+        # any non-ASCII character. To prevent that from happening,
+        # we do the encoding ourselves using UTF-8, a more universal
+        # encoding. There is still a chance that the email body contains
+        # code points that UTF-8 does not support, but this should be
+        # extremely rare, given how prevalent UTF-8 now is. Nevertheless,
+        # to avoid triggering a UnicodeEncodeError exception when that
+        # happens, we ask the encoder to replace those unknown code points
+        # by their "backslashed escape sequence", by calling the encode
+        # method with error="backslashreplace". It's not as perfect as
+        # actually guessing the best encoding to use, but should be good
+        # enough in practice.
+        #
+        # Also, with Python 2.x, we must refrain from performing
+        # that encoding when "to_be_filed" is _not_ unicode, since
+        # its contents is already in encoded form by virtue of it
+        # never having been kept as is since being read in!
+        #
+        # With Python 3.x, on the other hand, all strings are unicode,
+        # so we always need to encode the string prior to passing it
+        # to POpen.communicate.
+        #
+        # FIXME: Unfortunately, because of the non-unicode case with
+        # Python 2.x, the above means that we are unable to handle
+        # this str-vs-bytes situation in a way that works with both
+        # Python 2.x and Python 3.x -- not without doing a significant
+        # revamp of that code to convert all strings to unicode at the point
+        # of input, something we'll look at during the transition to
+        # Python 3.x instead. For now, handle the situation for the case
+        # of Python 2.x. For Python 3.x, we cannot add extra code because
+        # we then introduce a line we can't cover anymore, so we will
+        # leave that to the transition to Python 3.x; all should have
+        # to do to fix the issue is just remove the checks for Python 2.x
+        # and non-unicode strings, always calling the "encode" method below.
+
+        if sys.version_info[0] < 3:
+            if not isinstance(to_be_filed, str):
+                to_be_filed = to_be_filed.encode(
+                    "UTF-8", errors="backslashreplace")
+
         p = Popen(self.filer_cmd, stdin=PIPE, stdout=PIPE, stderr=STDOUT)
         out, _ = p.communicate(to_be_filed)
         if p.returncode != 0:

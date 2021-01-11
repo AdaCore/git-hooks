@@ -1,0 +1,18 @@
+#! /usr/bin/env bash
+
+echo '-----[ commit-filer start ]-----'
+for i in "$@"
+do
+   echo "'$i'"
+done
+echo '-----[ commit-filer body ]-----'
+cat -
+echo '-----[ commit-filer end ]-----'
+
+# This script is used in a context where the output never reaches
+# the user, and therefore the testsuite, back unless the script
+# returns an error code. This is a bit of a hack which we might need
+# to undo someday, but we can hit two birds with one stone by returning
+# nonzero here: we get the output printed, and we also test the
+# handling of nonzero return.
+exit 1

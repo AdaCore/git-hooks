@@ -1,0 +1,8 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+        filer-email = filer@example.com
+        # We want to test the case where the commit log includes
+        # some characters not encodable in the ISO-8851-15 charset.
+        # So disable that requirement.
+        no-rh-character-range-check = true

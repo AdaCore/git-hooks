@@ -121,6 +121,10 @@ that configuration option can be specified with either:
       no-emails = refs/heads/fsf-.*, refs/heads/thirdparty
   ```
 
+*Note also that, for [list] options which are documented to have a non-empty
+default value, it is currently not possible to override that default.*
+
+
 Note About Reference Name Matching
 ----------------------------------
 
@@ -366,13 +370,14 @@ The following config options are available for general use:
 
   This is mostly meant for sites that use a review system which adds its
   own layer between the user's repository, and the reference repository
-  for which the git-hooks are installed. By default, it is set to ignore
-  references created by gerrit for its own internal purposes. Below is
-  an example of how to override that default:
+  for which the git-hooks are installed.
+
+  This option includes the following entries by default, which are meant
+  to match references created by gerrit for its own internal purposes:
 
   ```
-      ignore-refs = refs/heads/ignore-.*
-      ignore-refs = refs/heads/internal/
+      ignore-refs = refs/changes/.*
+      ignore-refs = refs/users/.*/edit-.*
   ```
 
 * **`hooks.mailinglist`**:

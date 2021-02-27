@@ -311,6 +311,15 @@ def initialize_git_config_map():
         # if defined, or else from the default value.
         if config_name in all_configs_map:
             config_val = all_configs_map[config_name]
+            if GIT_CONFIG_OPTS[config_name].get('type') == tuple:
+                # Include the default values for this configuration to
+                # the list of values provided by this project's config.
+                # Otherwise, projects that just want to add to the default
+                # would have to repeat that default in their repository's
+                # configuration first before adding their own values,
+                # as if starting the config option from scratch.
+                config_val = GIT_CONFIG_OPTS[config_name]['default'] + config_val
+
         else:
             config_val = GIT_CONFIG_OPTS[config_name]['default']
 

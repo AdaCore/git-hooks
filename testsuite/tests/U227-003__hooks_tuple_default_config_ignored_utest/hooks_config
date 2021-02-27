@@ -1,0 +1,6 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+        filer-email = filer@example.com
+
+        no-emails = refs/heads/uninteresting

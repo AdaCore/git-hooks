@@ -1,0 +1,7 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+        filer-email = filer@example.com
+        # Add a no-email config option to verify that such option
+        # does not cause the default list to somehow be cleared.
+        no-emails = refs/heads/silent-branch

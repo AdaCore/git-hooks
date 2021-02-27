@@ -19,6 +19,7 @@ GERRIT_INTERNAL_REFS = ('refs/changes/.*',
                         'refs/users/.*/edit-.*',
                         )
 
+
 # The name of the reference we use to store the repository-specific
 # configuration for these hooks.
 CONFIG_REF = 'refs/meta/config'
@@ -35,6 +36,21 @@ CONFIG_FILENAME = 'project.config'
 # telling this module to use the configuration using the latest
 # commit, rather than the existing one.
 config_commit = CONFIG_REF
+
+# The default list of references for which no emails should be sent.
+CONFIG_DEFAULT_NO_EMAILS = (
+    # The reference that Gerrit uses to annotate commits with some info
+    # from the code review performed on that commit (who performed
+    # the review, when was the commit pushed, etc).
+    #
+    # We don't want to generate a commit email for these notes, because
+    # they are pushed at the same time as the change it annotates.
+    # Since a commit email is already being sent for the change itself,
+    # and the annotation contains information that users rarely need
+    # to consult, the email for the annotation was considered as unwanted
+    # noise.
+    'refs/notes/review',
+)
 
 # A dictionary of all git config names that this module can query.
 #   - The key used for this table is the config name.
@@ -66,7 +82,7 @@ GIT_CONFIG_OPTS = \
      'hooks.max-email-diff-size':         {'default': 100000, 'type': int},
      'hooks.max-filepath-length':         {'default': 150,    'type': int},
      'hooks.max-rh-line-length':          {'default': 76,     'type': int},
-     'hooks.no-emails':                   {'default': (),     'type': tuple},
+     'hooks.no-emails': {'default': CONFIG_DEFAULT_NO_EMAILS, 'type': tuple},
      'hooks.no-precommit-check':          {'default': (),     'type': tuple},
      'hooks.no-rh-character-range-check': {'default': False,  'type': bool},
      'hooks.no-rh-style-checks':          {'default': (),     'type': tuple},

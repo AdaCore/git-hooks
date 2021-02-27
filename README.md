@@ -446,7 +446,18 @@ The following config options are available for general use:
 * **`hooks.no-emails`** [list]:
 
   A list of regular expressions matching some reference names for which
-  updates should not trigger any email notification.
+  updates should not trigger any email notification. It includes the
+  following entries by default:
+
+  ```
+      # The reference that Gerrit uses for annotating commits which have
+      # been reviewed and "submitted" (pushed, in Git parlance).
+      #
+      # Sending commit emails for those commits is unnecessary, because
+      # it would be sent at the same time as the email sent for the commit
+      # it annotates, with information that users rarely need to consult.
+      no-emails = refs/notes/review
+  ```
 
   The example below turns off email notifications for all branches whose
   name start with "fsf-", as well as the "thirdparty" branch:

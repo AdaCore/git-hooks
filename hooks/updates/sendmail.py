@@ -21,10 +21,9 @@ def sendmail(from_email, to_emails, mail_as_string, smtp_server):
         sendmail queues the email and retries a few times if
         the target server is unable to receive the email.
     """
-    for sendmail in ('/usr/lib/sendmail', '/usr/sbin/sendmail'):
+    for sendmail in ("/usr/lib/sendmail", "/usr/sbin/sendmail"):
         if os.path.exists(sendmail):
-            p = Popen([sendmail] + to_emails,
-                      stdin=PIPE, stdout=PIPE, stderr=STDOUT)
+            p = Popen([sendmail] + to_emails, stdin=PIPE, stdout=PIPE, stderr=STDOUT)
             out, _ = p.communicate(mail_as_string)
             if p.returncode != 0:
                 print(out)
@@ -32,6 +31,7 @@ def sendmail(from_email, to_emails, mail_as_string, smtp_server):
 
     # Else try using smtplib
     import smtplib
+
     s = smtplib.SMTP(smtp_server)
     s.sendmail(from_email, to_emails, mail_as_string)
     s.quit()

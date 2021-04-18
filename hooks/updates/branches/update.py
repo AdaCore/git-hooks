@@ -36,36 +36,35 @@ def reject_retired_branch_update(short_ref_name, all_refs):
     # case, we could disallow it, but it could also be argued that
     # updating the retired branch is sometimes useful. Keep it simple
     # for now, and allow.
-    if short_ref_name.startswith('retired/'):
+    if short_ref_name.startswith("retired/"):
         return
 
-    retired_short_ref_name = 'retired/%s' % short_ref_name
-    if 'refs/heads/%s' % retired_short_ref_name in all_refs:
+    retired_short_ref_name = "retired/%s" % short_ref_name
+    if "refs/heads/%s" % retired_short_ref_name in all_refs:
         raise InvalidUpdate(
-            "Updates to the %s branch are no longer allowed, because"
-            % short_ref_name,
+            "Updates to the %s branch are no longer allowed, because" % short_ref_name,
             "this branch has been retired (and renamed into `%s')."
-            % retired_short_ref_name)
-    if 'refs/tags/%s' % retired_short_ref_name in all_refs:
+            % retired_short_ref_name,
+        )
+    if "refs/tags/%s" % retired_short_ref_name in all_refs:
         raise InvalidUpdate(
-            "Updates to the %s branch are no longer allowed, because"
-            % short_ref_name,
+            "Updates to the %s branch are no longer allowed, because" % short_ref_name,
             "this branch has been retired (a tag called `%s' has been"
             % retired_short_ref_name,
-            "created in its place).")
+            "created in its place).",
+        )
 
 
 class BranchUpdate(AbstractUpdate):
     """Update object for branch creation/update."""
+
     def self_sanity_check(self):
         """See AbstractUpdate.self_sanity_check."""
-        assert self.ref_kind == RefKind.branch_ref \
-            and self.object_type == 'commit'
+        assert self.ref_kind == RefKind.branch_ref and self.object_type == "commit"
 
     def validate_ref_update(self):
         """See AbstractUpdate.validate_ref_update."""
-        reject_retired_branch_update(self.short_ref_name,
-                                     self.all_refs)
+        reject_retired_branch_update(self.short_ref_name, self.all_refs)
 
         # Check that this is either a fast-forward update, or else that
         # forced-updates are allowed for that branch.  If old_rev is
@@ -79,24 +78,25 @@ class BranchUpdate(AbstractUpdate):
         """
         # For branch updates, we only send the update email when
         # the summary of changes is needed.
-        if not branch_summary_of_changes_needed(self.new_commits_for_ref,
-                                                self.lost_commits):
+        if not branch_summary_of_changes_needed(
+            self.new_commits_for_ref, self.lost_commits
+        ):
             return None
 
         # Compute the subject.
-        update_info = {'repo': self.email_info.project_name,
-                       'short_ref_name': self.short_ref_name,
-                       'branch': '/%s' % self.short_ref_name,
-                       'n_commits': '',
-                       'subject': commit_subject(self.new_rev)[:59],
-                       'old_commit_oneline': commit_oneline(self.old_rev),
-                       'commit_oneline': commit_oneline(self.new_rev),
-                       }
-        if self.short_ref_name == 'master':
-            update_info['branch'] = ''
+        update_info = {
+            "repo": self.email_info.project_name,
+            "short_ref_name": self.short_ref_name,
+            "branch": "/%s" % self.short_ref_name,
+            "n_commits": "",
+            "subject": commit_subject(self.new_rev)[:59],
+            "old_commit_oneline": commit_oneline(self.old_rev),
+            "commit_oneline": commit_oneline(self.new_rev),
+        }
+        if self.short_ref_name == "master":
+            update_info["branch"] = ""
         if len(self.new_commits_for_ref) > 1:
-            update_info['n_commits'] = \
-                ' (%d commits)' % len(self.new_commits_for_ref)
+            update_info["n_commits"] = " (%d commits)" % len(self.new_commits_for_ref)
 
         subject = "[%(repo)s%(branch)s]%(n_commits)s %(subject)s" % update_info
 

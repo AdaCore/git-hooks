@@ -20,16 +20,16 @@ from errors import InvalidUpdate
 def get_user_name():
     """Return the user name (in the Unix sense: The account name).
     """
-    if 'GIT_HOOKS_USER_NAME' in environ:
-        return environ['GIT_HOOKS_USER_NAME']
+    if "GIT_HOOKS_USER_NAME" in environ:
+        return environ["GIT_HOOKS_USER_NAME"]
     else:
         return pwd.getpwuid(os.getuid()).pw_name
 
 
 def get_user_full_name():
     """Return the user's full name."""
-    if 'GIT_HOOKS_USER_FULL_NAME' in environ:
-        full_name = environ['GIT_HOOKS_USER_FULL_NAME']
+    if "GIT_HOOKS_USER_FULL_NAME" in environ:
+        full_name = environ["GIT_HOOKS_USER_FULL_NAME"]
     else:
         full_name = pwd.getpwuid(os.getuid()).pw_gecos
 
@@ -62,8 +62,8 @@ def create_scratch_dir():
     """
     global scratch_dir
     if scratch_dir is not None:
-        warn('Unexpected second call to create_scratch_dir')
-    scratch_dir = mkdtemp('', 'git-hooks-tmp-')
+        warn("Unexpected second call to create_scratch_dir")
+    scratch_dir = mkdtemp("", "git-hooks-tmp-")
 
 
 ############################################################################
@@ -71,6 +71,7 @@ def create_scratch_dir():
 # Warning messages, error message, debug traces, etc...
 #
 ############################################################################
+
 
 def debug(msg, level=1):
     """Print a debug message on stderr if appropriate.
@@ -99,17 +100,19 @@ def debug(msg, level=1):
         a little abusive.  But it simplifies a bit the update script,
         which then only has to handle a single exception...
     """
-    if 'GIT_HOOKS_DEBUG_LEVEL' in environ:
-        debug_level = environ['GIT_HOOKS_DEBUG_LEVEL']
+    if "GIT_HOOKS_DEBUG_LEVEL" in environ:
+        debug_level = environ["GIT_HOOKS_DEBUG_LEVEL"]
         if not debug_level.isdigit():
-            raise InvalidUpdate('Invalid value for GIT_HOOKS_DEBUG_LEVEL: %s '
-                                '(must be integer)' % debug_level)
+            raise InvalidUpdate(
+                "Invalid value for GIT_HOOKS_DEBUG_LEVEL: %s "
+                "(must be integer)" % debug_level
+            )
         debug_level = int(debug_level)
     else:
-        debug_level = git_config('hooks.debug-level')
+        debug_level = git_config("hooks.debug-level")
 
     if debug_level >= level:
-        warn(msg, prefix='  ' * (level - 1) + 'DEBUG: ')
+        warn(msg, prefix="  " * (level - 1) + "DEBUG: ")
 
 
 def warn(*args, **kwargs):
@@ -129,7 +132,7 @@ def warn(*args, **kwargs):
         prefix: The prefix to be used when printing the message.
             Default value is '*** '.
     """
-    prefix = kwargs['prefix'] if 'prefix' in kwargs else '*** '
+    prefix = kwargs["prefix"] if "prefix" in kwargs else "*** "
     for arg in args:
         print("%s%s" % (prefix, arg), file=sys.stderr)
 
@@ -139,6 +142,7 @@ def warn(*args, **kwargs):
 # Misc...
 #
 ############################################################################
+
 
 def indent(text, indentation):
     """Indent every line with indentation.
@@ -153,7 +157,7 @@ def indent(text, indentation):
     indented = []
     for line in text.splitlines(True):
         indented.append(indentation + line)
-    return ''.join(indented)
+    return "".join(indented)
 
 
 def ref_matches_regexp(ref_name, ref_re):
@@ -186,6 +190,7 @@ class FileLock(object):
     The locking is relying on os.link being atomic, and thus only
     works on Unix systems.
     """
+
     def __init__(self, filename):
         """The constructor.
 
@@ -195,12 +200,12 @@ class FileLock(object):
                 it is automatically created.
         """
         self.filename = filename
-        self.lock_filename = self.filename + '.lock'
+        self.lock_filename = self.filename + ".lock"
         # Make sure the file to be locked exists; if not, create it now.
         if not os.path.exists(self.filename):
             # Use mode 'a' instead of 'w' to avoid truncating the file
             # if someone opens the same file at the same time.
-            open(self.filename, 'a').close()
+            open(self.filename, "a").close()
             os.chmod(self.filename, 0o664)
 
     def __enter__(self):
@@ -209,22 +214,26 @@ class FileLock(object):
             # Just in case the lock is accidently left behind, write
             # some information that helps us track the author of
             # the lock.
-            with open(self.lock_filename, 'w') as f:
-                f.write('locked by user %s at %s (pid = %d)\n'
-                        % (get_user_name(), str(datetime.now()), os.getpid()))
+            with open(self.lock_filename, "w") as f:
+                f.write(
+                    "locked by user %s at %s (pid = %d)\n"
+                    % (get_user_name(), str(datetime.now()), os.getpid())
+                )
         except Exception:
             # It would be better if the warning was part of the InvalidUpdate
             # exception date, since a client handling the lock failure
             # might have prefered to silence the warning???  But that would
             # require us to add a keyword argument to handle error message
             # prefixes. Good enough for now.
-            warn('-' * 69,
-                 '--  Another user is currently pushing changes to this'
-                 ' repository.  --',
-                 '--  Please try again in another minute or two.       '
-                 '              --',
-                 '-' * 69,
-                 prefix='')
+            warn(
+                "-" * 69,
+                "--  Another user is currently pushing changes to this"
+                " repository.  --",
+                "--  Please try again in another minute or two.       "
+                "              --",
+                "-" * 69,
+                prefix="",
+            )
             raise InvalidUpdate
 
     def __exit__(self, type, value, traceback):

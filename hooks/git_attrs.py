@@ -15,7 +15,7 @@ import utils
 
 # The name of the default attributes file in the bare repository.
 # This file expected to be relative to the root of the bare repository.
-DEFAULT_ATTRIBUTES_FILE = 'info/default_attributes'
+DEFAULT_ATTRIBUTES_FILE = "info/default_attributes"
 
 
 def cached_file_exists(commit_rev, filename):
@@ -30,7 +30,7 @@ def cached_file_exists(commit_rev, filename):
     # Implement the cache as an attribute of this function,
     # where the key is a tuple (commit_rev, filename), and
     # the value the result of the query.
-    if 'cache' not in cached_file_exists.__dict__:
+    if "cache" not in cached_file_exists.__dict__:
         # First time call, initialize the attribute.
         cached_file_exists.cache = {}
 
@@ -95,9 +95,9 @@ def git_attribute(commit_rev, filename_list, attr_name):
     # repository. So we use this copy of the environment without
     # the GIT_DIR environment variable when needed.
     tmp_git_dir_env = dict(os.environ)
-    tmp_git_dir_env.pop('GIT_DIR', None)
+    tmp_git_dir_env.pop("GIT_DIR", None)
 
-    tmp_git_dir = mkdtemp('.git', 'check-attr-', utils.scratch_dir)
+    tmp_git_dir = mkdtemp(".git", "check-attr-", utils.scratch_dir)
     git.init(_cwd=tmp_git_dir, _env=tmp_git_dir_env)
 
     # There is one extra complication: We want to also provide support
@@ -119,9 +119,8 @@ def git_attribute(commit_rev, filename_list, attr_name):
     # excised from the command's output.
 
     if isfile(DEFAULT_ATTRIBUTES_FILE):
-        copy(DEFAULT_ATTRIBUTES_FILE,
-             os.path.join(tmp_git_dir, ".gitattributes"))
-    checkout_subdir = 'src'
+        copy(DEFAULT_ATTRIBUTES_FILE, os.path.join(tmp_git_dir, ".gitattributes"))
+    checkout_subdir = "src"
     tmp_checkout_dir = os.path.join(tmp_git_dir, checkout_subdir)
 
     dirs_with_changes = {}
@@ -133,14 +132,15 @@ def git_attribute(commit_rev, filename_list, attr_name):
             dir_path = os.path.dirname(dir_path)
             if dir_path in dirs_with_changes:
                 continue
-            gitattributes_rel_file = os.path.join(dir_path, '.gitattributes')
+            gitattributes_rel_file = os.path.join(dir_path, ".gitattributes")
             if cached_file_exists(commit_rev, gitattributes_rel_file):
                 if not dir_created:
                     os.makedirs(os.path.join(tmp_checkout_dir, dir_path))
                     dir_created = True
-                git.show("%s:%s" % (commit_rev, gitattributes_rel_file),
-                         _outfile=os.path.join(tmp_checkout_dir,
-                                               gitattributes_rel_file))
+                git.show(
+                    "%s:%s" % (commit_rev, gitattributes_rel_file),
+                    _outfile=os.path.join(tmp_checkout_dir, gitattributes_rel_file),
+                )
             dirs_with_changes[dir_path] = True
 
     # To avoid having to deal with the parsing of quoted filenames,
@@ -155,11 +155,17 @@ def git_attribute(commit_rev, filename_list, attr_name):
     # the filename, the second being the name of the attribute
     # being queried, and the third being the attribute's value
     # for that file.
-    check_attr_input = '\x00'.join(['%s/%s' % (checkout_subdir, filename)
-                                    for filename in filename_list])
-    attr_info = git.check_attr('-z', '--stdin', attr_name,
-                               _cwd=tmp_git_dir, _env=tmp_git_dir_env,
-                               _input=check_attr_input).split('\x00')
+    check_attr_input = "\x00".join(
+        ["%s/%s" % (checkout_subdir, filename) for filename in filename_list]
+    )
+    attr_info = git.check_attr(
+        "-z",
+        "--stdin",
+        attr_name,
+        _cwd=tmp_git_dir,
+        _env=tmp_git_dir_env,
+        _input=check_attr_input,
+    ).split("\x00")
     if len(attr_info) % 3 == 1 and not attr_info[-1]:
         # The attribute information for each filename ends with
         # a NUL character, so the terminating NUL character in
@@ -177,8 +183,8 @@ def git_attribute(commit_rev, filename_list, attr_name):
         attr_info.pop(0)  # Ignore the attribute name...
         attr_val = attr_info.pop(0)
 
-        assert filename.startswith(checkout_subdir + '/')
-        filename = filename[len(checkout_subdir) + 1:]
+        assert filename.startswith(checkout_subdir + "/")
+        filename = filename[len(checkout_subdir) + 1 :]
 
         result[filename] = attr_val
 

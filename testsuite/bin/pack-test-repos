@@ -27,30 +27,30 @@ from sys import exit, stderr
 
 
 def fatal(msg):
-    print('ERROR: %s.' % msg, file=stderr)
-    print('Aborting.', file=stderr)
+    print("ERROR: %s." % msg, file=stderr)
+    print("Aborting.", file=stderr)
     exit(1)
 
 
 # The config file to be used in the bare repository...
-BARE_REPO_CONFIG = 'bare_repo_config'
+BARE_REPO_CONFIG = "bare_repo_config"
 
-if not isdir('repo'):
+if not isdir("repo"):
     fatal('Directory "repo" does not exist')
-if not isdir('repo/.git'):
+if not isdir("repo/.git"):
     fatal('Directory "repo" does not appear to be a git repository')
-if not isdir('bare/repo.git'):
+if not isdir("bare/repo.git"):
     fatal('Directory "bare/repo.git" does not exist')
 
 # Determine the path to the bare repo's config file.
 # It depends on whether our repository is a bare repository or not.
-if isdir('bare/repo.git/.git'):
-    bare_repo_config_dir = 'bare/repo.git/.git'
+if isdir("bare/repo.git/.git"):
+    bare_repo_config_dir = "bare/repo.git/.git"
 else:
-    bare_repo_config_dir = 'bare/repo.git'
-bare_repo_config_path = '%s/config' % bare_repo_config_dir
+    bare_repo_config_dir = "bare/repo.git"
+bare_repo_config_path = "%s/config" % bare_repo_config_dir
 if not isfile(bare_repo_config_path):
-    fatal('Cannot find bare repo config file: %s' % bare_repo_config_path)
+    fatal("Cannot find bare repo config file: %s" % bare_repo_config_path)
 
 # Move the bare repo config file out, before archiving.
 # This allows us to track it independently of the (very binary)
@@ -60,19 +60,22 @@ mv(bare_repo_config_path, BARE_REPO_CONFIG)
 # Create a local copy of the bare repository's project.config file.
 # This file is not meant to be the master, but helps when one needs
 # to grep the configuration of all testsuite test repositories.
-with open('hooks_config', 'w') as fd:
-    r = Run('git show refs/meta/config:project.config'.split(),
-            output=fd, error=stderr, cwd=bare_repo_config_dir)
+with open("hooks_config", "w") as fd:
+    r = Run(
+        "git show refs/meta/config:project.config".split(),
+        output=fd,
+        error=stderr,
+        cwd=bare_repo_config_dir,
+    )
     if r.status != 0:
-        fatal('cannot find project.config file in refs/meta/config (err: %d)',
-              r.status)
+        fatal("cannot find project.config file in refs/meta/config (err: %d)", r.status)
 
-r = Run('tar cvfj git-repos.tar.bz2 bare repo'.split())
+r = Run("tar cvfj git-repos.tar.bz2 bare repo".split())
 if r.status != 0:
     # The packing operation failed. Print an error message, and exit.
-    print('ERROR: tar failed to pack repositories:', file=stderr)
+    print("ERROR: tar failed to pack repositories:", file=stderr)
     print(r.out, file=stderr)
     exit(r.status)
 
-rmtree('repo')
-rmtree('bare')
+rmtree("repo")
+rmtree("bare")

@@ -23,10 +23,10 @@ the operation)."""
 
 class BranchDeletion(AbstractUpdate):
     """Update object for branch creation/update."""
+
     def self_sanity_check(self):
         """See AbstractUpdate.self_sanity_check."""
-        assert self.ref_kind == RefKind.branch_ref \
-            and self.object_type == 'commit'
+        assert self.ref_kind == RefKind.branch_ref and self.object_type == "commit"
 
     def validate_ref_update(self):
         """See AbstractUpdate.validate_ref_update."""
@@ -45,9 +45,7 @@ class BranchDeletion(AbstractUpdate):
 
             allowed_list = git_config("hooks.allow-delete-branch")
             if not allowed_list:
-                err.append(
-                    "Deleting branches is not allowed for this repository."
-                )
+                err.append("Deleting branches is not allowed for this repository.")
 
             else:
                 err.extend(
@@ -64,7 +62,7 @@ class BranchDeletion(AbstractUpdate):
                     + ["    {}".format(allowed) for allowed in allowed_list]
                 )
 
-            tip = git_config('hooks.rejected-branch-deletion-tip')
+            tip = git_config("hooks.rejected-branch-deletion-tip")
             if tip is None:
                 tip = DEFAULT_REJECTED_BRANCH_DELETION_TIP
             err.append("")
@@ -77,15 +75,17 @@ class BranchDeletion(AbstractUpdate):
         """
         subject = "[%s] Deleted branch %s" % (
             self.email_info.project_name,
-            self.human_readable_ref_name())
+            self.human_readable_ref_name(),
+        )
 
         update_info = {
-            'human_readable_ref_name': self.human_readable_ref_name(),
-            'commit_oneline': commit_oneline(self.old_rev),
-            }
+            "human_readable_ref_name": self.human_readable_ref_name(),
+            "commit_oneline": commit_oneline(self.old_rev),
+        }
         body = BRANCH_DELETION_EMAIL_BODY_TEMPLATE % update_info
-        if branch_summary_of_changes_needed(self.new_commits_for_ref,
-                                            self.lost_commits):
+        if branch_summary_of_changes_needed(
+            self.new_commits_for_ref, self.lost_commits
+        ):
             body += self.summary_of_changes()
 
         return (self.everyone_emails(), subject, body)

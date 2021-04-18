@@ -50,16 +50,18 @@ def pre_receive(refs_data):
     # Enforcing CONFIG_REF updates to be done on their own push
     # solves that problem.
     if len(refs_data) > 1 and CONFIG_REF in refs_data:
-        err_msg = [
-            'You are trying to push multiple references at the same time:']
-        err_msg.extend('  - {}'.format(ref_name)
-                       for ref_name in sorted(refs_data))
-        err_msg.extend([
-            '',
-            'Updates to the {CONFIG_REF} reference must be pushed'
-            .format(CONFIG_REF=CONFIG_REF),
-            'on their own. Please push this reference first, and then',
-            'retry pushing the remaining references.'])
+        err_msg = ["You are trying to push multiple references at the same time:"]
+        err_msg.extend("  - {}".format(ref_name) for ref_name in sorted(refs_data))
+        err_msg.extend(
+            [
+                "",
+                "Updates to the {CONFIG_REF} reference must be pushed".format(
+                    CONFIG_REF=CONFIG_REF
+                ),
+                "on their own. Please push this reference first, and then",
+                "retry pushing the remaining references.",
+            ]
+        )
         raise InvalidUpdate(*err_msg)
 
     # Verify that we are not trying to delete the CONFIG_REF reference.
@@ -71,11 +73,13 @@ def pre_receive(refs_data):
         _, new_rev = refs_data[CONFIG_REF]
         if is_null_rev(new_rev):
             raise InvalidUpdate(
-                'Deleting the reference {CONFIG_REF} is not allowed.'
-                .format(CONFIG_REF=CONFIG_REF),
-                '',
-                'This reference provides important configuration information',
-                'and thus must not be deleted.')
+                "Deleting the reference {CONFIG_REF} is not allowed.".format(
+                    CONFIG_REF=CONFIG_REF
+                ),
+                "",
+                "This reference provides important configuration information",
+                "and thus must not be deleted.",
+            )
 
 
 def maybe_pre_receive_hook(pre_receive_data):
@@ -88,21 +92,22 @@ def maybe_pre_receive_hook(pre_receive_data):
     ARGUMENTS
         pre_receive_data: The data received via stdin by the pre-receive hook.
     """
-    result = ThirdPartyHook('hooks.pre-receive-hook').call_if_defined(
-        hook_input=pre_receive_data)
+    result = ThirdPartyHook("hooks.pre-receive-hook").call_if_defined(
+        hook_input=pre_receive_data
+    )
     if result is not None:
         hook_exe, p, out = result
         if p.returncode != 0:
             raise InvalidUpdate(
-                "Update rejected by this repository's hooks.pre-receive-hook"
-                " script",
-                '({}):'.format(hook_exe),
-                *out.splitlines())
+                "Update rejected by this repository's hooks.pre-receive-hook" " script",
+                "({}):".format(hook_exe),
+                *out.splitlines()
+            )
         else:
             sys.stdout.write(out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     stdin = sys.stdin.read()
     refs_data = OrderedDict()
     for line in stdin.splitlines():

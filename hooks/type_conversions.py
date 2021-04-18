@@ -23,9 +23,9 @@ def to_bool(val):
     if val in (True, False):
         return val
     val_str = str(val).lower()
-    if val_str == 'true':
+    if val_str == "true":
         return True
-    if val_str == 'false':
+    if val_str == "false":
         return False
     raise ValueError("invalid boolean value: '%s'", str(val))
 
@@ -49,7 +49,7 @@ def to_tuple(val):
     # an empty tuple in this case.
     if not val:
         return ()
-    return tuple(val.split(','))
+    return tuple(val.split(","))
 
 
 def to_type(val, new_type):

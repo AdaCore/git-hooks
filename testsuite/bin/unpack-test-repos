@@ -15,17 +15,17 @@ from sys import exit, stderr
 
 
 def fatal(msg):
-    print('ERROR: %s.' % msg, file=stderr)
-    print('Aborting.', file=stderr)
+    print("ERROR: %s." % msg, file=stderr)
+    print("Aborting.", file=stderr)
     exit(1)
 
 
 # The infrastructure assumes that the repositories are archives
 # inside a tarball called git-repos.tar.gz.
-REPOS_TARBALL = 'git-repos.tar.bz2'
+REPOS_TARBALL = "git-repos.tar.bz2"
 
 # The config file to be used in the bare repository...
-BARE_REPO_CONFIG = 'bare_repo_config'
+BARE_REPO_CONFIG = "bare_repo_config"
 
 if not exists(REPOS_TARBALL):
     fatal("Cannot find repositories' tarball: %s" % REPOS_TARBALL)
@@ -33,32 +33,31 @@ if not exists(REPOS_TARBALL):
 if not exists(BARE_REPO_CONFIG):
     fatal("Cannot find config file for bare repository: %s" % BARE_REPO_CONFIG)
 
-r = Run(['tar', 'xvfj', REPOS_TARBALL])
+r = Run(["tar", "xvfj", REPOS_TARBALL])
 if r.status != 0:
     # The packing operation failed. Print an error message, and exit.
-    print('ERROR: tar failed to unpack repositories:', file=stderr)
+    print("ERROR: tar failed to unpack repositories:", file=stderr)
     print(r.out, file=stderr)
     exit(r.status)
 
-if not isdir('repo'):
+if not isdir("repo"):
     fatal('Directory "repo" does not exist')
-if not isdir('repo/.git'):
+if not isdir("repo/.git"):
     fatal('Directory "repo" does not appear to be a git repository')
-if not isdir('bare/repo.git'):
+if not isdir("bare/repo.git"):
     fatal('Directory "bare/repo.git" does not exist')
 
 # Determine the location of the bare/repo.git's config file.
 # It depends on whether the repository is a bare repository or not.
-if isdir('bare/repo.git/.git'):
-    bare_repo_config_path = 'bare/repo.git/.git/config'
+if isdir("bare/repo.git/.git"):
+    bare_repo_config_path = "bare/repo.git/.git/config"
 else:
-    bare_repo_config_path = 'bare/repo.git/config'
+    bare_repo_config_path = "bare/repo.git/config"
 
 # Move our config file in place, after having verified that we are not
 # about to overwrite one.
 if isfile(bare_repo_config_path):
-    fatal('Unexpected config file in bare repository: %s'
-          % bare_repo_config_path)
+    fatal("Unexpected config file in bare repository: %s" % bare_repo_config_path)
 mv(BARE_REPO_CONFIG, bare_repo_config_path)
 
 unlink(REPOS_TARBALL)

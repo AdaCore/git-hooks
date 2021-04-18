@@ -15,19 +15,20 @@ from tempfile import mkstemp
 # This reference is just a kind of staging area. In this case, it ensures
 # the newly-created commit has a reference, and therefore never ends up
 # being garbage-collected.
-GERRIT_INTERNAL_REFS = ('refs/changes/.*',
-                        'refs/users/.*/edit-.*',
-                        )
+GERRIT_INTERNAL_REFS = (
+    "refs/changes/.*",
+    "refs/users/.*/edit-.*",
+)
 
 
 # The name of the reference we use to store the repository-specific
 # configuration for these hooks.
-CONFIG_REF = 'refs/meta/config'
+CONFIG_REF = "refs/meta/config"
 
 # The name of the file we read the configuration from (stored in
 # the special CONFIG_REF reference), relative to the repository's
 # root directory.
-CONFIG_FILENAME = 'project.config'
+CONFIG_FILENAME = "project.config"
 
 # The commit to use in order to access the respository-specific
 # configuration for these hooks. By default, it is CONFIG_REF.
@@ -49,7 +50,7 @@ CONFIG_DEFAULT_NO_EMAILS = (
     # and the annotation contains information that users rarely need
     # to consult, the email for the annotation was considered as unwanted
     # noise.
-    'refs/notes/review',
+    "refs/notes/review",
 )
 
 # A dictionary of all git config names that this module can query.
@@ -57,50 +58,48 @@ CONFIG_DEFAULT_NO_EMAILS = (
 #   - The value is another dictionary containing the following keys.
 #       + 'default': The default value for this config option.
 
-GIT_CONFIG_OPTS = \
-    {'hooks.allow-delete-branch':         {'default': (),     'type': tuple},
-     'hooks.allow-delete-tag':            {'default': False,  'type': bool},
-     'hooks.allow-non-fast-forward':      {'default': (),     'type': tuple},
-     'hooks.allow-lightweight-tag':       {'default': False,  'type': bool},
-     'hooks.branch-ref-namespace':        {'default': (),     'type': tuple},
-     'hooks.combined-style-checking':     {'default': False,  'type': bool},
-     'hooks.commit-email-formatter':      {'default': None},
-     'hooks.commit-extra-checker':        {'default': None},
-     'hooks.commit-url':                  {'default': None},
-     'hooks.debug-level':                 {'default': 0,      'type': int},
-     'hooks.email-new-commits-only':      {'default': (),     'type': tuple},
-     'hooks.disable-email-diff':          {'default': False,  'type': bool},
-     'hooks.disable-merge-commit-checks': {'default': False,  'type': bool},
-     'hooks.file-commit-cmd':             {'default': None},
-     'hooks.filer-email':                 {'default': (), 'type': tuple},
-     'hooks.from-domain':                 {'default': None},
-     'hooks.frozen-ref':                  {'default': (),     'type': tuple},
-     'hooks.ignore-refs':                 {'default': GERRIT_INTERNAL_REFS,
-                                           'type': tuple},
-     'hooks.mailinglist':                 {'default': (),     'type': tuple},
-     'hooks.max-commit-emails':           {'default': 100,    'type': int},
-     'hooks.max-email-diff-size':         {'default': 100000, 'type': int},
-     'hooks.max-filepath-length':         {'default': 150,    'type': int},
-     'hooks.max-rh-line-length':          {'default': 76,     'type': int},
-     'hooks.no-emails': {'default': CONFIG_DEFAULT_NO_EMAILS, 'type': tuple},
-     'hooks.no-precommit-check':          {'default': (),     'type': tuple},
-     'hooks.no-rh-character-range-check': {'default': False,  'type': bool},
-     'hooks.no-rh-style-checks':          {'default': (),     'type': tuple},
-     'hooks.no-style-checks':             {'default': (),     'type': tuple},
-     'hooks.pre-receive-hook':            {'default': None},
-     'hooks.post-receive-hook':           {'default': None},
-     'hooks.reject-merge-commits':        {'default': (),     'type': tuple},
-     'hooks.rejected-branch-deletion-tip': {'default': None},
-     'hooks.restrict-branch-deletion':    {'default': False,  'type': bool},
-     'hooks.style-checker':               {'default': 'style_checker'},
-     'hooks.style-checker-config-file':   {'default': None},
-     'hooks.tag-ref-namespace':           {'default': (),     'type': tuple},
-     'hooks.tn-required':                 {'default': False,  'type': bool},
-     'hooks.update-hook':                 {'default': None},
-     'hooks.use-standard-branch-ref-namespace': {'default': True,
-                                                 'type': bool},
-     'hooks.use-standard-tag-ref-namespace': {'default': True, 'type': bool},
-     }
+GIT_CONFIG_OPTS = {
+    "hooks.allow-delete-branch": {"default": (), "type": tuple},
+    "hooks.allow-delete-tag": {"default": False, "type": bool},
+    "hooks.allow-non-fast-forward": {"default": (), "type": tuple},
+    "hooks.allow-lightweight-tag": {"default": False, "type": bool},
+    "hooks.branch-ref-namespace": {"default": (), "type": tuple},
+    "hooks.combined-style-checking": {"default": False, "type": bool},
+    "hooks.commit-email-formatter": {"default": None},
+    "hooks.commit-extra-checker": {"default": None},
+    "hooks.commit-url": {"default": None},
+    "hooks.debug-level": {"default": 0, "type": int},
+    "hooks.email-new-commits-only": {"default": (), "type": tuple},
+    "hooks.disable-email-diff": {"default": False, "type": bool},
+    "hooks.disable-merge-commit-checks": {"default": False, "type": bool},
+    "hooks.file-commit-cmd": {"default": None},
+    "hooks.filer-email": {"default": (), "type": tuple},
+    "hooks.from-domain": {"default": None},
+    "hooks.frozen-ref": {"default": (), "type": tuple},
+    "hooks.ignore-refs": {"default": GERRIT_INTERNAL_REFS, "type": tuple},
+    "hooks.mailinglist": {"default": (), "type": tuple},
+    "hooks.max-commit-emails": {"default": 100, "type": int},
+    "hooks.max-email-diff-size": {"default": 100000, "type": int},
+    "hooks.max-filepath-length": {"default": 150, "type": int},
+    "hooks.max-rh-line-length": {"default": 76, "type": int},
+    "hooks.no-emails": {"default": CONFIG_DEFAULT_NO_EMAILS, "type": tuple},
+    "hooks.no-precommit-check": {"default": (), "type": tuple},
+    "hooks.no-rh-character-range-check": {"default": False, "type": bool},
+    "hooks.no-rh-style-checks": {"default": (), "type": tuple},
+    "hooks.no-style-checks": {"default": (), "type": tuple},
+    "hooks.pre-receive-hook": {"default": None},
+    "hooks.post-receive-hook": {"default": None},
+    "hooks.reject-merge-commits": {"default": (), "type": tuple},
+    "hooks.rejected-branch-deletion-tip": {"default": None},
+    "hooks.restrict-branch-deletion": {"default": False, "type": bool},
+    "hooks.style-checker": {"default": "style_checker"},
+    "hooks.style-checker-config-file": {"default": None},
+    "hooks.tag-ref-namespace": {"default": (), "type": tuple},
+    "hooks.tn-required": {"default": False, "type": bool},
+    "hooks.update-hook": {"default": None},
+    "hooks.use-standard-branch-ref-namespace": {"default": True, "type": bool},
+    "hooks.use-standard-tag-ref-namespace": {"default": True, "type": bool},
+}
 
 # The maximum number of characters from a commit's subject
 # to be used as part of the subject of emails describing
@@ -120,6 +119,7 @@ class ThirdPartyHook(object):
         hook_exe: The path to the hook itself (a string), or None if
             the project does not define that option.
     """
+
     def __init__(self, hook_option_name):
         """Initialize self.
 
@@ -168,14 +168,19 @@ class ThirdPartyHook(object):
         if hook_args is not None:
             hook_cmd.extend(hook_args)
         try:
-            p = Popen(hook_cmd, stdin=PIPE if hook_input is not None else None,
-                      stdout=PIPE, stderr=STDOUT, cwd=cwd)
+            p = Popen(
+                hook_cmd,
+                stdin=PIPE if hook_input is not None else None,
+                stdout=PIPE,
+                stderr=STDOUT,
+                cwd=cwd,
+            )
         except OSError as E:
             raise InvalidUpdate(
-                'Invalid {self.hook_option_name} configuration'
-                ' ({self.hook_exe}):\n'
-                '{err_info}'.format(
-                    self=self, err_info=str(E)))
+                "Invalid {self.hook_option_name} configuration"
+                " ({self.hook_exe}):\n"
+                "{err_info}".format(self=self, err_info=str(E))
+            )
 
         out, _ = p.communicate(hook_input)
 
@@ -206,6 +211,7 @@ class ThirdPartyHook(object):
 class UnsupportedOptionName(Exception):
     """An exception raised when trying to lookup an unsupported option name.
     """
+
     pass
 
 
@@ -224,7 +230,9 @@ Unable to find the file {CONFIG_FILENAME} in {CONFIG_REF}.
 Your repository appears to be incorrectly set up. Please contact
 your repository's administrator to set your {CONFIG_FILENAME} file up.
 -----------------------------------------------------------------
-""".format(CONFIG_FILENAME=CONFIG_FILENAME, CONFIG_REF=CONFIG_REF)
+""".format(
+    CONFIG_FILENAME=CONFIG_FILENAME, CONFIG_REF=CONFIG_REF
+)
 
 
 def git_config(option_name):
@@ -246,18 +254,19 @@ def git_config(option_name):
     # this type if necessary.  We do this here, rather than during
     # initialize_git_config_map to avoid the potential for causing
     # an error for options which might not be used in the end.
-    if ('type' in GIT_CONFIG_OPTS[option_name] and isinstance(val, str)):
+    if "type" in GIT_CONFIG_OPTS[option_name] and isinstance(val, str):
         try:
-            val = to_type(val, GIT_CONFIG_OPTS[option_name]['type'])
+            val = to_type(val, GIT_CONFIG_OPTS[option_name]["type"])
         except ValueError:
-            TYPE_NAME_MAP = {bool:  'boolean',
-                             int:   'integer',
-                             tuple: 'list',
-                             }
-            type_name = TYPE_NAME_MAP[GIT_CONFIG_OPTS[option_name]['type']]
+            TYPE_NAME_MAP = {
+                bool: "boolean",
+                int: "integer",
+                tuple: "list",
+            }
+            type_name = TYPE_NAME_MAP[GIT_CONFIG_OPTS[option_name]["type"]]
             raise InvalidUpdate(
-                'Invalid %s value: %s (must be %s)'
-                % (option_name, val, type_name))
+                "Invalid %s value: %s (must be %s)" % (option_name, val, type_name)
+            )
         # Save the converted value to avoid having to do it again
         # the next time we query the same config option.
         __git_config_map[option_name] = val
@@ -273,11 +282,11 @@ def initialize_git_config_map():
     # The hooks' configuration is stored in a special reference
     # (see CONFIG_REF), inside a file whose name is CONFIG_FILENAME.
     # Get that file.
-    (tmp_fd, tmp_file) = mkstemp('tmp-git-hooks-')
+    (tmp_fd, tmp_file) = mkstemp("tmp-git-hooks-")
     try:
         cfg_file = tmp_file
         try:
-            git.show(config_commit + ':' + CONFIG_FILENAME, _outfile=tmp_fd)
+            git.show(config_commit + ":" + CONFIG_FILENAME, _outfile=tmp_fd)
         except CalledProcessError:
             # Either the CONFIG_REF reference does not exist, or
             # the config file itself does not exist. Either way,
@@ -293,7 +302,7 @@ def initialize_git_config_map():
         # Also, use the nul character as the separator between each
         # entry (-z option) so as to not confuse them with potential
         # newlines being used inside the value of an option.
-        all_configs = git.config('-z', '-l', '--file', cfg_file).split('\x00')
+        all_configs = git.config("-z", "-l", "--file", cfg_file).split("\x00")
     finally:
         os.unlink(tmp_file)
 
@@ -304,10 +313,12 @@ def initialize_git_config_map():
             # which cause all_configs to end with an empty entry. Just ignore
             # those.
             continue
-        config_name, config_val = config.split('\n', 1)
-        if config_name in GIT_CONFIG_OPTS and \
-                'type' in GIT_CONFIG_OPTS[config_name] and \
-                GIT_CONFIG_OPTS[config_name]['type'] == tuple:
+        config_name, config_val = config.split("\n", 1)
+        if (
+            config_name in GIT_CONFIG_OPTS
+            and "type" in GIT_CONFIG_OPTS[config_name]
+            and GIT_CONFIG_OPTS[config_name]["type"] == tuple
+        ):
             # This config is a list of potentially multiple values, and
             # therefore multiple entries with the same config name can be
             # provided for each value. Just save them in a list.
@@ -327,17 +338,17 @@ def initialize_git_config_map():
         # if defined, or else from the default value.
         if config_name in all_configs_map:
             config_val = all_configs_map[config_name]
-            if GIT_CONFIG_OPTS[config_name].get('type') == tuple:
+            if GIT_CONFIG_OPTS[config_name].get("type") == tuple:
                 # Include the default values for this configuration to
                 # the list of values provided by this project's config.
                 # Otherwise, projects that just want to add to the default
                 # would have to repeat that default in their repository's
                 # configuration first before adding their own values,
                 # as if starting the config option from scratch.
-                config_val = GIT_CONFIG_OPTS[config_name]['default'] + config_val
+                config_val = GIT_CONFIG_OPTS[config_name]["default"] + config_val
 
         else:
-            config_val = GIT_CONFIG_OPTS[config_name]['default']
+            config_val = GIT_CONFIG_OPTS[config_name]["default"]
 
         # Finally, save the config value if __git_config_map
         __git_config_map[config_name] = config_val

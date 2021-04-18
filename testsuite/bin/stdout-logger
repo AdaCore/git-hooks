@@ -9,14 +9,19 @@ from argparse import ArgumentParser
 def stdout_logger():
     parser = ArgumentParser()
     parser.add_argument(
-        '-t', '--tag', dest='tag', default='[username]',
-        help='Mark every line to be logged with the specified TAG.')
+        "-t",
+        "--tag",
+        dest="tag",
+        default="[username]",
+        help="Mark every line to be logged with the specified TAG.",
+    )
     parser.add_argument(
-        '-p', '--priority', dest='priority',
-        help='Enter the message into the log with the specified PRIORITY.')
-    parser.add_argument(
-        'message',
-        help='The message to be filed in the syslog.')
+        "-p",
+        "--priority",
+        dest="priority",
+        help="Enter the message into the log with the specified PRIORITY.",
+    )
+    parser.add_argument("message", help="The message to be filed in the syslog.")
 
     args = parser.parse_args()
     print("SYSLOG: %s: %s" % (args.tag, args.message))

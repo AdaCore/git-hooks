@@ -29,20 +29,22 @@ def post_receive_one(ref_name, old_rev, new_rev, refs, submitter_email):
             in git_show_ref.
         submitter_email: Same as AbstractUpdate.__init__.
     """
-    debug('post_receive_one(ref_name=%s\n'
-          '                        old_rev=%s\n'
-          '                        new_rev=%s)'
-          % (ref_name, old_rev, new_rev))
+    debug(
+        "post_receive_one(ref_name=%s\n"
+        "                        old_rev=%s\n"
+        "                        new_rev=%s)" % (ref_name, old_rev, new_rev)
+    )
 
     update = new_update(ref_name, old_rev, new_rev, refs, submitter_email)
     if update is None:
         # We emit a warning, rather than trigger an assertion, because
         # it gives the script a chance to process any other reference
         # that was updated, but not processed yet.
-        warn("post-receive: Unsupported reference update: %s (ignored)."
-             % ref_name,
-             "              old_rev = %s" % old_rev,
-             "              new_rev = %s" % new_rev)
+        warn(
+            "post-receive: Unsupported reference update: %s (ignored)." % ref_name,
+            "              old_rev = %s" % old_rev,
+            "              new_rev = %s" % new_rev,
+        )
         return
     update.send_email_notifications()
 
@@ -61,8 +63,7 @@ def post_receive(updated_refs, submitter_email):
 
     for ref_name in updated_refs.keys():
         (old_rev, new_rev) = updated_refs[ref_name]
-        post_receive_one(ref_name, old_rev, new_rev, refs,
-                         submitter_email)
+        post_receive_one(ref_name, old_rev, new_rev, refs, submitter_email)
 
     # Flush the email queue.  Since this involves creating a daemon,
     # only do so if there is at least one email to be sent.
@@ -78,8 +79,9 @@ def maybe_post_receive_hook(post_receive_data):
     config variable, by calling this function if the config variable
     is defined.
     """
-    result = ThirdPartyHook('hooks.post-receive-hook').call_if_defined(
-        hook_input=post_receive_data)
+    result = ThirdPartyHook("hooks.post-receive-hook").call_if_defined(
+        hook_input=post_receive_data
+    )
     if result is not None:
         hook_exe, p, out = result
         sys.stdout.write(out)
@@ -87,8 +89,7 @@ def maybe_post_receive_hook(post_receive_data):
         # ahead of the warning below, which is directed to stderr.
         sys.stdout.flush()
         if p.returncode != 0:
-            warn('!!! WARNING: %s returned code: %d.'
-                 % (hook_exe, p.returncode))
+            warn("!!! WARNING: %s returned code: %d." % (hook_exe, p.returncode))
 
 
 def parse_command_line():
@@ -97,15 +98,19 @@ def parse_command_line():
     # handle it by hand.  But it's nice to have features such as
     # -h/--help switches which come for free if we use argparse.
     ap = ArgumentParser(description='Git "post-receive" hook.')
-    ap.add_argument('--submitter-email',
-                    help=('Use this email address as the sender'
-                          ' of email notifications instead of using the'
-                          ' email address of the user calling this'
-                          ' script'))
+    ap.add_argument(
+        "--submitter-email",
+        help=(
+            "Use this email address as the sender"
+            " of email notifications instead of using the"
+            " email address of the user calling this"
+            " script"
+        ),
+    )
     return ap.parse_args()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = parse_command_line()
 
     stdin = sys.stdin.read()

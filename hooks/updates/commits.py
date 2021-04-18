@@ -25,6 +25,7 @@ class CommitInfo(object):
             this commit, False otherwise. May be None, meaning that
             the value of that attribute has not been computed yet.
     """
+
     def __init__(self, rev, author_name, author_email, subject, parent_revs):
         self.rev = rev
         self.author_name = author_name
@@ -53,12 +54,12 @@ class CommitInfo(object):
     def oneline_str(self):
         """A one-line string description of the commit.
         """
-        return '%s... %s' % (self.rev[:7], self.subject[:59])
+        return "%s... %s" % (self.rev[:7], self.subject[:59])
 
     @property
     def full_author_email(self):
         """Return the author's full email address (name and actual address)."""
-        return '{self.author_name} <{self.author_email}>'.format(self=self)
+        return "{self.author_name} <{self.author_email}>".format(self=self)
 
     @property
     def raw_revlog(self):
@@ -70,8 +71,7 @@ class CommitInfo(object):
         Note that the revlog is computed lazily and then cached.
         """
         if self.__raw_revlog is None:
-            self.__raw_revlog = git.log(self.rev, max_count='1',
-                                        pretty='format:%B')
+            self.__raw_revlog = git.log(self.rev, max_count="1", pretty="format:%B")
         return self.__raw_revlog
 
     @property
@@ -101,7 +101,8 @@ class CommitInfo(object):
         """
         if ref_name not in self.__email_to:
             self.__email_to[ref_name] = expanded_mailing_list(
-                ref_name, self.files_changed)
+                ref_name, self.files_changed
+            )
         return self.__email_to[ref_name]
 
     def all_files(self):
@@ -118,14 +119,14 @@ class CommitInfo(object):
         """
         if self.__files_changed is None:
             self.__files_changed = []
-            all_changes = diff_tree('-r', self.base_rev_for_git(), self.rev)
+            all_changes = diff_tree("-r", self.base_rev_for_git(), self.rev)
             for item in all_changes:
-                (old_mode, new_mode, old_sha1, new_sha1, status, filename) \
-                    = item
-                debug('diff-tree entry: %s %s %s %s %s %s'
-                      % (old_mode, new_mode, old_sha1, new_sha1, status,
-                         filename),
-                      level=5)
+                (old_mode, new_mode, old_sha1, new_sha1, status, filename) = item
+                debug(
+                    "diff-tree entry: %s %s %s %s %s %s"
+                    % (old_mode, new_mode, old_sha1, new_sha1, status, filename),
+                    level=5,
+                )
                 self.__files_changed.append(filename)
         return self.__files_changed
 
@@ -156,8 +157,7 @@ class CommitInfo(object):
         if base_rev is None:
             prev_commit_all_files = set()
         else:
-            prev_commit_all_files = set(
-                self.__all_files_from_commit_rev(base_rev))
+            prev_commit_all_files = set(self.__all_files_from_commit_rev(base_rev))
 
         # The list of files is returned in sorted alphabetical order,
         # mostly to ensure predictability and stability in the result.
@@ -233,7 +233,7 @@ class CommitInfo(object):
         revision log of such commits, hoping that a user is not deleting
         them afterwards.
         """
-        if 'This reverts commit' in self.raw_revlog:
+        if "This reverts commit" in self.raw_revlog:
             return True
 
         # No recognizable pattern. Probably not a revert commit.
@@ -246,8 +246,7 @@ class CommitInfo(object):
         Note that unlike in the all_files method, the result of
         this method is not cached.
         """
-        return git.ls_tree(
-            '--full-tree', '--name-only', '-r', rev, _split_lines=True)
+        return git.ls_tree("--full-tree", "--name-only", "-r", rev, _split_lines=True)
 
 
 def commit_info_list(*args):
@@ -256,8 +255,9 @@ def commit_info_list(*args):
     PARAMETERS
         Same as in the "git rev-list" command.
     """
-    rev_info = git.rev_list(*args, pretty='format:%P%n%an%n%ae%n%s',
-                            _split_lines=True, reverse=True)
+    rev_info = git.rev_list(
+        *args, pretty="format:%P%n%an%n%ae%n%s", _split_lines=True, reverse=True
+    )
     # Each commit should generate 5 lines of output.
     assert len(rev_info) % 5 == 0
 
@@ -268,8 +268,7 @@ def commit_info_list(*args):
         author_name = rev_info.pop(0)
         author_email = rev_info.pop(0)
         subject = rev_info.pop(0)
-        assert commit_keyword == 'commit'
-        result.append(CommitInfo(rev, author_name, author_email, subject,
-                                 parents))
+        assert commit_keyword == "commit"
+        result.append(CommitInfo(rev, author_name, author_email, subject, parents))
 
     return result

@@ -22,22 +22,26 @@ from utils import ref_matches_regexp
 
 # A named tuple used to determine a repository's namespace information
 # for a given kind of reference (RefKind).
-NamespaceKey = namedtuple('NamespaceKey', [
-    # The name of the config option to use in order to retrieve,
-    # for the associated RefKind, the repository's namespace.
-    # Should be None if alternate (non-standard) namespaces are not
-    # supported for the associated kind of reference.
-    'opt_name',
-    # The name of the option to use to decide whether the namespaces,
-    # which are normally standard for the associated kind of reference,
-    # should be used or not.
-    # Should be None if alternate (non-standard) namespaces are not
-    # supported for this kind of reference.
-    'use_std_opt_name',
-    # The standard namespaces for that kind of reference:
-    # A tuple of strings, each being a regular expression, matching
-    # references which are recognized, by default, as this RefKind.
-    'std'])
+NamespaceKey = namedtuple(
+    "NamespaceKey",
+    [
+        # The name of the config option to use in order to retrieve,
+        # for the associated RefKind, the repository's namespace.
+        # Should be None if alternate (non-standard) namespaces are not
+        # supported for the associated kind of reference.
+        "opt_name",
+        # The name of the option to use to decide whether the namespaces,
+        # which are normally standard for the associated kind of reference,
+        # should be used or not.
+        # Should be None if alternate (non-standard) namespaces are not
+        # supported for this kind of reference.
+        "use_std_opt_name",
+        # The standard namespaces for that kind of reference:
+        # A tuple of strings, each being a regular expression, matching
+        # references which are recognized, by default, as this RefKind.
+        "std",
+    ],
+)
 
 # A dictionary providing namespace information for each kind of reference.
 #
@@ -46,42 +50,41 @@ NamespaceKey = namedtuple('NamespaceKey', [
 #   + The value is a NamespaceKey.
 NAMESPACES_INFO = {
     RefKind.branch_ref: NamespaceKey(
-        opt_name='hooks.branch-ref-namespace',
-        use_std_opt_name='hooks.use-standard-branch-ref-namespace',
-        std=('refs/heads/.*',    # Git/Gerrit branches.
-             'refs/meta/.*',     # Git/Gerrit/git-hooks configuration.
-             'refs/drafts/.*',   # Gerrit branches.
-             'refs/for/.*',      # Gerrit branches.
-             'refs/publish/.*',  # Gerrit branches.
-             ),
+        opt_name="hooks.branch-ref-namespace",
+        use_std_opt_name="hooks.use-standard-branch-ref-namespace",
+        std=(
+            "refs/heads/.*",  # Git/Gerrit branches.
+            "refs/meta/.*",  # Git/Gerrit/git-hooks configuration.
+            "refs/drafts/.*",  # Gerrit branches.
+            "refs/for/.*",  # Gerrit branches.
+            "refs/publish/.*",  # Gerrit branches.
+        ),
     ),
     RefKind.notes_ref: NamespaceKey(
-        opt_name=None,          # No alternate namespace support.
+        opt_name=None,  # No alternate namespace support.
         use_std_opt_name=None,  # No alternate namespace support.
-        std=('refs/notes/.*',
-             ),
+        std=("refs/notes/.*",),
     ),
     RefKind.tag_ref: NamespaceKey(
-        opt_name='hooks.tag-ref-namespace',
-        use_std_opt_name='hooks.use-standard-tag-ref-namespace',
-        std=('refs/tags/.*',
-             ),
+        opt_name="hooks.tag-ref-namespace",
+        use_std_opt_name="hooks.use-standard-tag-ref-namespace",
+        std=("refs/tags/.*",),
     ),
 }
 
 REF_CHANGE_MAP = {
-    (RefKind.branch_ref, UpdateKind.create, 'commit'): BranchCreation,
-    (RefKind.branch_ref, UpdateKind.delete, 'commit'): BranchDeletion,
-    (RefKind.branch_ref, UpdateKind.update, 'commit'): BranchUpdate,
-    (RefKind.notes_ref,  UpdateKind.create, 'commit'): NotesCreation,
-    (RefKind.notes_ref,  UpdateKind.delete, 'commit'): NotesDeletion,
-    (RefKind.notes_ref,  UpdateKind.update, 'commit'): NotesUpdate,
-    (RefKind.tag_ref,    UpdateKind.create, 'tag'):    AnnotatedTagCreation,
-    (RefKind.tag_ref,    UpdateKind.delete, 'tag'):    AnnotatedTagDeletion,
-    (RefKind.tag_ref,    UpdateKind.update, 'tag'):    AnnotatedTagUpdate,
-    (RefKind.tag_ref,    UpdateKind.create, 'commit'): LightweightTagCreation,
-    (RefKind.tag_ref,    UpdateKind.delete, 'commit'): LightweightTagDeletion,
-    (RefKind.tag_ref,    UpdateKind.update, 'commit'): LightweightTagUpdate,
+    (RefKind.branch_ref, UpdateKind.create, "commit"): BranchCreation,
+    (RefKind.branch_ref, UpdateKind.delete, "commit"): BranchDeletion,
+    (RefKind.branch_ref, UpdateKind.update, "commit"): BranchUpdate,
+    (RefKind.notes_ref, UpdateKind.create, "commit"): NotesCreation,
+    (RefKind.notes_ref, UpdateKind.delete, "commit"): NotesDeletion,
+    (RefKind.notes_ref, UpdateKind.update, "commit"): NotesUpdate,
+    (RefKind.tag_ref, UpdateKind.create, "tag"): AnnotatedTagCreation,
+    (RefKind.tag_ref, UpdateKind.delete, "tag"): AnnotatedTagDeletion,
+    (RefKind.tag_ref, UpdateKind.update, "tag"): AnnotatedTagUpdate,
+    (RefKind.tag_ref, UpdateKind.create, "commit"): LightweightTagCreation,
+    (RefKind.tag_ref, UpdateKind.delete, "commit"): LightweightTagDeletion,
+    (RefKind.tag_ref, UpdateKind.update, "commit"): LightweightTagUpdate,
 }
 
 
@@ -101,8 +104,9 @@ def get_namespace_info(ref_kind):
 
     namespace_key = NAMESPACES_INFO[ref_kind]
 
-    if namespace_key.use_std_opt_name is None or \
-            git_config(namespace_key.use_std_opt_name):
+    if namespace_key.use_std_opt_name is None or git_config(
+        namespace_key.use_std_opt_name
+    ):
         namespace_info.extend(namespace_key.std)
 
     if namespace_key.opt_name is not None:
@@ -154,20 +158,26 @@ def raise_unrecognized_ref_name(ref_name):
     PARAMETERS
         ref_name: The name of the reference we did not recognize.
     """
-    err = ['Unable to determine the type of reference for: {}'
-           .format(ref_name),
-           '',
-           'This repository currently recognizes the following types',
-           'of references:',
-           ]
+    err = [
+        "Unable to determine the type of reference for: {}".format(ref_name),
+        "",
+        "This repository currently recognizes the following types",
+        "of references:",
+    ]
     for ref_kind in RefKind:
-        err.append('')
-        err.append(' * {}:'.format({RefKind.branch_ref: 'Branches',
-                                    RefKind.notes_ref: 'Git Notes',
-                                    RefKind.tag_ref: 'Tags',
-                                    }[ref_kind]))
-        err.extend(['      {}'.format(ref_re)
-                    for ref_re in get_namespace_info(ref_kind)])
+        err.append("")
+        err.append(
+            " * {}:".format(
+                {
+                    RefKind.branch_ref: "Branches",
+                    RefKind.notes_ref: "Git Notes",
+                    RefKind.tag_ref: "Tags",
+                }[ref_kind]
+            )
+        )
+        err.extend(
+            ["      {}".format(ref_re) for ref_re in get_namespace_info(ref_kind)]
+        )
     raise InvalidUpdate(*err)
 
 
@@ -189,8 +199,9 @@ def new_update(ref_name, old_rev, new_rev, all_refs, submitter_email):
         # a branch name (i.e. 'master' instead of 'refs/heads/master'),
         # git itself notices that the branch doesn't exist and returns
         # an error even before calling the hooks for validation.
-        raise InvalidUpdate("unable to delete '{}': remote ref does not exist"
-                            .format(ref_name))
+        raise InvalidUpdate(
+            "unable to delete '{}': remote ref does not exist".format(ref_name)
+        )
 
     if is_null_rev(old_rev):
         change_type = UpdateKind.create
@@ -210,5 +221,6 @@ def new_update(ref_name, old_rev, new_rev, all_refs, submitter_email):
     if new_cls is None:
         return None
 
-    return new_cls(ref_name, ref_kind, object_type, old_rev, new_rev, all_refs,
-                   submitter_email)
+    return new_cls(
+        ref_name, ref_kind, object_type, old_rev, new_rev, all_refs, submitter_email
+    )

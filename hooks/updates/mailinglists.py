@@ -34,13 +34,12 @@ def get_emails_from_script(script_filename, ref_name, changed_files):
         changed_files: A list of files to pass to the script (via stdin).
             None is also accepted in place of an empty list.
     """
-    input_str = '' if changed_files is None else '\n'.join(changed_files)
+    input_str = "" if changed_files is None else "\n".join(changed_files)
 
     p = Popen([script_filename, ref_name], stdin=PIPE, stdout=PIPE)
     (output, _) = p.communicate(input=input_str)
     if p.returncode != 0:
-        warn('!!! %s failed with error code: %d.'
-             % (script_filename, p.returncode))
+        warn("!!! %s failed with error code: %d." % (script_filename, p.returncode))
     return output.splitlines()
 
 
@@ -62,13 +61,11 @@ def expanded_mailing_list(ref_name, get_files_changed_cb):
     result = []
     files_changed = () if get_files_changed_cb is None else None
 
-    for entry in git_config('hooks.mailinglist'):
+    for entry in git_config("hooks.mailinglist"):
         if is_mailinglist_script(entry):
             if files_changed is None:
                 files_changed = get_files_changed_cb()
-            result.extend(get_emails_from_script(entry,
-                                                 ref_name,
-                                                 files_changed))
+            result.extend(get_emails_from_script(entry, ref_name, files_changed))
         else:
             result.append(entry)
     return result

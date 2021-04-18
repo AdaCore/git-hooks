@@ -70,7 +70,7 @@ def check_fast_forward(ref_name, old_rev, new_rev):
 
     # Non-fast-forward update.  See if this is one of the references
     # where such an update is allowed.
-    ok_refs = git_config('hooks.allow-non-fast-forward')
+    ok_refs = git_config("hooks.allow-non-fast-forward")
 
     for ok_ref_re in ok_refs + FORCED_UPDATE_OK_REFS:
         if re.match(ok_ref_re, ref_name) is not None:
@@ -98,21 +98,22 @@ def check_fast_forward(ref_name, old_rev, new_rev):
     # the update that's a problem. Add some additional information
     # to the error message in order to help him understand what's
     # is likely happening.
-    if ref_name.startswith('refs/heads/'):
-        for ok_ref_re in ['refs/heads/' + branch.strip()
-                          for branch in ok_refs]:
+    if ref_name.startswith("refs/heads/"):
+        for ok_ref_re in ["refs/heads/" + branch.strip() for branch in ok_refs]:
             if re.match(ok_ref_re, ref_name) is not None:
-                err_msg += '\n\n' + OLD_STYLE_CONFIG_WARNING
+                err_msg += "\n\n" + OLD_STYLE_CONFIG_WARNING
                 break
 
     raise InvalidUpdate(*err_msg.splitlines())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # First, retrieve the command-line arguments.
     if len(sys.argv) != 4:
-        warn("Error(%s): Invalid usage, wrong number of arguments (%d)"
-             % (sys.argv[0], len(sys.argv)))
+        warn(
+            "Error(%s): Invalid usage, wrong number of arguments (%d)"
+            % (sys.argv[0], len(sys.argv))
+        )
         sys.exit(1)
     try:
         check_fast_forward(sys.argv[1], sys.argv[2], sys.argv[3])

@@ -7,10 +7,13 @@ Driver for the git hooks testsuite.
 from __future__ import print_function
 from gnatpython.fileutils import rm
 from gnatpython.main import Main
-from gnatpython.mainloop import (MainLoop, add_mainloop_options,
-                                 generate_collect_result,
-                                 generate_run_testcase,
-                                 setup_result_dir)
+from gnatpython.mainloop import (
+    MainLoop,
+    add_mainloop_options,
+    generate_collect_result,
+    generate_run_testcase,
+    setup_result_dir,
+)
 from gnatpython.testdriver import add_run_test_options
 import os
 
@@ -18,7 +21,7 @@ from tempfile import mkdtemp
 from utils import fatal_error
 
 # The name of the script to execute in order to run a testcase.
-TESTCASE_SCRIPT_NAME = 'test.py'
+TESTCASE_SCRIPT_NAME = "test.py"
 
 # When the user does not specify specific testcases on the command
 # line, then assume that we should be running the entire testsuite,
@@ -70,13 +73,16 @@ def print_testsuite_results_summary(metrics):
     ARGUMENTS
         metrics: Same as in gnatpython.mainloop.generate_collect_result.
     """
-    print("""\
+    print(
+        """\
 
 Testsuite Results Summary -- Out of %(run)d testscase(s) run in total:
 
     %(failed)4d testcase(s) failed
     %(crashed)4d testcase(s) crashed
-""" % metrics)
+"""
+        % metrics
+    )
 
 
 def main():
@@ -85,8 +91,13 @@ def main():
     m = Main()
     add_mainloop_options(m, extended_options=True)
     add_run_test_options(m)
-    m.add_option("--diffs", dest="view_diffs", action="store_true",
-                 default=False, help="show diffs on stdout")
+    m.add_option(
+        "--diffs",
+        dest="view_diffs",
+        action="store_true",
+        default=False,
+        help="show diffs on stdout",
+    )
     m.parse_args()
 
     # Create a tmp directory for the entire testsuite, to make sure
@@ -99,8 +110,8 @@ def main():
     # own tmp directory (allowing for concurrency).  We pass that
     # information to the testcase through the GIT_HOOKS_TESTSUITE_TMP
     # environment variable.
-    m.options.tmp = mkdtemp('', 'git-hooks-TS-', m.options.tmp)
-    os.environ['GIT_HOOKS_TESTSUITE_TMP'] = m.options.tmp
+    m.options.tmp = mkdtemp("", "git-hooks-TS-", m.options.tmp)
+    os.environ["GIT_HOOKS_TESTSUITE_TMP"] = m.options.tmp
 
     try:
         testcases = get_testcases(m.args)
@@ -110,17 +121,14 @@ def main():
         discs = None
 
         metrics = {}
-        collect_result = generate_collect_result(metrics=metrics,
-                                                 options=m.options)
-        run_testcase = generate_run_testcase('bin/run-testcase',
-                                             discs, m.options)
+        collect_result = generate_collect_result(metrics=metrics, options=m.options)
+        run_testcase = generate_run_testcase("bin/run-testcase", discs, m.options)
 
-        MainLoop(testcases, run_testcase, collect_result,
-                 m.options.mainloop_jobs)
+        MainLoop(testcases, run_testcase, collect_result, m.options.mainloop_jobs)
         print_testsuite_results_summary(metrics)
     finally:
         rm(m.options.tmp, recursive=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

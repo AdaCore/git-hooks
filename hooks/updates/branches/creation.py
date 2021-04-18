@@ -19,6 +19,7 @@ class BranchCreation(BranchUpdate):
         some of the abstract methods would be identical.  So inherit
         from BranchUpdate.
     """
+
     def validate_ref_update(self):
         """See AbstractUpdate.validate_ref_update."""
         # First, perform the same validation as our parent class
@@ -32,16 +33,20 @@ class BranchCreation(BranchUpdate):
         """See AbstractUpdate.get_update_email_contents.
         """
         subject = "[%s] Created branch %s" % (
-            self.email_info.project_name, self.human_readable_ref_name())
+            self.email_info.project_name,
+            self.human_readable_ref_name(),
+        )
 
         update_info = {
-            'human_readable_ref_name': self.human_readable_ref_name(
-                action='was created'),
-            'commit_oneline': commit_oneline(self.new_rev),
-            }
+            "human_readable_ref_name": self.human_readable_ref_name(
+                action="was created"
+            ),
+            "commit_oneline": commit_oneline(self.new_rev),
+        }
         body = BRANCH_CREATION_EMAIL_BODY_TEMPLATE % update_info
-        if branch_summary_of_changes_needed(self.new_commits_for_ref,
-                                            self.lost_commits):
+        if branch_summary_of_changes_needed(
+            self.new_commits_for_ref, self.lost_commits
+        ):
             body += self.summary_of_changes()
 
         return (self.everyone_emails(), subject, body)
@@ -69,16 +74,15 @@ class BranchCreation(BranchUpdate):
         special namespaces, for which a user checking out the branch
         and sending a review is unlikely.
         """
-        GITREVIEW_FILENAME = '.gitreview'
-        DEFAULTBRANCH_CONFIG_NAME = 'gerrit.defaultbranch'
+        GITREVIEW_FILENAME = ".gitreview"
+        DEFAULTBRANCH_CONFIG_NAME = "gerrit.defaultbranch"
 
         # Only perform this check for traditional git branches.
         # See method description above for the reason why.
-        if not self.ref_name.startswith('refs/heads/'):
+        if not self.ref_name.startswith("refs/heads/"):
             return
 
-        if self.search_config_option_list('hooks.no-precommit-check')\
-                is not None:
+        if self.search_config_option_list("hooks.no-precommit-check") is not None:
             # The user explicitly disabled the .gitreview check
             # on this branch.
             return
@@ -99,11 +103,10 @@ class BranchCreation(BranchUpdate):
         #   2. If we even want to look at other configurations in
         #      that file, the code is already in place to do so.
 
-        gitreview_contents = git.show(
-            '%s:%s' % (self.new_rev, GITREVIEW_FILENAME))
+        gitreview_contents = git.show("%s:%s" % (self.new_rev, GITREVIEW_FILENAME))
         gitreview_configs = git.config(
-            '-z', '-l', '--file', '-',
-            _input=gitreview_contents).split('\x00')
+            "-z", "-l", "--file", "-", _input=gitreview_contents
+        ).split("\x00")
 
         config_map = {}
         for config in gitreview_configs:
@@ -112,20 +115,23 @@ class BranchCreation(BranchUpdate):
                 # its output, which cause gitreview_configs to end with
                 # an empty entry. Just ignore those.
                 continue
-            config_name, config_val = config.split('\n', 1)
+            config_name, config_val = config.split("\n", 1)
             config_map[config_name] = config_val
 
-        if DEFAULTBRANCH_CONFIG_NAME in config_map and \
-                config_map[DEFAULTBRANCH_CONFIG_NAME] != self.short_ref_name:
+        if (
+            DEFAULTBRANCH_CONFIG_NAME in config_map
+            and config_map[DEFAULTBRANCH_CONFIG_NAME] != self.short_ref_name
+        ):
             raise InvalidUpdate(
                 "Incorrect gerrit default branch name in file `%s'."
                 % GITREVIEW_FILENAME,
                 "You probably forgot to update your %s file following"
                 % GITREVIEW_FILENAME,
                 "the creation of this branch.",
-                '',
+                "",
                 "Please create a commit which updates the value",
                 "of %s in the file `%s'"
                 % (DEFAULTBRANCH_CONFIG_NAME, GITREVIEW_FILENAME),
                 "and set it to `%s' (instead of `%s')."
-                % (self.short_ref_name, config_map[DEFAULTBRANCH_CONFIG_NAME]))
+                % (self.short_ref_name, config_map[DEFAULTBRANCH_CONFIG_NAME]),
+            )

@@ -38,11 +38,11 @@ class NotesUpdate(AbstractUpdate):
     small, so this class has been implemented in a way to support
     both (in other words, self.old_rev may be null).
     """
+
     def self_sanity_check(self):
         """See AbstractUpdate.self_sanity_check."""
-        assert self.ref_kind == RefKind.notes_ref \
-            and self.object_type == 'commit'
-        assert self.ref_name.startswith('refs/notes/')
+        assert self.ref_kind == RefKind.notes_ref and self.object_type == "commit"
+        assert self.ref_name.startswith("refs/notes/")
 
     def validate_ref_update(self):
         """See AbstractUpdate.validate_ref_update."""
@@ -57,16 +57,15 @@ class NotesUpdate(AbstractUpdate):
             notes = GitNotes(notes_commit.rev)
             if not is_valid_commit(notes.annotated_rev):
                 error_message = [
-                    'The commit associated to the following notes update',
-                    'cannot be found. Please push your branch commits first',
-                    'and then push your notes commits.',
-                    '',
-                    'Notes commit:     %s' % notes.rev,
-                    'Annotated commit: %s' % notes.annotated_rev,
-                    '',
-                    'Notes contents:',
-                    ] + \
-                    notes.contents.splitlines()
+                    "The commit associated to the following notes update",
+                    "cannot be found. Please push your branch commits first",
+                    "and then push your notes commits.",
+                    "",
+                    "Notes commit:     %s" % notes.rev,
+                    "Annotated commit: %s" % notes.annotated_rev,
+                    "",
+                    "Notes contents:",
+                ] + notes.contents.splitlines()
                 raise InvalidUpdate(*error_message)
 
     def pre_commit_checks(self):
@@ -96,32 +95,36 @@ class NotesUpdate(AbstractUpdate):
         # whereas what we needs is the contents at the commit.rev.
         # This makes a difference when a single push updates the notes
         # of the same commit multiple times.
-        annotated_rev_log = git.log(annotated_commit.rev, no_notes=True,
-                                    max_count="1")
-        notes_contents = (None if notes.contents is None
-                          else indent(notes.contents, ' ' * 4))
+        annotated_rev_log = git.log(annotated_commit.rev, no_notes=True, max_count="1")
+        notes_contents = (
+            None if notes.contents is None else indent(notes.contents, " " * 4)
+        )
 
         # Determine subject tag based on ref name:
         #   * remove "refs/notes" prefix
         #   * remove entire tag if remaining component is "commits"
         #     (case of the default refs/notes/commits ref)
-        notes_ref = self.ref_name.split('/', 2)[2]
+        notes_ref = self.ref_name.split("/", 2)[2]
         if notes_ref == "commits":
             subject_tag = ""
         else:
             subject_tag = "(%s)" % notes_ref
 
-        subject = '[notes%s][%s] %s' % (subject_tag,
-                                        self.email_info.project_name,
-                                        annotated_commit.subject)
+        subject = "[notes%s][%s] %s" % (
+            subject_tag,
+            self.email_info.project_name,
+            annotated_commit.subject,
+        )
 
         body_template = (
-            DELETED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE if notes_contents is None
-            else UPDATED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE)
+            DELETED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE
+            if notes_contents is None
+            else UPDATED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE
+        )
         body = body_template % {
-            'annotated_rev_log': annotated_rev_log,
-            'notes_contents': notes_contents,
-            }
+            "annotated_rev_log": annotated_rev_log,
+            "notes_contents": notes_contents,
+        }
 
         # Git commands calls strip on the output, which is usually
         # a good thing, but not in the case of the diff output.
@@ -130,12 +133,20 @@ class NotesUpdate(AbstractUpdate):
         # by stripping it from the output.
         diff = git.show(commit.rev, pretty="format:|", p=True)[1:]
 
-        email_bcc = git_config('hooks.filer-email')
+        email_bcc = git_config("hooks.filer-email")
 
-        return Email(self.email_info,
-                     annotated_commit.email_to(self.ref_name), email_bcc,
-                     subject, body, commit.full_author_email, self.ref_name,
-                     commit.base_rev_for_display(), commit.rev, diff)
+        return Email(
+            self.email_info,
+            annotated_commit.email_to(self.ref_name),
+            email_bcc,
+            subject,
+            body,
+            commit.full_author_email,
+            self.ref_name,
+            commit.base_rev_for_display(),
+            commit.rev,
+            diff,
+        )
 
     def __ensure_fast_forward(self):
         """Raise InvalidUpdate if the update is not a fast-forward update.
@@ -152,6 +163,7 @@ class NotesUpdate(AbstractUpdate):
             return
 
         raise InvalidUpdate(
-            'Your Git Notes are not up to date.',
-            '',
-            'Please update your Git Notes and push again.')
+            "Your Git Notes are not up to date.",
+            "",
+            "Please update your Git Notes and push again.",
+        )

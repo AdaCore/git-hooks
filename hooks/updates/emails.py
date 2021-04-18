@@ -36,6 +36,7 @@ class EmailInfo(object):
         is set.  Otherwise, an InvalidUpdate exception is raised when
         the object is initialized.
     """
+
     def __init__(self, email_from):
         """The constructor.
 
@@ -46,15 +47,18 @@ class EmailInfo(object):
         """
         self.project_name = get_module_name()
 
-        from_domain = git_config('hooks.from-domain')
+        from_domain = git_config("hooks.from-domain")
         if not from_domain:
             raise InvalidUpdate(
-                'Error: hooks.from-domain config variable not set.',
-                'Please contact your repository\'s administrator.')
+                "Error: hooks.from-domain config variable not set.",
+                "Please contact your repository's administrator.",
+            )
         if email_from is None:
-            self.email_from = '%s <%s@%s>' % (get_user_full_name(),
-                                              get_user_name(),
-                                              from_domain)
+            self.email_from = "%s <%s@%s>" % (
+                get_user_full_name(),
+                get_user_name(),
+                from_domain,
+            )
         else:
             self.email_from = email_from
 
@@ -65,9 +69,10 @@ class EmailQueue(object):
     ATTRIBUTES
         queue: A list of emails to be sent.
     """
+
     def __new__(cls, *args, **kw):
         """The allocator."""
-        if not hasattr(cls, '_instance'):
+        if not hasattr(cls, "_instance"):
             orig = super(EmailQueue, cls)
             cls._instance = orig.__new__(cls, *args, **kw)
         return cls._instance
@@ -75,7 +80,7 @@ class EmailQueue(object):
     def __init__(self):
         """The constructor."""
         # If the singleton has never been initialized, do it now.
-        if not hasattr(self, 'queue'):
+        if not hasattr(self, "queue"):
             self.queue = []
 
     def enqueue(self, email):
@@ -106,13 +111,13 @@ class EmailQueue(object):
             nb_emails_left -= 1
             if nb_emails_left > 0:
                 # Need a small delay until we can send the next one.
-                if 'GIT_HOOKS_TESTSUITE_MODE' in os.environ:
+                if "GIT_HOOKS_TESTSUITE_MODE" in os.environ:
                     # For the testsuite, print a debug trace in place
                     # of delaying the execution.  Use debug level 0
                     # to make sure it is always printed (to make sure
                     # the testsuite always alerts us if there is any
                     # change in the delay policy).
-                    debug('inter-email delay...', level=0)
+                    debug("inter-email delay...", level=0)
                 else:  # pragma: no cover (do not want delays during testing)
                     sleep(EMAIL_DELAY_IN_SECONDS)
         self.queue = []
@@ -135,6 +140,7 @@ class EmailCustomContents(object):
         diff: The contents of the "Diff:" section. If None, the "Diff:"
             section is omitted.
     """
+
     def __init__(self, subject=None, body=None, appendix=None, diff=None):
         """Initialize an EmailCustomContents object.
 
@@ -176,10 +182,21 @@ class Email(object):
         old_rev: See AbstractUpdate.old_rev attribute.
         new_rev: See AbstractUpdate.new_rev attribute.
     """
-    def __init__(self, email_info, email_to, email_bcc,
-                 email_subject, email_body,
-                 author, ref_name, old_rev, new_rev, diff=None,
-                 filer_cmd=None):
+
+    def __init__(
+        self,
+        email_info,
+        email_to,
+        email_bcc,
+        email_subject,
+        email_body,
+        author,
+        ref_name,
+        old_rev,
+        new_rev,
+        diff=None,
+        filer_cmd=None,
+    ):
         """The constructor.
 
         PARAMETERS
@@ -297,7 +314,7 @@ class Email(object):
                 # It means that we first need to modify this method
                 # to use EmailMessage instead of MIMEText if we want to
                 # be able to control the Content-Transfer-Encoding.
-                e_msg_charset = 'UTF-8'
+                e_msg_charset = "UTF-8"
                 e_msg_body = e_msg_body.encode(e_msg_charset)
 
         e_msg = MIMEText(e_msg_body)
@@ -305,27 +322,31 @@ class Email(object):
             e_msg.set_charset(e_msg_charset)
 
         # Create the email's header.
-        e_msg['From'] = sanitized_email_address(self.email_info.email_from)
-        e_msg['To'] = ', '.join(map(sanitized_email_address, self.email_to))
+        e_msg["From"] = sanitized_email_address(self.email_info.email_from)
+        e_msg["To"] = ", ".join(map(sanitized_email_address, self.email_to))
         if self.email_bcc:
-            e_msg['Bcc'] = ', '.join(map(sanitized_email_address,
-                                         self.email_bcc))
-        e_msg['Subject'] = sanitized_email_header_field(self.email_subject)
-        e_msg['X-Act-Checkin'] = self.email_info.project_name
-        e_msg['X-Git-Author'] = sanitized_email_address(
-            self.author or self.email_info.email_from)
-        e_msg['X-Git-Refname'] = self.ref_name
-        e_msg['X-Git-Oldrev'] = self.old_rev
-        e_msg['X-Git-Newrev'] = self.new_rev
+            e_msg["Bcc"] = ", ".join(map(sanitized_email_address, self.email_bcc))
+        e_msg["Subject"] = sanitized_email_header_field(self.email_subject)
+        e_msg["X-Act-Checkin"] = self.email_info.project_name
+        e_msg["X-Git-Author"] = sanitized_email_address(
+            self.author or self.email_info.email_from
+        )
+        e_msg["X-Git-Refname"] = self.ref_name
+        e_msg["X-Git-Oldrev"] = self.old_rev
+        e_msg["X-Git-Newrev"] = self.new_rev
 
         # email_from = e_msg.get('From')
-        email_recipients = [addr[1] for addr
-                            in getaddresses(e_msg.get_all('To', [])
-                                            + e_msg.get_all('Cc', [])
-                                            + e_msg.get_all('Bcc', []))]
+        email_recipients = [
+            addr[1]
+            for addr in getaddresses(
+                e_msg.get_all("To", [])
+                + e_msg.get_all("Cc", [])
+                + e_msg.get_all("Bcc", [])
+            )
+        ]
 
-        if 'GIT_HOOKS_TESTSUITE_MODE' in os.environ:
-            if 'GIT_HOOKS_MINIMAL_EMAIL_DEBUG_TRACE' in os.environ:
+        if "GIT_HOOKS_TESTSUITE_MODE" in os.environ:
+            if "GIT_HOOKS_MINIMAL_EMAIL_DEBUG_TRACE" in os.environ:
                 # This environment variable is set when the testcase
                 # doesn't really care about the full contents of
                 # the email. Just print a simple trace showing that
@@ -333,16 +354,18 @@ class Email(object):
                 #
                 # Use debug level 0 to make sure that the trace is always
                 # printed.
-                debug("Sending email: {e_msg[Subject]}..."
-                      .format(e_msg=e_msg),
-                      level=0)
+                debug("Sending email: {e_msg[Subject]}...".format(e_msg=e_msg), level=0)
             else:
                 # Use debug level 0 to make sure that the trace is always
                 # printed.
                 debug(e_msg.as_string(), level=0)
         else:  # pragma: no cover (do not want real emails during testing)
-            sendmail(self.email_info.email_from, email_recipients,
-                     e_msg.as_string(), 'localhost')
+            sendmail(
+                self.email_info.email_from,
+                email_recipients,
+                e_msg.as_string(),
+                "localhost",
+            )
 
         if self.filer_cmd is not None:
             self.__call_filer_cmd()
@@ -365,11 +388,10 @@ class Email(object):
             # the diff. Truncate the patch if necessary.
             diff = self.diff
 
-            max_diff_size = git_config('hooks.max-email-diff-size')
+            max_diff_size = git_config("hooks.max-email-diff-size")
             if len(diff) > max_diff_size:
                 diff = diff[:max_diff_size]
-                diff += ('[...]\n\n[diff truncated at %d bytes]\n'
-                         % max_diff_size)
+                diff += "[...]\n\n[diff truncated at %d bytes]\n" % max_diff_size
 
             # FIXME: The following is only needed when using Python 2.x,
             # due to the fact that strings and unicode strings are
@@ -415,7 +437,7 @@ class Email(object):
                 if isinstance(diff, str) and not isinstance(email_body, str):
                     diff = diff.decode(guess_encoding(diff))
 
-            email_body += '\nDiff:\n'
+            email_body += "\nDiff:\n"
             email_body += diff
         return email_body
 
@@ -430,14 +452,15 @@ class Email(object):
         the call.
         """
         ref_name = self.ref_name
-        if ref_name.startswith('refs/heads/'):
+        if ref_name.startswith("refs/heads/"):
             # Replace the reference name by something a little more
             # intelligible for normal users.
-            ref_name = 'The %s branch' % ref_name[11:]
-        to_be_filed = ('%s has been updated by %s:'
-                       % (ref_name, self.email_info.email_from)
-                       + '\n\n'
-                       + self.email_body)
+            ref_name = "The %s branch" % ref_name[11:]
+        to_be_filed = (
+            "%s has been updated by %s:" % (ref_name, self.email_info.email_from)
+            + "\n\n"
+            + self.email_body
+        )
 
         # Popen.communicate expects a byte string as its input parameter.
         #
@@ -483,8 +506,7 @@ class Email(object):
 
         if sys.version_info[0] < 3:
             if not isinstance(to_be_filed, str):
-                to_be_filed = to_be_filed.encode(
-                    "UTF-8", errors="backslashreplace")
+                to_be_filed = to_be_filed.encode("UTF-8", errors="backslashreplace")
 
         p = Popen(self.filer_cmd, stdin=PIPE, stdout=PIPE, stderr=STDOUT)
         out, _ = p.communicate(to_be_filed)
@@ -514,7 +536,7 @@ def guess_encoding(text):
         may not last forever, since some codes are not legal with
         that encoding.
     """
-    for potential_encoding in ('ascii', 'UTF-8', 'iso-8859-1'):
+    for potential_encoding in ("ascii", "UTF-8", "iso-8859-1"):
         # Note: It looks like iso-8859-1 accepts any sequence of bytes.
         # So, always place it last in the list above, so as to try all
         # the other encodings before defaulting to that one.  We do try
@@ -539,8 +561,9 @@ def sanitized_email_header_field(field_body):
             in an email's header.
     """
     encoding = guess_encoding(field_body)
-    if encoding == 'ascii' and \
-            not any(c for c in field_body if ord(c) < 32 or ord(c) > 126):
+    if encoding == "ascii" and not any(
+        c for c in field_body if ord(c) < 32 or ord(c) > 126
+    ):
         # The field body has only ASCII characters in the range 32-126.
         # So no encoding required.
         return field_body
@@ -583,4 +606,4 @@ def sanitized_email_address(email_address):
         # probably the best we can do.
         return email_address
 
-    return '%s <%s>' % (sanitized_email_header_field(gecos), email_spec)
+    return "%s <%s>" % (sanitized_email_header_field(gecos), email_spec)

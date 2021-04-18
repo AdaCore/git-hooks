@@ -34,21 +34,23 @@ def style_check_files(filename_list, commit_rev, project_name):
         project_name: The name of the project (same as the attribute
             in updates.emails.EmailInfo).
     """
-    debug("style_check_files (commit_rev=%s):\n%s"
-          % (commit_rev,
-             '\n'.join([" - `%s'" % fname for fname in filename_list])),
-          level=3)
+    debug(
+        "style_check_files (commit_rev=%s):\n%s"
+        % (commit_rev, "\n".join([" - `%s'" % fname for fname in filename_list])),
+        level=3,
+    )
 
-    config_file = git_config('hooks.style-checker-config-file')
+    config_file = git_config("hooks.style-checker-config-file")
 
     # Auxilary list of files we need to fetch from the same reference
     # for purposes other than checking their contents.
     aux_files = []
     if config_file is not None and config_file not in filename_list:
         if not file_exists(commit_rev, config_file):
-            info = (STYLE_CHECKER_CONFIG_FILE_MISSING_ERR_MSG
-                    % {'config_filename': config_file,
-                       'commit_rev': commit_rev}).splitlines()
+            info = (
+                STYLE_CHECKER_CONFIG_FILE_MISSING_ERR_MSG
+                % {"config_filename": config_file, "commit_rev": commit_rev}
+            ).splitlines()
             raise InvalidUpdate(*info)
         aux_files.append(config_file)
 
@@ -66,12 +68,13 @@ def style_check_files(filename_list, commit_rev, project_name):
     # when trying to make the needed corrections outlined by the
     # style-checker.
     for filename in filename_list + aux_files:
-        path_to_filename = "%s/%s" % (utils.scratch_dir,
-                                      os.path.dirname(filename))
+        path_to_filename = "%s/%s" % (utils.scratch_dir, os.path.dirname(filename))
         if not os.path.exists(path_to_filename):
             os.makedirs(path_to_filename)
-        git.show("%s:%s" % (commit_rev, filename),
-                 _outfile="%s/%s" % (utils.scratch_dir, filename))
+        git.show(
+            "%s:%s" % (commit_rev, filename),
+            _outfile="%s/%s" % (utils.scratch_dir, filename),
+        )
 
     # Call the style-checker.
 
@@ -82,22 +85,23 @@ def style_check_files(filename_list, commit_rev, project_name):
     # some sources specifically designed to trigger the various
     # error conditions.
     style_checker_hook = ThirdPartyHook("hooks.style-checker")
-    if 'GIT_HOOKS_STYLE_CHECKER' in os.environ:
-        style_checker_hook.hook_exe = os.environ['GIT_HOOKS_STYLE_CHECKER']
+    if "GIT_HOOKS_STYLE_CHECKER" in os.environ:
+        style_checker_hook.hook_exe = os.environ["GIT_HOOKS_STYLE_CHECKER"]
     style_checker_hook_args = []
     if config_file is not None:
-        style_checker_hook_args.extend(['--config', config_file])
+        style_checker_hook_args.extend(["--config", config_file])
     style_checker_hook_args.append(project_name)
 
     _, p, out = style_checker_hook.call(
-        hook_input='\n'.join(filename_list),
+        hook_input="\n".join(filename_list),
         hook_args=style_checker_hook_args,
         cwd=utils.scratch_dir,
     )
 
     if p.returncode != 0:
-        info = (["pre-commit check failed for commit: %s" % commit_rev] +
-                out.splitlines())
+        info = [
+            "pre-commit check failed for commit: %s" % commit_rev
+        ] + out.splitlines()
         raise InvalidUpdate(*info)
 
     # If we reach this point, it means that the style-checker returned
@@ -121,7 +125,7 @@ def ensure_iso_8859_15_only(commit):
     PARAMETERS
         commit: A CommitInfo object corresponding to the commit being checked.
     """
-    if git_config('hooks.no-rh-character-range-check'):
+    if git_config("hooks.no-rh-character-range-check"):
         # The users of this repository explicitly requested that
         # all characters be allowed in revision logs, so do not perform
         # this verification.
@@ -129,21 +133,22 @@ def ensure_iso_8859_15_only(commit):
 
     for lineno, line in enumerate(commit.raw_revlog_lines, start=1):
         try:
-            u = line.decode('UTF-8')
-            u.encode('ISO-8859-15')
+            u = line.decode("UTF-8")
+            u.encode("ISO-8859-15")
         except UnicodeEncodeError as e:
             raise InvalidUpdate(
-                'Invalid revision history for commit %s:' % commit.rev,
-                'It contains characters not in the ISO-8859-15 charset.',
-                '',
-                'Below is the first line where this was detected'
-                ' (line %d):' % lineno,
-                '| ' + line,
-                '  ' + ' ' * e.start + '^',
-                '  ' + ' ' * e.start + '|',
-                '',
+                "Invalid revision history for commit %s:" % commit.rev,
+                "It contains characters not in the ISO-8859-15 charset.",
+                "",
+                "Below is the first line where this was detected"
+                " (line %d):" % lineno,
+                "| " + line,
+                "  " + " " * e.start + "^",
+                "  " + " " * e.start + "|",
+                "",
                 "Please amend the commit's revision history to remove it",
-                "and try again.")
+                "and try again.",
+            )
 
 
 def ensure_empty_line_after_subject(commit):
@@ -159,16 +164,18 @@ def ensure_empty_line_after_subject(commit):
         # No body other than the subject.  No violation possible.
         return
 
-    if not commit.raw_revlog_lines[1].strip() == '':
+    if not commit.raw_revlog_lines[1].strip() == "":
         info = (
-            ['Invalid revision history for commit %s:' % commit.rev,
-             'The first line should be the subject of the commit,',
-             'followed by an empty line.',
-             '',
-             'Below are the first few lines of the revision history:'] +
-            ['| %s' % line for line in commit.raw_revlog_lines[:5]] +
-            ['',
-             "Please amend the commit's revision history and try again."])
+            [
+                "Invalid revision history for commit %s:" % commit.rev,
+                "The first line should be the subject of the commit,",
+                "followed by an empty line.",
+                "",
+                "Below are the first few lines of the revision history:",
+            ]
+            + ["| %s" % line for line in commit.raw_revlog_lines[:5]]
+            + ["", "Please amend the commit's revision history and try again."]
+        )
         raise InvalidUpdate(*info)
 
 
@@ -180,7 +187,7 @@ def reject_lines_too_long(commit):
     PARAMETERS
         commit: A CommitInfo object corresponding to the commit being checked.
     """
-    max_line_length = git_config('hooks.max-rh-line-length')
+    max_line_length = git_config("hooks.max-rh-line-length")
     if max_line_length <= 0:
         # A value of zero (or less) means that the project does not
         # want this check to be applied.  Skip it.
@@ -189,13 +196,14 @@ def reject_lines_too_long(commit):
     for line in commit.raw_revlog_lines:
         if len(line) > max_line_length:
             raise InvalidUpdate(
-                'Invalid revision history for commit %s:' % commit.rev,
-                '',
-                'The following line in the revision history is too long',
-                '(%d characters, when the maximum is %d characters):'
+                "Invalid revision history for commit %s:" % commit.rev,
+                "",
+                "The following line in the revision history is too long",
+                "(%d characters, when the maximum is %d characters):"
                 % (len(line), max_line_length),
-                '',
-                '>>> %s' % line)
+                "",
+                ">>> %s" % line,
+            )
 
 
 def reject_unedited_merge_commit(commit):
@@ -215,7 +223,7 @@ def reject_unedited_merge_commit(commit):
     PARAMETERS
         commit: A CommitInfo object corresponding to the commit being checked.
     """
-    if git_config('hooks.disable-merge-commit-checks'):
+    if git_config("hooks.disable-merge-commit-checks"):
         # The users of this repository do not want this safety guard.
         # So do not perform this check.
         return
@@ -226,13 +234,14 @@ def reject_unedited_merge_commit(commit):
 
     for line in commit.raw_revlog_lines:
         if re.match(RH_PATTERN, line):
-            info = ['Pattern "%s" has been detected.' % RH_PATTERN,
-                    '(in commit %s)' % commit.rev,
-                    '',
-                    'This usually indicates an unintentional merge commit.',
-                    'If you would really like to push a merge commit,'
-                    ' please',
-                    "edit the merge commit's revision history."]
+            info = [
+                'Pattern "%s" has been detected.' % RH_PATTERN,
+                "(in commit %s)" % commit.rev,
+                "",
+                "This usually indicates an unintentional merge commit.",
+                "If you would really like to push a merge commit," " please",
+                "edit the merge commit's revision history.",
+            ]
             raise InvalidUpdate(*info)
 
 
@@ -251,19 +260,17 @@ def reject_merge_conflict_section(commit):
 
     for line in commit.raw_revlog_lines:
         if line.strip() == RH_PATTERN:
-            info = ['Pattern "%s" has been detected.' % RH_PATTERN,
-                    '(in commit %s)' % commit.rev,
-                    '',
-                    'This usually indicates a merge commit where some'
-                    ' merge conflicts',
-                    'had to be resolved, but where the "Conflicts:"'
-                    ' section has not ',
-                    'been deleted from the revision history.',
-                    '',
-                    'Please edit the commit\'s revision history to'
-                    ' either delete',
-                    'the section, or to avoid using the pattern above'
-                    ' by itself.']
+            info = [
+                'Pattern "%s" has been detected.' % RH_PATTERN,
+                "(in commit %s)" % commit.rev,
+                "",
+                "This usually indicates a merge commit where some" " merge conflicts",
+                'had to be resolved, but where the "Conflicts:"' " section has not ",
+                "been deleted from the revision history.",
+                "",
+                "Please edit the commit's revision history to" " either delete",
+                "the section, or to avoid using the pattern above" " by itself.",
+            ]
             raise InvalidUpdate(*info)
 
 
@@ -275,29 +282,31 @@ def check_missing_ticket_number(commit):
     PARAMETERS
         commit: A CommitInfo object corresponding to the commit being checked.
     """
-    if not git_config('hooks.tn-required'):
+    if not git_config("hooks.tn-required"):
         return
 
     tn_re = [  # Satisfy pep8's 2-spaces before inline comment.
         # The word 'no-tn-check' anywhere in the RH removes the need
         # for a TN in the RH.
-        r'\bno-tn-check\b',
+        r"\bno-tn-check\b",
         # TN regexp.
-        r'\b[0-9A-Z][0-9A-Z][0-9][0-9]-[0-9A-Z][0-9][0-9]\b',
-        ]
+        r"\b[0-9A-Z][0-9A-Z][0-9][0-9]-[0-9A-Z][0-9][0-9]\b",
+    ]
     for line in commit.raw_revlog_lines:
-        if re.search('|'.join(tn_re), line, re.IGNORECASE):
+        if re.search("|".join(tn_re), line, re.IGNORECASE):
             return
 
-    raise InvalidUpdate(*[
-        'The following commit is missing a ticket number inside',
-        'its revision history.  If the change is sufficiently',
-        'minor that a ticket number is not meaningful, please use',
-        'the word "no-tn-check" in place of a ticket number.',
-        '',
-        'commit %s' % commit.rev,
-        'Subject: %s' % commit.subject,
-        ])
+    raise InvalidUpdate(
+        *[
+            "The following commit is missing a ticket number inside",
+            "its revision history.  If the change is sufficiently",
+            "minor that a ticket number is not meaningful, please use",
+            'the word "no-tn-check" in place of a ticket number.',
+            "",
+            "commit %s" % commit.rev,
+            "Subject: %s" % commit.subject,
+        ]
+    )
 
 
 def check_revision_history(commit):
@@ -308,7 +317,7 @@ def check_revision_history(commit):
     PARAMETERS
         commit: A CommitInfo object representing the commit to be checked.
     """
-    if 'no-rh-check' in commit.raw_revlog:
+    if "no-rh-check" in commit.raw_revlog:
         return
 
     # Various checks on the revision history...
@@ -333,22 +342,24 @@ def check_filename_collisions(commit):
             filename_map[key] = [filename]
         else:
             filename_map[key].append(filename)
-    collisions = [filename_map[k] for k in filename_map.keys()
-                  if len(filename_map[k]) > 1]
+    collisions = [
+        filename_map[k] for k in filename_map.keys() if len(filename_map[k]) > 1
+    ]
     if collisions:
         info = [
-            'The following filename collisions have been detected.',
-            'These collisions happen when the name of two or more files',
+            "The following filename collisions have been detected.",
+            "These collisions happen when the name of two or more files",
             'differ in casing only (Eg: "hello.txt" and "Hello.txt").',
-            'Please re-do your commit, chosing names that do not collide.',
-            '',
-            '    Commit: %s' % commit.rev,
-            '    Subject: %s' % commit.subject,
-            '',
-            'The matching files are:']
+            "Please re-do your commit, chosing names that do not collide.",
+            "",
+            "    Commit: %s" % commit.rev,
+            "    Subject: %s" % commit.subject,
+            "",
+            "The matching files are:",
+        ]
         for matching_names in collisions:
-            info.append('')  # Empty line to separate each group...
-            info += ['    %s' % filename for filename in matching_names]
+            info.append("")  # Empty line to separate each group...
+            info += ["    %s" % filename for filename in matching_names]
         raise InvalidUpdate(*info)
 
 
@@ -358,14 +369,17 @@ def check_filepath_length(commit):
     PARAMETERS
         commit: A CommitInfo object representing the commit to be checked.
     """
-    max_path_length = git_config('hooks.max-filepath-length')
+    max_path_length = git_config("hooks.max-filepath-length")
     if max_path_length <= 0:
         # This means the project explicitly requested that this check
         # be skipped.
         return
 
-    too_long = [file_path for file_path in commit.added_files()
-                if len(file_path) > max_path_length]
+    too_long = [
+        file_path
+        for file_path in commit.added_files()
+        if len(file_path) > max_path_length
+    ]
     if too_long:
         info = [
             "The following commit introduces some new files whose total",
@@ -377,13 +391,17 @@ def check_filepath_length(commit):
             "    Commit: {commit.rev}".format(commit=commit),
             "    Subject: {commit.subject}".format(commit=commit),
             "",
-            "The problematic files are ({max_path_length} characters max):"
-            .format(max_path_length=max_path_length),
+            "The problematic files are ({max_path_length} characters max):".format(
+                max_path_length=max_path_length
+            ),
             "",
         ]
-        info.extend("    {path_name} ({path_len} characters)"
-                    .format(path_name=path_name, path_len=len(path_name))
-                    for path_name in too_long)
+        info.extend(
+            "    {path_name} ({path_len} characters)".format(
+                path_name=path_name, path_len=len(path_name)
+            )
+            for path_name in too_long
+        )
         info.append("")
         raise InvalidUpdate(*info)
 
@@ -412,10 +430,12 @@ def reject_commit_if_merge(commit, ref_name):
     """
     assert commit.parent_revs is not None
     if len(commit.parent_revs) > 1:
-        raise InvalidUpdate(*(MERGE_NOT_ALLOWED_ERROR_MSG
-                              % {'ref_name': ref_name,
-                                 'rev': commit.rev,
-                                 'subject': commit.subject}).splitlines())
+        raise InvalidUpdate(
+            *(
+                MERGE_NOT_ALLOWED_ERROR_MSG
+                % {"ref_name": ref_name, "rev": commit.rev, "subject": commit.subject}
+            ).splitlines()
+        )
 
 
 def style_check_commit(old_rev, new_rev, project_name):
@@ -431,29 +451,31 @@ def style_check_commit(old_rev, new_rev, project_name):
         project_name: The name of the project (same as the attribute
             in updates.emails.EmailInfo).
     """
-    debug('style_check_commit(old_rev=%s, new_rev=%s)' % (old_rev, new_rev))
+    debug("style_check_commit(old_rev=%s, new_rev=%s)" % (old_rev, new_rev))
 
     # We allow users to explicitly disable pre-commit checks for
     # specific commits via the use of a special keyword placed anywhere
     # in the revision log. If found, then return immediately.
-    raw_revlog = git.log('-1', new_rev, pretty='format:%B')
-    if 'no-precommit-check' in raw_revlog:
-        debug('pre-commit checks explicity disabled for commit %s' % new_rev)
+    raw_revlog = git.log("-1", new_rev, pretty="format:%B")
+    if "no-precommit-check" in raw_revlog:
+        debug("pre-commit checks explicity disabled for commit %s" % new_rev)
         return
 
-    changes = diff_tree('-r', old_rev, new_rev)
+    changes = diff_tree("-r", old_rev, new_rev)
     files_to_check = []
 
     for item in changes:
         (old_mode, new_mode, old_sha1, new_sha1, status, filename) = item
-        debug('diff-tree entry: %s %s %s %s %s %s'
-              % (old_mode, new_mode, old_sha1, new_sha1, status, filename),
-              level=5)
+        debug(
+            "diff-tree entry: %s %s %s %s %s %s"
+            % (old_mode, new_mode, old_sha1, new_sha1, status, filename),
+            level=5,
+        )
 
-        if status in ('D'):
-            debug('deleted file ignored: %s' % filename, level=2)
-        elif new_mode == '160000':
-            debug('subproject entry ignored: %s' % filename, level=2)
+        if status in ("D"):
+            debug("deleted file ignored: %s" % filename, level=2)
+        elif new_mode == "160000":
+            debug("subproject entry ignored: %s" % filename, level=2)
         else:
             # Note: We treat a file rename as the equivalent of the old
             # file being deleted and the new file being added. This means
@@ -463,7 +485,7 @@ def style_check_commit(old_rev, new_rev, project_name):
             # branch for status values starting with `R'.
             files_to_check.append(filename)
 
-    no_style_check_map = git_attribute(new_rev, files_to_check, 'no-precommit-check')
+    no_style_check_map = git_attribute(new_rev, files_to_check, "no-precommit-check")
 
     def needs_style_check_p(filename):
         """Return True if the file should be style-checked, False otherwise.
@@ -471,15 +493,15 @@ def style_check_commit(old_rev, new_rev, project_name):
         In addition to returning True/False, it generates a debug log
         when the file does have a no-precommit-check attribute.
         """
-        if no_style_check_map[filename] == 'set':
-            debug('no-precommit-check: %s commit_rev=%s' % (filename, new_rev))
+        if no_style_check_map[filename] == "set":
+            debug("no-precommit-check: %s commit_rev=%s" % (filename, new_rev))
             return False
         else:
             return True
 
     files_to_check = filter(needs_style_check_p, files_to_check)
     if not files_to_check:
-        debug('style_check_commit: no files to style-check')
+        debug("style_check_commit: no files to style-check")
         return
 
     style_check_files(files_to_check, new_rev, project_name)

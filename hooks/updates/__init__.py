@@ -204,7 +204,7 @@ class AbstractUpdate(object):
         REMARKS
             This method is abstract and should be overridden.
         """
-        assert False
+        raise AssertionError("Abstract method must be overridden")
 
     def validate_ref_update(self):
         """Raise InvalidUpdate if the update is invalid.
@@ -212,7 +212,7 @@ class AbstractUpdate(object):
         REMARKS
             This method is abstract and should be overridden.
         """
-        assert False
+        raise AssertionError("Abstract method must be overridden")
 
     def get_update_email_contents(self):
         """Return a tuple describing the update (or None).
@@ -241,7 +241,7 @@ class AbstractUpdate(object):
         commits, a branch update summary email is not going to bring
         much, and thus can be omitted.
         """
-        assert False
+        raise AssertionError("Abstract method must be overridden")
 
     # ------------------------------------------------------------------
     # --  Methods that child classes may override.                    --

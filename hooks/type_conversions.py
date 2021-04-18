@@ -48,7 +48,7 @@ def to_tuple(val):
     # return a tuple containing an empty string.  We want to return
     # an empty tuple in this case.
     if not val:
-        return tuple()
+        return ()
     return tuple(val.split(','))
 
 

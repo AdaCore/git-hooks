@@ -463,9 +463,7 @@ def style_check_commit(old_rev, new_rev, project_name):
             # branch for status values starting with `R'.
             files_to_check.append(filename)
 
-    no_style_check_map = git_attribute(new_rev,
-                                       [fname for fname in files_to_check],
-                                       'no-precommit-check')
+    no_style_check_map = git_attribute(new_rev, files_to_check, 'no-precommit-check')
 
     def needs_style_check_p(filename):
         """Return True if the file should be style-checked, False otherwise.

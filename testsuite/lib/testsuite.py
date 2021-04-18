@@ -21,7 +21,7 @@ from tempfile import mkdtemp
 from utils import fatal_error
 
 # The name of the script to execute in order to run a testcase.
-TESTCASE_SCRIPT_NAME = "test.py"
+TESTCASE_SCRIPT_NAME = "run_test.py"
 
 # When the user does not specify specific testcases on the command
 # line, then assume that we should be running the entire testsuite,

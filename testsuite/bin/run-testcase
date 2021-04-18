@@ -101,6 +101,11 @@ def main():
                      m.options.restricted_discs,
                      len(m.args) > 1 and m.args[1:] or None,
                      m.options.failed_only)
+    # Change the name of the testcase script ("test.cmd" or "test.py").
+    # This is to allow us to implement a step towards moving this testsuite
+    # to a pytest-based testsuite, where "test.py" isn't a name that pytest
+    # will consider when looking for testcases.
+    t.opt_results["CMD"] = "run_test.py"
     t.execute()
 
 

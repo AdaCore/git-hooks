@@ -53,7 +53,7 @@ def get_testcases(testcase_dirs):
     for testcase_dir in testcase_dirs:
         if not os.path.isdir(testcase_dir):
             fatal_error("Invalid directory name: %s" % testcase_dir)
-        for root, dirs, files in os.walk(testcase_dir):
+        for root, _, files in os.walk(testcase_dir):
             if TESTCASE_SCRIPT_NAME in files:
                 testcases[os.path.realpath(root)] = None
     # One last sanity check: Make sure that we have at least one testcase.

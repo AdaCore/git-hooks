@@ -67,7 +67,7 @@ def git_run(command, *args, **kwargs):
     input = None
     outfile = None
     do_split_lines = False
-    for (k, v) in kwargs.iteritems():
+    for (k, v) in kwargs.items():
         if k == '_cwd':
             cwd = v
         elif k == '_env':

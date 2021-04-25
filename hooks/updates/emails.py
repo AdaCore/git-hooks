@@ -8,7 +8,6 @@ from email.utils import getaddresses, parseaddr
 from errors import InvalidUpdate
 from git import get_module_name
 import os
-from string import strip
 from subprocess import Popen, PIPE, STDOUT
 import sys
 from time import sleep
@@ -589,7 +588,7 @@ def sanitized_email_address(email_address):
     PARAMETERS
         email_address: A string containing an email address.
     """
-    email_address = strip(email_address)
+    email_address = email_address.strip()
     gecos, email_spec = parseaddr(email_address)
     if not gecos:
         # There is no GECOS, so the email address is made of only

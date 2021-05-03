@@ -35,15 +35,12 @@ def to_tuple(val):
 
     PARAMETERS
         val: The value to convert, assumed to be a string for now.
-            An assertion will be raised if this is not the case.
 
     REMARKS
         Handling of val being a tuple, or even maybe other types
         could be added as well.  But there is no need for it at
         the moment.
     """
-    assert isinstance(val, str)
-
     # Handle the case where val is empty separately, as split would
     # return a tuple containing an empty string.  We want to return
     # an empty tuple in this case.

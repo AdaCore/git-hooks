@@ -14,9 +14,9 @@ class TestRun(TestCase):
         # the associated check.  So the push should work.
         p = Run('git push origin master'.split())
         expected_out = """\
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -48,9 +48,9 @@ remote: +++ b/b
 remote: @@ -0,0 +1 @@
 remote: +A second file. No chance of conflict.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com

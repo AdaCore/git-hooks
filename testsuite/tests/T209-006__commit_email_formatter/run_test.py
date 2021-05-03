@@ -199,9 +199,9 @@ remote: [Diff removed for reason X and Y]
         # except that the "diff" section has been removed.
         expected_out += """\
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -233,9 +233,9 @@ remote:
         # (meaning, the standard email should get sent).
         expected_out += """\
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -283,9 +283,9 @@ remote: +Hello. This is going to be a useful document for everyone to read.
 
         expected_out += """\
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -389,9 +389,9 @@ remote: +It will provide detailed information on this thing.
         # the email body (but before the diff).
         expected_out += """\
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -448,9 +448,9 @@ remote: +Let's then look at the foreground: Bright colorful.
 
         expected_out += """\
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -485,9 +485,9 @@ remote:
 
         expected_out += """\
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -546,9 +546,9 @@ remote: +information that you might never have thought about.
 
         expected_out += """\
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -580,9 +580,9 @@ To ../bare/repo.git
 
         p = Run('git push origin hook-dump'.split())
         expected_out = """\
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Subject: [repo] Created branch 'hook-dump'

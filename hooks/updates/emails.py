@@ -244,8 +244,19 @@ class Email(object):
             is set, then a trace of the email is printed, instead
             of sending it.  This is for testing purposes.
         """
+        # Force the charset being used to UTF-8. We could possibly try
+        # to guess whether more primitive charsets might work such as
+        # ASCII or IS0-8859-1, but UTF-8 is so close to those encodings
+        # that it is not worth the extra complication.
+        #
+        # The one situation where it might be worth guessing the charset
+        # is when the email body contains some characters which are not
+        # available in UTF-8. Since UTF-8 is so widely used, we'll assume
+        # for now that it's not necessary in practice to support this
+        # scenario.
+        e_msg_charset = "UTF-8"
+
         e_msg_body = self.__email_body_with_diff
-        e_msg_charset = guess_encoding(e_msg_body)
 
         # FIXME: The following is only needed when using Python 2.x,
         # due to the fact that strings and unicode strings are
@@ -273,9 +284,9 @@ class Email(object):
                 # a problem per se, except that this then makes is very hard
                 # for a human to double-check the contents of the email,
                 # something that we need to do when doing testing. So,
-                # we work around all of these issues by selecting a UTF-8
-                # charset, and converting the unicode string back to
-                # a byte string using that selected charset.
+                # we work around all of these issues by converting the unicode
+                # string back to a byte string using the charset we chose
+                # above.
                 #
                 # It's not clear what we'll want to do about this when
                 # switching to Python 3.x, where all strings are unicode
@@ -313,7 +324,6 @@ class Email(object):
                 # It means that we first need to modify this method
                 # to use EmailMessage instead of MIMEText if we want to
                 # be able to control the Content-Transfer-Encoding.
-                e_msg_charset = "UTF-8"
                 e_msg_body = e_msg_body.encode(e_msg_charset)
 
         e_msg = MIMEText(e_msg_body)

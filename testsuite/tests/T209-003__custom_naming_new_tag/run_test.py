@@ -8,9 +8,9 @@ class TestRun(TestCase):
         # Try pushing tag v0.1.
         p = Run('git push origin v0.1'.split())
         expected_out = """\
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@example.com>
 remote: To: testsuite@example.com
 remote: Bcc: filer@example.com
@@ -42,9 +42,9 @@ To ../bare/repo.git
         # Try pushing tag v0.1.
         p = Run('git push origin v0.1:refs/user/myself/tags/v0.1'.split())
         expected_out = """\
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@example.com>
 remote: To: testsuite@example.com
 remote: Bcc: filer@example.com

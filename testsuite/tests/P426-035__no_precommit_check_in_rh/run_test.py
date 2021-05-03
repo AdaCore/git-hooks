@@ -28,9 +28,9 @@ remote: DEBUG: post_receive_one(ref_name=refs/heads/gdb-head
 remote:                         old_rev=2c2cd0d654cc6cf460024feb845ee7ea760290c4
 remote:                         new_rev=8da5e84724007accbaf409022c3c9f07776a8c8b)
 remote: DEBUG: update base: 2c2cd0d654cc6cf460024feb845ee7ea760290c4
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: nowhere@example.com
 remote: Subject: [repo/gdb-head] (2 commits) Resync from fsf-master as of today --
@@ -61,9 +61,9 @@ remote: (*) This commit exists in a branch whose name matches
 remote:     the hooks.noemail config option. No separate email
 remote:     sent.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: nowhere@example.com
 remote: Bcc: filer@example.com

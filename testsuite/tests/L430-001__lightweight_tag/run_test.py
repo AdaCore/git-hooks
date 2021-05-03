@@ -16,9 +16,9 @@ class TestRun(TestCase):
         self.assertEqual(p.status, 0, p.image)
 
         expected_out = """\
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@example.com>
 remote: To: commits@example.com
 remote: Subject: [repo] Created tag 'new-tag'

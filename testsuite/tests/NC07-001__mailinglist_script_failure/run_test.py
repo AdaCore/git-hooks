@@ -33,9 +33,9 @@ remote: *** !!! %(TEST_DIR)s/email_to.py failed with error code: 3.
 remote: *** !!! %(TEST_DIR)s/email_to.py failed with error code: 3.
 remote: *** !!! %(TEST_DIR)s/email_to.py failed with error code: 3.
 remote: *** !!! %(TEST_DIR)s/email_to.py failed with error code: 3.
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To:
 remote: Bcc: filer@example.com
@@ -71,9 +71,9 @@ remote: +{
 remote: +  int handle;
 remote: +};
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To:
 remote: Bcc: filer@example.com
@@ -104,9 +104,9 @@ remote:  /* top.h */
 remote: +
 remote: +extern void start_mainloop (void);
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To:
 remote: Bcc: filer@example.com
@@ -150,9 +150,9 @@ remote: +++ b/gdb/README
 remote: @@ -0,0 +1 @@
 remote: +Note that GDB depends on BFD.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To:
 remote: Bcc: filer@example.com

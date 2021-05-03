@@ -43,7 +43,7 @@ remote: +And now a third line.
 remote: DEBUG: inter-email delay...
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 8bit
-remote: Content-Type: text/plain; charset="iso-8859-1"
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com, =?utf-8?b?TcOibsO8IFNjcmlwdA==?= <ms@example.com>
 remote: Bcc: filer@example.com

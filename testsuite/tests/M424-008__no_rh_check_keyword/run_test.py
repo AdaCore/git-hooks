@@ -13,9 +13,9 @@ class TestRun(TestCase):
         p = Run('git push origin c16481a7e16f7d1632319922e84a9cc32dcf876b:master'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com

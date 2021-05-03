@@ -39,9 +39,9 @@ error: failed to push some refs to '../bare/repo.git'
 remote: *** cvs_check: `--config' `style.yaml' `repo' < `project.config' `style.yaml'
 remote: *** # A YaML file (with nothing in it)
 remote: ***
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -117,9 +117,9 @@ error: failed to push some refs to '../bare/repo.git'
 remote: *** cvs_check: `--config' `style.yaml' `repo' < `style.yaml'
 remote: *** # A YaML file (with nothing in it)
 remote: ***
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -164,9 +164,9 @@ To ../bare/repo.git
 remote: *** cvs_check: `--config' `style.yaml' `repo' < `b.adb'
 remote: *** # A YaML file (with nothing in it)
 remote: ***
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -220,9 +220,9 @@ remote: *** cvs_check: `--config' `style.yaml' `repo' < `style.yaml'
 remote: *** # A YaML file (with nothing in it)
 remote: *** hello: world
 remote: ***
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -274,9 +274,9 @@ remote: *** # A YaML file (with nothing in it)
 remote: *** hello: world
 remote: *** something: else
 remote: ***
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com

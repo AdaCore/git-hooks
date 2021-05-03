@@ -23,9 +23,9 @@ class TestRun(TestCase):
         p = Run('git push origin meta/config:refs/meta/config'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `project.config'
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Subject: [repo] Created branch 'config' in namespace 'refs/meta'
@@ -39,9 +39,9 @@ remote: The branch 'config' was created in namespace 'refs/meta' pointing to:
 remote:
 remote:  7dcb1b7... Initial config for project
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com

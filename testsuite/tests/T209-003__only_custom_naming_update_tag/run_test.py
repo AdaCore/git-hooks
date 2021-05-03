@@ -57,9 +57,9 @@ remote: *** -- get the new tag. Assuming this update was deliberate,
 remote: *** -- notifying all known users of the update is recommended.
 remote: *** ---------------------------------------------------------------
 remote: *** cvs_check: `repo' < `bar.c' `foo'
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@example.com>
 remote: To: repo@example.com
 remote: Bcc: filer@example.com
@@ -90,9 +90,9 @@ remote: -----------------------------------
 remote:
 remote:   8c0b415... Added bar.c, and updated foo.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: Content-Type: text/plain; charset="us-ascii"
-remote: MIME-Version: 1.0
+remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
+remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@example.com>
 remote: To: repo@example.com
 remote: Bcc: filer@example.com

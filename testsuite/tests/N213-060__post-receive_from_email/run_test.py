@@ -14,9 +14,9 @@ class TestRun(TestCase):
                )
 
         expected_out = """\
-DEBUG: Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+DEBUG: MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
 From: Dave Smith <ds@example.com>
 To: git-hooks-ci@example.com
 Bcc: filer@example.com

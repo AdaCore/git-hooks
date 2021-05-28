@@ -49,7 +49,7 @@ remote: To: git-hooks-ci@example.com, =?utf-8?b?TcOibsO8IFNjcmlwdA==?= <ms@examp
 remote: Bcc: filer@example.com
 remote: Subject: [repo] Remove useless comment in "b"
 remote: X-Act-Checkin: repo
-remote: X-Git-Author: =?iso-8859-1?q?M=E3n=FC_Script?= <script@example.com>
+remote: X-Git-Author: =?iso-8859-15?q?M=E3n=FC_Script?= <script@example.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: 15f28e076a944b3fbe98ebb1053e60cb43bc6751
 remote: X-Git-Newrev: 98bda8f3aa783282348a39ddf816413e54847d6d

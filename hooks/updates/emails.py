@@ -246,7 +246,7 @@ class Email(object):
         """
         # Force the charset being used to UTF-8. We could possibly try
         # to guess whether more primitive charsets might work such as
-        # ASCII or IS0-8859-1, but UTF-8 is so close to those encodings
+        # ASCII or IS0-8859-15, but UTF-8 is so close to those encodings
         # that it is not worth the extra complication.
         #
         # The one situation where it might be worth guessing the charset
@@ -537,7 +537,7 @@ def guess_encoding(text):
         encoding is able to decode the given string. None otherwise.
 
         Note that one of the encodings that this function tries is
-        the 'iso-8859-1' encoding which, as of this writing (using
+        the 'iso-8859-15' encoding which, as of this writing (using
         Python 2.7.10), appears to be an encoding accepting any sequence
         of bytes. So, as of now, the implementation of this function
         is such that it should never return None. However, users of
@@ -545,8 +545,8 @@ def guess_encoding(text):
         may not last forever, since some codes are not legal with
         that encoding.
     """
-    for potential_encoding in ("ascii", "UTF-8", "iso-8859-1"):
-        # Note: It looks like iso-8859-1 accepts any sequence of bytes.
+    for potential_encoding in ("ascii", "UTF-8", "iso-8859-15"):
+        # Note: It looks like iso-8859-15 accepts any sequence of bytes.
         # So, always place it last in the list above, so as to try all
         # the other encodings before defaulting to that one.  We do try
         # it before using it, though, just in case it starts failing
@@ -578,7 +578,7 @@ def sanitized_email_header_field(field_body):
         return field_body
 
     if encoding is None:  # pragma: no cover (see explanation below)
-        # Should never happen, since guess_encoding tries the iso-8859-1
+        # Should never happen, since guess_encoding tries the iso-8859-15
         # encoding which apparently accepts any byte stream.
         # Nevertheless, just in case, do the best we can in that situation,
         # and just send the header as is.

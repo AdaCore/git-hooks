@@ -19,9 +19,9 @@ REMARKS
 """
 from __future__ import print_function
 
-from gnatpython.ex import Run
 from os.path import isdir, isfile
 from shutil import move, rmtree
+from subprocess import Popen, PIPE, STDOUT
 from sys import exit, stderr
 
 
@@ -60,21 +60,26 @@ move(bare_repo_config_path, BARE_REPO_CONFIG)
 # This file is not meant to be the master, but helps when one needs
 # to grep the configuration of all testsuite test repositories.
 with open("hooks_config", "w") as fd:
-    r = Run(
+    p = Popen(
         "git show refs/meta/config:project.config".split(),
-        output=fd,
-        error=stderr,
+        stdout=fd,
+        stderr=stderr,
         cwd=bare_repo_config_dir,
     )
-    if r.status != 0:
-        fatal("cannot find project.config file in refs/meta/config (err: %d)", r.status)
+    p.communicate()
+    if p.returncode != 0:
+        fatal(
+            "cannot find project.config file in refs/meta/config"
+            " (err: {p.returncode})".format(p=p)
+        )
 
-r = Run("tar cvfj git-repos.tar.bz2 bare repo".split())
-if r.status != 0:
+p = Popen("tar cvfj git-repos.tar.bz2 bare repo".split(), stdout=PIPE, stderr=STDOUT)
+out, _ = p.communicate()
+if p.returncode != 0:
     # The packing operation failed. Print an error message, and exit.
     print("ERROR: tar failed to pack repositories:", file=stderr)
-    print(r.out, file=stderr)
-    exit(r.status)
+    print(out, file=stderr)
+    exit(p.returncode)
 
 rmtree("repo")
 rmtree("bare")

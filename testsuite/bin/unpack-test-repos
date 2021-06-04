@@ -7,10 +7,10 @@ used by the testcase.
 """
 from __future__ import print_function
 
-from gnatpython.ex import Run
 from os import unlink
 from os.path import exists, isdir, isfile
 from shutil import move
+from subprocess import Popen, PIPE, STDOUT
 from sys import exit, stderr
 
 
@@ -33,12 +33,13 @@ if not exists(REPOS_TARBALL):
 if not exists(BARE_REPO_CONFIG):
     fatal("Cannot find config file for bare repository: %s" % BARE_REPO_CONFIG)
 
-r = Run(["tar", "xvfj", REPOS_TARBALL])
-if r.status != 0:
+p = Popen(["tar", "xvfj", REPOS_TARBALL], stdout=PIPE, stderr=STDOUT)
+out, _ = p.communicate()
+if p.returncode != 0:
     # The packing operation failed. Print an error message, and exit.
     print("ERROR: tar failed to unpack repositories:", file=stderr)
-    print(r.out, file=stderr)
-    exit(r.status)
+    print(out, file=stderr)
+    exit(p.returncode)
 
 if not isdir("repo"):
     fatal('Directory "repo" does not exist')

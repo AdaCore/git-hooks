@@ -1,4 +1,4 @@
-from gnatpython.fileutils import diff
+from difflib import unified_diff
 from support import *
 
 
@@ -38,7 +38,15 @@ handled properly by the git-hooks."""
             "%s\n\nDiff:\n\n%s"
             % (
                 no_emails,
-                diff(expected_no_emails.splitlines(), no_emails.splitlines()),
+                "\n".join(
+                    unified_diff(
+                        a=expected_no_emails.splitlines(),
+                        b=no_emails.splitlines(),
+                        fromfile="expected",
+                        tofile="actual",
+                        lineterm="",
+                    )
+                ),
             ),
         )
 

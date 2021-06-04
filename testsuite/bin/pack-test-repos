@@ -20,9 +20,8 @@ REMARKS
 from __future__ import print_function
 
 from gnatpython.ex import Run
-from gnatpython.fileutils import mv
 from os.path import isdir, isfile
-from shutil import rmtree
+from shutil import move, rmtree
 from sys import exit, stderr
 
 
@@ -55,7 +54,7 @@ if not isfile(bare_repo_config_path):
 # Move the bare repo config file out, before archiving.
 # This allows us to track it independently of the (very binary)
 # repo tarball.
-mv(bare_repo_config_path, BARE_REPO_CONFIG)
+move(bare_repo_config_path, BARE_REPO_CONFIG)
 
 # Create a local copy of the bare repository's project.config file.
 # This file is not meant to be the master, but helps when one needs

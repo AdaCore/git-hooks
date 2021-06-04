@@ -8,9 +8,9 @@ used by the testcase.
 from __future__ import print_function
 
 from gnatpython.ex import Run
-from gnatpython.fileutils import mv
 from os import unlink
 from os.path import exists, isdir, isfile
+from shutil import move
 from sys import exit, stderr
 
 
@@ -58,6 +58,6 @@ else:
 # about to overwrite one.
 if isfile(bare_repo_config_path):
     fatal("Unexpected config file in bare repository: %s" % bare_repo_config_path)
-mv(BARE_REPO_CONFIG, bare_repo_config_path)
+move(BARE_REPO_CONFIG, bare_repo_config_path)
 
 unlink(REPOS_TARBALL)

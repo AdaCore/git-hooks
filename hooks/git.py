@@ -436,9 +436,7 @@ def commit_subject(rev):
     PARAMETERS
         rev: A commit revision.
     """
-    info = git.rev_list(rev, max_count="1", oneline=True)
-    _, subject = info.split(None, 1)
-    return subject
+    return git.log("-n1", "--pretty=format:%s", rev)
 
 
 def diff_tree(*args, **kwargs):

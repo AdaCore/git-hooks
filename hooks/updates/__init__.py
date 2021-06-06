@@ -390,13 +390,6 @@ class AbstractUpdate(object):
         # part is now performed by the Email class). The purpose
         # is to prevent bugtool from searching for TNs in the patch
         # itself.
-        #
-        # For the diff, there is one subtlelty:
-        # Git commands calls strip on the output, which is usually
-        # a good thing, but not in the case of the diff output.
-        # Prevent this from happening by putting an artificial
-        # character at the start of the format string, and then
-        # by stripping it from the output.
 
         body = git.log(commit.rev, max_count="1") + "\n"
         if git_config("hooks.commit-url") is not None:
@@ -406,9 +399,12 @@ class AbstractUpdate(object):
         if git_config("hooks.disable-email-diff"):
             diff = None
         else:
-            diff = git.show(commit.rev, p=True, M=True, stat=True, pretty="format:|")[
-                1:
-            ]
+            diff = git.show(commit.rev, p=True, M=True, stat=True, pretty="format:")
+            # Add a small "---" separator line at the beginning of
+            # the diff section we just computed. This mimicks what
+            # "git show" would do if we hadn't provided an empty
+            # "format:" string to the "--pretty" command-line option.
+            diff = "---\n" + diff
 
         filer_cmd = git_config("hooks.file-commit-cmd")
         if filer_cmd is not None:

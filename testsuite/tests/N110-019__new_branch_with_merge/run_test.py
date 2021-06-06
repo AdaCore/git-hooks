@@ -60,7 +60,7 @@ remote:
 remote:     today's resync from fsf-master. Mostly to get c.txt.
 remote:
 remote: Diff:
-remote:
+remote: ---
 remote:  c.txt | 2 ++
 remote:  1 file changed, 2 insertions(+)
 To ../bare/repo.git

@@ -114,7 +114,7 @@ remote:
 remote:     This repo requires a ticket number, so there: L327-022.
 remote:
 remote: Diff:
-remote:
+remote: ---
 remote:  top | 1 +
 remote:  1 file changed, 1 insertion(+)
 remote:

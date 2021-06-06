@@ -69,7 +69,7 @@ remote:
 remote:     Merge branch 'topic'
 remote:
 remote: Diff:
-remote:
+remote: ---
 remote:  b | 1 +
 remote:  1 file changed, 1 insertion(+)
 To ../bare/repo.git

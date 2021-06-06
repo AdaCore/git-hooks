@@ -409,7 +409,7 @@ remote:
 remote:     import latest changes from branch 'master'
 remote:
 remote: Diff:
-remote:
+remote: ---
 remote:  d | 1 +
 remote:  e | 1 +
 remote:  2 files changed, 2 insertions(+)

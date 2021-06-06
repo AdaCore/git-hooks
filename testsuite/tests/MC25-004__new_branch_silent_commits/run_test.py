@@ -102,7 +102,7 @@ remote:     There is a change that we need in order to implement the new feature
 remote:     that will bring this program to another level.
 remote:
 remote: Diff:
-remote:
+remote: ---
 remote:  source.c | 1 +
 remote:  1 file changed, 1 insertion(+)
 remote: DEBUG: inter-email delay...

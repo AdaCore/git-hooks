@@ -83,7 +83,7 @@ remote:
 remote:     Resync from fsf-master as of today -- no-precommit-check
 remote:
 remote: Diff:
-remote:
+remote: ---
 remote:  a.txt      | 2 +-
 remote:  bcd        | 2 +-
 remote:  sub/ab.txt | 2 +-

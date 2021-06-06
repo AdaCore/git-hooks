@@ -139,7 +139,7 @@ remote:     This changs only bring a second bottom to top.
 remote:     Nothing else.
 remote:
 remote: Diff:
-remote:
+remote: ---
 remote:  top | 1 +
 remote:  1 file changed, 1 insertion(+)
 remote:

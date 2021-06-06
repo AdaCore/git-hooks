@@ -133,7 +133,7 @@ remote:             * c: New file.
 remote:             * README: New file.
 remote:
 remote: Diff:
-remote:
+remote: ---
 remote:  README | 4 ++++
 remote:  a      | 2 ++
 remote:  c      | 1 +

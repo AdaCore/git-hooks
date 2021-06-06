@@ -273,7 +273,7 @@ remote:
 remote:     Merge new feature from branch contrib/new-feature.
 remote:
 remote: Diff:
-remote:
+remote: ---
 remote:  gdb/feature.c | 1 +
 remote:  1 file changed, 1 insertion(+)
 To ../bare/repo.git

@@ -5,6 +5,7 @@ from config import git_config, ThirdPartyHook
 from errors import InvalidUpdate
 from git import git, diff_tree, file_exists
 from git_attrs import git_attribute
+import itertools
 import utils
 from utils import debug, warn
 
@@ -26,7 +27,7 @@ def style_check_files(filename_list, commit_rev, project_name):
     Raise InvalidUpdate if one or more style violations are detected.
 
     PARAMETERS
-        filename_list: The name of the file to check.
+        filename_list: The name of the file to check (an iterable).
         commit_rev: The associated commit sha1.  This piece of information
             helps us find the correct version of the files to be checked,
             as well as the .gitattributes files which are used to determine
@@ -67,7 +68,7 @@ def style_check_files(filename_list, commit_rev, project_name):
     # it can also be useful to quickly locate a file in the project
     # when trying to make the needed corrections outlined by the
     # style-checker.
-    for filename in filename_list + aux_files:
+    for filename in itertools.chain(filename_list, aux_files):
         path_to_filename = "%s/%s" % (utils.scratch_dir, os.path.dirname(filename))
         if not os.path.exists(path_to_filename):
             os.makedirs(path_to_filename)

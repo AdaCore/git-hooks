@@ -64,7 +64,7 @@ def check_fast_forward(ref_name, old_rev, new_rev):
     # Non-fast-foward updates can be characterized by the fact that
     # there is at least one commit that is accessible from the old
     # revision which would no longer be accessible from the new revision.
-    if git.rev_list("%s..%s" % (new_rev, old_rev)) == "":
+    if not git.rev_list("%s..%s" % (new_rev, old_rev)):
         # This is a fast-forward update.
         return
 

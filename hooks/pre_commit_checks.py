@@ -500,7 +500,7 @@ def style_check_commit(old_rev, new_rev, project_name):
         else:
             return True
 
-    files_to_check = filter(needs_style_check_p, files_to_check)
+    files_to_check = tuple(filter(needs_style_check_p, files_to_check))
     if not files_to_check:
         debug("style_check_commit: no files to style-check")
         return

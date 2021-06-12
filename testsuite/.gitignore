@@ -5,6 +5,7 @@ out
 # coverage analyzer.
 .coverage
 .coverage.*
+coverage.rc
 htmlcov/
 sitecustomize/
 

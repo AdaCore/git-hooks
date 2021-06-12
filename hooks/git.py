@@ -437,7 +437,7 @@ def commit_subject(rev):
     return git.log("-n1", "--pretty=format:%s", rev)
 
 
-def diff_tree(*args, **kwargs):
+def diff_tree(*args):
     """Same as git.diff_tree, but handling weird filenames properly.
 
     When the diff-tree output lists some files whose name contain
@@ -447,19 +447,13 @@ def diff_tree(*args, **kwargs):
     which handles everything.
 
     PARAMETERS
-        Same as with git.diff_tree.
-        *** NOTE *** Do not use _split_lines. It is useless in this case,
-            and would likely interfere with this implementation.
+        *args: The arguments to be passed to the "git diff-tree" command.
 
     RETURN VALUE
         A list, with one element per file modified. Each element
         is a 6-element tuple, organized as follow:
             (old_mode, new_mode, old_sha1, new_sha1, status, filename)
     """
-    assert (
-        "_split_lines" not in kwargs
-    ), "git.py::diff_tree should never be called with _split_lines"
-
     # To avoid having to deal with the parsing of quoted filenames,
     # we use the -z option of "git diff-tree". What this does is
     # that it separates the filename from the rest of the data
@@ -470,7 +464,7 @@ def diff_tree(*args, **kwargs):
     # pairs of lines, with the first line containing the information
     # about a given file, and the line following it containing
     # the name of the file.
-    diff_data = git.diff_tree("-z", *args, **kwargs).split("\x00")
+    diff_data = git.diff_tree("-z", *args).split("\x00")
 
     # When doing a "git diff-tree" with a single tree-ish, the output
     # starts with the hash of what is being compared. We're not

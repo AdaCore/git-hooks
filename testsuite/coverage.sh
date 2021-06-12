@@ -39,6 +39,6 @@ GIT_HOOKS_DIR="$root/../hooks"
 # which provides the sendmail module.
 GIT_HOOKS_MODULES=`find $GIT_HOOKS_DIR -name '*.py' -print | grep -v hooks/updates/sendmail.py`
 coverage combine
-coverage report $GIT_HOOKS_MODULES
-coverage html $GIT_HOOKS_MODULES
+coverage report --rcfile=coverage.rc $GIT_HOOKS_MODULES
+coverage html --rcfile=coverage.rc $GIT_HOOKS_MODULES
 perl -pi -e "s;$GIT_HOOKS_DIR/;;" htmlcov/*

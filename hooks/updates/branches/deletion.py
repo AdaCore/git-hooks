@@ -71,8 +71,7 @@ class BranchDeletion(AbstractUpdate):
             raise InvalidUpdate(*err)
 
     def get_update_email_contents(self):
-        """See AbstractUpdate.get_update_email_contents.
-        """
+        """See AbstractUpdate.get_update_email_contents."""
         subject = "[%s] Deleted branch %s" % (
             self.email_info.project_name,
             self.human_readable_ref_name(),

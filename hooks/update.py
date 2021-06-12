@@ -18,8 +18,7 @@ from updates.factory import new_update
 
 
 def parse_command_line():
-    """Return a namespace built after parsing the command line.
-    """
+    """Return a namespace built after parsing the command line."""
     # The command-line interface is very simple, so we could possibly
     # handle it by hand.  But it's nice to have features such as
     # -h/--help switches which come for free if we use argparse.

@@ -30,8 +30,7 @@ class BranchCreation(BranchUpdate):
         self.__check_gitreview_defaultbranch()
 
     def get_update_email_contents(self):
-        """See AbstractUpdate.get_update_email_contents.
-        """
+        """See AbstractUpdate.get_update_email_contents."""
         subject = "[%s] Created branch %s" % (
             self.email_info.project_name,
             self.human_readable_ref_name(),

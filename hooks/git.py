@@ -31,8 +31,7 @@ import subprocess
 
 
 class CalledProcessError(subprocess.CalledProcessError):
-    """An exception raised in case of failure in this module.
-    """
+    """An exception raised in case of failure in this module."""
 
     # Initially, defining this exception here was a way to shield
     # the script from the fact that subprocess.CalledProcessError
@@ -165,8 +164,7 @@ def get_git_dir():
 
 
 def is_null_rev(rev):
-    """Return True iff rev is the a NULL commit SHA1.
-    """
+    """Return True iff rev is the a NULL commit SHA1."""
     return re.match("0+$", rev) is not None
 
 

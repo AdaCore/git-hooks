@@ -106,16 +106,14 @@ class TestCase(unittest.TestCase):
             os.environ["GIT_HOOKS_MINIMAL_EMAIL_DEBUG_TRACE"] = "set"
 
     def enable_unit_test(self):
-        """Setup the environment in a way that allows us to perform unit test.
-        """
+        """Setup the environment in a way that allows us to perform unit test."""
         sys.path.insert(0, "%s/bare/repo.git/hooks" % TEST_DIR)
         # Also, we need to cd to the bare repository, as the hooks
         # assumes we are being called from there.
         os.chdir("%s/bare/repo.git" % TEST_DIR)
 
     def git_version(self):
-        """Return the git version number (a LooseVersion object).
-        """
+        """Return the git version number (a LooseVersion object)."""
         from distutils.version import LooseVersion
 
         p = gnatpython.ex.Run(["git", "--version"])
@@ -136,14 +134,12 @@ class TestCase(unittest.TestCase):
 
 
 def runtests():
-    """Call unittest.main.
-    """
+    """Call unittest.main."""
     unittest.main()
 
 
 class Run(gnatpython.ex.Run):
-    """A gnatpython.ex.Run subclass providing access to a sanitized output.
-    """
+    """A gnatpython.ex.Run subclass providing access to a sanitized output."""
 
     @property
     def cmd_out(self):

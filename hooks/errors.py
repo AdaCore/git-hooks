@@ -3,7 +3,6 @@
 
 
 class InvalidUpdate(Exception):
-    """An exception raised when the update is not accepted.
-    """
+    """An exception raised when the update is not accepted."""
 
     pass

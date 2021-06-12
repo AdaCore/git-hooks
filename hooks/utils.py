@@ -18,8 +18,7 @@ from errors import InvalidUpdate
 
 
 def get_user_name():
-    """Return the user name (in the Unix sense: The account name).
-    """
+    """Return the user name (in the Unix sense: The account name)."""
     if "GIT_HOOKS_USER_NAME" in environ:
         return environ["GIT_HOOKS_USER_NAME"]
     else:

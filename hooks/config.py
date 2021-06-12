@@ -209,8 +209,7 @@ class ThirdPartyHook(object):
 
 
 class UnsupportedOptionName(Exception):
-    """An exception raised when trying to lookup an unsupported option name.
-    """
+    """An exception raised when trying to lookup an unsupported option name."""
 
     pass
 
@@ -275,8 +274,7 @@ def git_config(option_name):
 
 
 def initialize_git_config_map():
-    """Initialize the __git_config_map global.
-    """
+    """Initialize the __git_config_map global."""
     global __git_config_map
 
     # The hooks' configuration is stored in a special reference

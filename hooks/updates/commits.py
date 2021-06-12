@@ -52,8 +52,7 @@ class CommitInfo(object):
         self.__added_files = None
 
     def oneline_str(self):
-        """A one-line string description of the commit.
-        """
+        """A one-line string description of the commit."""
         return "%s... %s" % (self.rev[:7], self.subject[:59])
 
     @property

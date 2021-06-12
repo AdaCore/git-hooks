@@ -86,8 +86,7 @@ Testsuite Results Summary -- Out of %(run)d testscase(s) run in total:
 
 
 def main():
-    """Run the testsuite.
-    """
+    """Run the testsuite."""
     m = Main()
     add_mainloop_options(m, extended_options=True)
     add_run_test_options(m)

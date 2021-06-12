@@ -74,8 +74,7 @@ class BranchUpdate(AbstractUpdate):
             check_fast_forward(self.ref_name, self.old_rev, self.new_rev)
 
     def get_update_email_contents(self):
-        """See AbstractUpdate.get_update_email_contents.
-        """
+        """See AbstractUpdate.get_update_email_contents."""
         # For branch updates, we only send the update email when
         # the summary of changes is needed.
         if not branch_summary_of_changes_needed(

@@ -187,8 +187,7 @@ class AbstractUpdate(object):
         self.pre_commit_checks()
 
     def send_email_notifications(self):
-        """Send all email notifications associated to this update.
-        """
+        """Send all email notifications associated to this update."""
         no_email_re = self.search_config_option_list("hooks.no-emails")
         if no_email_re is not None:
             warn(
@@ -610,8 +609,7 @@ class AbstractUpdate(object):
         return "\n".join(summary)
 
     def everyone_emails(self):
-        """Return the list of email addresses listing everyone possible.
-        """
+        """Return the list of email addresses listing everyone possible."""
         return expanded_mailing_list(self.ref_name, None)
 
     # ------------------------
@@ -872,8 +870,7 @@ class AbstractUpdate(object):
         return True
 
     def __check_max_commit_emails(self):
-        """Raise InvalidUpdate is this update will generate too many emails.
-        """
+        """Raise InvalidUpdate is this update will generate too many emails."""
         # Determine the number of commit emails that would be sent if
         # we accept the update, and raise an error if it exceeds
         # the maximum number of emails.
@@ -999,7 +996,8 @@ class AbstractUpdate(object):
         hooks_data["email_default_diff"] = default_diff
 
         hook_exe, p, out = email_contents_hook.call(
-            hook_input=json.dumps(hooks_data), hook_args=(self.ref_name, commit.rev),
+            hook_input=json.dumps(hooks_data),
+            hook_args=(self.ref_name, commit.rev),
         )
 
         def standard_email_due_to_error(err_msg):
@@ -1089,8 +1087,7 @@ class AbstractUpdate(object):
         email.enqueue()
 
     def __email_new_commits(self):
-        """Send one email per new (non-pre-existing) commit.
-        """
+        """Send one email per new (non-pre-existing) commit."""
         for commit in self.new_commits_for_ref:
             if commit.send_email_p:
                 self.__send_commit_email(commit, self.get_standard_commit_email(commit))

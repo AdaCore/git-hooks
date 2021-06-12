@@ -149,8 +149,7 @@ class NotesUpdate(AbstractUpdate):
         )
 
     def __ensure_fast_forward(self):
-        """Raise InvalidUpdate if the update is not a fast-forward update.
-        """
+        """Raise InvalidUpdate if the update is not a fast-forward update."""
         if is_null_rev(self.old_rev):
             # Git Notes creation, and thus necessarily a fast-forward.
             return

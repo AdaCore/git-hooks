@@ -27,6 +27,10 @@ cat <<EOF > coverage.rc
 [run]
 cover_pylib = True
 parallel = True
+[report]
+exclude_lines =
+    pragma: no cover
+    pragma: py3-only
 EOF
 
 

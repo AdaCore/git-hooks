@@ -1,5 +1,5 @@
 from support import *
-import re
+
 
 class TestRun(TestCase):
     def test_push_annotated_tag(self):

@@ -2,9 +2,8 @@ from support import *
 
 
 class TestRun(TestCase):
-    def test_push_lightweight_tag(self):
-        """Try pushing a lightweight tag.
-        """
+    def test_delete_tag(self):
+        """Try deleting a tag."""
         cd ('%s/repo' % TEST_DIR)
 
         # Try deleting full-tag.  The remote is setup to refuse this request.

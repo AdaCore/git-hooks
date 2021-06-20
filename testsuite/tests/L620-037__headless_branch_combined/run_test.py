@@ -1,5 +1,5 @@
 from support import *
-import os
+
 
 class TestRun(TestCase):
     def test_push(self):

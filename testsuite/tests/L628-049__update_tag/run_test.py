@@ -112,13 +112,6 @@ To ../bare/repo.git
 """
 
         self.assertEqual(p.status, 0, p.image)
-        # The expected output matches the output for git version 1.8.3.2.
-        # For older versions of git, and in particular version 1.7.11.5,
-        # the output is slightly different.  Upgrade the actual output
-        # to pretend we got the new one.
-        p.out = p.out.replace(
-            '   a69eaab..17b9d4a  full-tag -> full-tag',
-            ' + a69eaab...17b9d4a full-tag -> full-tag (forced update)')
         self.assertRunOutputEqual(p, expected_out)
 
 

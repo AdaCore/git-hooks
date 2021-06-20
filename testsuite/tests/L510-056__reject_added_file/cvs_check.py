@@ -18,6 +18,6 @@ print("cvs_check: %s < %s" % (
 # Fail the style-check for the following files:
 for filename in filenames:
     if filename == 'pck.ads':
-	print("ERROR: style-check error detected for file: `%s'." % filename, file=sys.stderr)
-	print('ERROR: Copyright year in header is not up to date', file=sys.stderr)
-	sys.exit(1)
+        print("ERROR: style-check error detected for file: `%s'." % filename, file=sys.stderr)
+        print('ERROR: Copyright year in header is not up to date', file=sys.stderr)
+        sys.exit(1)

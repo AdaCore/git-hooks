@@ -21,7 +21,7 @@ print("cvs_check: %s < %s" % (
 for filename in filenames:
     print("File `%s' contains:" % filename)
     with open(filename, 'r') as fd:
-	print(fd.read())
+        print(fd.read())
     print("--- Done ---")
 
 # And simulate a rejection.  Passing a relative path of the filename

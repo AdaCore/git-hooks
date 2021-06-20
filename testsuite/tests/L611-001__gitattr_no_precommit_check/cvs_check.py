@@ -21,5 +21,5 @@ print("cvs_check: %s < %s" % (
 
 for filename in filenames:
     if filename == 'b':
-	print("Error: Style violations detected in file: %s" % filename)
-	sys.exit(1)
+        print("Error: Style violations detected in file: %s" % filename)
+        sys.exit(1)

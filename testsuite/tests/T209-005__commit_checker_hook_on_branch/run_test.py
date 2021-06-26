@@ -51,8 +51,7 @@ class TestRun(TestCase):
         self.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
-        self.assertTrue('HEAD -> refs/meta/config' in p.out.splitlines()[-1],
-                        p.image)
+        assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
 
         # While at it, verify that the commit-extra-checker was called
         # to check that commit. Our hooks generates some output so

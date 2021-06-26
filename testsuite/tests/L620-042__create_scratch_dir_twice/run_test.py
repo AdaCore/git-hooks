@@ -23,8 +23,7 @@ class TestRun(TestCase):
         sys.stderr = real_stderr
 
         rmtree(utils.scratch_dir)
-        self.assertEqual(new_stderr.getvalue(), '',
-                         new_stderr.getvalue())
+        self.assertEqual(new_stderr.getvalue(), "", new_stderr.getvalue())
         new_stderr.close()
 
         # Call create_scratch_dir again, and verify that a warning is
@@ -36,9 +35,9 @@ class TestRun(TestCase):
         sys.stderr = real_stderr
 
         rmtree(utils.scratch_dir)
-        self.assertTrue('Unexpected second call to create_scratch_dir'
-                            in new_stderr.getvalue(),
-                         new_stderr.getvalue())
+        assert (
+            "Unexpected second call to create_scratch_dir" in new_stderr.getvalue()
+        ), new_stderr.getvalue()
         new_stderr.close()
 
 

@@ -13,8 +13,7 @@ class TestRun(TestCase):
         assert p.status == 0, p.image
 
         # Verify that subm is a directory that exists...
-        self.assertTrue(isdir('subm'),
-                        p.image + '\n' + Run(['ls -la'.split()]).cmd_out)
+        assert isdir('subm'), p.image + '\n' + Run(['ls -la'.split()]).cmd_out
 
         # Now that the setup phase is done, commit the change.
         p = Run(['git', 'commit', '-m', 'Add submodule subm'])

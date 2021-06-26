@@ -10,7 +10,7 @@ class TestRun(TestCase):
         # to does not exist in that reference, nor is is added by
         # the commit we're pusing. So this should be rejected.
 
-        p = Run('git push origin meta-config-missing:refs/meta/config'.split())
+        p = testcase.run('git push origin meta-config-missing:refs/meta/config'.split())
         expected_out = """\
 remote: *** Cannot find style_checker config file: `style.yaml'.
 remote: ***
@@ -34,7 +34,7 @@ error: failed to push some refs to '../bare/repo.git'
         # the style-checker-config-file option.  This time, the update
         # should be accepted.
 
-        p = Run('git push origin meta-config:refs/meta/config'.split())
+        p = testcase.run('git push origin meta-config:refs/meta/config'.split())
         expected_out = """\
 remote: *** cvs_check: `--config' `style.yaml' `repo' < `project.config' `style.yaml'
 remote: *** # A YaML file (with nothing in it)
@@ -90,7 +90,7 @@ To ../bare/repo.git
         # Push a commit to the repository to a branch where
         # the style checker's config file does not exist yet...
 
-        p = Run('git push origin step-1/checker_config_missing:master'.split())
+        p = testcase.run('git push origin step-1/checker_config_missing:master'.split())
         expected_out = """\
 remote: *** Cannot find style_checker config file: `style.yaml'.
 remote: ***
@@ -112,7 +112,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Once the checkin above did not work, push a commit which
         # adds the missing config file (on its own)
 
-        p = Run('git push origin step-2/add_checker_config_file:master'.split())
+        p = testcase.run('git push origin step-2/add_checker_config_file:master'.split())
         expected_out = """\
 remote: *** cvs_check: `--config' `style.yaml' `repo' < `style.yaml'
 remote: *** # A YaML file (with nothing in it)
@@ -158,7 +158,7 @@ To ../bare/repo.git
         # Once the config file is in, we should now be able to push
         # our commit, this time.
 
-        p = Run('git push origin step-3/try_initial_commit_again:master'
+        p = testcase.run('git push origin step-3/try_initial_commit_again:master'
                 .split())
         expected_out = """\
 remote: *** cvs_check: `--config' `style.yaml' `repo' < `b.adb'
@@ -213,7 +213,7 @@ To ../bare/repo.git
         # to our style_checker (cvs_check in our testsuite) shows
         # the updated contents.
 
-        p = Run('git push origin step-4/modify_checker_config_only:master'
+        p = testcase.run('git push origin step-4/modify_checker_config_only:master'
                 .split())
         expected_out = """\
 remote: *** cvs_check: `--config' `style.yaml' `repo' < `style.yaml'
@@ -266,7 +266,7 @@ To ../bare/repo.git
         # passed to our style_checker (cvs_check in our testsuite) shows
         # the updated contents.
 
-        p = Run('git push origin step-5/modify_code_and_checker_config:master'
+        p = testcase.run('git push origin step-5/modify_code_and_checker_config:master'
                 .split())
         expected_out = """\
 remote: *** cvs_check: `--config' `style.yaml' `repo' < `a.ads' `style.yaml'

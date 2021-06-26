@@ -10,7 +10,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin head'.split())
+        p = testcase.run('git push origin head'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `.gitignore'
 remote: *** cvs_check: `repo' < `source.c'
@@ -151,7 +151,7 @@ To ../bare/repo.git
 
         cd('%s/bare/repo.git' % TEST_DIR)
 
-        p = Run('git show-ref -s head'.split())
+        p = testcase.run('git show-ref -s head'.split())
         expected_out = """\
 53ec7dc719ba973a33490a696250b2bdeb931e7b
 """

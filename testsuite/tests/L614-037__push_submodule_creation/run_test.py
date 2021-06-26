@@ -9,30 +9,30 @@ class TestRun(TestCase):
         cd ('%s/repo' % TEST_DIR)
 
         # First, add the submodule...
-        p = Run(['git', 'submodule', 'add', '%s/bare/subm.git' % TEST_DIR])
+        p = testcase.run(['git', 'submodule', 'add', '%s/bare/subm.git' % TEST_DIR])
         assert p.status == 0, p.image
 
         # Verify that subm is a directory that exists...
-        assert isdir('subm'), p.image + '\n' + Run(['ls -la'.split()]).cmd_out
+        assert isdir('subm'), p.image + '\n' + testcase.run(['ls -la'.split()]).cmd_out
 
         # Now that the setup phase is done, commit the change.
-        p = Run(['git', 'commit', '-m', 'Add submodule subm'])
+        p = testcase.run(['git', 'commit', '-m', 'Add submodule subm'])
         assert p.status == 0, p.image
 
         # Get the hash of our submodule commit.  We will need it
         # to match the output of the push command.
-        p = Run(['git rev-parse HEAD'.split()])
+        p = testcase.run(['git rev-parse HEAD'.split()])
         assert p.status == 0, p.image
         subm_rev = p.out.strip()
 
         # Also get the "author date" for our commit.  We need this
         # info as part of the expected output.
-        p = Run(['git log -n1 --pretty=format:%ad'.split()])
+        p = testcase.run(['git log -n1 --pretty=format:%ad'.split()])
         assert p.status == 0, p.image
         author_date = p.out.strip()
 
         # Same for the hash of the .gitmodules file...
-        p = Run(['git ls-tree HEAD .gitmodules'.split()])
+        p = testcase.run(['git ls-tree HEAD .gitmodules'.split()])
         assert p.status == 0, p.image
         gitmodules_hash = p.out.split()[2]
 
@@ -59,7 +59,7 @@ class TestRun(TestCase):
         # in order to get the one that says that submodule entries
         # are ignored.
         testcase.set_debug_level(2)
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote:   DEBUG: check_update(ref_name=refs/heads/master, old_rev=7a373b536b65b600a449b5c739c137301f6fd364, new_rev=%(subm_rev)s)
 remote: DEBUG: validate_ref_update (refs/heads/master, 7a373b536b65b600a449b5c739c137301f6fd364, %(subm_rev)s)

@@ -1,4 +1,4 @@
-from support import Run, TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, cd, runtests
 
 
 class TestRun(TestCase):
@@ -6,7 +6,7 @@ class TestRun(TestCase):
         """Push a branch update using a standard reference name."""
         cd('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin my-topic'.split())
+        p = testcase.run('git push origin my-topic'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0

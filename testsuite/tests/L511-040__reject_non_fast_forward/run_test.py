@@ -6,7 +6,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push -f origin master'.split())
+        p = testcase.run('git push -f origin master'.split())
         expected_out = """\
 remote: *** Non-fast-forward updates are not allowed for this reference.
 remote: *** Please rebase your changes on top of the latest HEAD,

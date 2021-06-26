@@ -12,7 +12,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** Merge commits are not allowed on refs/heads/master.
 remote: *** The commit that caused this error is:

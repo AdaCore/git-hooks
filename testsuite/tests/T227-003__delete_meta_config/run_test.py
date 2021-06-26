@@ -6,7 +6,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin :refs/meta/config'.split())
+        p = testcase.run('git push origin :refs/meta/config'.split())
         expected_out = """\
 remote: *** Deleting the reference refs/meta/config is not allowed.
 remote: ***

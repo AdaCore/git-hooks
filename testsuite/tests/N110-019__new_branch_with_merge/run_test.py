@@ -7,7 +7,7 @@ class TestRun(TestCase):
         """
         cd('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin wavefront'.split())
+        p = testcase.run('git push origin wavefront'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `c.txt'
 remote: DEBUG: MIME-Version: 1.0

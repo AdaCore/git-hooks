@@ -17,7 +17,7 @@ class TestRun(TestCase):
         # is do the same as in a branch update (pre-commit checks,
         # commit emails, etc).
 
-        p = Run('git push origin version-0.1a'.split())
+        p = testcase.run('git push origin version-0.1a'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/tags/version-0.1a, 0000000000000000000000000000000000000000, b03c3952e1cd29c6ec0cad2590689c0b22d02197)
 remote: DEBUG: update base: 426fba3571947f6de7f967e885a3168b9df7004a
@@ -120,7 +120,7 @@ To ../bare/repo.git
         # and thus nothing other than the reference change should
         # be done.
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 426fba3571947f6de7f967e885a3168b9df7004a, 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3)
 remote: DEBUG: update base: 426fba3571947f6de7f967e885a3168b9df7004a

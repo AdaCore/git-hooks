@@ -8,7 +8,7 @@ class TestRun(TestCase):
 
         # The push should fail, because the pre-commit checker will
         # refuse one of the updates.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** pre-commit check failed for commit: 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3
 remote: *** cvs_check: `repo' < `a' `b' `c'

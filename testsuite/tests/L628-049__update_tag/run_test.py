@@ -13,7 +13,7 @@ class TestRun(TestCase):
         # Push "full-tag". This tag has a new value, different from
         # that is on the remote.  We should get an email notification,
         # and a warning about how bad it is to do that.
-        p = Run('git push --force origin full-tag'.split())
+        p = testcase.run('git push --force origin full-tag'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/tags/full-tag, a69eaaba59ea6d7574a9c5437805a628ea652c8e, 17b9d4acf8505cd1da487ad62e37819b93779a27)
 remote: *** ---------------------------------------------------------------

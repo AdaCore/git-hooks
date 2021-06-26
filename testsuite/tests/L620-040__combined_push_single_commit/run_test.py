@@ -12,7 +12,7 @@ class TestRun(TestCase):
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, d065089ff184d97934c010ccd0e7e8ed94cb7165, a60540361d47901d3fe254271779f380d94645f7)
 remote: DEBUG: update base: d065089ff184d97934c010ccd0e7e8ed94cb7165

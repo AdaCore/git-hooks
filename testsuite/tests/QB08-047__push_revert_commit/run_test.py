@@ -14,7 +14,7 @@ class TestRun(TestCase):
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently
@@ -46,7 +46,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
-        p = Run('git push origin revert'.split())
+        p = testcase.run('git push origin revert'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

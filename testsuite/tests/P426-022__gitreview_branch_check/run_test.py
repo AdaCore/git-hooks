@@ -10,7 +10,7 @@ class TestRun(TestCase):
         # branch, there is a file named .gitreview, whose default
         # branch is still "master". Make sure the git-hooks reject
         # that branch creation.
-        p = Run('git push origin forgot'.split())
+        p = testcase.run('git push origin forgot'.split())
         expected_out = """\
 remote: *** Incorrect gerrit default branch name in file `.gitreview'.
 remote: *** You probably forgot to update your .gitreview file following
@@ -37,7 +37,7 @@ error: failed to push some refs to '../bare/repo.git'
         # branch, there is a file named .gitreview, whose default
         # branch is now set to "fixed". So this branch creation
         # should be accepted.
-        p = Run('git push origin fixed'.split())
+        p = testcase.run('git push origin fixed'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

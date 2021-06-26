@@ -13,18 +13,18 @@ class TestRun(TestCase):
             project_config = f.read() % {'TEST_DIR': TEST_DIR}
         with open('project.config', 'w') as f:
             f.write(project_config)
-        p = Run(['git', 'commit', '-m', 'Add hooks.update-hook config',
+        p = testcase.run(['git', 'commit', '-m', 'Add hooks.update-hook config',
                  'project.config'])
         assert p.status == 0, p.image
 
-        p = Run(['git', 'push', 'origin',
+        p = testcase.run(['git', 'push', 'origin',
                  'refs/heads/meta/config:refs/meta/config'])
         assert p.status == 0, p.image
 
-        p = Run('git checkout master'.split())
+        p = testcase.run('git checkout master'.split())
         assert p.status == 0, p.image
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: -----[ update-hook args ]-----
 remote: 'refs/heads/master'

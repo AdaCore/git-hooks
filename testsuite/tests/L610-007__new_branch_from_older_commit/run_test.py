@@ -9,7 +9,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin release-0.1-branch'.split())
+        p = testcase.run('git push origin release-0.1-branch'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `b'
 remote: *** cvs_check: `repo' < `a' `c' `d'
@@ -127,7 +127,7 @@ To ../bare/repo.git
 
         cd('%s/bare/repo.git' % TEST_DIR)
 
-        p = Run('git show-ref -s release-0.1-branch'.split())
+        p = testcase.run('git show-ref -s release-0.1-branch'.split())
         expected_out = """\
 4205e52273adad6b014e19fb1cf1fe1c9b8b4089
 """

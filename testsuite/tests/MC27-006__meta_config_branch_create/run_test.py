@@ -20,7 +20,7 @@ class TestRun(TestCase):
 
         # Push the `meta/config' local branch as the new `refs/meta/config'
         # reference. This should be allowed.
-        p = Run('git push origin meta/config:refs/meta/config'.split())
+        p = testcase.run('git push origin meta/config:refs/meta/config'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `project.config'
 remote: DEBUG: MIME-Version: 1.0

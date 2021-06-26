@@ -10,7 +10,7 @@ class TestRun(TestCase):
         # where one line in the RH is 104 characters long. It should
         # still be accepted, since we've explicitly configured
         # the repository to skip RH line-length checks.
-        p = Run('git push origin not-ok-104:master'.split())
+        p = testcase.run('git push origin not-ok-104:master'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

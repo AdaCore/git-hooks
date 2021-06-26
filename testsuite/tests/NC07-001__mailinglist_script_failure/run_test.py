@@ -15,19 +15,19 @@ class TestRun(TestCase):
             project_config = f.read() % {'TEST_DIR': TEST_DIR}
         with open('project.config', 'w') as f:
             f.write(project_config)
-        p = Run(['git', 'commit', '-m', 'fix hooks.mailinglist',
+        p = testcase.run(['git', 'commit', '-m', 'fix hooks.mailinglist',
                  'project.config'])
         assert p.status == 0, p.image
 
-        p = Run(['git', 'push', 'origin',
+        p = testcase.run(['git', 'push', 'origin',
                  'refs/heads/meta/config:refs/meta/config'])
         assert p.status == 0, p.image
 
-        p = Run('git checkout master'.split())
+        p = testcase.run('git checkout master'.split())
         assert p.status == 0, p.image
 
         # Push branch master.
-        p = Run(['git', 'push', 'origin', 'master'])
+        p = testcase.run(['git', 'push', 'origin', 'master'])
         expected_out = """\
 remote: *** !!! %(TEST_DIR)s/email_to.py failed with error code: 3.
 remote: *** !!! %(TEST_DIR)s/email_to.py failed with error code: 3.

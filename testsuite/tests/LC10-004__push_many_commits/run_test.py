@@ -8,7 +8,7 @@ class TestRun(TestCase):
 
         # Push master to the `origin' remote.  The remote should
         # reject it saying that there are too many new commits.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: ----------------------------------------------------------------------
 remote: --  The hooks.no-emails config option contains `refs/heads/master',

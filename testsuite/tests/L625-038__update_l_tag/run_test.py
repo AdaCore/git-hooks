@@ -10,7 +10,7 @@ class TestRun(TestCase):
         # such as verifying that each commit gets checked individually.
         testcase.set_debug_level(1)
 
-        p = Run('git push --force origin some-tag'.split())
+        p = testcase.run('git push --force origin some-tag'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/tags/some-tag, 8b9a0d6bf08d7a983affbee3c187adadaaedec9e, 8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5)
 remote: *** ---------------------------------------------------------------

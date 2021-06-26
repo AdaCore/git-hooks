@@ -1,4 +1,4 @@
-from support import Run, TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, cd, runtests
 
 
 class TestRun(TestCase):
@@ -14,7 +14,7 @@ class TestRun(TestCase):
         # that this doesn't cause all branches whose name start with "to"
         # to be deletable.
 
-        p = Run('git push origin :to-delete'.split())
+        p = testcase.run('git push origin :to-delete'.split())
         expected_out = """\
 remote: *** Deleting branch 'to-delete' is not allowed.
 remote: ***
@@ -48,7 +48,7 @@ error: failed to push some refs to '../bare/repo.git'
         # to be deleted, but rather because we decided that configuration
         # wasn't relevant for branch "to-delete".
 
-        p = Run('git push origin :to'.split())
+        p = testcase.run('git push origin :to'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -80,7 +80,7 @@ To ../bare/repo.git
 
         # First, try a branch which we are not allowed to delete.
 
-        p = Run('git push origin :refs/user/to-delete'
+        p = testcase.run('git push origin :refs/user/to-delete'
                 .split())
         expected_out = """\
 remote: *** Deleting branch 'to-delete' in namespace 'refs/user' is not allowed.
@@ -109,7 +109,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         # Next, try with a branch which is allowed.
 
-        p = Run('git push origin :refs/user/myself/my-feature'.split())
+        p = testcase.run('git push origin :refs/user/myself/my-feature'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

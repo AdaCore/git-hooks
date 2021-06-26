@@ -20,7 +20,7 @@ class TestRun(TestCase):
         # repository yet, it counts as "new", and thus should be
         # validated through the pre-commit checks, which means
         # that we expect the update to fail.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 96cc4826ed3f82bee77514177ff3944601d1800d, bd6c0a7343402a7a5d1e5b42e5d338e5c1e3cb35)
 remote: DEBUG: update base: 96cc4826ed3f82bee77514177ff3944601d1800d
@@ -47,7 +47,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Now, push the thirdparty branch.  This branch is setup
         # to avoid the pre-commit checks, so this should allow
         # the problematic commit.
-        p = Run('git push origin thirdparty'.split())
+        p = testcase.run('git push origin thirdparty'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/thirdparty, 52723db7f709396057df819f73e66b846858217e, 492fd2fae27c2f358c1d59c59a2e13ec2a3a880f)
 remote: DEBUG: update base: 52723db7f709396057df819f73e66b846858217e
@@ -72,7 +72,7 @@ To ../bare/repo.git
         # And finally, try pushing the "master" branch again.
         # This time, the problematic commit is already in, and
         # so should not go through the pre-commit-checks again.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 96cc4826ed3f82bee77514177ff3944601d1800d, bd6c0a7343402a7a5d1e5b42e5d338e5c1e3cb35)
 remote: DEBUG: update base: 96cc4826ed3f82bee77514177ff3944601d1800d

@@ -8,7 +8,7 @@ class TestRun(TestCase):
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = r"""
 remote: *** cvs_check: `repo' < `"full-double"' `'full-single'' ``backtick`' `bad\dir/"two"' `bad\dir/'one'' `bad\dir/`lish' `bad\dir/nasa esa' `bad\dir/normal_filename' `bad\dir/one'two"3' `bad\dir/pet`ular' `front`tick' `one space' `subdir/"double"' `subdir/'single'' `subdir/another\bs.txt' `subdir/automa`' `subdir/hello:world' `subdir/sp ace' `subdir/time`tock' `weird:colon.h' `weird\backslash.c' `with"double-quote' `with'single-quote'
 remote: DEBUG: MIME-Version: 1.0

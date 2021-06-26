@@ -6,7 +6,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin :old-branch'.split())
+        p = testcase.run('git push origin :old-branch'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -35,7 +35,7 @@ To ../bare/repo.git
         # the (short) branch name (i.e 'refs/heads/other-old-branch'
         # instead of just 'other-old-branch').
 
-        p = Run('git push origin :refs/heads/other-old-branch'.split())
+        p = testcase.run('git push origin :refs/heads/other-old-branch'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

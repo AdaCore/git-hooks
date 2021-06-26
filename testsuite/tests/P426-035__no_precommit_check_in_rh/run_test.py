@@ -17,7 +17,7 @@ class TestRun(TestCase):
 
         # Push gdb-head to the `origin' remote.  The delta should be one
         # commit with one file being modified.
-        p = Run('git push origin gdb-head'.split())
+        p = testcase.run('git push origin gdb-head'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/gdb-head, 2c2cd0d654cc6cf460024feb845ee7ea760290c4, 8da5e84724007accbaf409022c3c9f07776a8c8b)
 remote: DEBUG: update base: 2c2cd0d654cc6cf460024feb845ee7ea760290c4

@@ -8,7 +8,7 @@ class TestRun(TestCase):
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
-        p = Run('git push origin my-topic'.split())
+        p = testcase.run('git push origin my-topic'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

@@ -7,7 +7,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin :some-tag'.split())
+        p = testcase.run('git push origin :some-tag'.split())
         testcase.assertNotEqual(p.status, 0, p.image)
 
         expected_out = """\

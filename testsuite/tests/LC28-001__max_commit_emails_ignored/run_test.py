@@ -21,7 +21,7 @@ class TestRun(TestCase):
         # reject it saying that there are too many new commits.
         # The goal is to verify that the no-cvs-check override
         # did not cause the max-commit-emails check to be skipped.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** This update introduces too many new commits (4), which would
 remote: *** trigger as many emails, exceeding the current limit (3).

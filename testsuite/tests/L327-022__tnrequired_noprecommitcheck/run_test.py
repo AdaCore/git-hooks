@@ -16,7 +16,7 @@ class TestRun(TestCase):
         # repository yet, it counts as "new", and thus should be
         # validated through the pre-commit checks, which means
         # that we expect the update to fail.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently
@@ -37,7 +37,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Now, push the thirdparty branch.  This branch is setup
         # to avoid the pre-commit checks, so this should allow
         # the problematic commit.
-        p = Run('git push origin thirdparty'.split())
+        p = testcase.run('git push origin thirdparty'.split())
         expected_out = """\
 remote: ----------------------------------------------------------------------
 remote: --  The hooks.no-emails config option contains `refs/heads/thirdparty',
@@ -56,7 +56,7 @@ To ../bare/repo.git
         # And finally, try pushing the "master" branch again.
         # This time, the problematic commit is already in, and
         # so should not go through the pre-commit-checks again.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `top'
 remote: DEBUG: MIME-Version: 1.0

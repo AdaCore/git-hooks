@@ -8,7 +8,7 @@ class TestRun(TestCase):
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
-        p = Run('git push origin master:topic/resync'.split())
+        p = testcase.run('git push origin master:topic/resync'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `README' `a' `c'
 remote: DEBUG: MIME-Version: 1.0

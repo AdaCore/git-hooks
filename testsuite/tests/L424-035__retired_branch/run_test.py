@@ -6,7 +6,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin retired/gdb-5.0'.split())
+        p = testcase.run('git push origin retired/gdb-5.0'.split())
 
         assert p.status == 0, p.image
 
@@ -78,7 +78,7 @@ To ../bare/repo.git
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin gdb-7.5'.split())
+        p = testcase.run('git push origin gdb-7.5'.split())
 
         assert p.status != 0, p.image
 
@@ -97,7 +97,7 @@ error: failed to push some refs to '../bare/repo.git'
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push -f origin gdb-7.5'.split())
+        p = testcase.run('git push -f origin gdb-7.5'.split())
 
         assert p.status != 0, p.image
 
@@ -119,7 +119,7 @@ error: failed to push some refs to '../bare/repo.git'
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin gdb-7.6'.split())
+        p = testcase.run('git push origin gdb-7.6'.split())
 
         assert p.status != 0, p.image
 
@@ -142,7 +142,7 @@ error: failed to push some refs to '../bare/repo.git'
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push -f origin gdb-7.6'.split())
+        p = testcase.run('git push -f origin gdb-7.6'.split())
 
         assert p.status != 0, p.image
 

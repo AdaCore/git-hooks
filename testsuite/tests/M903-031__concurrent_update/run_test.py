@@ -20,7 +20,7 @@ class TestRun(TestCase):
                 % os.getpid())
         f.close()
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: ---------------------------------------------------------------------
 remote: --  Another user is currently pushing changes to this repository.  --
@@ -37,7 +37,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         # Try it again, to make sure that the previous attempt did not
         # accidently deleted the lock file.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: ---------------------------------------------------------------------
 remote: --  Another user is currently pushing changes to this repository.  --
@@ -58,7 +58,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         os.unlink(lock_filename)
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0

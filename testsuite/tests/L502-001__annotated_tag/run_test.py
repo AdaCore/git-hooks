@@ -8,7 +8,7 @@ class TestRun(TestCase):
         cd ('%s/repo' % TEST_DIR)
 
         # Try pushing tag v0.1.
-        p = Run('git push origin v0.1'.split())
+        p = testcase.run('git push origin v0.1'.split())
         testcase.assertEqual(p.status, 0, p.image)
 
         expected_out = """\

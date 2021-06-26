@@ -11,7 +11,7 @@ class TestRun(TestCase):
         cd ('%s/repo' % TEST_DIR)
 
         # Push master to the `origin' remote.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** Invalid hooks.debug-level value: zero (must be integer)
 remote: error: hook declined to update refs/heads/master
@@ -26,7 +26,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Same thing, but with an invalid GIT_HOOKS_DEBUG_LEVEL value.
         testcase.set_debug_level('true')
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** Invalid value for GIT_HOOKS_DEBUG_LEVEL: true (must be integer)
 remote: error: hook declined to update refs/heads/master

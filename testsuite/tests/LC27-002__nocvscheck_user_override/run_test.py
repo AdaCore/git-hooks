@@ -23,7 +23,7 @@ class TestRun(TestCase):
         too_old = time.time() - 24 * 60 * 60 - 1
         utime(no_cvs_check_fullpath, (too_old, too_old))
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** %(TEST_DIR)s/.no_cvs_check is too old and will be ignored.
 remote: *** pre-commit check failed for commit: a60540361d47901d3fe254271779f380d94645f7
@@ -48,7 +48,7 @@ error: failed to push some refs to '../bare/repo.git'
         recent_enough = time.time() - 24 * 60 * 60 + 10
         utime(no_cvs_check_fullpath, (recent_enough, recent_enough))
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, d065089ff184d97934c010ccd0e7e8ed94cb7165, a60540361d47901d3fe254271779f380d94645f7)
 remote: DEBUG: update base: d065089ff184d97934c010ccd0e7e8ed94cb7165

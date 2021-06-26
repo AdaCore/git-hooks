@@ -8,7 +8,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin :retired/gdb-7.2'.split())
+        p = testcase.run('git push origin :retired/gdb-7.2'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

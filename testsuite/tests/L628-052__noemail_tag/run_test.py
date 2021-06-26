@@ -7,7 +7,7 @@ class TestRun(TestCase):
         cd ('%s/repo' % TEST_DIR)
 
         # Try pushing tag v0.1.
-        p = Run('git push origin v0.1'.split())
+        p = testcase.run('git push origin v0.1'.split())
         expected_out = """\
 remote: ----------------------------------------------------------------------
 remote: --  The hooks.no-emails config option contains `refs/tags/v0.1',

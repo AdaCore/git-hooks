@@ -20,7 +20,7 @@ class TestRun(TestCase):
         # only be one commit check, of the merge commit, using the old
         # master's SHA1 as the "parent".
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 128c4380beb275f9002a42e0b5da3618e00c11a9, 7277e89f8909d7279357489ccf0de81c7c0f3286)
 remote: DEBUG: update base: 128c4380beb275f9002a42e0b5da3618e00c11a9

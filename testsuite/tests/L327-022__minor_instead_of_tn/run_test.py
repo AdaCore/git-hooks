@@ -10,7 +10,7 @@ class TestRun(TestCase):
         # has the word "minor" in it, which used to be a valid
         # substitute for a TN, but this is no longer the case
         # as of 2017-07-28, so the push should now be rejected.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently

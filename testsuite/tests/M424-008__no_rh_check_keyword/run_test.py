@@ -10,7 +10,7 @@ class TestRun(TestCase):
         # a couple of rules (empty line after subject, missing TN),
         # but the "(no-rh-check)" keyword/tag in the revision log
         # should turn all rh-checks to be accepted.
-        p = Run('git push origin c16481a7e16f7d1632319922e84a9cc32dcf876b:master'.split())
+        p = testcase.run('git push origin c16481a7e16f7d1632319922e84a9cc32dcf876b:master'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
@@ -65,7 +65,7 @@ To ../bare/repo.git
         # the commit introduces some changes that the cvs_check'er
         # will reject.
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** pre-commit check failed for commit: 7b299989f3305ad611c2c9774cc0e587571beb84
 remote: *** cvs_check: `repo' < `b'

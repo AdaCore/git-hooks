@@ -21,7 +21,7 @@ class TestRun(TestCase):
         #    a branch creation).
         #################################################################
 
-        p = Run('git push origin existing-branch-ok'.split())
+        p = testcase.run('git push origin existing-branch-ok'.split())
         expected_out = """\
 remote: *** cvs_check: `file_67' (7 chars)
 remote: *** cvs_check: `file_with_name_too_long' (23 chars)
@@ -47,7 +47,7 @@ To ../bare/repo.git
         #    a branch creation).
         #################################################################
 
-        p = Run('git push origin existing-branch-one-bad'.split())
+        p = testcase.run('git push origin existing-branch-one-bad'.split())
         expected_out = """\
 remote: *** The following commit introduces some new files whose total
 remote: *** path length exceeds the maximum allowed for this repository.
@@ -86,7 +86,7 @@ error: failed to push some refs to '../bare/repo.git'
         #    a branch creation).
         #################################################################
 
-        p = Run('git push origin existing-branch-multi-bad'.split())
+        p = testcase.run('git push origin existing-branch-multi-bad'.split())
         expected_out = """\
 remote: *** The following commit introduces some new files whose total
 remote: *** path length exceeds the maximum allowed for this repository.
@@ -122,7 +122,7 @@ error: failed to push some refs to '../bare/repo.git'
         #    a new branch).
         #################################################################
 
-        p = Run('git push origin new-branch-ok'.split())
+        p = testcase.run('git push origin new-branch-ok'.split())
         expected_out = """\
 remote: *** cvs_check: `file_6' (6 chars)
 remote: *** cvs_check: `file_67' (7 chars)
@@ -149,7 +149,7 @@ To ../bare/repo.git
         #    a new branch).
         #################################################################
 
-        p = Run('git push origin new-branch-one-bad'.split())
+        p = testcase.run('git push origin new-branch-one-bad'.split())
         expected_out = """\
 remote: *** The following commit introduces some new files whose total
 remote: *** path length exceeds the maximum allowed for this repository.
@@ -188,7 +188,7 @@ error: failed to push some refs to '../bare/repo.git'
         #    a new branch).
         #################################################################
 
-        p = Run('git push origin new-branch-multi-bad'.split())
+        p = testcase.run('git push origin new-branch-multi-bad'.split())
         expected_out = """\
 remote: *** The following commit introduces some new files whose total
 remote: *** path length exceeds the maximum allowed for this repository.

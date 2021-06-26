@@ -8,7 +8,7 @@ class TestRun(TestCase):
 
         # Push master to the `origin' remote.  The operation should
         # fail due to some filename collisions...
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** The following filename collisions have been detected.
 remote: *** These collisions happen when the name of two or more files
@@ -37,7 +37,7 @@ error: failed to push some refs to '../bare/repo.git'
         # commit that does not introduce any collision.  The purpose
         # of the second commit is to verify that the hooks verify
         # *all* commits, not just the last one.
-        p = Run('git push origin two-files'.split())
+        p = testcase.run('git push origin two-files'.split())
         expected_out = """\
 remote: *** The following filename collisions have been detected.
 remote: *** These collisions happen when the name of two or more files

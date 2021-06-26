@@ -1,5 +1,5 @@
 import os
-from support import cd, Run, runtests, TestCase, TEST_DIR
+from support import cd, runtests, TestCase, TEST_DIR
 
 
 class TestRun(TestCase):
@@ -23,22 +23,22 @@ class TestRun(TestCase):
         # First, update the git-hooks configuration to install our
         # the script we want to use as our commit-email-formatter.
 
-        p = Run(['git', 'fetch', 'origin', 'refs/meta/config'])
+        p = testcase.run(['git', 'fetch', 'origin', 'refs/meta/config'])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run(['git', 'checkout', 'FETCH_HEAD'])
+        p = testcase.run(['git', 'checkout', 'FETCH_HEAD'])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run(['git', 'config', '--file', 'project.config',
+        p = testcase.run(['git', 'config', '--file', 'project.config',
                  'hooks.commit-email-formatter',
                  os.path.join(TEST_DIR, 'commit-email-formatter.py')])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run(['git', 'commit', '-m', 'Add hooks.commit-email-formatter',
+        p = testcase.run(['git', 'commit', '-m', 'Add hooks.commit-email-formatter',
                  'project.config'])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
+        p = testcase.run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
         testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
@@ -47,7 +47,7 @@ class TestRun(TestCase):
         # Return our current HEAD to branch "master". Not critical for
         # our testing, but it helps the testcase be closer to the more
         # typical scenarios.
-        p = Run(['git', 'checkout', 'master'])
+        p = testcase.run(['git', 'checkout', 'master'])
         testcase.assertEqual(p.status, 0, p.image)
 
         # Push the "master" branch, which introduces a series of commits.
@@ -60,7 +60,7 @@ class TestRun(TestCase):
         # behavior of the commit-email-formatter hook doesn't affect
         # the next commit.
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
 
         # Let's split the expected_out by commits, so we can add comments
         # describing each commit prior to being processed by our hook.
@@ -577,7 +577,7 @@ To ../bare/repo.git
         # via stdin. While at it, it also exercises the replacement
         # of the "Diff:" section.
 
-        p = Run('git push origin hook-dump'.split())
+        p = testcase.run('git push origin hook-dump'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -652,7 +652,7 @@ To ../bare/repo.git
         # body (dumping the data given to the script), as well as suppress
         # the diff.
 
-        p = Run('git push origin notes/commits'.split())
+        p = testcase.run('git push origin notes/commits'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

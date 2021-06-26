@@ -13,22 +13,22 @@ class TestRun(TestCase):
         # First, update the git-hooks configuration to install our
         # the script we want to use as our commit-extra-checker.
 
-        p = Run(['git', 'fetch', 'origin', 'refs/meta/config'])
+        p = testcase.run(['git', 'fetch', 'origin', 'refs/meta/config'])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run(['git', 'checkout', 'FETCH_HEAD'])
+        p = testcase.run(['git', 'checkout', 'FETCH_HEAD'])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run(['git', 'config', '--file', 'project.config',
+        p = testcase.run(['git', 'config', '--file', 'project.config',
                  'hooks.commit-extra-checker',
                  os.path.join(TEST_DIR, 'commit-extra-checker.py')])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run(['git', 'commit', '-m', 'Add hooks.commit-extra-checker',
+        p = testcase.run(['git', 'commit', '-m', 'Add hooks.commit-extra-checker',
                  'project.config'])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
+        p = testcase.run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
         testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
@@ -38,7 +38,7 @@ class TestRun(TestCase):
         # to be called on the notes themselves (not on the commits
         # to which the notes are attached).
 
-        p = Run('git push origin notes/commits'.split())
+        p = testcase.run('git push origin notes/commits'.split())
         expected_out = """\
 remote: DEBUG: commit-extra-checker.py refs/notes/commits 58e8efaaf0dee13edea66b1abbd4b669132b3d77
 remote: -----[ stdin ]-----
@@ -67,14 +67,14 @@ To ../bare/repo.git
         # before pushing the notes. As a result, the commit-extra-checker
         # should not be called at all.
 
-        p = Run(['git', 'notes', 'add', '-m', 'an annotation', 'master'])
+        p = testcase.run(['git', 'notes', 'add', '-m', 'an annotation', 'master'])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run('git show-ref refs/notes/commits'.split())
+        p = testcase.run('git show-ref refs/notes/commits'.split())
         testcase.assertEqual(p.status, 0, p.image)
         new_note_sha1 = p.out.split()[0]
 
-        p = Run('git push origin notes/commits'.split())
+        p = testcase.run('git push origin notes/commits'.split())
         expected_out = """\
 remote: *** The commit associated to the following notes update
 remote: *** cannot be found. Please push your branch commits first

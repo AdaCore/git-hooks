@@ -21,14 +21,14 @@ class TestRun(TestCase):
                 'hook_filename': bad_update_hook_filename}
         with open('project.config', 'w') as f:
             f.write(project_config)
-        p = Run(['git', 'commit', '-m', 'Add hooks.update-hook config',
+        p = testcase.run(['git', 'commit', '-m', 'Add hooks.update-hook config',
                  'project.config'])
         assert p.status == 0, p.image
 
         # If we try to push this commit to refs/meta/config,
         # it should be rejected, since it introduces a config to
         # an invalid hook.
-        p = Run(['git', 'push', 'origin',
+        p = testcase.run(['git', 'push', 'origin',
                  'refs/heads/meta/config:refs/meta/config'])
         expected_out = """\
 remote: *** Invalid hooks.update-hook configuration ({hook_filename}):
@@ -54,7 +54,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         # Try pushing the config update again. This time, it should work.
 
-        p = Run(['git', 'push', 'origin',
+        p = testcase.run(['git', 'push', 'origin',
                  'refs/heads/meta/config:refs/meta/config'])
         assert p.status == 0, p.image
 
@@ -66,7 +66,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         # Try to push master. It should be rejected.
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** Invalid hooks.update-hook configuration ({hook_filename}):
 remote: [Errno 2] No such file or directory

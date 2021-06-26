@@ -1,4 +1,4 @@
-from support import Run, TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, cd, runtests
 
 
 class TestRun(TestCase):
@@ -10,7 +10,7 @@ class TestRun(TestCase):
         # First, try pushing with a branch name which is recognized
         # by the repository's branch namespace.
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
@@ -59,7 +59,7 @@ To ../bare/repo.git
         # repository, but is not recognized as a branch reference
         # (could be a legacy branch).
 
-        p = Run('git push origin my-topic'.split())
+        p = testcase.run('git push origin my-topic'.split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/heads/my-topic
 remote: ***

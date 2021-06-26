@@ -1,4 +1,4 @@
-from support import Run, TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, cd, runtests
 
 
 class TestRun(TestCase):
@@ -9,7 +9,7 @@ class TestRun(TestCase):
         # Try to delete a branch with a custom name which does exist
         # in the remote repository, and is recognized by the naming
         # scheme as a branch. This should be accepted.
-        p = Run('git push origin :refs/user/to-delete'
+        p = testcase.run('git push origin :refs/user/to-delete'
                 .split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
@@ -38,7 +38,7 @@ To ../bare/repo.git
         # Try to delete a branch with a reference name which is
         # recognized by the naming scheme as a branch, but does not
         # exist in the remote repository. This will obviously fail.
-        p = Run('git push origin :refs/user/does-not-exist'
+        p = testcase.run('git push origin :refs/user/does-not-exist'
                 .split())
         expected_out = """\
 remote: *** unable to delete 'refs/user/does-not-exist': remote ref does not exist

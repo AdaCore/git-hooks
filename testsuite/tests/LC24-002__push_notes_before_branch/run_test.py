@@ -10,7 +10,7 @@ class TestRun(TestCase):
         # that needs to be pushed references a commit from master
         # which has not been pushed, yet.  So the update should be
         # rejected.
-        p = Run('git push origin notes/commits'.split())
+        p = testcase.run('git push origin notes/commits'.split())
         expected_out = """\
 remote: *** The commit associated to the following notes update
 remote: *** cannot be found. Please push your branch commits first

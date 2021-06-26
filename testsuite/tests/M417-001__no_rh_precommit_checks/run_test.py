@@ -14,7 +14,7 @@ class TestRun(TestCase):
         # Push the first commit. The RH should normally fail the RH
         # style check, but we deactivated it for all branches, and
         # thus the push is expected to pass.
-        p = Run('git push origin bf43717d61e2a67cf9b3d040e9c40d6041a8444d:master'.split())
+        p = testcase.run('git push origin bf43717d61e2a67cf9b3d040e9c40d6041a8444d:master'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -62,7 +62,7 @@ To ../bare/repo.git
         # style check disabled does not prevent the precommit-check
         # checks from being applied. cvs_check has been setup to reject
         # the update, and thus cause the push to fail.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** pre-commit check failed for commit: e4dede9e45c3b88fd57aab5edbce1cd4d1da0850
 remote: *** cvs_check: style check violation in b

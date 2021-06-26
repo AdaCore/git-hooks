@@ -6,7 +6,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin before'.split())
+        p = testcase.run('git push origin before'.split())
         expected_out = """\
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently
@@ -29,7 +29,7 @@ error: failed to push some refs to '../bare/repo.git'
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin after'.split())
+        p = testcase.run('git push origin after'.split())
         expected_out = """\
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently

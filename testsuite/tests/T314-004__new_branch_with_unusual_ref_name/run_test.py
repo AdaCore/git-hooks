@@ -5,7 +5,7 @@ class TestRun(TestCase):
         """Push master as new ref with name outside standard namespace."""
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin master:refs/for/master'.split())
+        p = testcase.run('git push origin master:refs/for/master'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
@@ -74,7 +74,7 @@ To ../bare/repo.git
 
         cd('%s/bare/repo.git' % TEST_DIR)
 
-        p = Run('git show-ref -s refs/for/master'.split())
+        p = testcase.run('git show-ref -s refs/for/master'.split())
         expected_out = """\
 a60540361d47901d3fe254271779f380d94645f7
 """

@@ -1,4 +1,4 @@
-from support import Run, TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, cd, runtests
 
 
 class TestRun(TestCase):
@@ -10,7 +10,7 @@ class TestRun(TestCase):
         # First, try pushing with a branch name which is recognized
         # by the repository's branch namespace.
 
-        p = Run('git push origin master:refs/user/someone'.split())
+        p = testcase.run('git push origin master:refs/user/someone'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -39,7 +39,7 @@ To ../bare/repo.git
         # by the repository's branch namespace. E.g., try creating
         # a "release-y" branch directly in "refs/heads".
 
-        p = Run('git push origin master:refs/not/recognized'.split())
+        p = testcase.run('git push origin master:refs/not/recognized'.split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/not/recognized
 remote: ***

@@ -44,20 +44,20 @@ class TestRun(TestCase):
         with open(new_file_name, 'w') as f:
             f.write("Hello world\n");
 
-        p = Run(["git", "add", new_file_name])
+        p = testcase.run(["git", "add", new_file_name])
         assert p.status == 0, p.image
 
-        p = Run(["git", "commit", "-m", "Add looooong file"])
+        p = testcase.run(["git", "commit", "-m", "Add looooong file"])
         assert p.status == 0, p.image
 
         # Determine the SHA1 of that new commit. We will need it later
         # when matching outputs...
 
-        p = Run(["git", "log", "-1", "--format=%H"])
+        p = testcase.run(["git", "log", "-1", "--format=%H"])
         assert p.status == 0, p.image
         new_commit_sha1 = p.out.strip()
 
-        p = Run(["git", "log", "-1", "--format=%h"])
+        p = testcase.run(["git", "log", "-1", "--format=%h"])
         assert p.status == 0, p.image
         new_commit_abbrev_sha1 = p.out.strip()
 
@@ -68,7 +68,7 @@ class TestRun(TestCase):
         #
         #################################################################
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** The following commit introduces some new files whose total
 remote: *** path length exceeds the maximum allowed for this repository.
@@ -103,27 +103,27 @@ error: failed to push some refs to '../bare/repo.git'
         #
         #################################################################
 
-        p = Run(['git', 'fetch', 'origin', 'refs/meta/config'])
+        p = testcase.run(['git', 'fetch', 'origin', 'refs/meta/config'])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run(['git', 'checkout', 'FETCH_HEAD'])
+        p = testcase.run(['git', 'checkout', 'FETCH_HEAD'])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run(['git', 'config', '--file', 'project.config',
+        p = testcase.run(['git', 'config', '--file', 'project.config',
                  'hooks.max-filepath-length', '0'])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run(['git', 'commit', '-m', 'Set hooks.max-filepath-length to 0',
+        p = testcase.run(['git', 'commit', '-m', 'Set hooks.max-filepath-length to 0',
                  'project.config'])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
+        p = testcase.run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
         testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
         assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
 
-        p = Run(['git', 'checkout', 'master'])
+        p = testcase.run(['git', 'checkout', 'master'])
         testcase.assertEqual(p.status, 0, p.image)
 
         #################################################################
@@ -133,7 +133,7 @@ error: failed to push some refs to '../bare/repo.git'
         #
         #################################################################
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: DEBUG: Sending email: [repo] Add looooong file...
 To ../bare/repo.git

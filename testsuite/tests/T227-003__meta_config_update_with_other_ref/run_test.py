@@ -12,7 +12,7 @@ class TestRun(TestCase):
         # get pushed, with one of the references to update being the special
         # reference refs/meta/config. We expect this update attempt to be
         # rejected.
-        p = Run('git push'.split())
+        p = testcase.run('git push'.split())
         expected_out = """\
 remote: *** You are trying to push multiple references at the same time:
 remote: ***   - refs/heads/master
@@ -32,7 +32,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         # Now, push the refs/meta/config update on its own, as requested.
 
-        p = Run('git push origin meta/config:refs/meta/config'.split())
+        p = testcase.run('git push origin meta/config:refs/meta/config'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `project.config'
 remote: DEBUG: MIME-Version: 1.0
@@ -80,7 +80,7 @@ To ../bare/repo.git
         # the simple "git push" command we tried earlier should work,
         # now.
 
-        p = Run('git push'.split())
+        p = testcase.run('git push'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0

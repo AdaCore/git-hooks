@@ -13,20 +13,20 @@ class TestRun(TestCase):
             project_config = f.read() % {'TEST_DIR': TEST_DIR}
         with open('project.config', 'w') as f:
             f.write(project_config)
-        p = Run(['git', 'commit', '-m', 'fix hooks.mailinglist',
+        p = testcase.run(['git', 'commit', '-m', 'fix hooks.mailinglist',
                  'project.config'])
         assert p.status == 0, p.image
 
-        p = Run(['git', 'push', 'origin',
+        p = testcase.run(['git', 'push', 'origin',
                  'refs/heads/meta/config:refs/meta/config'])
         assert p.status == 0, p.image
 
-        p = Run('git checkout master'.split())
+        p = testcase.run('git checkout master'.split())
         assert p.status == 0, p.image
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `README' `a' `c'
 remote: DEBUG: MIME-Version: 1.0

@@ -22,7 +22,7 @@ class TestRun(TestCase):
         no_cvs_check_fullpath = '%s/.no_cvs_check' % TEST_DIR
         open(no_cvs_check_fullpath, 'w').close()
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** Failed to file the following syslog entry:
 remote: ***   - message: Pre-commit checks disabled for a60540361d47901d3fe254271779f380d94645f7 on repo by user testsuite using %(TEST_DIR)s/.no_cvs_check

@@ -6,7 +6,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin gdb-7.5'.split())
+        p = testcase.run('git push origin gdb-7.5'.split())
 
         assert p.status != 0, p.image
 
@@ -26,7 +26,7 @@ error: failed to push some refs to '../bare/repo.git'
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push -f origin gdb-7.5'.split())
+        p = testcase.run('git push -f origin gdb-7.5'.split())
 
         assert p.status != 0, p.image
 
@@ -46,7 +46,7 @@ error: failed to push some refs to '../bare/repo.git'
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin gdb-7.6'.split())
+        p = testcase.run('git push origin gdb-7.6'.split())
         expected_out = """\
 remote: *** Updates to the gdb-7.6 branch are no longer allowed because
 remote: *** this branch is now frozen (see "hooks.frozen-ref" in file
@@ -65,7 +65,7 @@ error: failed to push some refs to '../bare/repo.git'
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 Everything up-to-date
 """
@@ -78,7 +78,7 @@ Everything up-to-date
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin gdb-7.5-release'.split())
+        p = testcase.run('git push origin gdb-7.5-release'.split())
         expected_out = """\
 remote: *** Updates to refs/tags/gdb-7.5-release are no longer allowed because
 remote: *** this reference is now frozen (see "hooks.frozen-ref" in file
@@ -97,7 +97,7 @@ error: failed to push some refs to '../bare/repo.git'
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin gdb-7.6-release'.split())
+        p = testcase.run('git push origin gdb-7.6-release'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0

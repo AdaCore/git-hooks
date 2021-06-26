@@ -1,4 +1,4 @@
-from support import Run, TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, cd, runtests
 
 
 class TestRun(TestCase):
@@ -10,7 +10,7 @@ class TestRun(TestCase):
         """
         cd('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin master:refs/vendor/name/topic'.split())
+        p = testcase.run('git push origin master:refs/vendor/name/topic'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

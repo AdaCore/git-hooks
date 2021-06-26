@@ -8,7 +8,7 @@ class TestRun(TestCase):
 
         # Push master to the `origin' remote.  The remote should
         # reject it saying that there are too many new commits.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** This update introduces too many new commits (4), which would
 remote: *** trigger as many emails, exceeding the current limit (3).
@@ -26,7 +26,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Now, try pushing only HEAD~, which should only push
         # 3 new commits, which should be under the limit, and
         # thus be accepted.
-        p = Run('git push origin master~:master'.split())
+        p = testcase.run('git push origin master~:master'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -143,7 +143,7 @@ To ../bare/repo.git
 
         # Now, try push master again.  We should have one last
         # new commit left to push...
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

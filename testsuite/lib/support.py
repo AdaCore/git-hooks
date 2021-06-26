@@ -63,6 +63,9 @@ class TestCase(unittest.TestCase):
         os.environ["TMP"] = self.testcase_tmp_dir
         os.environ["TMPDIR"] = self.testcase_tmp_dir
 
+        # Allow users to call self.run as if they were calling Run.
+        self.run = Run
+
     def tearDown(self):
         # One last check: Verify that the scripts did not leak any
         # temporary files/directories, by looking at the number of

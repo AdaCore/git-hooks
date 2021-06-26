@@ -1,4 +1,4 @@
-from support import Run, TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, cd, runtests
 
 
 class TestRun(TestCase):
@@ -10,7 +10,7 @@ class TestRun(TestCase):
         # First, try pushing with a branch name which is recognized
         # by the repository's branch namespace.
 
-        p = Run('git push origin my-topic:refs/user/myself/my-feature'.split())
+        p = testcase.run('git push origin my-topic:refs/user/myself/my-feature'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
@@ -56,7 +56,7 @@ To ../bare/repo.git
         # Next, try pushing with a branch name which is not recognized
         # by the repository's branch namespace.
 
-        p = Run('git push origin my-topic:refs/others/exists-but-unrecognized'
+        p = testcase.run('git push origin my-topic:refs/others/exists-but-unrecognized'
                 .split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/others/exists-but-unrecognized

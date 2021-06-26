@@ -28,7 +28,7 @@ class TestRun(TestCase):
         # script in this testcase generates a trace at every call, one piece
         # of evidence that style checking is not being done is lack of such
         # traces in the push's output).
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: DEBUG: Sending email: [repo] Revert "Rename "world" into "there""...
 To ../bare/repo.git

@@ -9,7 +9,7 @@ class TestRun(TestCase):
         # the standard naming scheme for reference, so this should be
         # rejected as "not recognized".
 
-        p = Run('git push origin v0.1'.split())
+        p = testcase.run('git push origin v0.1'.split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/tags/v0.1
 remote: ***
@@ -42,7 +42,7 @@ error: failed to push some refs to '../bare/repo.git'
         cd ('%s/repo' % TEST_DIR)
 
         # Try pushing tag v0.1.
-        p = Run('git push origin v0.1:refs/user/myself/tags/v0.1'.split())
+        p = testcase.run('git push origin v0.1:refs/user/myself/tags/v0.1'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -76,7 +76,7 @@ To ../bare/repo.git
         cd ('%s/repo' % TEST_DIR)
 
         # Try pushing tag v0.1.
-        p = Run('git push origin v0.1:refs/nogo/tags/v0.1'.split())
+        p = testcase.run('git push origin v0.1:refs/nogo/tags/v0.1'.split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/nogo/tags/v0.1
 remote: ***

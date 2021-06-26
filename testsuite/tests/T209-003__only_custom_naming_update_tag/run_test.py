@@ -10,7 +10,7 @@ class TestRun(TestCase):
         # ignore the standard namespace for tags, so this should be
         # rejected as "not recognized".
 
-        p = Run('git push --force origin full-tag'.split())
+        p = testcase.run('git push --force origin full-tag'.split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/tags/full-tag
 remote: ***
@@ -42,7 +42,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Push "full-tag" to a reference which already exists in
         # the remote and is recognized as a tag.
 
-        p = Run('git push --force origin'
+        p = testcase.run('git push --force origin'
                 ' full-tag:refs/user/myself/tags/full-tag'.split())
         expected_out = """\
 remote: *** ---------------------------------------------------------------
@@ -139,7 +139,7 @@ To ../bare/repo.git
         # Push "full-tag" to a reference which already exists in
         # the remote but is not recognized as a tag.
 
-        p = Run('git push --force origin'
+        p = testcase.run('git push --force origin'
                 ' full-tag:refs/nogo/myself/tags/full-tag'.split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/nogo/myself/tags/full-tag

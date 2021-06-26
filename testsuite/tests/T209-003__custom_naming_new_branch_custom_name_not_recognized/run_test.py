@@ -1,4 +1,4 @@
-from support import Run, TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, cd, runtests
 
 
 class TestRun(TestCase):
@@ -11,7 +11,7 @@ class TestRun(TestCase):
         """
         cd('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin master:refs/does-not-exist/my-feature'
+        p = testcase.run('git push origin master:refs/does-not-exist/my-feature'
                 .split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/does-not-exist/my-feature

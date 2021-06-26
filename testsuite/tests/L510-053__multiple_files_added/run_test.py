@@ -6,7 +6,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `pck.adb' `pck.ads' `types.ads'
 remote: DEBUG: MIME-Version: 1.0

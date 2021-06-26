@@ -1,5 +1,5 @@
 import os
-from support import cd, Run, runtests, TestCase, TEST_DIR
+from support import cd, runtests, TestCase, TEST_DIR
 
 class TestRun(TestCase):
     def test_commit_checker_hook_on_branches(testcase):
@@ -32,22 +32,22 @@ class TestRun(TestCase):
         # First, update the git-hooks configuration to install our
         # the script we want to use as our commit-extra-checker.
 
-        p = Run(['git', 'fetch', 'origin', 'refs/meta/config'])
+        p = testcase.run(['git', 'fetch', 'origin', 'refs/meta/config'])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run(['git', 'checkout', 'FETCH_HEAD'])
+        p = testcase.run(['git', 'checkout', 'FETCH_HEAD'])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run(['git', 'config', '--file', 'project.config',
+        p = testcase.run(['git', 'config', '--file', 'project.config',
                  'hooks.commit-extra-checker',
                  os.path.join(TEST_DIR, 'commit-extra-checker.py')])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run(['git', 'commit', '-m', 'Add hooks.commit-extra-checker',
+        p = testcase.run(['git', 'commit', '-m', 'Add hooks.commit-extra-checker',
                  'project.config'])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = Run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
+        p = testcase.run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
         testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
@@ -61,7 +61,7 @@ class TestRun(TestCase):
         # Push a branch which introduces a single new commit, which
         # we expect the commit-extra-checker to accept the commit.
 
-        p = Run('git push origin single-commit-accept'.split())
+        p = testcase.run('git push origin single-commit-accept'.split())
         expected_out = """\
 remote: DEBUG: commit-extra-checker.py refs/heads/single-commit-accept f109361240e74d710e8e7927495104ab40943060
 remote: -----[ stdin ]-----
@@ -78,7 +78,7 @@ To ../bare/repo.git
         # Push a branch which introduces a single new commit,
         # which we expect the commit-extra-checker to reject.
 
-        p = Run('git push origin single-commit-reject'.split())
+        p = testcase.run('git push origin single-commit-reject'.split())
         expected_out = """\
 remote: *** The following commit was rejected by your hooks.commit-extra-checker script (status: 1)
 remote: *** commit: 2c27994b8413d8b9515ebd38a0b229639809e5c1
@@ -105,7 +105,7 @@ error: failed to push some refs to '../bare/repo.git'
         # these commits being completely new, the commit-extra-checker
         # is expected to be called for each and every of these 3 commits.
 
-        p = Run('git push origin multiple-commits-accept-all-new'.split())
+        p = testcase.run('git push origin multiple-commits-accept-all-new'.split())
         expected_out = """\
 remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-accept-all-new 4a250d3fd87947c594579e14b5688d1e60514883
 remote: -----[ stdin ]-----
@@ -155,7 +155,7 @@ To ../bare/repo.git
         # has ~180,000 commits as of 2020-10-02), it would be as many unwanted
         # calls to the commit checkers!
 
-        p = Run('git push origin multiple-commits-accept-some-preexisting'.split())
+        p = testcase.run('git push origin multiple-commits-accept-some-preexisting'.split())
         expected_out = """\
 remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-accept-some-preexisting 25f07c061174291b3126b1df487937ea3408f291
 remote: -----[ stdin ]-----
@@ -177,7 +177,7 @@ To ../bare/repo.git
         # the first one expected to be rejected by commit-extra-checker
         # (we should see the checker only be called once).
 
-        p = Run('git push origin multiple-commits-reject-first'.split())
+        p = testcase.run('git push origin multiple-commits-reject-first'.split())
         expected_out = """\
 remote: *** The following commit was rejected by your hooks.commit-extra-checker script (status: 1)
 remote: *** commit: 8ce0d28d635cd7dd490f6d574baecf079fd363d3
@@ -205,7 +205,7 @@ error: failed to push some refs to '../bare/repo.git'
         # printing stderr contents ahead of stdout. Accept that
         # pre-existing behavior.
 
-        p = Run('git push origin multiple-commits-reject-middle'.split())
+        p = testcase.run('git push origin multiple-commits-reject-middle'.split())
         expected_out = """\
 remote: *** The following commit was rejected by your hooks.commit-extra-checker script (status: 1)
 remote: *** commit: 6822734adebb636e8d3f9e664215d56f3d319282
@@ -242,7 +242,7 @@ error: failed to push some refs to '../bare/repo.git'
         # printing stderr contents ahead of stdout. Accept that
         # pre-existing behavior.
 
-        p = Run('git push origin multiple-commits-reject-last'.split())
+        p = testcase.run('git push origin multiple-commits-reject-last'.split())
         expected_out = """\
 remote: *** The following commit was rejected by your hooks.commit-extra-checker script (status: 1)
 remote: *** commit: d2593aef8aaaef1a6a43336277afe5c02b2fe04e
@@ -271,7 +271,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Push a new branch, and verify that our commit-extra-checker
         # gets called (and rejects the push because of a bad commit).
 
-        p = Run('git push origin new-branch-multiple-commits-reject-first'
+        p = testcase.run('git push origin new-branch-multiple-commits-reject-first'
                 .split())
         expected_out = """\
 remote: *** The following commit was rejected by your hooks.commit-extra-checker script (status: 1)
@@ -293,7 +293,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Push a branch deletion. Our commit-extra-checker shouldn't
         # get called, since there are no new commits.
 
-        p = Run('git push origin :delete-me'.split())
+        p = testcase.run('git push origin :delete-me'.split())
         expected_out = """\
 remote: DEBUG: Sending email: [repo] Deleted branch 'delete-me'...
 To ../bare/repo.git

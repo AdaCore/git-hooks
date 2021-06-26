@@ -7,7 +7,7 @@ class TestRun(TestCase):
         cd ('%s/repo' % TEST_DIR)
 
         # Try deleting full-tag.  The remote is setup to refuse this request.
-        p = Run('git push origin :full-tag'.split())
+        p = testcase.run('git push origin :full-tag'.split())
         testcase.assertNotEqual(p.status, 0, p.image)
 
         expected_out = """\

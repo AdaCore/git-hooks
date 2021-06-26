@@ -6,7 +6,7 @@ class TestRun(TestCase):
         """
         cd ('%s/bare/repo.git' % TEST_DIR)
 
-        p = Run(['./hooks/post-receive',
+        p = testcase.run(['./hooks/post-receive',
                  '--submitter-email=Dave Smith <ds@example.com>'],
                 input=('|d065089ff184d97934c010ccd0e7e8ed94cb7165'
                        ' a60540361d47901d3fe254271779f380d94645f7'

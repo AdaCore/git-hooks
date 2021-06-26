@@ -15,20 +15,20 @@ class TestRun(TestCase):
             project_config = f.read() % {'TEST_DIR': TEST_DIR}
         with open('project.config', 'w') as f:
             f.write(project_config)
-        p = Run(['git', 'commit', '-m', 'fix hooks.mailinglist',
+        p = testcase.run(['git', 'commit', '-m', 'fix hooks.mailinglist',
                  'project.config'])
         assert p.status == 0, p.image
 
-        p = Run(['git', 'push', 'origin',
+        p = testcase.run(['git', 'push', 'origin',
                  'refs/heads/meta/config:refs/meta/config'])
         assert p.status == 0, p.image
 
-        p = Run('git checkout master'.split())
+        p = testcase.run('git checkout master'.split())
         assert p.status == 0, p.image
 
         # Push the first commit. This is a binutils commit, so
         # should be sent to the binutils ml only.
-        p = Run(['git', 'push', 'origin',
+        p = testcase.run(['git', 'push', 'origin',
                  '4207b94cadc3c1be0edb4f6df5670f0311c267f3:master'])
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
@@ -76,7 +76,7 @@ To ../bare/repo.git
 
         # Push the next commit, which is a GDB commit and thus should
         # be sent to the gdb ml only.
-        p = Run(['git', 'push', 'origin',
+        p = testcase.run(['git', 'push', 'origin',
                  'cd2f5d40776eee5a47dc821eddd9a7c6c0ed436d:master'])
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
@@ -120,7 +120,7 @@ To ../bare/repo.git
         # Push the next commit, which is a commit touching both
         # a binutile file and GDB file, and so should be emailed
         # to both projects.
-        p = Run(['git', 'push', 'origin',
+        p = testcase.run(['git', 'push', 'origin',
                  '4c7588eee23d6d42e8d50ba05343e3d0f31dd286:master'])
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
@@ -176,7 +176,7 @@ To ../bare/repo.git
 
         # Push the next commit, which is a commit touching a file
         # which is common to both binutils and GDB.
-        p = Run(['git', 'push', 'origin',
+        p = testcase.run(['git', 'push', 'origin',
                  '0ed035c4417a51987594586016b061bed362ec9b:master'])
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
@@ -218,7 +218,7 @@ To ../bare/repo.git
 
         # Push the final commit, which is a merge commit with one
         # pre-existing commit.
-        p = Run(['git', 'push', 'origin', 'master'])
+        p = testcase.run(['git', 'push', 'origin', 'master'])
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -283,7 +283,7 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
         # Push a tag to a bfd commit.
-        p = Run(['git', 'push', 'origin', 'bfd-tag'])
+        p = testcase.run(['git', 'push', 'origin', 'bfd-tag'])
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -313,7 +313,7 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
         # Push a tag to a GDB commit.
-        p = Run(['git', 'push', 'origin', 'gdb-tag'])
+        p = testcase.run(['git', 'push', 'origin', 'gdb-tag'])
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -337,7 +337,7 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
         # Push a tag to a common commit.
-        p = Run(['git', 'push', 'origin', 'common-tag'])
+        p = testcase.run(['git', 'push', 'origin', 'common-tag'])
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -361,7 +361,7 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
         # Push all git notes.
-        p = Run(['git', 'push', 'origin',
+        p = testcase.run(['git', 'push', 'origin',
                  'refs/notes/commits:refs/notes/commits'])
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0

@@ -29,7 +29,7 @@ To ../bare/repo.git
  - [deleted]         full-tag
 """
 
-        p = Run('git push origin :full-tag'.split())
+        p = testcase.run('git push origin :full-tag'.split())
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
@@ -37,7 +37,7 @@ To ../bare/repo.git
         # the tag's full reference name instead of just passing
         # the tag's name.
 
-        p = Run('git push origin :refs/tags/other-full-tag'.split())
+        p = testcase.run('git push origin :refs/tags/other-full-tag'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

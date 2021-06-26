@@ -12,7 +12,7 @@ class TestRun(TestCase):
         # For the purpose of this test, the part that we really care
         # about is the fact that we set the repository up so that
         # commit emails are sent by Bcc to two email addresses.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0

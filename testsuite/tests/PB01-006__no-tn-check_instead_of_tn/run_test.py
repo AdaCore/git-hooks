@@ -6,7 +6,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
@@ -61,7 +61,7 @@ To ../bare/repo.git
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin badleft'.split())
+        p = testcase.run('git push origin badleft'.split())
         expected_out = """\
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently
@@ -84,7 +84,7 @@ error: failed to push some refs to '../bare/repo.git'
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin badright'.split())
+        p = testcase.run('git push origin badright'.split())
         expected_out = """\
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently

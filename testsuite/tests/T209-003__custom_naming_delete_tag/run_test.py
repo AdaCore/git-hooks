@@ -9,7 +9,7 @@ class TestRun(TestCase):
 
         # Delete a tag in the standard naming scheme.
 
-        p = Run('git push origin :full-tag'.split())
+        p = testcase.run('git push origin :full-tag'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -38,7 +38,7 @@ To ../bare/repo.git
         # the tag's full reference name instead of just passing
         # the tag's name.
 
-        p = Run('git push origin :refs/tags/other-full-tag'.split())
+        p = testcase.run('git push origin :refs/tags/other-full-tag'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -66,7 +66,7 @@ To ../bare/repo.git
         # Delete a tag with a custom reference name which is recognized
         # as a tag reference.
 
-        p = Run('git push origin :refs/vendor/me/tags/v1'.split())
+        p = testcase.run('git push origin :refs/vendor/me/tags/v1'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -94,7 +94,7 @@ To ../bare/repo.git
         # Delete a custom reference name which is recognized as a tag,
         # but does not exist on the remote.
 
-        p = Run('git push origin :refs/vendor/me/tags/unknown'.split())
+        p = testcase.run('git push origin :refs/vendor/me/tags/unknown'.split())
         expected_out = """\
 remote: *** unable to delete 'refs/vendor/me/tags/unknown': remote ref does not exist
 remote: error: hook declined to update refs/vendor/me/tags/unknown

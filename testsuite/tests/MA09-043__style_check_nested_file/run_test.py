@@ -8,7 +8,7 @@ class TestRun(TestCase):
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** pre-commit check failed for commit: d402899ac1ae2b5896c2b1558cdf1564ffa54d01
 remote: *** cvs_check: `repo' < `path/to/file'

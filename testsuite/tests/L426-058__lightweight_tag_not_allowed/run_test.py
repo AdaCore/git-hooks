@@ -15,12 +15,12 @@ class TestRun(TestCase):
         cd ('%s/repo' % TEST_DIR)
 
         # Create a tag called 'new-tag'...
-        p = Run('git tag new-tag'.split())
+        p = testcase.run('git tag new-tag'.split())
         testcase.assertEqual(p.status, 0, p.image)
 
         # Try pushing that new-tag.  The repository has been configured
         # to reject such updates.
-        p = Run('git push origin new-tag'.split())
+        p = testcase.run('git push origin new-tag'.split())
         testcase.assertNotEqual(p.status, 0, p.image)
 
         expected_out = """\

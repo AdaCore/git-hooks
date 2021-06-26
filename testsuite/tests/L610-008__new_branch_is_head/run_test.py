@@ -9,7 +9,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin release-0.1-branch'.split())
+        p = testcase.run('git push origin release-0.1-branch'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -38,7 +38,7 @@ To ../bare/repo.git
 
         cd('%s/bare/repo.git' % TEST_DIR)
 
-        p = Run('git show-ref -s release-0.1-branch'.split())
+        p = testcase.run('git show-ref -s release-0.1-branch'.split())
         expected_out = """\
 dd6165c96db712d3e918fb5c61088b171b5e7cab
 """

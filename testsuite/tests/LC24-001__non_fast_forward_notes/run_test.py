@@ -6,7 +6,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin notes/commits'.split())
+        p = testcase.run('git push origin notes/commits'.split())
         expected_out = """\
 To ../bare/repo.git
  ! [rejected]        refs/notes/commits -> refs/notes/commits (fetch first)
@@ -61,7 +61,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
         # Try again with -f, simulating a user trying to force
         # its way into getting this non-fast-forward update accepted.
-        p = Run('git push -f origin notes/commits'.split())
+        p = testcase.run('git push -f origin notes/commits'.split())
         expected_out = """\
 remote: *** Your Git Notes are not up to date.
 remote: ***

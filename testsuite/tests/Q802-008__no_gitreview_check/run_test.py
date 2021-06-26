@@ -13,7 +13,7 @@ class TestRun(TestCase):
         # for branches whose name start with "github/pull/", so we expect
         # the push to be accepted.
 
-        p = Run('git push origin github/pull/19'.split())
+        p = testcase.run('git push origin github/pull/19'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

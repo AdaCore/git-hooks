@@ -14,7 +14,7 @@ class TestRun(TestCase):
         #   - There are no cvs_check debug traces in the output;
         #   - The cvs_check script has been setup to reject everything;
         #     so if it gets called, the update will be rejected.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 9cbe95153dd093ef72c0dcb27094c9c6cdd97ad9, e7007066aeb5fefeba7d226e5a31c70971b67cdb)
 remote: DEBUG: update base: 9cbe95153dd093ef72c0dcb27094c9c6cdd97ad9

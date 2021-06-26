@@ -11,7 +11,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin release-0.1-branch'.split())
+        p = testcase.run('git push origin release-0.1-branch'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `b'
 remote: *** pre-commit check failed for commit: 4205e52273adad6b014e19fb1cf1fe1c9b8b4089
@@ -30,7 +30,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         cd('%s/bare/repo.git' % TEST_DIR)
 
-        p = Run('git show-ref -s release-0.1-branch'.split())
+        p = testcase.run('git show-ref -s release-0.1-branch'.split())
 
         assert p.status != 0, p.image
 

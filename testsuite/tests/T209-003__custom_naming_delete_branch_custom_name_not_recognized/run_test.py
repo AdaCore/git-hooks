@@ -1,4 +1,4 @@
-from support import Run, TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, cd, runtests
 
 
 class TestRun(TestCase):
@@ -12,7 +12,7 @@ class TestRun(TestCase):
         # reference this is, be it a branch, or a tag, or maybe
         # a reference to some git notes).
 
-        p = Run('git push origin :refs/others/exists-but-unrecognized'
+        p = testcase.run('git push origin :refs/others/exists-but-unrecognized'
                 .split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/others/exists-but-unrecognized
@@ -47,7 +47,7 @@ error: failed to push some refs to '../bare/repo.git'
         # match any of the known namespaces, and does not even exist
         # in the remote repository.
 
-        p = Run('git push origin :refs/does-not-exist/my-feature'
+        p = testcase.run('git push origin :refs/does-not-exist/my-feature'
                 .split())
         expected_out = """\
 remote: *** unable to delete 'refs/does-not-exist/my-feature': remote ref does not exist

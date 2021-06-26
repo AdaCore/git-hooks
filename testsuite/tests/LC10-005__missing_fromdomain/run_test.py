@@ -9,7 +9,7 @@ class TestRun(TestCase):
         # Push master to the `origin' remote.
         # The update should be refused because hooks.from-domain config
         # is not set.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** Error: hooks.from-domain config variable not set.
 remote: *** Please contact your repository's administrator.

@@ -25,7 +25,7 @@ class TestRun(TestCase):
         # script in this testcase generates a trace at every call, one piece
         # of evidence that style checking is not being done is lack of such
         # traces in the push's output).
-        p = Run('git push origin v1.0.0'.split())
+        p = testcase.run('git push origin v1.0.0'.split())
         expected_out = """\
 remote: DEBUG: Sending email: [repo] Created tag 'v1.0.0'...
 To ../bare/repo.git

@@ -12,28 +12,28 @@ class TestRun(TestCase):
         # First, adjust the project.config file to use a pre-receive-hook
         # script.  We can't do it any earlier, because we don't know
         # which temporary directory will be used when running this test.
-        p = Run(['git', 'fetch', 'origin', 'refs/meta/config'])
+        p = testcase.run(['git', 'fetch', 'origin', 'refs/meta/config'])
         assert p.status == 0, p.image
 
-        p = Run(['git', 'checkout', 'FETCH_HEAD'])
+        p = testcase.run(['git', 'checkout', 'FETCH_HEAD'])
         assert p.status == 0, p.image
 
-        p = Run(['git', 'config', '-f', 'project.config',
+        p = testcase.run(['git', 'config', '-f', 'project.config',
                  '--add', 'hooks.pre-receive-hook',
                  os.path.join(TEST_DIR, 'pre-receive-hook')])
         assert p.status == 0, p.image
 
-        p = Run(['git', 'commit', '-m', 'add hooks.pre-receive-hook config',
+        p = testcase.run(['git', 'commit', '-m', 'add hooks.pre-receive-hook config',
                  'project.config'])
         assert p.status == 0, p.image
 
-        p = Run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
+        p = testcase.run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
         assert p.status == 0, p.image
 
         # Push master to the `origin' remote.  The pre-receive-hook
         # should be called (as evidenced by some debug output it prints),
         # and it should allow the update to get through.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: -----[ pre-receive-hook args ]-----
 remote: -----[ pre-receive-hook stdin ]-----

@@ -11,7 +11,7 @@ class TestRun(TestCase):
         #   - There are no cvs_check debug traces in the output;
         #   - The cvs_check script has been setup to reject everything;
         #     so if it gets called, the update will be rejected.
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

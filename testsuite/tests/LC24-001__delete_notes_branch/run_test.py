@@ -6,7 +6,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        p = Run('git push origin :refs/notes/commits'.split())
+        p = testcase.run('git push origin :refs/notes/commits'.split())
         expected_out = """\
 remote: *** Deleting the Git Notes is not allowed.
 remote: error: hook declined to update refs/notes/commits

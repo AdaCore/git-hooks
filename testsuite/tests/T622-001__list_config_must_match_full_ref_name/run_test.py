@@ -9,7 +9,7 @@ class TestRun(TestCase):
         # contains "refs/heads/master", so this push should have no emails
         # being sent.
 
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: ----------------------------------------------------------------------
 remote: --  The hooks.no-emails config option contains `refs/heads/master',
@@ -29,7 +29,7 @@ To ../bare/repo.git
         # entry for "refs/heads/master" should be ignored in this case,
         # and thus emails are expected to be sent.
 
-        p = Run('git push origin master-with-emails'.split())
+        p = testcase.run('git push origin master-with-emails'.split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit

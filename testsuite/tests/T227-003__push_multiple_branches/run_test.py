@@ -9,7 +9,7 @@ class TestRun(TestCase):
         # Do a git push without specifying which branch to push.
         # The repository has been configured (via .git/config)
         # so as to push both the "master" and "second" branches.
-        p = Run('git push origin'.split())
+        p = testcase.run('git push origin'.split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0

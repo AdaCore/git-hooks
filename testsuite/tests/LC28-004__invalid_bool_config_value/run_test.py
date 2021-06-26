@@ -11,7 +11,7 @@ class TestRun(TestCase):
         # Push master to the `origin' remote.  The update should
         # fail because hooks.combined-style-checking does not have
         # a valid value (simulating a typo).
-        p = Run('git push origin master'.split())
+        p = testcase.run('git push origin master'.split())
         expected_out = """\
 remote: *** Invalid hooks.combined-style-checking value: frue (must be boolean)
 remote: error: hook declined to update refs/heads/master

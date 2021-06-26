@@ -13,22 +13,22 @@ class TestRun(TestCase):
         # script.  We can't do it any earlier, because we don't know
         # which temporary directory will be used when running this test.
         p = Run(['git', 'fetch', 'origin', 'refs/meta/config'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         p = Run(['git', 'checkout', 'FETCH_HEAD'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         p = Run(['git', 'config', '-f', 'project.config',
                  '--add', 'hooks.pre-receive-hook',
                  os.path.join(TEST_DIR, 'pre-receive-hook')])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         p = Run(['git', 'commit', '-m', 'add hooks.pre-receive-hook config',
                  'project.config'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         p = Run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         # Push master to the `origin' remote.  The pre-receive-hook
         # should be called (as evidenced by some debug output it prints),

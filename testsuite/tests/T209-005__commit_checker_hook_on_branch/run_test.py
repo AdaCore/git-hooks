@@ -57,7 +57,7 @@ class TestRun(TestCase):
         # While at it, verify that the commit-extra-checker was called
         # to check that commit. Our hooks generates some output so
         # look for that.
-        self.assertTrue('DEBUG: commit-extra-checker.py' in p.out, p.image)
+        assert 'DEBUG: commit-extra-checker.py' in p.out, p.image
 
         # Push a branch which introduces a single new commit, which
         # we expect the commit-extra-checker to accept the commit.

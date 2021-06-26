@@ -12,10 +12,10 @@ class TestRun(TestCase):
         # script, which isn't known until now.
 
         p = Run(['git', 'fetch', 'origin', 'refs/meta/config'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         p = Run(['git', 'checkout', 'FETCH_HEAD'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         with open('%s/hooks_config' % TEST_DIR) as f:
             project_config = f.read() % {'TEST_DIR': TEST_DIR}
@@ -23,11 +23,11 @@ class TestRun(TestCase):
             f.write(project_config)
         p = Run(['git', 'commit', '-m', 'fix hooks.mailinglist',
                  'project.config'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         p = Run(['git', 'push', 'origin',
                  'HEAD:refs/meta/config'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified, and the hooks.mailinglist

@@ -106,7 +106,7 @@ To ../bare/repo.git
  * [new tag]         version-0.1a -> version-0.1a
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Next, push the master branch which, from the point of view of
@@ -185,7 +185,7 @@ To ../bare/repo.git
    426fba3..4f0f08f  master -> master
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':

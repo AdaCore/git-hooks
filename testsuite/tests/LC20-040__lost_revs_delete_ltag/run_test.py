@@ -37,7 +37,7 @@ remote:   4f0f08f... Minor modifications.
 To ../bare/repo.git
  - [deleted]         retired/gdb-7.2
 """
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':

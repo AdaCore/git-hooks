@@ -20,7 +20,7 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertTrue(p.status != 0, p.image)
+        assert p.status != 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Now, try pushing only HEAD~, which should only push

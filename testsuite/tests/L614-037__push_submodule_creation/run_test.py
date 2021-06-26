@@ -10,7 +10,7 @@ class TestRun(TestCase):
 
         # First, add the submodule...
         p = Run(['git', 'submodule', 'add', '%s/bare/subm.git' % TEST_DIR])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         # Verify that subm is a directory that exists...
         self.assertTrue(isdir('subm'),
@@ -18,23 +18,23 @@ class TestRun(TestCase):
 
         # Now that the setup phase is done, commit the change.
         p = Run(['git', 'commit', '-m', 'Add submodule subm'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         # Get the hash of our submodule commit.  We will need it
         # to match the output of the push command.
         p = Run(['git rev-parse HEAD'.split()])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         subm_rev = p.out.strip()
 
         # Also get the "author date" for our commit.  We need this
         # info as part of the expected output.
         p = Run(['git log -n1 --pretty=format:%ad'.split()])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         author_date = p.out.strip()
 
         # Same for the hash of the .gitmodules file...
         p = Run(['git ls-tree HEAD .gitmodules'.split()])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         gitmodules_hash = p.out.split()[2]
 
         # For coverage purposes, we want to test the calling of
@@ -122,7 +122,7 @@ To ../bare/repo.git
        'TEST_DIR' : TEST_DIR,
       }
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 

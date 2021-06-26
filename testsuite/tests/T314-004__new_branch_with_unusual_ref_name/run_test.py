@@ -66,7 +66,7 @@ To ../bare/repo.git
  * [new branch]      master -> refs/for/master
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Verify that the branch has been created in the remote
@@ -79,7 +79,7 @@ To ../bare/repo.git
 a60540361d47901d3fe254271779f380d94645f7
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 

@@ -11,7 +11,7 @@ class TestRun(TestCase):
 
         import utils
 
-        self.assertTrue(utils.scratch_dir is None)
+        assert utils.scratch_dir is None
 
         # Call create_scratch_dir, and verify that no warning is printed
         # on stderr, by redirecting it to a StringIO file.

@@ -75,7 +75,7 @@ remote: -end B;
 To ../bare/repo.git
    f826248..0c702ad  master -> master
 """
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':

@@ -32,7 +32,7 @@ To ../bare/repo.git
  * [new tag]         v1.0.0 -> v1.0.0
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':

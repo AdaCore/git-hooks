@@ -35,7 +35,7 @@ To ../bare/repo.git
    a2d7a20..73b1b7d  master -> master
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':

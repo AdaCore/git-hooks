@@ -45,20 +45,20 @@ class TestRun(TestCase):
             f.write("Hello world\n");
 
         p = Run(["git", "add", new_file_name])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         p = Run(["git", "commit", "-m", "Add looooong file"])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         # Determine the SHA1 of that new commit. We will need it later
         # when matching outputs...
 
         p = Run(["git", "log", "-1", "--format=%H"])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         new_commit_sha1 = p.out.strip()
 
         p = Run(["git", "log", "-1", "--format=%h"])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         new_commit_abbrev_sha1 = p.out.strip()
 
         #################################################################

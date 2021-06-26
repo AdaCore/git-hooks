@@ -56,7 +56,7 @@ To ../bare/repo.git
  + a605403...14d1fa2 topic/new-feature -> topic/new-feature (forced update)
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':

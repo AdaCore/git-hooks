@@ -23,7 +23,7 @@ class TestRun(TestCase):
             f.write(project_config)
         p = Run(['git', 'commit', '-m', 'Add hooks.update-hook config',
                  'project.config'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         # If we try to push this commit to refs/meta/config,
         # it should be rejected, since it introduces a config to
@@ -39,7 +39,7 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """.format(hook_filename=bad_update_hook_filename)
 
-        self.assertTrue(p.status != 0, p.image)
+        assert p.status != 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Now, simulate the situation where the script exists
@@ -56,7 +56,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         p = Run(['git', 'push', 'origin',
                  'refs/heads/meta/config:refs/meta/config'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         # And now that the configuration change is in, let's delete
         # bad_update_hook_filename, to see what happens when it's missing...
@@ -76,7 +76,7 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """.format(hook_filename=bad_update_hook_filename)
 
-        self.assertTrue(p.status != 0, p.image)
+        assert p.status != 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':

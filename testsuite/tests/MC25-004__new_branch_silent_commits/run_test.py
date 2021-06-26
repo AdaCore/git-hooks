@@ -143,7 +143,7 @@ To ../bare/repo.git
  * [new branch]      head -> head
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Verify that the branch has been created in the remote
@@ -156,7 +156,7 @@ To ../bare/repo.git
 53ec7dc719ba973a33490a696250b2bdeb931e7b
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':

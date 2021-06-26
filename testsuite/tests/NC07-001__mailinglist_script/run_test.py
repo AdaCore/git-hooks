@@ -17,14 +17,14 @@ class TestRun(TestCase):
             f.write(project_config)
         p = Run(['git', 'commit', '-m', 'fix hooks.mailinglist',
                  'project.config'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         p = Run(['git', 'push', 'origin',
                  'refs/heads/meta/config:refs/meta/config'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         p = Run('git checkout master'.split())
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         # Push the first commit. This is a binutils commit, so
         # should be sent to the binutils ml only.
@@ -71,7 +71,7 @@ remote: +};
 To ../bare/repo.git
    ab5227e..4207b94  4207b94cadc3c1be0edb4f6df5670f0311c267f3 -> master
 """
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Push the next commit, which is a GDB commit and thus should
@@ -114,7 +114,7 @@ remote: +extern void start_mainloop (void);
 To ../bare/repo.git
    4207b94..cd2f5d4  cd2f5d40776eee5a47dc821eddd9a7c6c0ed436d -> master
 """
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Push the next commit, which is a commit touching both
@@ -171,7 +171,7 @@ remote: +Note that GDB depends on BFD.
 To ../bare/repo.git
    cd2f5d4..4c7588e  4c7588eee23d6d42e8d50ba05343e3d0f31dd286 -> master
 """
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Push the next commit, which is a commit touching a file
@@ -213,7 +213,7 @@ remote: +AC_INIT(bfd/bfd-in.h)
 To ../bare/repo.git
    4c7588e..0ed035c  0ed035c4417a51987594586016b061bed362ec9b -> master
 """
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Push the final commit, which is a merge commit with one
@@ -279,7 +279,7 @@ remote:  1 file changed, 1 insertion(+)
 To ../bare/repo.git
    0ed035c..5884482  master -> master
 """
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Push a tag to a bfd commit.
@@ -309,7 +309,7 @@ remote:     A binutils change...
 To ../bare/repo.git
  * [new tag]         bfd-tag -> bfd-tag
 """
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Push a tag to a GDB commit.
@@ -333,7 +333,7 @@ remote:  5884482... Merge new feature from branch contrib/new-feature.
 To ../bare/repo.git
  * [new tag]         gdb-tag -> gdb-tag
 """
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Push a tag to a common commit.
@@ -357,7 +357,7 @@ remote:  0ed035c... Call AC_INIT in configure.ac
 To ../bare/repo.git
  * [new tag]         common-tag -> common-tag
 """
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Push all git notes.
@@ -476,7 +476,7 @@ remote: +Synchronized change between binutils and GDB.
 To ../bare/repo.git
  * [new branch]      refs/notes/commits -> refs/notes/commits
 """
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':

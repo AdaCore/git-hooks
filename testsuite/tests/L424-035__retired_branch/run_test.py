@@ -8,7 +8,7 @@ class TestRun(TestCase):
 
         p = Run('git push origin retired/gdb-5.0'.split())
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
@@ -80,7 +80,7 @@ To ../bare/repo.git
 
         p = Run('git push origin gdb-7.5'.split())
 
-        self.assertTrue(p.status != 0, p.image)
+        assert p.status != 0, p.image
 
         expected_out = """\
 remote: *** Updates to the gdb-7.5 branch are no longer allowed, because
@@ -99,7 +99,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         p = Run('git push -f origin gdb-7.5'.split())
 
-        self.assertTrue(p.status != 0, p.image)
+        assert p.status != 0, p.image
 
         expected_out = """\
 remote: *** Updates to the gdb-7.5 branch are no longer allowed, because
@@ -121,7 +121,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         p = Run('git push origin gdb-7.6'.split())
 
-        self.assertTrue(p.status != 0, p.image)
+        assert p.status != 0, p.image
 
         expected_out = """\
 remote: *** Updates to the gdb-7.6 branch are no longer allowed, because
@@ -144,7 +144,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         p = Run('git push -f origin gdb-7.6'.split())
 
-        self.assertTrue(p.status != 0, p.image)
+        assert p.status != 0, p.image
 
         expected_out = """\
 remote: *** Updates to the gdb-7.6 branch are no longer allowed, because

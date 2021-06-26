@@ -15,14 +15,14 @@ class TestRun(TestCase):
             f.write(project_config)
         p = Run(['git', 'commit', '-m', 'fix hooks.mailinglist',
                  'project.config'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         p = Run(['git', 'push', 'origin',
                  'refs/heads/meta/config:refs/meta/config'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         p = Run('git checkout master'.split())
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         p = Run('git push origin master'.split())
         expected_out = """\
@@ -199,7 +199,7 @@ remote: *** !!! WARNING: %(TEST_DIR)s/post-receive-hook returned code: 1.
 To ../bare/repo.git
    426fba3..dd6165c  master -> master
 """ % {'TEST_DIR': TEST_DIR}
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':

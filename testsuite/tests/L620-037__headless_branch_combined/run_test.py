@@ -158,7 +158,7 @@ To ../bare/repo.git
  * [new branch]      headless -> headless
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Next, push the one-commit branch.
@@ -233,7 +233,7 @@ To ../bare/repo.git
  * [new branch]      one-commit -> one-commit
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 

@@ -15,14 +15,14 @@ class TestRun(TestCase):
             f.write(project_config)
         p = Run(['git', 'commit', '-m', 'Add hooks.update-hook config',
                  'project.config'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         p = Run(['git', 'push', 'origin',
                  'refs/heads/meta/config:refs/meta/config'])
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         p = Run('git checkout master'.split())
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
 
         p = Run('git push origin master'.split())
         expected_out = """\
@@ -41,7 +41,7 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """.format(TEST_DIR=TEST_DIR)
 
-        self.assertTrue(p.status != 0, p.image)
+        assert p.status != 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':

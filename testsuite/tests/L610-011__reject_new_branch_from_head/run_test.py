@@ -23,7 +23,7 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertTrue(p.status != 0, p.image)
+        assert p.status != 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Verify that the branch does not exist on the remote...
@@ -32,7 +32,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         p = Run('git show-ref -s release-0.1-branch'.split())
 
-        self.assertTrue(p.status != 0, p.image)
+        assert p.status != 0, p.image
 
 
 if __name__ == '__main__':

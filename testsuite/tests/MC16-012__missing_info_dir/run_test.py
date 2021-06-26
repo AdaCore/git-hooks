@@ -68,7 +68,7 @@ To ../bare/repo.git
    c8c2f45..8b4778c  master -> master
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 

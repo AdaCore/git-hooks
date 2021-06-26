@@ -30,7 +30,7 @@ To ../bare/repo.git
  * [new branch]      release-0.1-branch -> release-0.1-branch
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Verify that the branch has been created in the remote
@@ -43,7 +43,7 @@ To ../bare/repo.git
 dd6165c96db712d3e918fb5c61088b171b5e7cab
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':

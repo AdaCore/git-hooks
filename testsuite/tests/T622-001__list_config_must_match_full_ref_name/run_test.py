@@ -22,7 +22,7 @@ To ../bare/repo.git
    426fba3..4f0f08f  master -> master
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
         # Next, try pushing branch "master-with-emails". The no-emails
@@ -85,7 +85,7 @@ To ../bare/repo.git
    426fba3..8661ec1  master-with-emails -> master-with-emails
 """
 
-        self.assertTrue(p.status == 0, p.image)
+        assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
 

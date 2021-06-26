@@ -1,14 +1,14 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_delete_lightweight_tag(self):
+    def test_delete_lightweight_tag(testcase):
         """Try updating a lightweight tag.
         """
         cd ('%s/repo' % TEST_DIR)
 
         # Enable debug traces.  We use them to make certain verifications,
         # such as verifying that each commit gets checked individually.
-        self.set_debug_level(1)
+        testcase.set_debug_level(1)
 
         p = Run('git push --force origin some-tag'.split())
         expected_out = """\
@@ -93,8 +93,8 @@ To ../bare/repo.git
  + 8b9a0d6...8a567a0 some-tag -> some-tag (forced update)
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

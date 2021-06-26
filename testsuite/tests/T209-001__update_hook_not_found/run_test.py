@@ -5,7 +5,7 @@ from shutil import copy
 
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Try an update when update-hook points to a non-existant script.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -40,7 +40,7 @@ error: failed to push some refs to '../bare/repo.git'
 """.format(hook_filename=bad_update_hook_filename)
 
         assert p.status != 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Now, simulate the situation where the script exists
         # at the time the configuration change is pushed, but
@@ -77,7 +77,7 @@ error: failed to push some refs to '../bare/repo.git'
 """.format(hook_filename=bad_update_hook_filename)
 
         assert p.status != 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

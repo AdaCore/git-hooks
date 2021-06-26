@@ -2,7 +2,7 @@ from support import *
 from os import environ
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Try pushing one single-file commit on master.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -75,8 +75,8 @@ To ../bare/repo.git
 """ % {
     'TEST_DIR' : TEST_DIR }
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

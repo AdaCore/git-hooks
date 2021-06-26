@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Try pushing commit on master.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -9,7 +9,7 @@ class TestRun(TestCase):
         # Enable debug traces.  We use them to make certain verifications,
         # such as verifying that certain files are not being checked
         # because they are being deleted.
-        self.set_debug_level(2)
+        testcase.set_debug_level(2)
 
         p = Run('git push origin master'.split())
         expected_out = """\
@@ -76,7 +76,7 @@ To ../bare/repo.git
    f826248..0c702ad  master -> master
 """
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

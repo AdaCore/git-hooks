@@ -1,14 +1,14 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Try pushing tag referencing new commit.
         """
         cd ('%s/repo' % TEST_DIR)
 
         # We need some debug traces to be enabled, in order to verify
         # certain assertions.
-        self.set_debug_level(1)
+        testcase.set_debug_level(1)
 
         # Scenario: The user made some changes, and then committed them
         # in his repo. Then created an annotated tag (release-0.1a).
@@ -114,7 +114,7 @@ To ../bare/repo.git
 """
 
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Next, push the changes.  The commits are no longer "new",
         # and thus nothing other than the reference change should
@@ -183,7 +183,7 @@ To ../bare/repo.git
 """
 
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

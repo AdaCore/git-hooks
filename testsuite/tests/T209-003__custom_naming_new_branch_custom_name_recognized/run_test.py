@@ -2,7 +2,7 @@ from support import Run, TEST_DIR, TestCase, cd, runtests
 
 
 class TestRun(TestCase):
-    def test_create_branch_custom_name_recognized(self):
+    def test_create_branch_custom_name_recognized(testcase):
         """Create a new branch with a custom reference name.
 
         This reference name is recognized as a branch by the repository's
@@ -31,8 +31,8 @@ To ../bare/repo.git
  * [new branch]      master -> refs/vendor/name/topic
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

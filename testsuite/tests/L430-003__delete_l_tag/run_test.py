@@ -1,13 +1,13 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_delete_lightweight_tag(self):
+    def test_delete_lightweight_tag(testcase):
         """Try deleting a lightweight tag.
         """
         cd ('%s/repo' % TEST_DIR)
 
         p = Run('git push origin :some-tag'.split())
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
@@ -30,7 +30,7 @@ To ../bare/repo.git
  - [deleted]         some-tag
 """
 
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

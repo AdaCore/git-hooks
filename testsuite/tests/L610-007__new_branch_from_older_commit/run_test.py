@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Try pushing new branch on remote.
 
         In this testcase, the release-0.1-branch points to a commit
@@ -120,7 +120,7 @@ To ../bare/repo.git
 """
 
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Verify that the branch has been created in the remote
         # repository and that it points to the expected commit.
@@ -133,7 +133,7 @@ To ../bare/repo.git
 """
 
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

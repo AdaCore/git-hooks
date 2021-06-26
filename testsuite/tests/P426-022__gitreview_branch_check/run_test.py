@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_forgot(self):
+    def test_push_forgot(testcase):
         """Try pushing the branch named "forgot"
         """
         cd ('%s/repo' % TEST_DIR)
@@ -25,10 +25,10 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_fixed(self):
+    def test_push_fixed(testcase):
         """Try pushing the branch named "fixed"
         """
         cd ('%s/repo' % TEST_DIR)
@@ -126,8 +126,8 @@ To ../bare/repo.git
  * [new branch]      fixed -> fixed
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

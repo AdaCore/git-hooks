@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Try pushing one commit on master.
 
         The purpose is to verify that the style checker gets called
@@ -75,8 +75,8 @@ To ../bare/repo.git
    22aa0fb..f4b0979  master -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

@@ -2,7 +2,7 @@ from support import *
 from subprocess import check_output, check_call
 
 class TestRun(TestCase):
-    def __bare_repo_fixup(self):
+    def __bare_repo_fixup(testcase):
         """Fix the bare repository to implement legacy hooks configuration.
 
         Reproduce the situation where the project.config file in
@@ -11,10 +11,10 @@ class TestRun(TestCase):
         check_call('git update-ref -d refs/meta/config'.split(),
                    cwd='%s/bare/repo.git' % TEST_DIR)
 
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Test creating the refs/meta/config branch on the remote.
         """
-        self.__bare_repo_fixup()
+        testcase.__bare_repo_fixup()
 
         cd ('%s/repo' % TEST_DIR)
 
@@ -77,8 +77,8 @@ To ../bare/repo.git
  * [new branch]      meta/config -> refs/meta/config
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

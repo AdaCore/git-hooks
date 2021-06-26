@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_too_many_new_commits_on_master(self):
+    def test_push_too_many_new_commits_on_master(testcase):
         """Try pushing too many new commits on master.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -21,8 +21,8 @@ To ../bare/repo.git
    d065089..4ca9852  master -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

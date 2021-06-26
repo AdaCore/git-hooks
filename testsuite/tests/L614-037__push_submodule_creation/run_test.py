@@ -3,7 +3,7 @@ import os
 from os.path import isdir
 
 class TestRun(TestCase):
-    def test_push_commit(self):
+    def test_push_commit(testcase):
         """Try pushing a commit that creates a subproject.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -58,7 +58,7 @@ class TestRun(TestCase):
         # For verification purposes, we enable tracing to level 2,
         # in order to get the one that says that submodule entries
         # are ignored.
-        self.set_debug_level(2)
+        testcase.set_debug_level(2)
         p = Run('git push origin master'.split())
         expected_out = """\
 remote:   DEBUG: check_update(ref_name=refs/heads/master, old_rev=7a373b536b65b600a449b5c739c137301f6fd364, new_rev=%(subm_rev)s)
@@ -122,7 +122,7 @@ To ../bare/repo.git
       }
 
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

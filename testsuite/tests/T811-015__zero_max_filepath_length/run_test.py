@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_commits(self):
+    def test_push_commits(testcase):
         """Test setting hooks.max-filepath-length to zero turns check off."""
 
         # The purpose of this testcase is to verify that, when setting
@@ -20,7 +20,7 @@ class TestRun(TestCase):
 
         # For this testcase, the contents of the emails being sent
         # is not important, so reduce their verbosity.
-        self.change_email_sending_verbosity(full_verbosity=False)
+        testcase.change_email_sending_verbosity(full_verbosity=False)
 
         #################################################################
         #
@@ -91,8 +91,8 @@ error: failed to push some refs to '../bare/repo.git'
            new_file_name=new_file_name,
            TEST_FILE_PATH_LENGTH=TEST_FILE_PATH_LENGTH)
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         #################################################################
         #
@@ -104,27 +104,27 @@ error: failed to push some refs to '../bare/repo.git'
         #################################################################
 
         p = Run(['git', 'fetch', 'origin', 'refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'checkout', 'FETCH_HEAD'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'config', '--file', 'project.config',
                  'hooks.max-filepath-length', '0'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'commit', '-m', 'Set hooks.max-filepath-length to 0',
                  'project.config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
         assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
 
         p = Run(['git', 'checkout', 'master'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         #################################################################
         #
@@ -140,8 +140,8 @@ To ../bare/repo.git
    8d5ce43..{new_commit_abbrev_sha1}  master -> master
 """.format(new_commit_abbrev_sha1=new_commit_abbrev_sha1)
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

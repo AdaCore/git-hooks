@@ -2,7 +2,7 @@ from support import Run, TEST_DIR, TestCase, cd, runtests
 
 
 class TestRun(TestCase):
-    def test_delete_branch_with_custom_name(self):
+    def test_delete_branch_with_custom_name(testcase):
         """Delete a new branch with a custom reference name.
         """
         cd('%s/repo' % TEST_DIR)
@@ -32,8 +32,8 @@ To ../bare/repo.git
  - [deleted]         refs/user/to-delete
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Next, try deleting a branch which does not exist.
 
@@ -46,8 +46,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Try deleting a branch which exists, but is not recognized
         # as a valid reference name for a branch.
@@ -76,8 +76,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Try deleting a reference which does not exist not is
         # recognized by the branch namespace.
@@ -91,8 +91,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 

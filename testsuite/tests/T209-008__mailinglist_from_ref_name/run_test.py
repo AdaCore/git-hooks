@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_commit_on_master_and_release_x(self):
+    def test_push_commit_on_master_and_release_x(testcase):
         """Try pushing a commit on two branches.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -78,8 +78,8 @@ To ../bare/repo.git
    d065089..a605403  master -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Do the same as above, but this time with the 'release-x' branch.
         # This time around, the hooks.mailinglist script should detect
@@ -130,8 +130,8 @@ To ../bare/repo.git
    d065089..a605403  release-x -> release-x
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

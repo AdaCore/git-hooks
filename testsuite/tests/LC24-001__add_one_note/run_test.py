@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_notes(self):
+    def test_push_notes(testcase):
         """Try pushing our notes.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -46,8 +46,8 @@ To ../bare/repo.git
    bbcc356..58e8efa  refs/notes/commits -> refs/notes/commits
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

@@ -2,7 +2,7 @@ import os
 from support import cd, Run, runtests, TestCase, TEST_DIR
 
 class TestRun(TestCase):
-    def test_commit_checker_hook_on_branches(self):
+    def test_commit_checker_hook_on_branches(testcase):
         """Test pushing branch updates with a commit-extra-checker.
 
         The purpose of this testcase is to perform a sanity-check
@@ -27,28 +27,28 @@ class TestRun(TestCase):
         # by the git-hooks is not important, so reduce verbosity at
         # that level to reduce the noise in the hooks' output.
 
-        self.change_email_sending_verbosity(full_verbosity=False)
+        testcase.change_email_sending_verbosity(full_verbosity=False)
 
         # First, update the git-hooks configuration to install our
         # the script we want to use as our commit-extra-checker.
 
         p = Run(['git', 'fetch', 'origin', 'refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'checkout', 'FETCH_HEAD'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'config', '--file', 'project.config',
                  'hooks.commit-extra-checker',
                  os.path.join(TEST_DIR, 'commit-extra-checker.py')])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'commit', '-m', 'Add hooks.commit-extra-checker',
                  'project.config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
         assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
@@ -72,8 +72,8 @@ To ../bare/repo.git
    1e1e706..f109361  single-commit-accept -> single-commit-accept
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push a branch which introduces a single new commit,
         # which we expect the commit-extra-checker to reject.
@@ -93,8 +93,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push a branch which introduces more than one new commit,
         # which we expect the commit-extra-checker to accept.
@@ -128,8 +128,8 @@ To ../bare/repo.git
    1e1e706..309196c  multiple-commits-accept-all-new -> multiple-commits-accept-all-new
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push a branch which introduces more than one new commit,
         # which we expect the commit-extra-checker to accept.
@@ -170,8 +170,8 @@ To ../bare/repo.git
    1e1e706..25f07c0  multiple-commits-accept-some-preexisting -> multiple-commits-accept-some-preexisting
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push a branch which introduces more than one new commit, with
         # the first one expected to be rejected by commit-extra-checker
@@ -192,8 +192,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push a branch which introduces more than one new commit, with
         # the second one (explicitly chosen to not be first nor last)
@@ -224,8 +224,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # multiple-commits-reject-last
         #   + Modify `a' and add `b'
@@ -265,8 +265,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push a new branch, and verify that our commit-extra-checker
         # gets called (and rejects the push because of a bad commit).
@@ -287,8 +287,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push a branch deletion. Our commit-extra-checker shouldn't
         # get called, since there are no new commits.
@@ -300,8 +300,8 @@ To ../bare/repo.git
  - [deleted]         delete-me
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

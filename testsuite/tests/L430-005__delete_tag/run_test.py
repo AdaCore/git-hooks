@@ -2,7 +2,7 @@ from support import *
 
 
 class TestRun(TestCase):
-    def test_push_annotated_tag(self):
+    def test_push_annotated_tag(testcase):
         """Try pushing an annotated tag.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -30,8 +30,8 @@ To ../bare/repo.git
 """
 
         p = Run('git push origin :full-tag'.split())
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Same as above: Try deleting a tag, except we are passing
         # the tag's full reference name instead of just passing
@@ -59,8 +59,8 @@ To ../bare/repo.git
  - [deleted]         other-full-tag
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

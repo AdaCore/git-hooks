@@ -1,15 +1,15 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_check_update(self):
+    def test_check_update(testcase):
         """Unit test update.check_update.
         """
-        self.enable_unit_test()
+        testcase.enable_unit_test()
 
         from update import check_update
         from utils import InvalidUpdate
 
-        with self.assertRaisesRegexp(
+        with testcase.assertRaisesRegexp(
             InvalidUpdate,
             r'Unable to determine the type of reference for: '
                 'some/dummy_refname'):

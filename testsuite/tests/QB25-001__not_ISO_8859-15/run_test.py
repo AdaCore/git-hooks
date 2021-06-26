@@ -2,14 +2,14 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Try pushing one single-file commit on master.
         """
         cd ('%s/repo' % TEST_DIR)
 
         # For this testcase, the contents of the emails being sent
         # is not important, so reduce their verbosity.
-        self.change_email_sending_verbosity(full_verbosity=False)
+        testcase.change_email_sending_verbosity(full_verbosity=False)
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
@@ -32,8 +32,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push bad-after-subject to the `origin' remote as branch master.
         # The delta should be one commit with one file being modified.
@@ -56,8 +56,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         ##############################################################
         #
@@ -68,25 +68,25 @@ error: failed to push some refs to '../bare/repo.git'
         ##############################################################
 
         p = Run('git fetch origin refs/meta/config'.split())
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run('git checkout FETCH_HEAD'.split())
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'config', '-f', 'project.config',
                  '--add', 'hooks.no-rh-character-range-check', 'True'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'commit',
                  '-m', 'Set hooks.no-rh-character-range-check to True',
                  'project.config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run('git push origin HEAD:refs/meta/config'.split())
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run('git checkout master'.split())
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         # Try pushing branch "master". It should succeed, now.
 
@@ -98,8 +98,8 @@ To ../bare/repo.git
    d065089..cee1725  master -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Try pushing branch "bad-after-subject". It should succeed as well.
 
@@ -111,8 +111,8 @@ To ../bare/repo.git
    d065089..48f93aa  bad-after-subject -> bad-after-subject
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

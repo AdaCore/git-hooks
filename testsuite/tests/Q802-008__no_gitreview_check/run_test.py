@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_github_pull_19(self):
+    def test_push_github_pull_19(testcase):
         """Try pushing the branch named "github/pull/19"
         """
         cd ('%s/repo' % TEST_DIR)
@@ -66,8 +66,8 @@ To ../bare/repo.git
  * [new branch]      github/pull/19 -> github/pull/19
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

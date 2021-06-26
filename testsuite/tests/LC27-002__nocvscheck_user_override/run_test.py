@@ -3,7 +3,7 @@ from os import environ, utime
 import time
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Try pushing one single-file commit on master.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -35,13 +35,13 @@ error: failed to push some refs to '../bare/repo.git'
 """ % {
     'TEST_DIR' : TEST_DIR }
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Set debug level to 1, in order to get the debug trace
         # when pre-commit checks are skipped due to .no_cvs_check
         # user override.
-        self.set_debug_level(1)
+        testcase.set_debug_level(1)
 
         # Make the .no_cvs_check file 1 day minus a few seconds old,
         # which should make it just old enough to be honored.
@@ -101,8 +101,8 @@ To ../bare/repo.git
 """ % {
     'TEST_DIR' : TEST_DIR }
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

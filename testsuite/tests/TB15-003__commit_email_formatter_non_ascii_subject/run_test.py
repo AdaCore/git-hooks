@@ -4,7 +4,7 @@ from email.header import Header
 
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Try pushing one single-file commit on master.
 
         The purpose of this testcase is to verify that the git-hooks
@@ -18,22 +18,22 @@ class TestRun(TestCase):
         # the script we want to use as our commit-email-formatter.
 
         p = Run(['git', 'fetch', 'origin', 'refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'checkout', 'FETCH_HEAD'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'config', '--file', 'project.config',
                  'hooks.commit-email-formatter',
                  os.path.join(TEST_DIR, 'commit-email-formatter.py')])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'commit', '-m', 'Add hooks.commit-email-formatter',
                  'project.config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
         assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
@@ -42,7 +42,7 @@ class TestRun(TestCase):
         # our testing, but it helps the testcase be closer to the more
         # typical scenarios.
         p = Run(['git', 'checkout', 'master'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
@@ -102,8 +102,8 @@ To ../bare/repo.git
    d065089..a605403  master -> master
 """.format(ENCODED_COMMIT_EMAIL_SUBJECT=ENCODED_COMMIT_EMAIL_SUBJECT)
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

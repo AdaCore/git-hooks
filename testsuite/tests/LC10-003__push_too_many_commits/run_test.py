@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_too_many_new_commits_on_master(self):
+    def test_push_too_many_new_commits_on_master(testcase):
         """Try pushing too many new commits on master.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -21,7 +21,7 @@ error: failed to push some refs to '../bare/repo.git'
 """
 
         assert p.status != 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Now, try pushing only HEAD~, which should only push
         # 3 new commits, which should be under the limit, and
@@ -138,8 +138,8 @@ To ../bare/repo.git
    d065089..c32bed0  master~ -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Now, try push master again.  We should have one last
         # new commit left to push...
@@ -182,8 +182,8 @@ To ../bare/repo.git
    c32bed0..4ca9852  master -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

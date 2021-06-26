@@ -4,10 +4,10 @@ import sys
 
 
 class TestRun(TestCase):
-    def test_post_receive_one(self):
+    def test_post_receive_one(testcase):
         """Unit test utils.get_user_name.
         """
-        self.enable_unit_test()
+        testcase.enable_unit_test()
 
         # Redirect stdout in order to capture it, and check its contents.
         old_stderr = sys.stderr
@@ -25,7 +25,7 @@ class TestRun(TestCase):
 ***               old_rev = 0000000000000000000000000000000000000000
 ***               new_rev = 30242ad9fa3091c81e55a7b1349ab83f8c1b04e7
 """
-        self.assertEqual(sys.stderr.getvalue(), expected_out)
+        testcase.assertEqual(sys.stderr.getvalue(), expected_out)
 
         # Restore sys.stderr...
         sys.stderr = old_stderr

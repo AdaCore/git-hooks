@@ -2,14 +2,14 @@ from support import *
 
 
 class TestRun(TestCase):
-    def test_push_annotated_tag(self):
+    def test_push_annotated_tag(testcase):
         """Try pushing an anotated tag.
         """
         cd ('%s/repo' % TEST_DIR)
 
         # Try pushing tag v0.1.
         p = Run('git push origin v0.1'.split())
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
@@ -37,7 +37,7 @@ To ../bare/repo.git
  * [new tag]         v0.1 -> v0.1
 """
 
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

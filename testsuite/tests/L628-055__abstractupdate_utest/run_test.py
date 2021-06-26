@@ -1,10 +1,10 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_git_config(self):
+    def test_git_config(testcase):
         """Unit test AbstractUpdate child class missing methods.
         """
-        self.enable_unit_test()
+        testcase.enable_unit_test()
 
         # Define new classes deriving from AbstractRefChange.
         # Normally, that new class is expected to override
@@ -19,10 +19,10 @@ class TestRun(TestCase):
             pass
 
         class MissingOtherMethods(AbstractUpdate):
-            def self_sanity_check(self):
+            def self_sanity_check(testcase):
                 pass
 
-        with self.assertRaises(AssertionError):
+        with testcase.assertRaises(AssertionError):
             MissingSelfSanityCheck(
                 'refs/heads/master',
                 RefKind.branch_ref,
@@ -39,10 +39,10 @@ class TestRun(TestCase):
             'd065089ff184d97934c010ccd0e7e8ed94cb7165',
             None, None)
 
-        with self.assertRaises(AssertionError):
+        with testcase.assertRaises(AssertionError):
             bad_update.validate_ref_update()
 
-        with self.assertRaises(AssertionError):
+        with testcase.assertRaises(AssertionError):
             bad_update.get_update_email_contents()
 
 

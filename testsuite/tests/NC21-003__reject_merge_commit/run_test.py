@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_branch_with_merge_commit(self):
+    def test_push_branch_with_merge_commit(testcase):
         """Test merge-commit reject on branches where they are not allowed.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -22,8 +22,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         p = Run('git push origin gdb-7.8-branch'.split())
         expected_out = """\
@@ -41,8 +41,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         p = Run('git push origin topic/accept-merges'.split())
         expected_out = """\
@@ -184,8 +184,8 @@ To ../bare/repo.git
    33e7556..ffb05b4  topic/accept-merges -> topic/accept-merges
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

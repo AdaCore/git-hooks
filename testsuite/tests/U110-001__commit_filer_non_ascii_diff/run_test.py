@@ -16,7 +16,7 @@ json.dump({'diff': u'My \\u2192 Email diff \\u2190\\n'}, sys.stdout)
 
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Try pushing ia single-file commit.
 
         The purpose of this testcase is to verify that the git-hooks
@@ -45,22 +45,22 @@ class TestRun(TestCase):
         # the script we want to use as our file-commit-cmd.
 
         p = Run(['git', 'fetch', 'origin', 'refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'checkout', 'FETCH_HEAD'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'config', '--file', 'project.config',
                  'hooks.file-commit-cmd',
                  os.path.join(TEST_DIR, 'commit-filer')])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'commit', '-m', 'Add hooks.commit-filer',
                  'project.config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
         assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
@@ -69,7 +69,7 @@ class TestRun(TestCase):
         # our testing, but it helps the testcase be closer to the more
         # typical scenarios.
         p = Run(['git', 'checkout', 'master'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
@@ -86,7 +86,7 @@ class TestRun(TestCase):
         # at least reviewing all the considerations that went into
         # that decision.
 
-        self.change_email_sending_verbosity(full_verbosity=True)
+        testcase.change_email_sending_verbosity(full_verbosity=True)
 
         p = Run('git push origin master'.split())
         expected_out = """\
@@ -146,8 +146,8 @@ To ../bare/repo.git
    d065089..764f229  master -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Second part of the testcase: Create and then install a simple
         # commit-email-formatter hook, which changes email bodies and
@@ -161,22 +161,22 @@ To ../bare/repo.git
                  stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR)
 
         p = Run(['git', 'fetch', 'origin', 'refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'checkout', 'FETCH_HEAD'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'config', '--file', 'project.config',
                  'hooks.commit-email-formatter',
                  COMMIT_EMAIL_FORMATTER_FILENAME])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'commit', '-m', 'Add hooks.commit-email-formatter',
                  'project.config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
         assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
@@ -185,7 +185,7 @@ To ../bare/repo.git
         # our testing, but it helps the testcase be closer to the more
         # typical scenarios.
         p = Run(['git', 'checkout', 'master'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run('git push origin master:with-email-formatter'.split())
         expected_out = """\
@@ -232,8 +232,8 @@ To ../bare/repo.git
    d065089..764f229  master -> with-email-formatter
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

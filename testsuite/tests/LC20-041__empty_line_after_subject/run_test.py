@@ -1,14 +1,14 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_empty_line_after_subject(self):
+    def test_empty_line_after_subject(testcase):
         """Test the rejection of revision histories missing an empty line
         after the commit subject.
         """
         cd ('%s/repo' % TEST_DIR)
 
         # Enable pre-commit-check debug traces...
-        self.set_debug_level(1)
+        testcase.set_debug_level(1)
 
         # Push master to the `origin' remote.  The should push
         # one merge commit which also references a commit from
@@ -41,8 +41,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Now, push the thirdparty branch.  This branch is setup
         # to avoid the pre-commit checks, so this should allow
@@ -66,8 +66,8 @@ To ../bare/repo.git
    52723db..492fd2f  thirdparty -> thirdparty
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # And finally, try pushing the "master" branch again.
         # This time, the problematic commit is already in, and
@@ -157,8 +157,8 @@ To ../bare/repo.git
    96cc482..bd6c0a7  master -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

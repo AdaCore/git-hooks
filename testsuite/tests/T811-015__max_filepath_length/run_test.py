@@ -1,12 +1,12 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_commits(self):
+    def test_push_commits(testcase):
         cd ('%s/repo' % TEST_DIR)
 
         # For this testcase, the contents of the emails being sent
         # is not important, so reduce their verbosity.
-        self.change_email_sending_verbosity(full_verbosity=False)
+        testcase.change_email_sending_verbosity(full_verbosity=False)
 
         #################################################################
         # Push a commit which does the following:
@@ -30,8 +30,8 @@ To ../bare/repo.git
    40f4f7d..3b98690  existing-branch-ok -> existing-branch-ok
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         #################################################################
         # Push a commit which does the following:
@@ -68,8 +68,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         #################################################################
         # Push a commit which is very similar to the commit above
@@ -108,8 +108,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         #################################################################
         # Push a commit which does the following:
@@ -134,8 +134,8 @@ To ../bare/repo.git
  * [new branch]      new-branch-ok -> new-branch-ok
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         #################################################################
         # Push a commit which does the following:
@@ -170,8 +170,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         #################################################################
         # Push a commit which is very similar to the commit above
@@ -211,8 +211,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

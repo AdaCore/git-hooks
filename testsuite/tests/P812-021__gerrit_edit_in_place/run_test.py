@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_edit_from_gerrit_web_interface(self):
+    def test_push_edit_from_gerrit_web_interface(testcase):
         """Try pushing one single-file commit on master.
 
         This test simulates the following situation: After a first
@@ -62,8 +62,8 @@ To ../bare/repo.git
    d065089..a605403  master -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

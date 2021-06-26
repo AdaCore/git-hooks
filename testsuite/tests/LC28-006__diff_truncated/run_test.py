@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Try pushing one single-file commit on master.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -54,11 +54,11 @@ To ../bare/repo.git
         # section of the diff, causing the truncation to occur at
         # a different location when using older versions of git
         # (1.7.8.2 in our case). Adjust the expected output accordingly.
-        if self.git_version() < '1.7.10':
+        if testcase.git_version() < '1.7.10':
             expected_out = expected_out.replace('remote: -Se', 'remote: -')
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

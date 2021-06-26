@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_filename_collisions(self):
+    def test_filename_collisions(testcase):
         """Test filename-collision detector.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -28,8 +28,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Same for the 'two-files' branch...
         # This example is slightly more complex, as it involves
@@ -60,8 +60,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

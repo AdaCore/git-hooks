@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_branch_with_merge_commit(self):
+    def test_push_branch_with_merge_commit(testcase):
         """Try pushing an update to master adding one merge commit.
 
         But the new master points to an already-existing commit
@@ -152,8 +152,8 @@ To ../bare/repo.git
    33e7556..ffb05b4  master -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

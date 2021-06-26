@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Try pushing multiple commits on master.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -42,7 +42,7 @@ error: failed to push some refs to '../bare/repo.git'
 """.format(TEST_DIR=TEST_DIR)
 
         assert p.status != 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

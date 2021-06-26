@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_delete_branch(self):
+    def test_delete_branch(testcase):
         """Try deleting a branch on the remote.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -27,8 +27,8 @@ remote:  cc8d2c2... Modify `c', delete `b'.
 To ../bare/repo.git
  - [deleted]         old-branch
 """
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Same as above: Delete a branch, but passing the branch's
         # full reference name to the push command, instead of using
@@ -56,8 +56,8 @@ remote:  cc8d2c2... Modify `c', delete `b'.
 To ../bare/repo.git
  - [deleted]         other-old-branch
 """
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

@@ -1,14 +1,14 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_tag(self):
+    def test_push_tag(testcase):
         """Try pushing a new value for an annotated tag.
         """
         cd ('%s/repo' % TEST_DIR)
 
         # Enable debug traces.  We use them to make certain verifications,
         # such as verifying that each commit gets checked individually.
-        self.set_debug_level(1)
+        testcase.set_debug_level(1)
 
         # Push "full-tag". This tag has a new value, different from
         # that is on the remote.  We should get an email notification,
@@ -111,8 +111,8 @@ To ../bare/repo.git
  + a69eaab...17b9d4a full-tag -> full-tag (forced update)
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

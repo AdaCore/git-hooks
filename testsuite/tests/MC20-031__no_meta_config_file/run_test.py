@@ -2,7 +2,7 @@ from support import *
 from subprocess import check_output, check_call
 
 class TestRun(TestCase):
-    def __bare_repo_fixup(self):
+    def __bare_repo_fixup(testcase):
         """Fix the bare repository to implement legacy hooks configuration.
 
         Reproduce the (legacy) situation where the project.config file
@@ -20,10 +20,10 @@ class TestRun(TestCase):
         check_call('git update-ref -d refs/meta/config'.split(),
                    cwd='%s/bare/repo.git' % TEST_DIR)
 
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Try pushing one single-file commit on master.
         """
-        self.__bare_repo_fixup()
+        testcase.__bare_repo_fixup()
 
         cd ('%s/repo' % TEST_DIR)
 
@@ -42,8 +42,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

@@ -2,7 +2,7 @@ from support import *
 
 
 class TestRun(TestCase):
-    def test_pushes(self):
+    def test_pushes(testcase):
         """Test various pushes to multi-project repository.
         """
         cd('%s/repo' % TEST_DIR)
@@ -72,7 +72,7 @@ To ../bare/repo.git
    ab5227e..4207b94  4207b94cadc3c1be0edb4f6df5670f0311c267f3 -> master
 """
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push the next commit, which is a GDB commit and thus should
         # be sent to the gdb ml only.
@@ -115,7 +115,7 @@ To ../bare/repo.git
    4207b94..cd2f5d4  cd2f5d40776eee5a47dc821eddd9a7c6c0ed436d -> master
 """
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push the next commit, which is a commit touching both
         # a binutile file and GDB file, and so should be emailed
@@ -172,7 +172,7 @@ To ../bare/repo.git
    cd2f5d4..4c7588e  4c7588eee23d6d42e8d50ba05343e3d0f31dd286 -> master
 """
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push the next commit, which is a commit touching a file
         # which is common to both binutils and GDB.
@@ -214,7 +214,7 @@ To ../bare/repo.git
    4c7588e..0ed035c  0ed035c4417a51987594586016b061bed362ec9b -> master
 """
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push the final commit, which is a merge commit with one
         # pre-existing commit.
@@ -280,7 +280,7 @@ To ../bare/repo.git
    0ed035c..5884482  master -> master
 """
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push a tag to a bfd commit.
         p = Run(['git', 'push', 'origin', 'bfd-tag'])
@@ -310,7 +310,7 @@ To ../bare/repo.git
  * [new tag]         bfd-tag -> bfd-tag
 """
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push a tag to a GDB commit.
         p = Run(['git', 'push', 'origin', 'gdb-tag'])
@@ -334,7 +334,7 @@ To ../bare/repo.git
  * [new tag]         gdb-tag -> gdb-tag
 """
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push a tag to a common commit.
         p = Run(['git', 'push', 'origin', 'common-tag'])
@@ -358,7 +358,7 @@ To ../bare/repo.git
  * [new tag]         common-tag -> common-tag
 """
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push all git notes.
         p = Run(['git', 'push', 'origin',
@@ -477,7 +477,7 @@ To ../bare/repo.git
  * [new branch]      refs/notes/commits -> refs/notes/commits
 """
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

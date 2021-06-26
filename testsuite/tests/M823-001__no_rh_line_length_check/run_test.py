@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_commits(self):
+    def test_push_commits(testcase):
         """See comments below.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -54,8 +54,8 @@ To ../bare/repo.git
    d065089..8f9e357  not-ok-104 -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

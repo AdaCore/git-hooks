@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push(self):
+    def test_push(testcase):
         """Try pushing one single-file commit on master.
 
         The operation should fail due to either config.debug-level
@@ -21,10 +21,10 @@ error: failed to push some refs to '../bare/repo.git'
 """
 
         assert p.status != 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Same thing, but with an invalid GIT_HOOKS_DEBUG_LEVEL value.
-        self.set_debug_level('true')
+        testcase.set_debug_level('true')
 
         p = Run('git push origin master'.split())
         expected_out = """\
@@ -36,7 +36,7 @@ error: failed to push some refs to '../bare/repo.git'
 """
 
         assert p.status != 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

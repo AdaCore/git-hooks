@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_head(self):
+    def test_push_head(testcase):
         """Try pushing new branch on remote.
 
         The purpose of this test is to check what happens when pushing
@@ -144,7 +144,7 @@ To ../bare/repo.git
 """
 
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Verify that the branch has been created in the remote
         # repository and that it points to the expected commit.
@@ -157,7 +157,7 @@ To ../bare/repo.git
 """
 
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

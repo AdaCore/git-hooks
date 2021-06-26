@@ -15,7 +15,7 @@ json.dump({'email_subject': u'New \\u2192 Email Subject \\u2190'}, sys.stdout)
 
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Try pushing a single-file commit.
 
         The purpose of this testcase is to verify that the git-hooks
@@ -44,22 +44,22 @@ class TestRun(TestCase):
         # the script we want to use as our commit-email-formatter.
 
         p = Run(['git', 'fetch', 'origin', 'refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'checkout', 'FETCH_HEAD'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'config', '--file', 'project.config',
                  'hooks.file-commit-cmd',
                  os.path.join(TEST_DIR, 'commit-filer')])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'commit', '-m', 'Add hooks.file-commit-cmd',
                  'project.config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
         assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
@@ -68,7 +68,7 @@ class TestRun(TestCase):
         # our testing, but it helps the testcase be closer to the more
         # typical scenarios.
         p = Run(['git', 'checkout', 'master'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
@@ -140,8 +140,8 @@ To ../bare/repo.git
    d065089..abdeb3a  master -> master
 """.format(ENCODED_COMMIT_EMAIL_SUBJECT=ENCODED_COMMIT_EMAIL_SUBJECT)
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Second part of the testcase: Create and then install a simple
         # commit-email-formatter hook, which changes email bodies and
@@ -155,22 +155,22 @@ To ../bare/repo.git
                  stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR)
 
         p = Run(['git', 'fetch', 'origin', 'refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'checkout', 'FETCH_HEAD'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'config', '--file', 'project.config',
                  'hooks.commit-email-formatter',
                  COMMIT_EMAIL_FORMATTER_FILENAME])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'commit', '-m', 'Add hooks.commit-email-formatter',
                  'project.config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
         assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
@@ -179,7 +179,7 @@ To ../bare/repo.git
         # our testing, but it helps the testcase be closer to the more
         # typical scenarios.
         p = Run(['git', 'checkout', 'master'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         # The subject of the email we expect to be sent during the push.
         # As we can see, this subject has some non-ascii characters in it...
@@ -248,8 +248,8 @@ To ../bare/repo.git
    d065089..abdeb3a  master -> with-email-formatter
 """.format(ENCODED_COMMIT_EMAIL_SUBJECT=ENCODED_COMMIT_EMAIL_SUBJECT)
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

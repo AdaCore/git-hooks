@@ -2,7 +2,7 @@ from support import *
 
 
 class TestRun(TestCase):
-    def test_push_commits_on_master(self):
+    def test_push_commits_on_master(testcase):
         cd('%s/repo' % TEST_DIR)
 
         # Push the commit adding the style-checker-config-file option
@@ -26,8 +26,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Do the same as above, but this time with a commit which
         # provides both the config file at the same time it adds
@@ -84,8 +84,8 @@ To ../bare/repo.git
    ac4cd5a..9142bec  meta-config -> refs/meta/config
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push a commit to the repository to a branch where
         # the style checker's config file does not exist yet...
@@ -106,8 +106,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Once the checkin above did not work, push a commit which
         # adds the missing config file (on its own)
@@ -152,8 +152,8 @@ To ../bare/repo.git
    b3a13b3..c84b233  step-2/add_checker_config_file -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Once the config file is in, we should now be able to push
         # our commit, this time.
@@ -204,8 +204,8 @@ To ../bare/repo.git
    c84b233..bf95cd2  step-3/try_initial_commit_again -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Simulate a change where we only change the config file...
         # We expect that config file to be effective immediately,
@@ -255,8 +255,8 @@ To ../bare/repo.git
    bf95cd2..2e2c5c5  step-4/modify_checker_config_only -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # And finally, simulate a commit which changes both the config
         # file and other files.
@@ -320,8 +320,8 @@ To ../bare/repo.git
    2e2c5c5..bdd1bbb  step-5/modify_code_and_checker_config -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

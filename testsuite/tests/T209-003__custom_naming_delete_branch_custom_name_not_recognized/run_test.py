@@ -2,7 +2,7 @@ from support import Run, TEST_DIR, TestCase, cd, runtests
 
 
 class TestRun(TestCase):
-    def test_delete_branch_custom_name_not_recognized(self):
+    def test_delete_branch_custom_name_not_recognized(testcase):
         """Push a branch deletion using a custom reference name."""
         cd('%s/repo' % TEST_DIR)
 
@@ -40,8 +40,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Try to delete a reference which both has a name that does not
         # match any of the known namespaces, and does not even exist
@@ -57,8 +57,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

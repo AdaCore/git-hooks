@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_commits(self):
+    def test_push_commits(testcase):
         """See comments below.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -55,8 +55,8 @@ To ../bare/repo.git
    8fcbf01..bf43717  bf43717d61e2a67cf9b3d040e9c40d6041a8444d -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push the second commit. This time, verify that having the RH
         # style check disabled does not prevent the precommit-check
@@ -72,8 +72,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

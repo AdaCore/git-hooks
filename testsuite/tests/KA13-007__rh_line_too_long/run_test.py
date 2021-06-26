@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_commits(self):
+    def test_push_commits(testcase):
         """See comments below.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -23,8 +23,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push not-ok-77 on master. It introduces a new commit
         # where one line in the RH is 77 characters long, which
@@ -43,8 +43,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push ok-76 on master. It introduces a new commit
         # where one line in the RH is 76 characters long, which
@@ -95,8 +95,8 @@ To ../bare/repo.git
    d065089..04687d3  ok-76 -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push not-ok-77 on third-party. It introduces a new commit
         # where one line in the RH is 77 characters long, which is
@@ -115,8 +115,8 @@ To ../bare/repo.git
    d065089..a80d278  not-ok-77 -> third-party
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

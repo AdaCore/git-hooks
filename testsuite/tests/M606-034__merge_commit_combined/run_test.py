@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_branch_with_merge_commit(self):
+    def test_push_branch_with_merge_commit(testcase):
         """Try pushing an update to master adding one merge commit.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -9,7 +9,7 @@ class TestRun(TestCase):
         # Enable some logging, in order to be able to see which
         # commits get checked, and what commits are being used
         # as their reference.
-        self.set_debug_level(1)
+        testcase.set_debug_level(1)
 
         # Push master to the `origin' remote. This brings in two commits:
         #
@@ -94,8 +94,8 @@ To ../bare/repo.git
    128c438..7277e89  master -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

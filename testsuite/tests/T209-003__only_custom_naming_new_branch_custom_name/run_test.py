@@ -2,7 +2,7 @@ from support import Run, TEST_DIR, TestCase, cd, runtests
 
 
 class TestRun(TestCase):
-    def test_create_branch_with_custom_name(self):
+    def test_create_branch_with_custom_name(testcase):
         """Create a new branch with a standard reference name.
         """
         cd('%s/repo' % TEST_DIR)
@@ -31,8 +31,8 @@ To ../bare/repo.git
  * [new branch]      master -> refs/user/someone
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
         # Next, try pushing with a branch name which is not recognized
@@ -63,8 +63,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

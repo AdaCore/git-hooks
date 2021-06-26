@@ -2,7 +2,7 @@ from support import *
 
 
 class TestRun(TestCase):
-    def test_pushes(self):
+    def test_pushes(testcase):
         """Test various pushes to multi-project repository.
         """
         cd('%s/repo' % TEST_DIR)
@@ -185,7 +185,7 @@ To ../bare/repo.git
    ab5227e..0ed035c  master -> master
 """ % {'TEST_DIR': TEST_DIR}
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

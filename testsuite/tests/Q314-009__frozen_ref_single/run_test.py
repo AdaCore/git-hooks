@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_retired_branch(self):
+    def test_push_retired_branch(testcase):
         """Try pushing a branch update on a frozen branch.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -19,9 +19,9 @@ To ../bare/repo.git
  ! [remote rejected] gdb-7.5 -> gdb-7.5 (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_force_push_retired_branch(self):
+    def test_force_push_retired_branch(testcase):
         """Try force-pushing a branch update on a retired branch.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -39,9 +39,9 @@ To ../bare/repo.git
  ! [remote rejected] gdb-7.5 -> gdb-7.5 (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_active_branch(self):
+    def test_push_active_branch(testcase):
         """Try pushing a branch which has not been frozen.
 
         This is to verify that adding a hooks.frozen-ref does not
@@ -94,8 +94,8 @@ To ../bare/repo.git
    d065089..a605403  gdb-7.6 -> gdb-7.6
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

@@ -2,7 +2,7 @@ from support import *
 import re
 
 class TestRun(TestCase):
-    def test_push_annotated_tag_std_namespace(self):
+    def test_push_annotated_tag_std_namespace(testcase):
         cd ('%s/repo' % TEST_DIR)
 
         # Try pushing tag v0.1.
@@ -33,10 +33,10 @@ To ../bare/repo.git
  * [new tag]         v0.1 -> v0.1
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_annotated_tag_custom_namespace(self):
+    def test_push_annotated_tag_custom_namespace(testcase):
         cd ('%s/repo' % TEST_DIR)
 
         # Try pushing tag v0.1.
@@ -67,10 +67,10 @@ To ../bare/repo.git
  * [new branch]      v0.1 -> refs/user/myself/tags/v0.1
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_annotated_tag_custom_namespace_not_recognized(self):
+    def test_push_annotated_tag_custom_namespace_not_recognized(testcase):
         cd ('%s/repo' % TEST_DIR)
 
         # Try pushing tag v0.1.
@@ -101,8 +101,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

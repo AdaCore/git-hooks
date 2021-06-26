@@ -52,28 +52,28 @@ class TestRun(TestCase):
         sys.stdout = cls.__real_stdout
         sys.stderr = cls.__real_stderr
 
-    def setUp(self):
-        TestCase.setUp(self)
-        self.enable_unit_test()
+    def setUp(testcase):
+        TestCase.setUp(testcase)
+        testcase.enable_unit_test()
 
-    def test_fail_at_first_fork(self):
+    def test_fail_at_first_fork(testcase):
         """run_in_daemon fails at first fork...
         """
         from daemon import run_in_daemon
         global good_forks
         good_forks = [False]
 
-        self.redirect_output()
+        testcase.redirect_output()
         run_in_daemon(hello_world)
         expected_out = """\
 fork #1 failed: (12) fork: Resource temporarily unavailable
 """
         out = sys.stdout.getvalue()
-        self.restore_output()
+        testcase.restore_output()
 
-        self.assertEqual(out, expected_out)
+        testcase.assertEqual(out, expected_out)
 
-    def test_fail_at_second_fork(self):
+    def test_fail_at_second_fork(testcase):
         """run_in_daemon fails at second fork...
         """
         from daemon import run_in_daemon
@@ -82,16 +82,16 @@ fork #1 failed: (12) fork: Resource temporarily unavailable
         global good_forks
         good_forks = [True, False, True]
 
-        self.redirect_output()
+        testcase.redirect_output()
         run_in_daemon(hello_world)
         # Not exactly sure why we do not get the output from
         # the logger, but might be normal???
         expected_out = """\
 """
         out = sys.stdout.getvalue()
-        self.restore_output()
+        testcase.restore_output()
 
-        self.assertEqual(out, expected_out, out)
+        testcase.assertEqual(out, expected_out, out)
 
 
 if __name__ == '__main__':

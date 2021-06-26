@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_gdb_head(self):
+    def test_push_gdb_head(testcase):
         """Try pushing gdb-head.
 
         The push introduces a merge commit whose revision log contains
@@ -13,7 +13,7 @@ class TestRun(TestCase):
         # Set the debug level to 1, in order to see the debug trace
         # confirming that the no-precommit-check keyword was picked up
         # by the hooks.
-        self.set_debug_level(1)
+        testcase.set_debug_level(1)
 
         # Push gdb-head to the `origin' remote.  The delta should be one
         # commit with one file being modified.
@@ -103,8 +103,8 @@ To ../bare/repo.git
    2c2cd0d..8da5e84  gdb-head -> gdb-head
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

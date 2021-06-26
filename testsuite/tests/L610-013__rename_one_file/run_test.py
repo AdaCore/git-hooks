@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Try pushing one single-file commit on master.
 
         The commit contains one file rename, but we tell the hooks
@@ -10,7 +10,7 @@ class TestRun(TestCase):
         """
         cd ('%s/repo' % TEST_DIR)
 
-        self.set_debug_level(2)
+        testcase.set_debug_level(2)
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
@@ -60,7 +60,7 @@ To ../bare/repo.git
 """
 
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

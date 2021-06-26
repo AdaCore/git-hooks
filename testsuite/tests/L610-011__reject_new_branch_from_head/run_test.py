@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Try pushing new branch on remote.
 
         In this situation, release-0.1-branch is a branch containing
@@ -24,7 +24,7 @@ error: failed to push some refs to '../bare/repo.git'
 """
 
         assert p.status != 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Verify that the branch does not exist on the remote...
 

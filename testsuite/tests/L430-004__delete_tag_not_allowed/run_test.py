@@ -2,13 +2,13 @@ from support import *
 
 
 class TestRun(TestCase):
-    def test_delete_tag(self):
+    def test_delete_tag(testcase):
         """Try deleting a tag."""
         cd ('%s/repo' % TEST_DIR)
 
         # Try deleting full-tag.  The remote is setup to refuse this request.
         p = Run('git push origin :full-tag'.split())
-        self.assertNotEqual(p.status, 0, p.image)
+        testcase.assertNotEqual(p.status, 0, p.image)
 
         expected_out = """\
 remote: *** Deleting a tag is not allowed in this repository
@@ -18,7 +18,7 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

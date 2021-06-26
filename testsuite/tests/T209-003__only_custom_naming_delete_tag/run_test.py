@@ -2,7 +2,7 @@ from support import *
 import re
 
 class TestRun(TestCase):
-    def test_push_annotated_tag(self):
+    def test_push_annotated_tag(testcase):
         """Try pushing an annotated tag.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -37,8 +37,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Same as above: Try deleting a tag, except we are passing
         # the tag's full reference name instead of just passing
@@ -71,8 +71,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Delete a tag with a custom reference name which is recognized
         # as a tag reference.
@@ -99,8 +99,8 @@ To ../bare/repo.git
  - [deleted]         refs/vendor/me/tags/v1
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Delete a custom reference name which is recognized as a tag,
         # but does not exist on the remote.
@@ -114,8 +114,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@ from support import *
 
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Push new branch wavefront (one of the commits is a merge commit).
         """
         cd('%s/repo' % TEST_DIR)
@@ -66,8 +66,8 @@ remote:  1 file changed, 2 insertions(+)
 To ../bare/repo.git
  * [new branch]      wavefront -> wavefront
 """
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

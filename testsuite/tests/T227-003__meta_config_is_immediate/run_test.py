@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_refs_meta_config_update(self):
+    def test_push_refs_meta_config_update(testcase):
         """Try pushing an update of the refs/meta/config:project.config file
         """
         cd ('%s/repo' % TEST_DIR)
@@ -55,8 +55,8 @@ To ../bare/repo.git
    adff0b9..e11c90a  meta/config -> refs/meta/config
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

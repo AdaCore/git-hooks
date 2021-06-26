@@ -2,7 +2,7 @@ from support import Run, TEST_DIR, TestCase, cd, runtests
 
 
 class TestRun(TestCase):
-    def test_create_branch_with_standard_name(self):
+    def test_create_branch_with_standard_name(testcase):
         """Create a new branch with a standard reference name.
         """
         cd('%s/repo' % TEST_DIR)
@@ -28,8 +28,8 @@ To ../bare/repo.git
  * [new branch]      master -> new-master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

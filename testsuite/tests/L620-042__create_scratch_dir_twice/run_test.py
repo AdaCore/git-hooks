@@ -4,10 +4,10 @@ import sys
 from StringIO import StringIO
 
 class TestRun(TestCase):
-    def test_git_config(self):
+    def test_git_config(testcase):
         """Unit test git_config with invalid config name...
         """
-        self.enable_unit_test()
+        testcase.enable_unit_test()
 
         import utils
 
@@ -23,7 +23,7 @@ class TestRun(TestCase):
         sys.stderr = real_stderr
 
         rmtree(utils.scratch_dir)
-        self.assertEqual(new_stderr.getvalue(), "", new_stderr.getvalue())
+        testcase.assertEqual(new_stderr.getvalue(), "", new_stderr.getvalue())
         new_stderr.close()
 
         # Call create_scratch_dir again, and verify that a warning is

@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_create_retired_branch(self):
+    def test_create_retired_branch(testcase):
         """Try pushing the (newly-created branch) retired/gdb-5.0.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -70,10 +70,10 @@ To ../bare/repo.git
  * [new branch]      retired/gdb-5.0 -> retired/gdb-5.0
 """
 
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
-    def test_push_retired_branch(self):
+    def test_push_retired_branch(testcase):
         """Try pushing a branch update on a retired branch.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -90,9 +90,9 @@ To ../bare/repo.git
  ! [remote rejected] gdb-7.5 -> gdb-7.5 (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_force_push_retired_branch(self):
+    def test_force_push_retired_branch(testcase):
         """Try force-pushing a branch update on a retired branch.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -109,9 +109,9 @@ To ../bare/repo.git
  ! [remote rejected] gdb-7.5 -> gdb-7.5 (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_retired_branch_as_tag(self):
+    def test_push_retired_branch_as_tag(testcase):
         """Try pushing a branch update on a retired branch...
 
         ... where the branch has been marked as retired thanks to
@@ -132,9 +132,9 @@ To ../bare/repo.git
  ! [remote rejected] gdb-7.6 -> gdb-7.6 (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_force_push_retired_branch_as_tag(self):
+    def test_force_push_retired_branch_as_tag(testcase):
         """Try force-pushing a branch update on a retired branch...
 
         ... where the branch has been marked as retired thanks to
@@ -156,7 +156,7 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

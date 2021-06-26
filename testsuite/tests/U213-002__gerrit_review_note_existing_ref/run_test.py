@@ -2,7 +2,7 @@ from support import cd, Run, runtests, TestCase, TEST_DIR
 
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Push the refs/notes/review note."""
         cd('%s/repo' % TEST_DIR)
 
@@ -21,8 +21,8 @@ To ../bare/repo.git
    35631ec..a9e9519  refs/notes/review -> refs/notes/review
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

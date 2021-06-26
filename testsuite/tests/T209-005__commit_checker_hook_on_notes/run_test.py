@@ -1,35 +1,35 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_notes(self):
+    def test_push_notes(testcase):
         cd ('%s/repo' % TEST_DIR)
 
         # In this testcase, the contents of the emails being sent
         # by the git-hooks is not important, so reduce verbosity at
         # that level to reduce the noise in the hooks' output.
 
-        self.change_email_sending_verbosity(full_verbosity=False)
+        testcase.change_email_sending_verbosity(full_verbosity=False)
 
         # First, update the git-hooks configuration to install our
         # the script we want to use as our commit-extra-checker.
 
         p = Run(['git', 'fetch', 'origin', 'refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'checkout', 'FETCH_HEAD'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'config', '--file', 'project.config',
                  'hooks.commit-extra-checker',
                  os.path.join(TEST_DIR, 'commit-extra-checker.py')])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'commit', '-m', 'Add hooks.commit-extra-checker',
                  'project.config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
         assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
@@ -55,8 +55,8 @@ To ../bare/repo.git
    bbcc356..0892f7e  refs/notes/commits -> refs/notes/commits
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # The master branch in our repository has one commit which
         # hasn't been pushed to the remote, yet. Annotate that commit,
@@ -68,10 +68,10 @@ To ../bare/repo.git
         # should not be called at all.
 
         p = Run(['git', 'notes', 'add', '-m', 'an annotation', 'master'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run('git show-ref refs/notes/commits'.split())
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
         new_note_sha1 = p.out.split()[0]
 
         p = Run('git push origin notes/commits'.split())
@@ -91,8 +91,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """.format(new_note_sha1=new_note_sha1)
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

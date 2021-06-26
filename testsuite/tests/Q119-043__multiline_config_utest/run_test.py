@@ -3,9 +3,9 @@ from support import *
 
 
 class TestRun(TestCase):
-    def test_multiline_git_config(self):
+    def test_multiline_git_config(testcase):
         """Check that we handle multiline configs correctly"""
-        self.enable_unit_test()
+        testcase.enable_unit_test()
 
         cd("%s/bare/repo.git" % TEST_DIR)
 
@@ -21,7 +21,7 @@ class TestRun(TestCase):
 
         # no_emails should be 1-element tuple. Verify that and then
         # just keep that first element.
-        self.assertEqual(
+        testcase.assertEqual(
             len(no_emails),
             1,
             "ERROR: hooks.no-emails should be 1 element only:\n%s" % str(no_emails),
@@ -32,7 +32,7 @@ class TestRun(TestCase):
 a multiline description
 of my project which should be
 handled properly by the git-hooks."""
-        self.assertEqual(
+        testcase.assertEqual(
             expected_no_emails,
             no_emails,
             "%s\n\nDiff:\n\n%s"

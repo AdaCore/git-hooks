@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_retired_branch(self):
+    def test_push_retired_branch(testcase):
         """Try pushing a branch update on a frozen branch.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -19,9 +19,9 @@ To ../bare/repo.git
  ! [remote rejected] gdb-7.5 -> gdb-7.5 (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_force_push_retired_branch(self):
+    def test_force_push_retired_branch(testcase):
         """Try force-pushing a branch update on a retired branch.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -39,9 +39,9 @@ To ../bare/repo.git
  ! [remote rejected] gdb-7.5 -> gdb-7.5 (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_other_frozen_branch(self):
+    def test_push_other_frozen_branch(testcase):
         """Try pushing another branch which is also frozen
         """
         cd ('%s/repo' % TEST_DIR)
@@ -58,9 +58,9 @@ error: failed to push some refs to '../bare/repo.git'
 """
 
         assert p.status != 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_master(self):
+    def test_push_master(testcase):
         """Try pushing master, which is not frozen
         """
         cd ('%s/repo' % TEST_DIR)
@@ -70,10 +70,10 @@ error: failed to push some refs to '../bare/repo.git'
 Everything up-to-date
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_frozen_tag(self):
+    def test_push_frozen_tag(testcase):
         """Try pushing a tag which has a "frozen-ref" entry.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -90,9 +90,9 @@ error: failed to push some refs to '../bare/repo.git'
 """
 
         assert p.status != 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_ok_tag(self):
+    def test_push_ok_tag(testcase):
         """Try pushing a tag which does not have a frozen-ref entry.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -171,8 +171,8 @@ To ../bare/repo.git
  * [new tag]         gdb-7.6-release -> gdb-7.6-release
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

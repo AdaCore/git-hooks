@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push(self):
+    def test_push(testcase):
         """Try pushing head-less branch (called "headless") on master.
         Same with head-less branch (called "one-commit") on master.
         The test with the "one-commit" branch is just to test the
@@ -11,7 +11,7 @@ class TestRun(TestCase):
 
         # Enable debugs to verify that the hooks pick the correct
         # commit as the first commit.
-        self.set_debug_level(1)
+        testcase.set_debug_level(1)
 
         # First, push the headless branch.
 
@@ -162,7 +162,7 @@ To ../bare/repo.git
 """
 
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Next, push the one-commit branch.
 
@@ -237,7 +237,7 @@ To ../bare/repo.git
 """
 
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

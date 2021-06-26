@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_commit_on_master(self):
+    def test_push_commit_on_master(testcase):
         """Push one new commit which is also a revert
 
         The purpose of this test is to verify that users are able to
@@ -21,7 +21,7 @@ class TestRun(TestCase):
 
         # For this testcase, the contents of the emails being sent
         # is not important, so reduce their verbosity.
-        self.change_email_sending_verbosity(full_verbosity=False)
+        testcase.change_email_sending_verbosity(full_verbosity=False)
 
         # Push master to the `origin' remote. The commit should be accepted,
         # with no commit being checked at all -- since the style_checker.py
@@ -36,7 +36,7 @@ To ../bare/repo.git
 """
 
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

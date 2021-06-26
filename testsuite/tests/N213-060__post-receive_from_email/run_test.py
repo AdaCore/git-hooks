@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_submitter_email(self):
+    def test_submitter_email(testcase):
         """Call post-receive hook with --submitter-email.
         """
         cd ('%s/bare/repo.git' % TEST_DIR)
@@ -54,8 +54,8 @@ index 01d0f12..a90d851 100644
 +
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

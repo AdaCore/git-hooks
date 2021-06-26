@@ -2,7 +2,7 @@ from support import Run, TEST_DIR, TestCase, cd, runtests
 
 
 class TestRun(TestCase):
-    def test_delete_nonexistant(self):
+    def test_delete_nonexistant(testcase):
         """Try deleting a references that don't exist on the remote."""
         cd('%s/repo' % TEST_DIR)
 
@@ -11,8 +11,8 @@ class TestRun(TestCase):
 error: unable to delete 'does-not-exist': remote ref does not exist
 error: failed to push some refs to '../bare/repo.git'
 """
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Do the same as above, but using the full reference, instead
         # of using the branch name.
@@ -25,8 +25,8 @@ To ../bare/repo.git
  ! [remote rejected] does-not-exist (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Same as above, but using the full reference in the tags
         # namespace.
@@ -39,8 +39,8 @@ To ../bare/repo.git
  ! [remote rejected] does-not-exist (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Same as above, but using the full reference in the notes
         # namespace.
@@ -53,8 +53,8 @@ To ../bare/repo.git
  ! [remote rejected] refs/notes/commits (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

@@ -1,35 +1,35 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_lightweight_tag(self):
+    def test_push_lightweight_tag(testcase):
         cd ('%s/repo' % TEST_DIR)
 
         # In this testcase, the contents of the emails being sent
         # by the git-hooks is not important, so reduce verbosity at
         # that level to reduce the noise in the hooks' output.
 
-        self.change_email_sending_verbosity(full_verbosity=False)
+        testcase.change_email_sending_verbosity(full_verbosity=False)
 
         # First, update the git-hooks configuration to install our
         # the script we want to use as our commit-extra-checker.
 
         p = Run(['git', 'fetch', 'origin', 'refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'checkout', 'FETCH_HEAD'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'config', '--file', 'project.config',
                  'hooks.commit-extra-checker',
                  os.path.join(TEST_DIR, 'commit-extra-checker.py')])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'commit', '-m', 'Add hooks.commit-extra-checker',
                  'project.config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
 
         p = Run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
-        self.assertEqual(p.status, 0, p.image)
+        testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
         assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
@@ -48,8 +48,8 @@ To ../bare/repo.git
  * [new tag]         light-tag -> light-tag
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Try pushing the annotated tag annotated-tag-good. This new tag
         # points to commits which have already been pushed to the remote,
@@ -63,8 +63,8 @@ To ../bare/repo.git
  * [new tag]         annotated-tag-good -> annotated-tag-good
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Try pushing the annotated tag annotated-tag-new-commits-good.
         # This tag points to a couple of commits which have not been pushed
@@ -92,8 +92,8 @@ To ../bare/repo.git
  * [new tag]         annotated-tag-new-commits-good -> annotated-tag-new-commits-good
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Try pushing the annotated tag annotated-tag-new-commits-bad.
         # This tag points to a couple of commits which have not been pushed
@@ -118,8 +118,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

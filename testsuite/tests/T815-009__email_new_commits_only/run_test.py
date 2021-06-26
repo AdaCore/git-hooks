@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_on_branch_with_email_new_commits_only(self):
+    def test_push_on_branch_with_email_new_commits_only(testcase):
         cd ('%s/repo' % TEST_DIR)
 
         # This testcase verifies the behavior of the hooks relative
@@ -122,8 +122,8 @@ To ../bare/repo.git
  * [new branch]      feature -> feature
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push branch `feature-2' as `feature'.
         #
@@ -250,8 +250,8 @@ To ../bare/repo.git
  + c305de8...33c342b feature-2 -> feature (forced update)
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push branch `feature-3' as `feature'.
         #
@@ -332,8 +332,8 @@ To ../bare/repo.git
    33c342b..4bb270f  feature-3 -> feature
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Push branch `feature-4' as `feature'.
         #
@@ -417,8 +417,8 @@ To ../bare/repo.git
    4bb270f..785f3f1  feature-4 -> feature
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Verify that the hooks.no-emails config takes precendence
         # over the hooks.email-new-commits-only config.
@@ -441,8 +441,8 @@ To ../bare/repo.git
  * [new branch]      feature-no-emails -> feature-no-emails
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

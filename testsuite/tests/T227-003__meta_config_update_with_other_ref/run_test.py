@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_push_meta_config_and_master(self):
+    def test_push_meta_config_and_master(testcase):
         """Try pushing refs/meta/config at same time as other branch
         """
         cd ('%s/repo' % TEST_DIR)
@@ -27,8 +27,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Now, push the refs/meta/config update on its own, as requested.
 
@@ -73,8 +73,8 @@ To ../bare/repo.git
    87e99cb..dbef16c  meta/config -> refs/meta/config
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # And now that the refs/meta/config update is out of the way,
         # the simple "git push" command we tried earlier should work,
@@ -125,8 +125,8 @@ To ../bare/repo.git
    d065089..a605403  master -> master
 """
 
-        self.assertEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

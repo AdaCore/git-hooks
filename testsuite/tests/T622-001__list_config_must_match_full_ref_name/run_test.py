@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_pushes(self):
+    def test_pushes(testcase):
         """Push commits, and check effect (or not) of hooks.no-emails."""
         cd ('%s/repo' % TEST_DIR)
 
@@ -23,7 +23,7 @@ To ../bare/repo.git
 """
 
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
         # Next, try pushing branch "master-with-emails". The no-emails
         # entry for "refs/heads/master" should be ignored in this case,
@@ -86,7 +86,7 @@ To ../bare/repo.git
 """
 
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 if __name__ == '__main__':

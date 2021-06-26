@@ -2,11 +2,11 @@ from support import cd, runtests, TestCase, TEST_DIR
 
 
 class TestRun(TestCase):
-    def test_git_config(self):
+    def test_git_config(testcase):
         """Unit test AbstractUpdate child class missing methods.
         """
         cd('%s/repo' % TEST_DIR)
-        self.enable_unit_test()
+        testcase.enable_unit_test()
 
         import config
 
@@ -23,7 +23,7 @@ class TestRun(TestCase):
         # config. It should include both the default values (set above) and
         # the values specified via the projet's git-hooks configuration.
         no_emails = config.git_config("hooks.no-emails")
-        self.assertEqual(
+        testcase.assertEqual(
             sorted(no_emails),
             [
                 "refs/heads/uninteresting",

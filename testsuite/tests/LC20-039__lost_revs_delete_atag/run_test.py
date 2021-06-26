@@ -1,7 +1,7 @@
 from support import *
 
 class TestRun(TestCase):
-    def test_delete_tag(self):
+    def test_delete_tag(testcase):
         """Try deteting tag retired/gdb-7.2...
 
         ... knowing that this will cause several commits to be lost.
@@ -40,7 +40,7 @@ To ../bare/repo.git
  - [deleted]         retired/gdb-7.2
 """
         assert p.status == 0, p.image
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 if __name__ == '__main__':
     runtests()

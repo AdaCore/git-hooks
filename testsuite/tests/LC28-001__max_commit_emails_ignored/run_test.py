@@ -2,7 +2,7 @@ from support import *
 from os import environ
 
 class TestRun(TestCase):
-    def test_push_too_many_new_commits_on_master(self):
+    def test_push_too_many_new_commits_on_master(testcase):
         """Try pushing too many new commits on master.
         """
         cd ('%s/repo' % TEST_DIR)
@@ -33,8 +33,8 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        self.assertNotEqual(p.status, 0, p.image)
-        self.assertRunOutputEqual(p, expected_out)
+        testcase.assertNotEqual(p.status, 0, p.image)
+        testcase.assertRunOutputEqual(p, expected_out)
 
 
 

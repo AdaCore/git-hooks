@@ -1,44 +1,19 @@
 from support import *
-from shutil import rmtree
-import sys
-from StringIO import StringIO
 
 
 class TestRun(TestCase):
     def test_git_config(testcase):
         """Unit test git_config with invalid config name..."""
-        testcase.enable_unit_test()
-
-        import utils
-
-        assert utils.scratch_dir is None
-
-        # Call create_scratch_dir, and verify that no warning is printed
-        # on stderr, by redirecting it to a StringIO file.
-        real_stderr = sys.stderr
-        new_stderr = StringIO()
-
-        sys.stderr = new_stderr
-        utils.create_scratch_dir()
-        sys.stderr = real_stderr
-
-        rmtree(utils.scratch_dir)
-        testcase.assertEqual(new_stderr.getvalue(), "", new_stderr.getvalue())
-        new_stderr.close()
-
-        # Call create_scratch_dir again, and verify that a warning is
-        # printed, this time.
-        new_stderr = StringIO()
-
-        sys.stderr = new_stderr
-        utils.create_scratch_dir()
-        sys.stderr = real_stderr
-
-        rmtree(utils.scratch_dir)
-        assert (
-            "Unexpected second call to create_scratch_dir" in new_stderr.getvalue()
-        ), new_stderr.getvalue()
-        new_stderr.close()
+        testcase.run_unit_test_script(
+            expected_out="""\
+DEBUG: Calling utils.create_scratch_dir (call #1)...
+DEBUG: Deleting scratch dir...
+DEBUG: Calling utils.create_scratch_dir (call #2)...
+       (this call is expected to generate a warning)
+*** Unexpected second call to create_scratch_dir
+DEBUG: Deleting crash dir again...
+"""
+        )
 
 
 if __name__ == "__main__":

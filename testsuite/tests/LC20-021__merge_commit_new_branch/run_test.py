@@ -1,14 +1,14 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_branch_with_merge_commit(testcase):
-        """Try pushing an update to master adding one merge commit.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing an update to master adding one merge commit."""
+        cd("%s/repo" % TEST_DIR)
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
-        p = testcase.run('git push origin master:topic/resync'.split())
+        p = testcase.run("git push origin master:topic/resync".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -32,5 +32,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

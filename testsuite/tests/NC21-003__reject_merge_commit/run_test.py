@@ -1,12 +1,12 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_branch_with_merge_commit(testcase):
-        """Test merge-commit reject on branches where they are not allowed.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Test merge-commit reject on branches where they are not allowed."""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** Merge commits are not allowed on refs/heads/master.
 remote: *** The commit that caused this error is:
@@ -25,7 +25,7 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertNotEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-        p = testcase.run('git push origin gdb-7.8-branch'.split())
+        p = testcase.run("git push origin gdb-7.8-branch".split())
         expected_out = """\
 remote: *** Merge commits are not allowed on refs/heads/gdb-7.8-branch.
 remote: *** The commit that caused this error is:
@@ -44,7 +44,7 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertNotEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-        p = testcase.run('git push origin topic/accept-merges'.split())
+        p = testcase.run("git push origin topic/accept-merges".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -187,5 +187,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

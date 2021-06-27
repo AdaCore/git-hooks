@@ -1,16 +1,16 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
-        """Try pushing multiple commits on master.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing multiple commits on master."""
+        cd("%s/repo" % TEST_DIR)
 
         # Enable debug traces.  We use them to make certain verifications,
         # such as verifying that each commit gets checked individually.
         testcase.set_debug_level(2)
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote:   DEBUG: check_update(ref_name=refs/heads/master, old_rev=f82624871b6cfc46d5a7c5be518bc20e8f42be42, new_rev=adb8ffe7b1718f6f8a6ec22f7c0ff06b83f086ec)
 remote: DEBUG: validate_ref_update (refs/heads/master, f82624871b6cfc46d5a7c5be518bc20e8f42be42, adb8ffe7b1718f6f8a6ec22f7c0ff06b83f086ec)
@@ -65,5 +65,6 @@ To ../bare/repo.git
         assert p.status == 0, p.image
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

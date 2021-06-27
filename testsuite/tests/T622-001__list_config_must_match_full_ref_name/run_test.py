@@ -1,15 +1,16 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_pushes(testcase):
         """Push commits, and check effect (or not) of hooks.no-emails."""
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # First, try pushing branch "master". The hooks.no-emails config
         # contains "refs/heads/master", so this push should have no emails
         # being sent.
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: ----------------------------------------------------------------------
 remote: --  The hooks.no-emails config option contains `refs/heads/master',
@@ -29,7 +30,7 @@ To ../bare/repo.git
         # entry for "refs/heads/master" should be ignored in this case,
         # and thus emails are expected to be sent.
 
-        p = testcase.run('git push origin master-with-emails'.split())
+        p = testcase.run("git push origin master-with-emails".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -89,5 +90,5 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

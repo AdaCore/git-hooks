@@ -1,12 +1,12 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_delete_tag(testcase):
-        """Delete a lightweight tag causing multiple commits to be lost.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Delete a lightweight tag causing multiple commits to be lost."""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin :retired/gdb-7.2'.split())
+        p = testcase.run("git push origin :retired/gdb-7.2".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -40,5 +40,6 @@ To ../bare/repo.git
         assert p.status == 0, p.image
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

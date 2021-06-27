@@ -3,8 +3,7 @@ from support import *
 
 class TestRun(TestCase):
     def test_get_user_name(testcase):
-        """Unit test utils.get_user_name.
-        """
+        """Unit test utils.get_user_name."""
         testcase.enable_unit_test()
 
         from type_conversions import to_bool
@@ -16,5 +15,5 @@ class TestRun(TestCase):
         testcase.assertEqual(to_bool(False), False)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

@@ -4,9 +4,9 @@ from support import TEST_DIR, TestCase, cd, runtests
 class TestRun(TestCase):
     def test_delete_branch_with_std_name(testcase):
         """Push a branch deletion using a standard reference name."""
-        cd('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin :to-delete'.split())
+        p = testcase.run("git push origin :to-delete".split())
         expected_out = """\
 remote: *** Deleting branches is not allowed for this repository.
 remote: ***
@@ -24,10 +24,9 @@ error: failed to push some refs to '../bare/repo.git'
 
     def test_delete_branch_with_custom_name(testcase):
         """Push a branch deletion using a custom reference name."""
-        cd('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin :refs/user/to-delete'
-                .split())
+        p = testcase.run("git push origin :refs/user/to-delete".split())
         expected_out = """\
 remote: *** Deleting branches is not allowed for this repository.
 remote: ***
@@ -43,5 +42,6 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertNotEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

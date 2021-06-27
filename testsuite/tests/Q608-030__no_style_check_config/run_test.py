@@ -1,17 +1,17 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push(testcase):
-        """Try pushing master...
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing master..."""
+        cd("%s/repo" % TEST_DIR)
 
         # First, try pushing the comming in the tn-missing branch
         # on fsf-master.  This is to verify that, even though,
         # style checks are disabled on this branch, other checks
         # are not.
 
-        p = testcase.run('git push origin tn-missing:fsf-master'.split())
+        p = testcase.run("git push origin tn-missing:fsf-master".split())
         expected_out = """\
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently
@@ -32,7 +32,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Next, try pushing master.  We should be failing the style
         # checks.
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** pre-commit check failed for commit: 217d35d3043af4087f10cfaadfa0abf1a4b87d4b
 remote: *** a: bad style, please fix.
@@ -49,7 +49,7 @@ error: failed to push some refs to '../bare/repo.git'
         # That branch has style checks disabled, so it should
         # work.
 
-        p = testcase.run('git push origin master:fsf-master'.split())
+        p = testcase.run("git push origin master:fsf-master".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -98,5 +98,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

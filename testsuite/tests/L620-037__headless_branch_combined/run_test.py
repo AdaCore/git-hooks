@@ -8,7 +8,7 @@ class TestRun(TestCase):
         The test with the "one-commit" branch is just to test the
         situation where the new head-less branch only has one commit.
         """
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # Enable debugs to verify that the hooks pick the correct
         # commit as the first commit.
@@ -16,7 +16,7 @@ class TestRun(TestCase):
 
         # First, push the headless branch.
 
-        p = testcase.run('git push origin headless'.split())
+        p = testcase.run("git push origin headless".split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/headless, 0000000000000000000000000000000000000000, 902092ffe1cf61b28e28c86949a447b9fc2591a4)
 remote: DEBUG: update base: None
@@ -163,7 +163,7 @@ To ../bare/repo.git
 
         # Next, push the one-commit branch.
 
-        p = testcase.run('git push origin one-commit'.split())
+        p = testcase.run("git push origin one-commit".split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/one-commit, 0000000000000000000000000000000000000000, ef3ab848df2bef804d5bd0880475d40cb6aab0bf)
 remote: DEBUG: update base: None
@@ -237,5 +237,5 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

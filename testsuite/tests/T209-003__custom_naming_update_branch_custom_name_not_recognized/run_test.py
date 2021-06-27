@@ -4,12 +4,13 @@ from support import TEST_DIR, TestCase, cd, runtests
 class TestRun(TestCase):
     def test_update_branch_custom_name_not_recognized(testcase):
         """Push a branch updates using invalid custom reference names."""
-        cd('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # Push to a reference which does exist in the remote repository,
         # but does not follow any of the repository's naming schemes.
-        p = testcase.run('git push origin my-topic:refs/others/exists-but-unrecognized'
-                .split())
+        p = testcase.run(
+            "git push origin my-topic:refs/others/exists-but-unrecognized".split()
+        )
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/others/exists-but-unrecognized
 remote: ***
@@ -42,8 +43,9 @@ error: failed to push some refs to '../bare/repo.git'
         # Push to a reference which does not exist in the remote
         # repository, and whose name does not follow any of the
         # repository's naming schemes.
-        p = testcase.run('git push origin my-topic:refs/does-not-exist/my-feature'
-                .split())
+        p = testcase.run(
+            "git push origin my-topic:refs/does-not-exist/my-feature".split()
+        )
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/does-not-exist/my-feature
 remote: ***
@@ -74,5 +76,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

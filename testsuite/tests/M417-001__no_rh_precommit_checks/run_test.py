@@ -1,10 +1,10 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commits(testcase):
-        """See comments below.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """See comments below."""
+        cd("%s/repo" % TEST_DIR)
 
         # Branch master is 2 commits ahead of the remote. But we push
         # the commits one by one, because we want to verify that the
@@ -14,7 +14,9 @@ class TestRun(TestCase):
         # Push the first commit. The RH should normally fail the RH
         # style check, but we deactivated it for all branches, and
         # thus the push is expected to pass.
-        p = testcase.run('git push origin bf43717d61e2a67cf9b3d040e9c40d6041a8444d:master'.split())
+        p = testcase.run(
+            "git push origin bf43717d61e2a67cf9b3d040e9c40d6041a8444d:master".split()
+        )
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -62,7 +64,7 @@ To ../bare/repo.git
         # style check disabled does not prevent the precommit-check
         # checks from being applied. cvs_check has been setup to reject
         # the update, and thus cause the push to fail.
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** pre-commit check failed for commit: e4dede9e45c3b88fd57aab5edbce1cd4d1da0850
 remote: *** cvs_check: style check violation in b
@@ -76,5 +78,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

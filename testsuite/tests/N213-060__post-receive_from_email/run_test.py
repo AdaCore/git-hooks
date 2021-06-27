@@ -1,17 +1,19 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_submitter_email(testcase):
-        """Call post-receive hook with --submitter-email.
-        """
-        cd ('%s/bare/repo.git' % TEST_DIR)
+        """Call post-receive hook with --submitter-email."""
+        cd("%s/bare/repo.git" % TEST_DIR)
 
-        p = testcase.run(['./hooks/post-receive',
-                 '--submitter-email=Dave Smith <ds@example.com>'],
-                input=('|d065089ff184d97934c010ccd0e7e8ed94cb7165'
-                       ' a60540361d47901d3fe254271779f380d94645f7'
-                       ' refs/heads/master')
-               )
+        p = testcase.run(
+            ["./hooks/post-receive", "--submitter-email=Dave Smith <ds@example.com>"],
+            input=(
+                "|d065089ff184d97934c010ccd0e7e8ed94cb7165"
+                " a60540361d47901d3fe254271779f380d94645f7"
+                " refs/heads/master"
+            ),
+        )
 
         expected_out = """\
 DEBUG: MIME-Version: 1.0
@@ -58,5 +60,5 @@ index 01d0f12..a90d851 100644
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

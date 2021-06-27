@@ -1,32 +1,32 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master_and_release_x(testcase):
-        """Try pushing a commit on two branches.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing a commit on two branches."""
+        cd("%s/repo" % TEST_DIR)
 
         # First, adjust the project.config file to use a script to
         # compute the email recipients.  We have to do it manually
         # here, because we need to provide the full path to that
         # script, which isn't known until now.
 
-        p = testcase.run(['git', 'fetch', 'origin', 'refs/meta/config'])
+        p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
         assert p.status == 0, p.image
 
-        p = testcase.run(['git', 'checkout', 'FETCH_HEAD'])
+        p = testcase.run(["git", "checkout", "FETCH_HEAD"])
         assert p.status == 0, p.image
 
-        with open('%s/hooks_config' % TEST_DIR) as f:
-            project_config = f.read() % {'TEST_DIR': TEST_DIR}
-        with open('project.config', 'w') as f:
+        with open("%s/hooks_config" % TEST_DIR) as f:
+            project_config = f.read() % {"TEST_DIR": TEST_DIR}
+        with open("project.config", "w") as f:
             f.write(project_config)
-        p = testcase.run(['git', 'commit', '-m', 'fix hooks.mailinglist',
-                 'project.config'])
+        p = testcase.run(
+            ["git", "commit", "-m", "fix hooks.mailinglist", "project.config"]
+        )
         assert p.status == 0, p.image
 
-        p = testcase.run(['git', 'push', 'origin',
-                 'HEAD:refs/meta/config'])
+        p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
         assert p.status == 0, p.image
 
         # Push master to the `origin' remote.  The delta should be one
@@ -34,7 +34,7 @@ class TestRun(TestCase):
         # script should see that it is being called for refs/heads/master,
         # and return that the mailing list to use is devel-commits@[...].
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -86,7 +86,7 @@ To ../bare/repo.git
         # that the branch name starts with "release-", and thus return
         # a different email address.
 
-        p = testcase.run('git push origin release-x'.split())
+        p = testcase.run("git push origin release-x".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -133,5 +133,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

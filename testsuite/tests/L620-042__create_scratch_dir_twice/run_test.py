@@ -3,10 +3,10 @@ from shutil import rmtree
 import sys
 from StringIO import StringIO
 
+
 class TestRun(TestCase):
     def test_git_config(testcase):
-        """Unit test git_config with invalid config name...
-        """
+        """Unit test git_config with invalid config name..."""
         testcase.enable_unit_test()
 
         import utils
@@ -41,5 +41,5 @@ class TestRun(TestCase):
         new_stderr.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

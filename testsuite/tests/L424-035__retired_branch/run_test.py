@@ -1,12 +1,12 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_create_retired_branch(testcase):
-        """Try pushing the (newly-created branch) retired/gdb-5.0.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing the (newly-created branch) retired/gdb-5.0."""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin retired/gdb-5.0'.split())
+        p = testcase.run("git push origin retired/gdb-5.0".split())
 
         assert p.status == 0, p.image
 
@@ -72,13 +72,11 @@ To ../bare/repo.git
 
         testcase.assertRunOutputEqual(p, expected_out)
 
-
     def test_push_retired_branch(testcase):
-        """Try pushing a branch update on a retired branch.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing a branch update on a retired branch."""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin gdb-7.5'.split())
+        p = testcase.run("git push origin gdb-7.5".split())
 
         assert p.status != 0, p.image
 
@@ -93,11 +91,10 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
     def test_force_push_retired_branch(testcase):
-        """Try force-pushing a branch update on a retired branch.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try force-pushing a branch update on a retired branch."""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push -f origin gdb-7.5'.split())
+        p = testcase.run("git push -f origin gdb-7.5".split())
 
         assert p.status != 0, p.image
 
@@ -117,9 +114,9 @@ error: failed to push some refs to '../bare/repo.git'
         ... where the branch has been marked as retired thanks to
         a tag named retired/<branch-name>
         """
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin gdb-7.6'.split())
+        p = testcase.run("git push origin gdb-7.6".split())
 
         assert p.status != 0, p.image
 
@@ -140,9 +137,9 @@ error: failed to push some refs to '../bare/repo.git'
         ... where the branch has been marked as retired thanks to
         a tag named retired/<branch-name>
         """
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push -f origin gdb-7.6'.split())
+        p = testcase.run("git push -f origin gdb-7.6".split())
 
         assert p.status != 0, p.image
 
@@ -158,5 +155,6 @@ error: failed to push some refs to '../bare/repo.git'
 
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

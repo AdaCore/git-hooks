@@ -4,9 +4,9 @@ from support import TEST_DIR, TestCase, cd, runtests
 class TestRun(TestCase):
     def test_update_branch_with_std_name(testcase):
         """Push a branch update using a standard reference name."""
-        cd('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin my-topic'.split())
+        p = testcase.run("git push origin my-topic".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
@@ -50,5 +50,5 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

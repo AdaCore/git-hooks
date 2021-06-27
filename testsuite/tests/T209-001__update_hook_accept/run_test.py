@@ -1,30 +1,32 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
-        """Try pushing multiple commits on master.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing multiple commits on master."""
+        cd("%s/repo" % TEST_DIR)
 
         # First, adjust the project.config file to use an update-hook
         # script.  We have to do it manually here, because we need to
         # provide the full path to that script.
-        with open('%s/hooks_config' % TEST_DIR) as f:
-            project_config = f.read() % {'TEST_DIR': TEST_DIR}
-        with open('project.config', 'w') as f:
+        with open("%s/hooks_config" % TEST_DIR) as f:
+            project_config = f.read() % {"TEST_DIR": TEST_DIR}
+        with open("project.config", "w") as f:
             f.write(project_config)
-        p = testcase.run(['git', 'commit', '-m', 'Add hooks.update-hook config',
-                 'project.config'])
+        p = testcase.run(
+            ["git", "commit", "-m", "Add hooks.update-hook config", "project.config"]
+        )
         assert p.status == 0, p.image
 
-        p = testcase.run(['git', 'push', 'origin',
-                 'refs/heads/meta/config:refs/meta/config'])
+        p = testcase.run(
+            ["git", "push", "origin", "refs/heads/meta/config:refs/meta/config"]
+        )
         assert p.status == 0, p.image
 
-        p = testcase.run('git checkout master'.split())
+        p = testcase.run("git checkout master".split())
         assert p.status == 0, p.image
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: -----[ update-hook args ]-----
 remote: 'refs/heads/master'
@@ -203,5 +205,6 @@ To ../bare/repo.git
         assert p.status == 0, p.image
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

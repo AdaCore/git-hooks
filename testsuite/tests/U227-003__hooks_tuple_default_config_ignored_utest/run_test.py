@@ -3,9 +3,8 @@ from support import cd, runtests, TestCase, TEST_DIR
 
 class TestRun(TestCase):
     def test_git_config(testcase):
-        """Unit test AbstractUpdate child class missing methods.
-        """
-        cd('%s/repo' % TEST_DIR)
+        """Unit test AbstractUpdate child class missing methods."""
+        cd("%s/repo" % TEST_DIR)
         testcase.enable_unit_test()
 
         import config
@@ -33,5 +32,5 @@ class TestRun(TestCase):
         )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

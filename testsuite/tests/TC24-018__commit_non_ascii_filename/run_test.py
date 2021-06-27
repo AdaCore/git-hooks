@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
-        """Try pushing one single-file commit on master.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing one single-file commit on master."""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin master'.split())
-        expected_out = \
-r"""remote: *** cvs_check: `repo' < `Mânü Scrîpt.txt'
+        p = testcase.run("git push origin master".split())
+        expected_out = r"""remote: *** cvs_check: `repo' < `Mânü Scrîpt.txt'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 8bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -54,5 +53,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

@@ -1,16 +1,16 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push(testcase):
-        """Try pushing master...
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing master..."""
+        cd("%s/repo" % TEST_DIR)
 
         # The revision log of the commit we are trying to push
         # has the word "minor" in it, which used to be a valid
         # substitute for a TN, but this is no longer the case
         # as of 2017-07-28, so the push should now be rejected.
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently
@@ -28,5 +28,6 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertNotEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

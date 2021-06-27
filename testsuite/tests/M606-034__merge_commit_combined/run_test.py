@@ -1,10 +1,10 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_branch_with_merge_commit(testcase):
-        """Try pushing an update to master adding one merge commit.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing an update to master adding one merge commit."""
+        cd("%s/repo" % TEST_DIR)
 
         # Enable some logging, in order to be able to see which
         # commits get checked, and what commits are being used
@@ -20,7 +20,7 @@ class TestRun(TestCase):
         # only be one commit check, of the merge commit, using the old
         # master's SHA1 as the "parent".
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 128c4380beb275f9002a42e0b5da3618e00c11a9, 7277e89f8909d7279357489ccf0de81c7c0f3286)
 remote: DEBUG: update base: 128c4380beb275f9002a42e0b5da3618e00c11a9
@@ -97,5 +97,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

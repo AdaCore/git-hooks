@@ -3,24 +3,24 @@ import fcntl
 import os
 import socket
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
-        """Try pushing one single-file commit on master.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing one single-file commit on master."""
+        cd("%s/repo" % TEST_DIR)
 
         # Simulate a push happening while another user is pushing
         # to the same repository, but using a bit of internal knowledge
         # to create a lock on the repository.
 
-        lock_filename = os.path.join(TEST_DIR, 'bare', 'repo.git',
-                                     'git-hooks::update.token.lock')
-        f = open(lock_filename, 'w')
-        f.write('locked by testsuite at <now> (pid = %d)'
-                % os.getpid())
+        lock_filename = os.path.join(
+            TEST_DIR, "bare", "repo.git", "git-hooks::update.token.lock"
+        )
+        f = open(lock_filename, "w")
+        f.write("locked by testsuite at <now> (pid = %d)" % os.getpid())
         f.close()
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: ---------------------------------------------------------------------
 remote: --  Another user is currently pushing changes to this repository.  --
@@ -37,7 +37,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         # Try it again, to make sure that the previous attempt did not
         # accidently deleted the lock file.
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: ---------------------------------------------------------------------
 remote: --  Another user is currently pushing changes to this repository.  --
@@ -58,7 +58,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         os.unlink(lock_filename)
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
@@ -106,5 +106,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

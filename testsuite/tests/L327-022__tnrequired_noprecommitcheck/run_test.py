@@ -1,10 +1,10 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push(testcase):
-        """Test pushing master...
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Test pushing master..."""
+        cd("%s/repo" % TEST_DIR)
 
         # Push master to the `origin' remote.  The should push
         # one merge commit which also references a commit from
@@ -16,7 +16,7 @@ class TestRun(TestCase):
         # repository yet, it counts as "new", and thus should be
         # validated through the pre-commit checks, which means
         # that we expect the update to fail.
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently
@@ -37,7 +37,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Now, push the thirdparty branch.  This branch is setup
         # to avoid the pre-commit checks, so this should allow
         # the problematic commit.
-        p = testcase.run('git push origin thirdparty'.split())
+        p = testcase.run("git push origin thirdparty".split())
         expected_out = """\
 remote: ----------------------------------------------------------------------
 remote: --  The hooks.no-emails config option contains `refs/heads/thirdparty',
@@ -56,7 +56,7 @@ To ../bare/repo.git
         # And finally, try pushing the "master" branch again.
         # This time, the problematic commit is already in, and
         # so should not go through the pre-commit-checks again.
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `top'
 remote: DEBUG: MIME-Version: 1.0
@@ -136,5 +136,5 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

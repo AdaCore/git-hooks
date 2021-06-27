@@ -8,9 +8,9 @@ class TestRun(TestCase):
         This reference name is recognized as a branch by the repository's
         naming scheme.
         """
-        cd('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin master:refs/vendor/name/topic'.split())
+        p = testcase.run("git push origin master:refs/vendor/name/topic".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -35,5 +35,5 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

@@ -3,14 +3,13 @@ from support import TEST_DIR, TestCase, cd, runtests
 
 class TestRun(TestCase):
     def test_update_branch_in_standard_namespace(testcase):
-        """Create a new branch with a standard reference name.
-        """
-        cd('%s/repo' % TEST_DIR)
+        """Create a new branch with a standard reference name."""
+        cd("%s/repo" % TEST_DIR)
 
         # First, try pushing with a branch name which is recognized
         # by the repository's branch namespace.
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
@@ -59,7 +58,7 @@ To ../bare/repo.git
         # repository, but is not recognized as a branch reference
         # (could be a legacy branch).
 
-        p = testcase.run('git push origin my-topic'.split())
+        p = testcase.run("git push origin my-topic".split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/heads/my-topic
 remote: ***
@@ -87,5 +86,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

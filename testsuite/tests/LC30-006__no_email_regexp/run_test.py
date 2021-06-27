@@ -1,12 +1,12 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
-        """Try pushing multiple commits on master.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing multiple commits on master."""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a' `b' `c'
 remote: *** cvs_check: `repo' < `c' `d'
@@ -27,5 +27,5 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

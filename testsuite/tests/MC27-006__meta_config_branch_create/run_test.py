@@ -1,6 +1,7 @@
 from support import *
 from subprocess import check_output, check_call
 
+
 class TestRun(TestCase):
     def __bare_repo_fixup(testcase):
         """Fix the bare repository to implement legacy hooks configuration.
@@ -8,19 +9,20 @@ class TestRun(TestCase):
         Reproduce the situation where the project.config file in
         refs/meta/config does not exist, yet.
         """
-        check_call('git update-ref -d refs/meta/config'.split(),
-                   cwd='%s/bare/repo.git' % TEST_DIR)
+        check_call(
+            "git update-ref -d refs/meta/config".split(),
+            cwd="%s/bare/repo.git" % TEST_DIR,
+        )
 
     def test_push_commit_on_master(testcase):
-        """Test creating the refs/meta/config branch on the remote.
-        """
+        """Test creating the refs/meta/config branch on the remote."""
         testcase.__bare_repo_fixup()
 
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # Push the `meta/config' local branch as the new `refs/meta/config'
         # reference. This should be allowed.
-        p = testcase.run('git push origin meta/config:refs/meta/config'.split())
+        p = testcase.run("git push origin meta/config:refs/meta/config".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `project.config'
 remote: DEBUG: MIME-Version: 1.0
@@ -80,5 +82,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

@@ -9,10 +9,11 @@ class TestRun(TestCase):
         the repository's naming scheme, and so the update should
         be rejected.
         """
-        cd('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin master:refs/does-not-exist/my-feature'
-                .split())
+        p = testcase.run(
+            "git push origin master:refs/does-not-exist/my-feature".split()
+        )
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/does-not-exist/my-feature
 remote: ***
@@ -43,5 +44,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

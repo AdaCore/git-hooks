@@ -28,8 +28,7 @@ def utest_fork():
         pid = real_fork()
         return pid
     else:
-        raise OSError(errno.ENOMEM,
-                      'fork: Resource temporarily unavailable')
+        raise OSError(errno.ENOMEM, "fork: Resource temporarily unavailable")
 
 
 # A small function to use as argument for run_in_daemon.
@@ -57,9 +56,9 @@ class TestRun(TestCase):
         testcase.enable_unit_test()
 
     def test_fail_at_first_fork(testcase):
-        """run_in_daemon fails at first fork...
-        """
+        """run_in_daemon fails at first fork..."""
         from daemon import run_in_daemon
+
         global good_forks
         good_forks = [False]
 
@@ -74,9 +73,9 @@ fork #1 failed: (12) fork: Resource temporarily unavailable
         testcase.assertEqual(out, expected_out)
 
     def test_fail_at_second_fork(testcase):
-        """run_in_daemon fails at second fork...
-        """
+        """run_in_daemon fails at second fork..."""
         from daemon import run_in_daemon
+
         # (we need the third one to work, because fork is used to call
         # the logger).
         global good_forks
@@ -94,7 +93,7 @@ fork #1 failed: (12) fork: Resource temporarily unavailable
         testcase.assertEqual(out, expected_out, out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Redirect fork, allowing us to control its behavior.
     os.fork = utest_fork
     runtests()

@@ -1,30 +1,32 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
-        """Try pushing multiple commits on master.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing multiple commits on master."""
+        cd("%s/repo" % TEST_DIR)
 
         # First, adjust the project.config file to use a commit-filer
         # script.  We have to do it manually here, because we need to
         # provide the full path to that script.
-        with open('%s/hooks_config' % TEST_DIR) as f:
-            project_config = f.read() % {'TEST_DIR': TEST_DIR}
-        with open('project.config', 'w') as f:
+        with open("%s/hooks_config" % TEST_DIR) as f:
+            project_config = f.read() % {"TEST_DIR": TEST_DIR}
+        with open("project.config", "w") as f:
             f.write(project_config)
-        p = testcase.run(['git', 'commit', '-m', 'fix hooks.mailinglist',
-                 'project.config'])
+        p = testcase.run(
+            ["git", "commit", "-m", "fix hooks.mailinglist", "project.config"]
+        )
         assert p.status == 0, p.image
 
-        p = testcase.run(['git', 'push', 'origin',
-                 'refs/heads/meta/config:refs/meta/config'])
+        p = testcase.run(
+            ["git", "push", "origin", "refs/heads/meta/config:refs/meta/config"]
+        )
         assert p.status == 0, p.image
 
-        p = testcase.run('git checkout master'.split())
+        p = testcase.run("git checkout master".split())
         assert p.status == 0, p.image
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -198,9 +200,12 @@ remote: -----[ post-recieve-hook end ]-----
 remote: *** !!! WARNING: %(TEST_DIR)s/post-receive-hook returned code: 1.
 To ../bare/repo.git
    426fba3..dd6165c  master -> master
-""" % {'TEST_DIR': TEST_DIR}
+""" % {
+            "TEST_DIR": TEST_DIR
+        }
         assert p.status == 0, p.image
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

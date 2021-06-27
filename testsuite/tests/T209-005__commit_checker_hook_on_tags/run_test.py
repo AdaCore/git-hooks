@@ -1,8 +1,9 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_lightweight_tag(testcase):
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # In this testcase, the contents of the emails being sent
         # by the git-hooks is not important, so reduce verbosity at
@@ -13,26 +14,34 @@ class TestRun(TestCase):
         # First, update the git-hooks configuration to install our
         # the script we want to use as our commit-extra-checker.
 
-        p = testcase.run(['git', 'fetch', 'origin', 'refs/meta/config'])
+        p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'checkout', 'FETCH_HEAD'])
+        p = testcase.run(["git", "checkout", "FETCH_HEAD"])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'config', '--file', 'project.config',
-                 'hooks.commit-extra-checker',
-                 os.path.join(TEST_DIR, 'commit-extra-checker.py')])
+        p = testcase.run(
+            [
+                "git",
+                "config",
+                "--file",
+                "project.config",
+                "hooks.commit-extra-checker",
+                os.path.join(TEST_DIR, "commit-extra-checker.py"),
+            ]
+        )
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'commit', '-m', 'Add hooks.commit-extra-checker',
-                 'project.config'])
+        p = testcase.run(
+            ["git", "commit", "-m", "Add hooks.commit-extra-checker", "project.config"]
+        )
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
+        p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
         testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
-        assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
+        assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
 
         # Try pushing the lightweight tag light-tag. We expect the checker
         # to not be called at all, and the push to be succesful.
@@ -41,7 +50,7 @@ class TestRun(TestCase):
         # trigger an error from the commit-extra-checker. However,
         # this commit has already been pushed to the remote, and thus
         # is not new, so the checker should not be called on it.
-        p = testcase.run('git push origin light-tag'.split())
+        p = testcase.run("git push origin light-tag".split())
         expected_out = """\
 remote: DEBUG: Sending email: [repo] Created tag 'light-tag'...
 To ../bare/repo.git
@@ -56,7 +65,7 @@ To ../bare/repo.git
         # so there are no new commits being added besides this new tag.
         # As a result, the commit-extra-checker should not be called
         # at all.
-        p = testcase.run('git push origin annotated-tag-good'.split())
+        p = testcase.run("git push origin annotated-tag-good".split())
         expected_out = """\
 remote: DEBUG: Sending email: [repo] Created tag 'annotated-tag-good'...
 To ../bare/repo.git
@@ -73,7 +82,7 @@ To ../bare/repo.git
         # The commits are expected to pass the checker, and so the push
         # is expected to succeed.
 
-        p = testcase.run('git push origin annotated-tag-new-commits-good'.split())
+        p = testcase.run("git push origin annotated-tag-new-commits-good".split())
         expected_out = """\
 remote: DEBUG: commit-extra-checker.py refs/tags/annotated-tag-new-commits-good 81792e975fbabb737876018499cb76123a2a599e
 remote: -----[ stdin ]-----
@@ -103,7 +112,7 @@ To ../bare/repo.git
         # to trigger the commit-extra-checker, so the push is expected
         # to be rejected.
 
-        p = testcase.run('git push origin annotated-tag-new-commits-bad'.split())
+        p = testcase.run("git push origin annotated-tag-new-commits-bad".split())
         expected_out = """\
 remote: *** The following commit was rejected by your hooks.commit-extra-checker script (status: 1)
 remote: *** commit: 4be0bf1ff4ecc4a1f28641bba9dee46ae846a834
@@ -122,5 +131,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

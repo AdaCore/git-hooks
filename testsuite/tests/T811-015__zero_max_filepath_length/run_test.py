@@ -1,5 +1,6 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commits(testcase):
         """Test setting hooks.max-filepath-length to zero turns check off."""
@@ -16,7 +17,7 @@ class TestRun(TestCase):
         # that was previously rejected should now be accepted, proving
         # that the length check is no longer applied.
 
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # For this testcase, the contents of the emails being sent
         # is not important, so reduce their verbosity.
@@ -40,9 +41,9 @@ class TestRun(TestCase):
 
         TEST_FILE_PATH_LENGTH = 160
 
-        new_file_name = 'a' * TEST_FILE_PATH_LENGTH
-        with open(new_file_name, 'w') as f:
-            f.write("Hello world\n");
+        new_file_name = "a" * TEST_FILE_PATH_LENGTH
+        with open(new_file_name, "w") as f:
+            f.write("Hello world\n")
 
         p = testcase.run(["git", "add", new_file_name])
         assert p.status == 0, p.image
@@ -68,7 +69,7 @@ class TestRun(TestCase):
         #
         #################################################################
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** The following commit introduces some new files whose total
 remote: *** path length exceeds the maximum allowed for this repository.
@@ -87,9 +88,11 @@ remote: error: hook declined to update refs/heads/master
 To ../bare/repo.git
  ! [remote rejected] master -> master (hook declined)
 error: failed to push some refs to '../bare/repo.git'
-""".format(new_commit_sha1=new_commit_sha1,
-           new_file_name=new_file_name,
-           TEST_FILE_PATH_LENGTH=TEST_FILE_PATH_LENGTH)
+""".format(
+            new_commit_sha1=new_commit_sha1,
+            new_file_name=new_file_name,
+            TEST_FILE_PATH_LENGTH=TEST_FILE_PATH_LENGTH,
+        )
 
         testcase.assertNotEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
@@ -103,27 +106,42 @@ error: failed to push some refs to '../bare/repo.git'
         #
         #################################################################
 
-        p = testcase.run(['git', 'fetch', 'origin', 'refs/meta/config'])
+        p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'checkout', 'FETCH_HEAD'])
+        p = testcase.run(["git", "checkout", "FETCH_HEAD"])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'config', '--file', 'project.config',
-                 'hooks.max-filepath-length', '0'])
+        p = testcase.run(
+            [
+                "git",
+                "config",
+                "--file",
+                "project.config",
+                "hooks.max-filepath-length",
+                "0",
+            ]
+        )
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'commit', '-m', 'Set hooks.max-filepath-length to 0',
-                 'project.config'])
+        p = testcase.run(
+            [
+                "git",
+                "commit",
+                "-m",
+                "Set hooks.max-filepath-length to 0",
+                "project.config",
+            ]
+        )
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
+        p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
         testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
-        assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
+        assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
 
-        p = testcase.run(['git', 'checkout', 'master'])
+        p = testcase.run(["git", "checkout", "master"])
         testcase.assertEqual(p.status, 0, p.image)
 
         #################################################################
@@ -133,16 +151,18 @@ error: failed to push some refs to '../bare/repo.git'
         #
         #################################################################
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: DEBUG: Sending email: [repo] Add looooong file...
 To ../bare/repo.git
    8d5ce43..{new_commit_abbrev_sha1}  master -> master
-""".format(new_commit_abbrev_sha1=new_commit_abbrev_sha1)
+""".format(
+            new_commit_abbrev_sha1=new_commit_abbrev_sha1
+        )
 
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

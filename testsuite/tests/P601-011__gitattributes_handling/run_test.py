@@ -1,14 +1,14 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
-        """Try pushing one single-file commit on master.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing one single-file commit on master."""
+        cd("%s/repo" % TEST_DIR)
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -61,5 +61,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

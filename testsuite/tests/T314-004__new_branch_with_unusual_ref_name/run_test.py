@@ -1,11 +1,12 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Push master as new ref with name outside standard namespace."""
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin master:refs/for/master'.split())
+        p = testcase.run("git push origin master:refs/for/master".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
@@ -72,9 +73,9 @@ To ../bare/repo.git
         # Verify that the branch has been created in the remote
         # repository and that it points to the expected commit.
 
-        cd('%s/bare/repo.git' % TEST_DIR)
+        cd("%s/bare/repo.git" % TEST_DIR)
 
-        p = testcase.run('git show-ref -s refs/for/master'.split())
+        p = testcase.run("git show-ref -s refs/for/master".split())
         expected_out = """\
 a60540361d47901d3fe254271779f380d94645f7
 """
@@ -83,5 +84,5 @@ a60540361d47901d3fe254271779f380d94645f7
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

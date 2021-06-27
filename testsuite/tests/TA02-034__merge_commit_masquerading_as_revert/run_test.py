@@ -1,5 +1,6 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_branch_with_merge_commit(testcase):
         """Test merge-commit reject on branches where they are not allowed.
@@ -10,9 +11,9 @@ class TestRun(TestCase):
         the check against merge commits) and thus incorrectly allowing
         this commit.
         """
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** Merge commits are not allowed on refs/heads/master.
 remote: *** The commit that caused this error is:
@@ -31,5 +32,6 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertNotEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

@@ -1,10 +1,10 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_refs_meta_config_update(testcase):
-        """Try pushing an update of the refs/meta/config:project.config file
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing an update of the refs/meta/config:project.config file"""
+        cd("%s/repo" % TEST_DIR)
 
         # Push an update to the refs/meta/config reference, where
         # we modify the hooks's configuration file. The goal of
@@ -14,7 +14,7 @@ class TestRun(TestCase):
         # changed from git-hooks-ci@example.com to super-ci@example.com.
         # Verify that the email gets sent to that address, rather than
         # the older one.
-        p = testcase.run('git push origin meta/config:refs/meta/config'.split())
+        p = testcase.run("git push origin meta/config:refs/meta/config".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `project.config'
 remote: DEBUG: MIME-Version: 1.0
@@ -58,5 +58,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

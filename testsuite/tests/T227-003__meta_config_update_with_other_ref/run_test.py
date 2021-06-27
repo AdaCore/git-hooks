@@ -1,10 +1,10 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_meta_config_and_master(testcase):
-        """Try pushing refs/meta/config at same time as other branch
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing refs/meta/config at same time as other branch"""
+        cd("%s/repo" % TEST_DIR)
 
         # Do a simple "git push" without any information about the remote
         # or the references to push; in that case, the (non-bare) repository
@@ -12,7 +12,7 @@ class TestRun(TestCase):
         # get pushed, with one of the references to update being the special
         # reference refs/meta/config. We expect this update attempt to be
         # rejected.
-        p = testcase.run('git push'.split())
+        p = testcase.run("git push".split())
         expected_out = """\
 remote: *** You are trying to push multiple references at the same time:
 remote: ***   - refs/heads/master
@@ -32,7 +32,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         # Now, push the refs/meta/config update on its own, as requested.
 
-        p = testcase.run('git push origin meta/config:refs/meta/config'.split())
+        p = testcase.run("git push origin meta/config:refs/meta/config".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `project.config'
 remote: DEBUG: MIME-Version: 1.0
@@ -80,7 +80,7 @@ To ../bare/repo.git
         # the simple "git push" command we tried earlier should work,
         # now.
 
-        p = testcase.run('git push'.split())
+        p = testcase.run("git push".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
@@ -129,5 +129,5 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

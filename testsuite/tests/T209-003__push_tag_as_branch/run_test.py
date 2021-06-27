@@ -12,11 +12,11 @@ class TestRun(TestCase):
         We want to make sure we handle these situations gracefullly
         in any case.
         """
-        cd('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # Push refs/tags/v1, which is a tag, to a reference whose name
         # suggests it is a branch. We should get an error.
-        p = testcase.run('git push origin refs/tags/v1:refs/heads/v1'.split())
+        p = testcase.run("git push origin refs/tags/v1:refs/heads/v1".split())
         expected_out = """\
 remote: *** This type of update (refs/heads/v1,tag) is not valid.
 remote: error: hook declined to update refs/heads/v1
@@ -29,5 +29,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

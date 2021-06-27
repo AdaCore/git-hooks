@@ -1,16 +1,16 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_notes(testcase):
-        """Try pushing our notes.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing our notes."""
+        cd("%s/repo" % TEST_DIR)
 
         # Try pushing the notes.  The problem is that the one note
         # that needs to be pushed references a commit from master
         # which has not been pushed, yet.  So the update should be
         # rejected.
-        p = testcase.run('git push origin notes/commits'.split())
+        p = testcase.run("git push origin notes/commits".split())
         expected_out = """\
 remote: *** The commit associated to the following notes update
 remote: *** cannot be found. Please push your branch commits first
@@ -30,5 +30,6 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertNotEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

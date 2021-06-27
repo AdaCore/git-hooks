@@ -3,14 +3,13 @@ from support import TEST_DIR, TestCase, cd, runtests
 
 class TestRun(TestCase):
     def test_create_branch_with_custom_name(testcase):
-        """Create a new branch with a standard reference name.
-        """
-        cd('%s/repo' % TEST_DIR)
+        """Create a new branch with a standard reference name."""
+        cd("%s/repo" % TEST_DIR)
 
         # First, try pushing with a branch name which is recognized
         # by the repository's branch namespace.
 
-        p = testcase.run('git push origin master:refs/user/someone'.split())
+        p = testcase.run("git push origin master:refs/user/someone".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -34,12 +33,11 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-
         # Next, try pushing with a branch name which is not recognized
         # by the repository's branch namespace. E.g., try creating
         # a "release-y" branch directly in "refs/heads".
 
-        p = testcase.run('git push origin master:refs/not/recognized'.split())
+        p = testcase.run("git push origin master:refs/not/recognized".split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/not/recognized
 remote: ***
@@ -67,5 +65,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

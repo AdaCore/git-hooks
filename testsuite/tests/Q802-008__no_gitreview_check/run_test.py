@@ -1,10 +1,10 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_github_pull_19(testcase):
-        """Try pushing the branch named "github/pull/19"
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing the branch named "github/pull/19" """
+        cd("%s/repo" % TEST_DIR)
 
         # This branch contains a .gitreview whose defaultbranch setting
         # points to another branch name. So normally, the hooks should
@@ -13,7 +13,7 @@ class TestRun(TestCase):
         # for branches whose name start with "github/pull/", so we expect
         # the push to be accepted.
 
-        p = testcase.run('git push origin github/pull/19'.split())
+        p = testcase.run("git push origin github/pull/19".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -69,5 +69,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

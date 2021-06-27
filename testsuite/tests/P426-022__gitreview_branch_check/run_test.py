@@ -1,16 +1,16 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_forgot(testcase):
-        """Try pushing the branch named "forgot"
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing the branch named "forgot" """
+        cd("%s/repo" % TEST_DIR)
 
         # "forgot" is a new branch. In the root directory of that
         # branch, there is a file named .gitreview, whose default
         # branch is still "master". Make sure the git-hooks reject
         # that branch creation.
-        p = testcase.run('git push origin forgot'.split())
+        p = testcase.run("git push origin forgot".split())
         expected_out = """\
 remote: *** Incorrect gerrit default branch name in file `.gitreview'.
 remote: *** You probably forgot to update your .gitreview file following
@@ -29,15 +29,14 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
     def test_push_fixed(testcase):
-        """Try pushing the branch named "fixed"
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing the branch named "fixed" """
+        cd("%s/repo" % TEST_DIR)
 
         # "fixed" is a new branch. In the root directory of that
         # branch, there is a file named .gitreview, whose default
         # branch is now set to "fixed". So this branch creation
         # should be accepted.
-        p = testcase.run('git push origin fixed'.split())
+        p = testcase.run("git push origin fixed".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -129,5 +128,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

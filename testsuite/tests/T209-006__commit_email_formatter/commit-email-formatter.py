@@ -19,8 +19,8 @@ def commit_data_image():
         if key in ("body", "email_default_body", "email_default_diff"):
             if value is not None and len(value.splitlines()) > 1:
                 value = "<multiline>\n" + "".join(
-                    "   | {line}".format(line=line)
-                    for line in value.splitlines(True))
+                    "   | {line}".format(line=line) for line in value.splitlines(True)
+                )
         result.append("* {key}: {value}".format(key=key, value=value))
     return "\n".join(result)
 

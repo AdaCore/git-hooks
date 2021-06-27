@@ -1,5 +1,6 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push(testcase):
         """Try pushing one single-file commit on master.
@@ -8,10 +9,10 @@ class TestRun(TestCase):
         having an invalid value, or GIT_HOOKS_DEBUG_LEVEL having
         an invalid value.
         """
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # Push master to the `origin' remote.
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** Invalid hooks.debug-level value: zero (must be integer)
 remote: error: hook declined to update refs/heads/master
@@ -24,9 +25,9 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
         # Same thing, but with an invalid GIT_HOOKS_DEBUG_LEVEL value.
-        testcase.set_debug_level('true')
+        testcase.set_debug_level("true")
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** Invalid value for GIT_HOOKS_DEBUG_LEVEL: true (must be integer)
 remote: error: hook declined to update refs/heads/master
@@ -39,5 +40,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

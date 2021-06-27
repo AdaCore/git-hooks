@@ -1,13 +1,12 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
-        """Try pushing multi-file commit on master.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing multi-file commit on master."""
+        cd("%s/repo" % TEST_DIR)
 
-
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a' `c'
 remote: DEBUG: MIME-Version: 1.0
@@ -72,5 +71,5 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

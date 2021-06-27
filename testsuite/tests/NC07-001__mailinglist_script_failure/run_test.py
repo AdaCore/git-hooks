@@ -3,31 +3,32 @@ from support import *
 
 class TestRun(TestCase):
     def test_pushes(testcase):
-        """Test various pushes to multi-project repository.
-        """
-        cd('%s/repo' % TEST_DIR)
+        """Test various pushes to multi-project repository."""
+        cd("%s/repo" % TEST_DIR)
 
         # First, adjust the project.config file to use a script to
         # compute the email recipients.  We have to do it manually
         # here, because we need to provide the full path to that
         # script, which isn't known until now.
-        with open('%s/hooks_config' % TEST_DIR) as f:
-            project_config = f.read() % {'TEST_DIR': TEST_DIR}
-        with open('project.config', 'w') as f:
+        with open("%s/hooks_config" % TEST_DIR) as f:
+            project_config = f.read() % {"TEST_DIR": TEST_DIR}
+        with open("project.config", "w") as f:
             f.write(project_config)
-        p = testcase.run(['git', 'commit', '-m', 'fix hooks.mailinglist',
-                 'project.config'])
+        p = testcase.run(
+            ["git", "commit", "-m", "fix hooks.mailinglist", "project.config"]
+        )
         assert p.status == 0, p.image
 
-        p = testcase.run(['git', 'push', 'origin',
-                 'refs/heads/meta/config:refs/meta/config'])
+        p = testcase.run(
+            ["git", "push", "origin", "refs/heads/meta/config:refs/meta/config"]
+        )
         assert p.status == 0, p.image
 
-        p = testcase.run('git checkout master'.split())
+        p = testcase.run("git checkout master".split())
         assert p.status == 0, p.image
 
         # Push branch master.
-        p = testcase.run(['git', 'push', 'origin', 'master'])
+        p = testcase.run(["git", "push", "origin", "master"])
         expected_out = """\
 remote: *** !!! %(TEST_DIR)s/email_to.py failed with error code: 3.
 remote: *** !!! %(TEST_DIR)s/email_to.py failed with error code: 3.
@@ -183,9 +184,12 @@ remote: -# Nothing there yet.
 remote: +AC_INIT(bfd/bfd-in.h)
 To ../bare/repo.git
    ab5227e..0ed035c  master -> master
-""" % {'TEST_DIR': TEST_DIR}
+""" % {
+            "TEST_DIR": TEST_DIR
+        }
         assert p.status == 0, p.image
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

@@ -1,12 +1,12 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
-        """Try non-fast-forward push on master.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try non-fast-forward push on master."""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push -f origin master'.split())
+        p = testcase.run("git push -f origin master".split())
         expected_out = """\
 remote: *** !!! WARNING: This is *NOT* a fast-forward update.
 remote: *** !!! WARNING: You may have removed some important commits.
@@ -90,5 +90,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

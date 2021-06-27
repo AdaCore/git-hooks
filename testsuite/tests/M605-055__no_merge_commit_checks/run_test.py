@@ -1,10 +1,10 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push(testcase):
-        """Try pushing branches with bad merges...
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing branches with bad merges..."""
+        cd("%s/repo" % TEST_DIR)
 
         # Try pushing "master".
         #
@@ -12,7 +12,7 @@ class TestRun(TestCase):
         # for merge commits.  The hooks should normally reject it,
         # except that the repository has been configured to disable
         # the associated check.  So the push should work.
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -86,7 +86,7 @@ To ../bare/repo.git
         # to remove the "Conflicts:" section.  The push should
         # still be rejected despite the merge-commit-check config
         # option being set.
-        p = testcase.run('git push origin master2'.split())
+        p = testcase.run("git push origin master2".split())
         expected_out = """\
 remote: *** Pattern "Conflicts:" has been detected.
 remote: *** (in commit 2c7f984bac68db52f1f14cc312509c7242686390)
@@ -106,5 +106,6 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertNotEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

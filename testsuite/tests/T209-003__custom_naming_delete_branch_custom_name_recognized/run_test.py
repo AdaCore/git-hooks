@@ -4,13 +4,12 @@ from support import TEST_DIR, TestCase, cd, runtests
 class TestRun(TestCase):
     def test_delete_branch_custom_name_recognized(testcase):
         """Push a branch deletion using a custom reference name."""
-        cd('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # Try to delete a branch with a custom name which does exist
         # in the remote repository, and is recognized by the naming
         # scheme as a branch. This should be accepted.
-        p = testcase.run('git push origin :refs/user/to-delete'
-                .split())
+        p = testcase.run("git push origin :refs/user/to-delete".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -38,8 +37,7 @@ To ../bare/repo.git
         # Try to delete a branch with a reference name which is
         # recognized by the naming scheme as a branch, but does not
         # exist in the remote repository. This will obviously fail.
-        p = testcase.run('git push origin :refs/user/does-not-exist'
-                .split())
+        p = testcase.run("git push origin :refs/user/does-not-exist".split())
         expected_out = """\
 remote: *** unable to delete 'refs/user/does-not-exist': remote ref does not exist
 remote: error: hook declined to update refs/user/does-not-exist
@@ -52,6 +50,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()
-

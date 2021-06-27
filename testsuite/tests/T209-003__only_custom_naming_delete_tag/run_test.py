@@ -1,17 +1,17 @@
 from support import *
 import re
 
+
 class TestRun(TestCase):
     def test_push_annotated_tag(testcase):
-        """Try pushing an annotated tag.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing an annotated tag."""
+        cd("%s/repo" % TEST_DIR)
 
         # Delete a tag in the standard naming scheme. The repository
         # has been configured to ignore the standard namespace for
         # tags, so this should be rejected as "not recognized".
 
-        p = testcase.run('git push origin :full-tag'.split())
+        p = testcase.run("git push origin :full-tag".split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/tags/full-tag
 remote: ***
@@ -45,7 +45,7 @@ error: failed to push some refs to '../bare/repo.git'
         # the tag's name. Same as above, the reference should not
         # be recognized and therefore the update should be rejected.
 
-        p = testcase.run('git push origin :refs/tags/other-full-tag'.split())
+        p = testcase.run("git push origin :refs/tags/other-full-tag".split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/tags/other-full-tag
 remote: ***
@@ -77,7 +77,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Delete a tag with a custom reference name which is recognized
         # as a tag reference.
 
-        p = testcase.run('git push origin :refs/vendor/me/tags/v1'.split())
+        p = testcase.run("git push origin :refs/vendor/me/tags/v1".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -105,7 +105,7 @@ To ../bare/repo.git
         # Delete a custom reference name which is recognized as a tag,
         # but does not exist on the remote.
 
-        p = testcase.run('git push origin :refs/vendor/me/tags/unknown'.split())
+        p = testcase.run("git push origin :refs/vendor/me/tags/unknown".split())
         expected_out = """\
 remote: *** unable to delete 'refs/vendor/me/tags/unknown': remote ref does not exist
 remote: error: hook declined to update refs/vendor/me/tags/unknown
@@ -118,5 +118,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

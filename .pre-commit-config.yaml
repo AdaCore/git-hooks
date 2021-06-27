@@ -3,7 +3,6 @@ repos:
     rev: 21.5b1
     hooks:
     - id: black
-      exclude: "^testsuite/tests/.*"
   - repo:  https://github.com/pycqa/flake8
     rev: 3.9.1
     hooks:

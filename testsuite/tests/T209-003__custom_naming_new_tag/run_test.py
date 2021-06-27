@@ -1,12 +1,13 @@
 from support import *
 import re
 
+
 class TestRun(TestCase):
     def test_push_annotated_tag_std_namespace(testcase):
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # Try pushing tag v0.1.
-        p = testcase.run('git push origin v0.1'.split())
+        p = testcase.run("git push origin v0.1".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -37,10 +38,10 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
     def test_push_annotated_tag_custom_namespace(testcase):
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # Try pushing tag v0.1.
-        p = testcase.run('git push origin v0.1:refs/user/myself/tags/v0.1'.split())
+        p = testcase.run("git push origin v0.1:refs/user/myself/tags/v0.1".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -71,10 +72,10 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
     def test_push_annotated_tag_custom_namespace_not_recognized(testcase):
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # Try pushing tag v0.1.
-        p = testcase.run('git push origin v0.1:refs/nogo/tags/v0.1'.split())
+        p = testcase.run("git push origin v0.1:refs/nogo/tags/v0.1".split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/nogo/tags/v0.1
 remote: ***
@@ -105,5 +106,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

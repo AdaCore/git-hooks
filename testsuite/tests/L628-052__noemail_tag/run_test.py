@@ -1,13 +1,13 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_annotated_tag(testcase):
-        """Try pushing an anotated tag.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing an anotated tag."""
+        cd("%s/repo" % TEST_DIR)
 
         # Try pushing tag v0.1.
-        p = testcase.run('git push origin v0.1'.split())
+        p = testcase.run("git push origin v0.1".split())
         expected_out = """\
 remote: ----------------------------------------------------------------------
 remote: --  The hooks.no-emails config option contains `refs/tags/v0.1',
@@ -24,5 +24,5 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

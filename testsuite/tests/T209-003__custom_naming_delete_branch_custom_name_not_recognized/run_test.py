@@ -4,7 +4,7 @@ from support import TEST_DIR, TestCase, cd, runtests
 class TestRun(TestCase):
     def test_delete_branch_custom_name_not_recognized(testcase):
         """Push a branch deletion using a custom reference name."""
-        cd('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # Try to delete a reference which does exist in the remote
         # but has a name which does not match any of the known
@@ -12,8 +12,7 @@ class TestRun(TestCase):
         # reference this is, be it a branch, or a tag, or maybe
         # a reference to some git notes).
 
-        p = testcase.run('git push origin :refs/others/exists-but-unrecognized'
-                .split())
+        p = testcase.run("git push origin :refs/others/exists-but-unrecognized".split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/others/exists-but-unrecognized
 remote: ***
@@ -47,8 +46,7 @@ error: failed to push some refs to '../bare/repo.git'
         # match any of the known namespaces, and does not even exist
         # in the remote repository.
 
-        p = testcase.run('git push origin :refs/does-not-exist/my-feature'
-                .split())
+        p = testcase.run("git push origin :refs/does-not-exist/my-feature".split())
         expected_out = """\
 remote: *** unable to delete 'refs/does-not-exist/my-feature': remote ref does not exist
 remote: error: hook declined to update refs/does-not-exist/my-feature
@@ -61,6 +59,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()
-

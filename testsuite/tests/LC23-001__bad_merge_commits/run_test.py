@@ -1,16 +1,16 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push(testcase):
-        """Try pushing branches with bad merges...
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing branches with bad merges..."""
+        cd("%s/repo" % TEST_DIR)
 
         # Try pushing "master".
         #
         # It contains a merge commit whose RH is the default RH
         # for merge commits.  The hooks should reject it.
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** Pattern "Merge branch '.*'" has been detected.
 remote: *** (in commit 3c799a3825af79b1a0f56b00ccc72a1e2837b4ed)
@@ -32,7 +32,7 @@ error: failed to push some refs to '../bare/repo.git'
         # This time, it contains a merge commit whose revision
         # history was edited as expected, but the user forgot
         # to remove the "Conflicts:" section.
-        p = testcase.run('git push origin master2'.split())
+        p = testcase.run("git push origin master2".split())
         expected_out = """\
 remote: *** Pattern "Conflicts:" has been detected.
 remote: *** (in commit 2c7f984bac68db52f1f14cc312509c7242686390)
@@ -52,5 +52,6 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertNotEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

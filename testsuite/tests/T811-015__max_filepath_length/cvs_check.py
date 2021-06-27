@@ -8,5 +8,4 @@ import sys
 
 for arg in sys.stdin.read().splitlines(False):
     arg_len = len(arg)
-    print("cvs_check: `{arg}' ({arg_len} chars)".format(
-        arg=arg, arg_len=arg_len))
+    print("cvs_check: `{arg}' ({arg_len} chars)".format(arg=arg, arg_len=arg_len))

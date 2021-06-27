@@ -4,9 +4,9 @@ from support import TEST_DIR, TestCase, cd, runtests
 class TestRun(TestCase):
     def test_delete_nonexistant(testcase):
         """Try deleting a references that don't exist on the remote."""
-        cd('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin :does-not-exist'.split())
+        p = testcase.run("git push origin :does-not-exist".split())
         expected_out = """\
 error: unable to delete 'does-not-exist': remote ref does not exist
 error: failed to push some refs to '../bare/repo.git'
@@ -17,7 +17,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Do the same as above, but using the full reference, instead
         # of using the branch name.
 
-        p = testcase.run('git push origin :refs/heads/does-not-exist'.split())
+        p = testcase.run("git push origin :refs/heads/does-not-exist".split())
         expected_out = """\
 remote: *** unable to delete 'refs/heads/does-not-exist': remote ref does not exist
 remote: error: hook declined to update refs/heads/does-not-exist
@@ -31,7 +31,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Same as above, but using the full reference in the tags
         # namespace.
 
-        p = testcase.run('git push origin :refs/tags/does-not-exist'.split())
+        p = testcase.run("git push origin :refs/tags/does-not-exist".split())
         expected_out = """\
 remote: *** unable to delete 'refs/tags/does-not-exist': remote ref does not exist
 remote: error: hook declined to update refs/tags/does-not-exist
@@ -45,7 +45,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Same as above, but using the full reference in the notes
         # namespace.
 
-        p = testcase.run('git push origin :refs/notes/commits'.split())
+        p = testcase.run("git push origin :refs/notes/commits".split())
         expected_out = """\
 remote: *** unable to delete 'refs/notes/commits': remote ref does not exist
 remote: error: hook declined to update refs/notes/commits
@@ -57,5 +57,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

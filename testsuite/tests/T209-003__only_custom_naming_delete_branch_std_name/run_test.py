@@ -3,14 +3,13 @@ from support import TEST_DIR, TestCase, cd, runtests
 
 class TestRun(TestCase):
     def test_delete_branch_with_custom_name(testcase):
-        """Delete a new branch with a custom reference name.
-        """
-        cd('%s/repo' % TEST_DIR)
+        """Delete a new branch with a custom reference name."""
+        cd("%s/repo" % TEST_DIR)
 
         # First, try deleting with a branch name which exists and
         # is recognized by the repository's branch namespace.
 
-        p = testcase.run('git push origin :refs/user/to-delete'.split())
+        p = testcase.run("git push origin :refs/user/to-delete".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -37,7 +36,7 @@ To ../bare/repo.git
 
         # Next, try deleting a branch which does not exist.
 
-        p = testcase.run('git push origin :refs/user/does-not-exist'.split())
+        p = testcase.run("git push origin :refs/user/does-not-exist".split())
         expected_out = """\
 remote: *** unable to delete 'refs/user/does-not-exist': remote ref does not exist
 remote: error: hook declined to update refs/user/does-not-exist
@@ -52,7 +51,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Try deleting a branch which exists, but is not recognized
         # as a valid reference name for a branch.
 
-        p = testcase.run('git push origin :refs/others/exists-but-unrecognized'.split())
+        p = testcase.run("git push origin :refs/others/exists-but-unrecognized".split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/others/exists-but-unrecognized
 remote: ***
@@ -82,7 +81,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Try deleting a reference which does not exist not is
         # recognized by the branch namespace.
 
-        p = testcase.run('git push origin :refs/does-not-exist/my-feature'.split())
+        p = testcase.run("git push origin :refs/does-not-exist/my-feature".split())
         expected_out = """\
 remote: *** unable to delete 'refs/does-not-exist/my-feature': remote ref does not exist
 remote: error: hook declined to update refs/does-not-exist/my-feature
@@ -95,6 +94,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

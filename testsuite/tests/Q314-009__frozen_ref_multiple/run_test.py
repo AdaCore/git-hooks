@@ -1,12 +1,12 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_retired_branch(testcase):
-        """Try pushing a branch update on a frozen branch.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing a branch update on a frozen branch."""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin gdb-7.5'.split())
+        p = testcase.run("git push origin gdb-7.5".split())
 
         assert p.status != 0, p.image
 
@@ -22,11 +22,10 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
     def test_force_push_retired_branch(testcase):
-        """Try force-pushing a branch update on a retired branch.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try force-pushing a branch update on a retired branch."""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push -f origin gdb-7.5'.split())
+        p = testcase.run("git push -f origin gdb-7.5".split())
 
         assert p.status != 0, p.image
 
@@ -42,11 +41,10 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
     def test_push_other_frozen_branch(testcase):
-        """Try pushing another branch which is also frozen
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing another branch which is also frozen"""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin gdb-7.6'.split())
+        p = testcase.run("git push origin gdb-7.6".split())
         expected_out = """\
 remote: *** Updates to the gdb-7.6 branch are no longer allowed because
 remote: *** this branch is now frozen (see "hooks.frozen-ref" in file
@@ -61,11 +59,10 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
     def test_push_master(testcase):
-        """Try pushing master, which is not frozen
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing master, which is not frozen"""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 Everything up-to-date
 """
@@ -74,11 +71,10 @@ Everything up-to-date
         testcase.assertRunOutputEqual(p, expected_out)
 
     def test_push_frozen_tag(testcase):
-        """Try pushing a tag which has a "frozen-ref" entry.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing a tag which has a "frozen-ref" entry."""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin gdb-7.5-release'.split())
+        p = testcase.run("git push origin gdb-7.5-release".split())
         expected_out = """\
 remote: *** Updates to refs/tags/gdb-7.5-release are no longer allowed because
 remote: *** this reference is now frozen (see "hooks.frozen-ref" in file
@@ -93,11 +89,10 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
     def test_push_ok_tag(testcase):
-        """Try pushing a tag which does not have a frozen-ref entry.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing a tag which does not have a frozen-ref entry."""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin gdb-7.6-release'.split())
+        p = testcase.run("git push origin gdb-7.6-release".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
@@ -174,5 +169,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

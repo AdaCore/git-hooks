@@ -1,25 +1,25 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
-        """Try pushing one single-file commit on master.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing one single-file commit on master."""
+        cd("%s/repo" % TEST_DIR)
 
         # We are trying to test the use of the hooks.style-checker config
         # option, which means we need to unset GIT_HOOKS_STYLE_CHECKER.
         # Otherwise, the latter overrides the operational behavior
         # which we are trying to test.
-        del os.environ['GIT_HOOKS_STYLE_CHECKER']
+        del os.environ["GIT_HOOKS_STYLE_CHECKER"]
 
         # The hooks.style-checker option only contains the name
         # of the program to call, but not the full path to that
         # program. Update the PATH so that the git-hooks find it.
-        os.environ['PATH'] = TEST_DIR + ':' + os.environ['PATH']
+        os.environ["PATH"] = TEST_DIR + ":" + os.environ["PATH"]
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** alt_style_checker: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
@@ -67,5 +67,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

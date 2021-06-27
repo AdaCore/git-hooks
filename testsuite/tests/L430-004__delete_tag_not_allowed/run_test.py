@@ -4,10 +4,10 @@ from support import *
 class TestRun(TestCase):
     def test_delete_tag(testcase):
         """Try deleting a tag."""
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # Try deleting full-tag.  The remote is setup to refuse this request.
-        p = testcase.run('git push origin :full-tag'.split())
+        p = testcase.run("git push origin :full-tag".split())
         testcase.assertNotEqual(p.status, 0, p.image)
 
         expected_out = """\
@@ -21,5 +21,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

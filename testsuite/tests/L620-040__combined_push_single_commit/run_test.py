@@ -1,18 +1,19 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing one single-file commit on master.
 
         The purpose of this testcase is to test combined style checking.
         """
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         testcase.set_debug_level(1)
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, d065089ff184d97934c010ccd0e7e8ed94cb7165, a60540361d47901d3fe254271779f380d94645f7)
 remote: DEBUG: update base: d065089ff184d97934c010ccd0e7e8ed94cb7165
@@ -68,5 +69,6 @@ To ../bare/repo.git
         assert p.status == 0, p.image
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

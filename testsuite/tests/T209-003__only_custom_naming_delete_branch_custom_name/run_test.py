@@ -3,14 +3,13 @@ from support import TEST_DIR, TestCase, cd, runtests
 
 class TestRun(TestCase):
     def test_delete_branch_with_standard_name(testcase):
-        """Delete a new branch with a standard reference name.
-        """
-        cd('%s/repo' % TEST_DIR)
+        """Delete a new branch with a standard reference name."""
+        cd("%s/repo" % TEST_DIR)
 
         # First, try deleting with a branch name which exists and
         # is recognized by the repository's branch namespace.
 
-        p = testcase.run('git push origin :branches/release-x'.split())
+        p = testcase.run("git push origin :branches/release-x".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -37,7 +36,7 @@ To ../bare/repo.git
 
         # Next, try deleting a branch which does not exist.
 
-        p = testcase.run('git push origin :branches/release-y'.split())
+        p = testcase.run("git push origin :branches/release-y".split())
         expected_out = """\
 error: unable to delete 'branches/release-y': remote ref does not exist
 error: failed to push some refs to '../bare/repo.git'
@@ -49,7 +48,7 @@ error: failed to push some refs to '../bare/repo.git'
         # Try deleting a branch which exists, but is not recognized
         # as a valid reference name for a branch.
 
-        p = testcase.run('git push origin :my-topic'.split())
+        p = testcase.run("git push origin :my-topic".split())
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/heads/my-topic
 remote: ***
@@ -77,5 +76,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

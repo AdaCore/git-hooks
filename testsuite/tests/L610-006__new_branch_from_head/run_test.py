@@ -1,5 +1,6 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing new branch on remote.
@@ -9,9 +10,9 @@ class TestRun(TestCase):
         (master does not have any commit that release-0.1-branch does
         not have).
         """
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin release-0.1-branch'.split())
+        p = testcase.run("git push origin release-0.1-branch".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a' `d'
 remote: *** cvs_check: `repo' < `a' `b'
@@ -129,9 +130,9 @@ To ../bare/repo.git
         # Verify that the branch has been created in the remote
         # repository and that it points to the expected commit.
 
-        cd('%s/bare/repo.git' % TEST_DIR)
+        cd("%s/bare/repo.git" % TEST_DIR)
 
-        p = testcase.run('git show-ref -s release-0.1-branch'.split())
+        p = testcase.run("git show-ref -s release-0.1-branch".split())
         expected_out = """\
 dcc477c258baf8cf59db378fcc344dc962ad9a29
 """
@@ -140,5 +141,5 @@ dcc477c258baf8cf59db378fcc344dc962ad9a29
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

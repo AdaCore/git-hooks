@@ -1,12 +1,12 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_delete_branch(testcase):
-        """Try deleting a branch on the remote.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try deleting a branch on the remote."""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin :old-branch'.split())
+        p = testcase.run("git push origin :old-branch".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -35,7 +35,7 @@ To ../bare/repo.git
         # the (short) branch name (i.e 'refs/heads/other-old-branch'
         # instead of just 'other-old-branch').
 
-        p = testcase.run('git push origin :refs/heads/other-old-branch'.split())
+        p = testcase.run("git push origin :refs/heads/other-old-branch".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -59,5 +59,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

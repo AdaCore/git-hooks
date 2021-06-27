@@ -11,15 +11,20 @@ filenames = sys.stdin.read().splitlines(False)
 
 # To help with testing, print a trace containing the name of the module
 # and the names of the files being checked.
-print("cvs_check: %s < %s" % (
-    ' '.join(["`%s'" % arg for arg in sys.argv[1:]]),
-    ' '.join(["`%s'" % arg for arg in filenames])), file=sys.stderr)
+print(
+    "cvs_check: %s < %s"
+    % (
+        " ".join(["`%s'" % arg for arg in sys.argv[1:]]),
+        " ".join(["`%s'" % arg for arg in filenames]),
+    ),
+    file=sys.stderr,
+)
 
 # We should never be called for file `b', because the user requested
 # that this file not have pre-commit checks run on it (via a .gitattribute
 # file).  If that's the case, error out.
 
 for filename in filenames:
-    if filename == 'b':
+    if filename == "b":
         print("Error: Style violations detected in file: %s" % filename)
         sys.exit(1)

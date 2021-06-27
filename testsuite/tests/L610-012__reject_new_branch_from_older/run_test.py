@@ -1,5 +1,6 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing new branch on remote.
@@ -9,9 +10,9 @@ class TestRun(TestCase):
         (master does not have any commit that release-0.1-branch does
         not have).
         """
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin release-0.1-branch'.split())
+        p = testcase.run("git push origin release-0.1-branch".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `b'
 remote: *** pre-commit check failed for commit: 4205e52273adad6b014e19fb1cf1fe1c9b8b4089
@@ -28,12 +29,12 @@ error: failed to push some refs to '../bare/repo.git'
 
         # Verify that the branch does not exist on the remote...
 
-        cd('%s/bare/repo.git' % TEST_DIR)
+        cd("%s/bare/repo.git" % TEST_DIR)
 
-        p = testcase.run('git show-ref -s release-0.1-branch'.split())
+        p = testcase.run("git show-ref -s release-0.1-branch".split())
 
         assert p.status != 0, p.image
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

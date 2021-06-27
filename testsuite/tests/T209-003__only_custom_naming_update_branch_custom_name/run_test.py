@@ -3,14 +3,13 @@ from support import TEST_DIR, TestCase, cd, runtests
 
 class TestRun(TestCase):
     def test_update_branch_in_custom_namespace(testcase):
-        """Create a new branch with a custom reference name.
-        """
-        cd('%s/repo' % TEST_DIR)
+        """Create a new branch with a custom reference name."""
+        cd("%s/repo" % TEST_DIR)
 
         # First, try pushing with a branch name which is recognized
         # by the repository's branch namespace.
 
-        p = testcase.run('git push origin my-topic:refs/user/myself/my-feature'.split())
+        p = testcase.run("git push origin my-topic:refs/user/myself/my-feature".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
@@ -56,8 +55,9 @@ To ../bare/repo.git
         # Next, try pushing with a branch name which is not recognized
         # by the repository's branch namespace.
 
-        p = testcase.run('git push origin my-topic:refs/others/exists-but-unrecognized'
-                .split())
+        p = testcase.run(
+            "git push origin my-topic:refs/others/exists-but-unrecognized".split()
+        )
         expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/others/exists-but-unrecognized
 remote: ***
@@ -85,5 +85,5 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

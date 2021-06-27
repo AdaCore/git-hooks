@@ -1,5 +1,6 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_gdb_head(testcase):
         """Try pushing gdb-head.
@@ -8,7 +9,7 @@ class TestRun(TestCase):
         a special keyword telling the hooks to skip the pre-commit-checks
         phase entirely.
         """
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # Set the debug level to 1, in order to see the debug trace
         # confirming that the no-precommit-check keyword was picked up
@@ -17,7 +18,7 @@ class TestRun(TestCase):
 
         # Push gdb-head to the `origin' remote.  The delta should be one
         # commit with one file being modified.
-        p = testcase.run('git push origin gdb-head'.split())
+        p = testcase.run("git push origin gdb-head".split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/gdb-head, 2c2cd0d654cc6cf460024feb845ee7ea760290c4, 8da5e84724007accbaf409022c3c9f07776a8c8b)
 remote: DEBUG: update base: 2c2cd0d654cc6cf460024feb845ee7ea760290c4
@@ -106,5 +107,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

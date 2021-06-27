@@ -14,7 +14,6 @@ json.dump({'diff': u'My \\u2192 Email diff \\u2190\\n'}, sys.stdout)
 """
 
 
-
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing ia single-file commit.
@@ -39,36 +38,44 @@ class TestRun(TestCase):
         nonetheless so as to make sure we test this scenario should
         we decide to pas that inforamtion, one day...
         """
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # First, update the git-hooks configuration to install
         # the script we want to use as our file-commit-cmd.
 
-        p = testcase.run(['git', 'fetch', 'origin', 'refs/meta/config'])
+        p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'checkout', 'FETCH_HEAD'])
+        p = testcase.run(["git", "checkout", "FETCH_HEAD"])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'config', '--file', 'project.config',
-                 'hooks.file-commit-cmd',
-                 os.path.join(TEST_DIR, 'commit-filer')])
+        p = testcase.run(
+            [
+                "git",
+                "config",
+                "--file",
+                "project.config",
+                "hooks.file-commit-cmd",
+                os.path.join(TEST_DIR, "commit-filer"),
+            ]
+        )
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'commit', '-m', 'Add hooks.commit-filer',
-                 'project.config'])
+        p = testcase.run(
+            ["git", "commit", "-m", "Add hooks.commit-filer", "project.config"]
+        )
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
+        p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
         testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
-        assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
+        assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
 
         # Return our current HEAD to branch "master". Not critical for
         # our testing, but it helps the testcase be closer to the more
         # typical scenarios.
-        p = testcase.run(['git', 'checkout', 'master'])
+        p = testcase.run(["git", "checkout", "master"])
         testcase.assertEqual(p.status, 0, p.image)
 
         # Push master to the `origin' remote.  The delta should be one
@@ -88,7 +95,7 @@ class TestRun(TestCase):
 
         testcase.change_email_sending_verbosity(full_verbosity=True)
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 8bit
@@ -154,40 +161,56 @@ To ../bare/repo.git
         # uses non-ascii characters.
 
         COMMIT_EMAIL_FORMATTER_FILENAME = os.path.join(
-            TEST_DIR, "commit-email-formatter.py")
+            TEST_DIR, "commit-email-formatter.py"
+        )
         with open(COMMIT_EMAIL_FORMATTER_FILENAME, "w") as f:
             f.write(COMMIT_EMAIL_FORMATTER_HOOK)
-        os.chmod(COMMIT_EMAIL_FORMATTER_FILENAME,
-                 stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR)
+        os.chmod(
+            COMMIT_EMAIL_FORMATTER_FILENAME, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR
+        )
 
-        p = testcase.run(['git', 'fetch', 'origin', 'refs/meta/config'])
+        p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'checkout', 'FETCH_HEAD'])
+        p = testcase.run(["git", "checkout", "FETCH_HEAD"])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'config', '--file', 'project.config',
-                 'hooks.commit-email-formatter',
-                 COMMIT_EMAIL_FORMATTER_FILENAME])
+        p = testcase.run(
+            [
+                "git",
+                "config",
+                "--file",
+                "project.config",
+                "hooks.commit-email-formatter",
+                COMMIT_EMAIL_FORMATTER_FILENAME,
+            ]
+        )
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'commit', '-m', 'Add hooks.commit-email-formatter',
-                 'project.config'])
+        p = testcase.run(
+            [
+                "git",
+                "commit",
+                "-m",
+                "Add hooks.commit-email-formatter",
+                "project.config",
+            ]
+        )
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
+        p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
         testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
-        assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
+        assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
 
         # Return our current HEAD to branch "master". Not critical for
         # our testing, but it helps the testcase be closer to the more
         # typical scenarios.
-        p = testcase.run(['git', 'checkout', 'master'])
+        p = testcase.run(["git", "checkout", "master"])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run('git push origin master:with-email-formatter'.split())
+        p = testcase.run("git push origin master:with-email-formatter".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 8bit
@@ -236,5 +259,5 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

@@ -2,28 +2,28 @@ from support import *
 from os import environ, utime
 import time
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
-        """Try pushing one single-file commit on master.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing one single-file commit on master."""
+        cd("%s/repo" % TEST_DIR)
 
         # Change the HOME environment variable to TEST_DIR, to get
         # the hooks to look for the .no_cvs_check file there,
         # instead of the real HOME dir.
-        environ['HOME'] = TEST_DIR
+        environ["HOME"] = TEST_DIR
 
         # Create an empty .no_cvs_check file in the new HOME,
         # to disable pre-commit checks.
-        no_cvs_check_fullpath = '%s/.no_cvs_check' % TEST_DIR
-        open(no_cvs_check_fullpath, 'w').close()
+        no_cvs_check_fullpath = "%s/.no_cvs_check" % TEST_DIR
+        open(no_cvs_check_fullpath, "w").close()
 
         # Make the .no_cvs_check file 1 day and 1 second old, which
         # should make it too old for the hooks to honor it.
         too_old = time.time() - 24 * 60 * 60 - 1
         utime(no_cvs_check_fullpath, (too_old, too_old))
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** %(TEST_DIR)s/.no_cvs_check is too old and will be ignored.
 remote: *** pre-commit check failed for commit: a60540361d47901d3fe254271779f380d94645f7
@@ -33,7 +33,8 @@ To ../bare/repo.git
  ! [remote rejected] master -> master (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """ % {
-    'TEST_DIR' : TEST_DIR }
+            "TEST_DIR": TEST_DIR
+        }
 
         testcase.assertNotEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
@@ -48,7 +49,7 @@ error: failed to push some refs to '../bare/repo.git'
         recent_enough = time.time() - 24 * 60 * 60 + 10
         utime(no_cvs_check_fullpath, (recent_enough, recent_enough))
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, d065089ff184d97934c010ccd0e7e8ed94cb7165, a60540361d47901d3fe254271779f380d94645f7)
 remote: DEBUG: update base: d065089ff184d97934c010ccd0e7e8ed94cb7165
@@ -99,10 +100,12 @@ remote: +
 To ../bare/repo.git
    d065089..a605403  master -> master
 """ % {
-    'TEST_DIR' : TEST_DIR }
+            "TEST_DIR": TEST_DIR
+        }
 
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

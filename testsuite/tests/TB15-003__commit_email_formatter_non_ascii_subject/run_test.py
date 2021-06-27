@@ -12,36 +12,50 @@ class TestRun(TestCase):
         hook which overrides the email_subject, with the returned subject
         containing some non-ascii characters.
         """
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # First, update the git-hooks configuration to install our
         # the script we want to use as our commit-email-formatter.
 
-        p = testcase.run(['git', 'fetch', 'origin', 'refs/meta/config'])
+        p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'checkout', 'FETCH_HEAD'])
+        p = testcase.run(["git", "checkout", "FETCH_HEAD"])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'config', '--file', 'project.config',
-                 'hooks.commit-email-formatter',
-                 os.path.join(TEST_DIR, 'commit-email-formatter.py')])
+        p = testcase.run(
+            [
+                "git",
+                "config",
+                "--file",
+                "project.config",
+                "hooks.commit-email-formatter",
+                os.path.join(TEST_DIR, "commit-email-formatter.py"),
+            ]
+        )
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'commit', '-m', 'Add hooks.commit-email-formatter',
-                 'project.config'])
+        p = testcase.run(
+            [
+                "git",
+                "commit",
+                "-m",
+                "Add hooks.commit-email-formatter",
+                "project.config",
+            ]
+        )
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
+        p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
         testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
-        assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
+        assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
 
         # Return our current HEAD to branch "master". Not critical for
         # our testing, but it helps the testcase be closer to the more
         # typical scenarios.
-        p = testcase.run(['git', 'checkout', 'master'])
+        p = testcase.run(["git", "checkout", "master"])
         testcase.assertEqual(p.status, 0, p.image)
 
         # Push master to the `origin' remote.  The delta should be one
@@ -58,7 +72,7 @@ class TestRun(TestCase):
             "utf-8",
         ).encode()
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -100,10 +114,13 @@ remote:  Third line.
 remote: +
 To ../bare/repo.git
    d065089..a605403  master -> master
-""".format(ENCODED_COMMIT_EMAIL_SUBJECT=ENCODED_COMMIT_EMAIL_SUBJECT)
+""".format(
+            ENCODED_COMMIT_EMAIL_SUBJECT=ENCODED_COMMIT_EMAIL_SUBJECT
+        )
 
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

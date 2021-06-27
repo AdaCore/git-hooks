@@ -1,28 +1,28 @@
 from support import *
 from os import environ
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
-        """Try pushing one single-file commit on master.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing one single-file commit on master."""
+        cd("%s/repo" % TEST_DIR)
 
         # Change the HOME environment variable to TEST_DIR, to get
         # the hooks to look for the .no_cvs_check file there,
         # instead of the real HOME dir.
-        environ['HOME'] = TEST_DIR
+        environ["HOME"] = TEST_DIR
 
         # Override the default GIT_HOOKS_LOGGER to use our own,
         # which will return an error after printing a message
         # on standard error.
-        environ['GIT_HOOKS_LOGGER'] = '%s/bad-logger' % TEST_DIR
+        environ["GIT_HOOKS_LOGGER"] = "%s/bad-logger" % TEST_DIR
 
         # Create an empty .no_cvs_check file in the new HOME,
         # to disable pre-commit checks.
-        no_cvs_check_fullpath = '%s/.no_cvs_check' % TEST_DIR
-        open(no_cvs_check_fullpath, 'w').close()
+        no_cvs_check_fullpath = "%s/.no_cvs_check" % TEST_DIR
+        open(no_cvs_check_fullpath, "w").close()
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** Failed to file the following syslog entry:
 remote: ***   - message: Pre-commit checks disabled for a60540361d47901d3fe254271779f380d94645f7 on repo by user testsuite using %(TEST_DIR)s/.no_cvs_check
@@ -73,10 +73,12 @@ remote: +
 To ../bare/repo.git
    d065089..a605403  master -> master
 """ % {
-    'TEST_DIR' : TEST_DIR }
+            "TEST_DIR": TEST_DIR
+        }
 
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

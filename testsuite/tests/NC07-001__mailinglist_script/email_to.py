@@ -2,17 +2,18 @@
 from __future__ import print_function
 import sys
 
-ML_MAP = {'bfd': 'bfd-cvs@example.com',
-          'gdb': 'gdb-cvs@example.com',
-          }
+ML_MAP = {
+    "bfd": "bfd-cvs@example.com",
+    "gdb": "gdb-cvs@example.com",
+}
 
 EVERYONE = set(ML_MAP[ml_key] for ml_key in ML_MAP)
 
 OWNER_MAP = (
-    ('bfd/', 'bfd'),
-    ('opcode/', 'bfd'),
-    ('gdb/', 'gdb'),
-    )
+    ("bfd/", "bfd"),
+    ("opcode/", "bfd"),
+    ("gdb/", "gdb"),
+)
 
 
 def ml_from_filename(filename):
@@ -21,6 +22,7 @@ def ml_from_filename(filename):
             return ML_MAP[ml_key]
     # Not found in map, it is a common file.
     return EVERYONE
+
 
 result = set()
 for filename in sys.stdin:
@@ -39,4 +41,4 @@ if not result:
     # No files given, return EVERYONE
     result = EVERYONE
 
-print('\n'.join(sorted(result)))
+print("\n".join(sorted(result)))

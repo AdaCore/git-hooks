@@ -1,5 +1,6 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Push one new commit which is also a revert
@@ -17,7 +18,7 @@ class TestRun(TestCase):
         of that list. Trying to do so in this case would lead to a crash
         due to an indext out of range.
         """
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # For this testcase, the contents of the emails being sent
         # is not important, so reduce their verbosity.
@@ -28,7 +29,7 @@ class TestRun(TestCase):
         # script in this testcase generates a trace at every call, one piece
         # of evidence that style checking is not being done is lack of such
         # traces in the push's output).
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: DEBUG: Sending email: [repo] Revert "Rename "world" into "there""...
 To ../bare/repo.git
@@ -38,5 +39,6 @@ To ../bare/repo.git
         assert p.status == 0, p.image
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

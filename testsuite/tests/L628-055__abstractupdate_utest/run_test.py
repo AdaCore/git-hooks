@@ -1,9 +1,9 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_git_config(testcase):
-        """Unit test AbstractUpdate child class missing methods.
-        """
+        """Unit test AbstractUpdate child class missing methods."""
         testcase.enable_unit_test()
 
         # Define new classes deriving from AbstractRefChange.
@@ -24,20 +24,24 @@ class TestRun(TestCase):
 
         with testcase.assertRaises(AssertionError):
             MissingSelfSanityCheck(
-                'refs/heads/master',
+                "refs/heads/master",
                 RefKind.branch_ref,
-                'commit',
-                '0000000000000000000000000000000000000000',
-                'd065089ff184d97934c010ccd0e7e8ed94cb7165',
-                None, None)
+                "commit",
+                "0000000000000000000000000000000000000000",
+                "d065089ff184d97934c010ccd0e7e8ed94cb7165",
+                None,
+                None,
+            )
 
         bad_update = MissingOtherMethods(
-            'refs/heads/master',
+            "refs/heads/master",
             RefKind.branch_ref,
-            'commit',
-            '0000000000000000000000000000000000000000',
-            'd065089ff184d97934c010ccd0e7e8ed94cb7165',
-            None, None)
+            "commit",
+            "0000000000000000000000000000000000000000",
+            "d065089ff184d97934c010ccd0e7e8ed94cb7165",
+            None,
+            None,
+        )
 
         with testcase.assertRaises(AssertionError):
             bad_update.validate_ref_update()
@@ -46,5 +50,5 @@ class TestRun(TestCase):
             bad_update.get_update_email_contents()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

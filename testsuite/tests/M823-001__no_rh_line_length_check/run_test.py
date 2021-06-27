@@ -1,16 +1,16 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commits(testcase):
-        """See comments below.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """See comments below."""
+        cd("%s/repo" % TEST_DIR)
 
         # Push not-ok-104 on master. It introduces a new commit
         # where one line in the RH is 104 characters long. It should
         # still be accepted, since we've explicitly configured
         # the repository to skip RH line-length checks.
-        p = testcase.run('git push origin not-ok-104:master'.split())
+        p = testcase.run("git push origin not-ok-104:master".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -58,5 +58,5 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

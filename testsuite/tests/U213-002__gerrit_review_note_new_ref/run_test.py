@@ -4,11 +4,11 @@ from support import cd, runtests, TestCase, TEST_DIR
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Push the refs/notes/review note."""
-        cd('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
-        p = testcase.run('git push origin refs/notes/review:refs/notes/review'.split())
+        p = testcase.run("git push origin refs/notes/review:refs/notes/review".split())
         expected_out = """\
 remote: ----------------------------------------------------------------------
 remote: --  The hooks.no-emails config option contains `refs/notes/review',
@@ -25,5 +25,5 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

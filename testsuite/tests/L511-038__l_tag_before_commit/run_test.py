@@ -1,10 +1,10 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
-        """Try pushing tag referencing new commit.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing tag referencing new commit."""
+        cd("%s/repo" % TEST_DIR)
 
         # We need some debug traces to be enabled, in order to verify
         # certain assertions.
@@ -18,7 +18,7 @@ class TestRun(TestCase):
         # Note: The remote repository has been configured to allow
         # unnanotated tags.
 
-        p = testcase.run('git push origin version-0.1a'.split())
+        p = testcase.run("git push origin version-0.1a".split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/tags/version-0.1a, 0000000000000000000000000000000000000000, 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3)
 remote: DEBUG: update base: 426fba3571947f6de7f967e885a3168b9df7004a
@@ -123,7 +123,7 @@ To ../bare/repo.git
         # we are seeing no traces printed by this testcase's style_checker.py
         # in the output, confirming that the script was not called.
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 426fba3571947f6de7f967e885a3168b9df7004a, 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3)
 remote: DEBUG: update base: 426fba3571947f6de7f967e885a3168b9df7004a
@@ -188,5 +188,6 @@ To ../bare/repo.git
         assert p.status == 0, p.image
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

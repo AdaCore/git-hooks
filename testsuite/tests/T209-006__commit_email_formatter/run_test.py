@@ -18,36 +18,50 @@ class TestRun(TestCase):
         differently based on the commit (generally speaking, it takes
         cues from the commit's revision log).
         """
-        cd('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # First, update the git-hooks configuration to install our
         # the script we want to use as our commit-email-formatter.
 
-        p = testcase.run(['git', 'fetch', 'origin', 'refs/meta/config'])
+        p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'checkout', 'FETCH_HEAD'])
+        p = testcase.run(["git", "checkout", "FETCH_HEAD"])
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'config', '--file', 'project.config',
-                 'hooks.commit-email-formatter',
-                 os.path.join(TEST_DIR, 'commit-email-formatter.py')])
+        p = testcase.run(
+            [
+                "git",
+                "config",
+                "--file",
+                "project.config",
+                "hooks.commit-email-formatter",
+                os.path.join(TEST_DIR, "commit-email-formatter.py"),
+            ]
+        )
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'commit', '-m', 'Add hooks.commit-email-formatter',
-                 'project.config'])
+        p = testcase.run(
+            [
+                "git",
+                "commit",
+                "-m",
+                "Add hooks.commit-email-formatter",
+                "project.config",
+            ]
+        )
         testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(['git', 'push', 'origin', 'HEAD:refs/meta/config'])
+        p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
         testcase.assertEqual(p.status, 0, p.image)
         # Check the last line that git printed, and verify that we have
         # another piece of evidence that the change was succesfully pushed.
-        assert 'HEAD -> refs/meta/config' in p.out.splitlines()[-1], p.image
+        assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
 
         # Return our current HEAD to branch "master". Not critical for
         # our testing, but it helps the testcase be closer to the more
         # typical scenarios.
-        p = testcase.run(['git', 'checkout', 'master'])
+        p = testcase.run(["git", "checkout", "master"])
         testcase.assertEqual(p.status, 0, p.image)
 
         # Push the "master" branch, which introduces a series of commits.
@@ -60,7 +74,7 @@ class TestRun(TestCase):
         # behavior of the commit-email-formatter hook doesn't affect
         # the next commit.
 
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
 
         # Let's split the expected_out by commits, so we can add comments
         # describing each commit prior to being processed by our hook.
@@ -321,7 +335,9 @@ remote: +++ b/b
 remote: @@ -1 +1,2 @@
 remote:  New file with some interesting contents.
 remote: +Let's start with some background: dark.
-""".format(TEST_DIR=TEST_DIR)
+""".format(
+            TEST_DIR=TEST_DIR
+        )
 
         # | commit 3d75bd9d3a551d8b66b8ec7b79eedc7496bb804f
         # | Author: Joel Brobecker <brobecker@adacore.com>
@@ -428,7 +444,9 @@ remote: @@ -1,2 +1,3 @@
 remote:  New file with some interesting contents.
 remote:  Let's start with some background: dark.
 remote: +Let's then look at the foreground: Bright colorful.
-""".format(TEST_DIR=TEST_DIR)
+""".format(
+            TEST_DIR=TEST_DIR
+        )
 
         # | commit e617216033a96c18bad5b2235d960c784dd3efa7
         # | Author: Joel Brobecker <brobecker@adacore.com>
@@ -528,7 +546,9 @@ remote:  Hello. This is going to be a useful document for everyone to read.
 remote: -It will provide detailed information on this thing.
 remote: +It will provide detailed information on this thing, including
 remote: +information that you might never have thought about.
-""".format(TEST_DIR=TEST_DIR)
+""".format(
+            TEST_DIR=TEST_DIR
+        )
 
         # | commit 699356fb0903efbe73a18e2573a9ca67bc7c35a5 (HEAD -> master)
         # | Author: Joel Brobecker <brobecker@adacore.com>
@@ -577,7 +597,7 @@ To ../bare/repo.git
         # via stdin. While at it, it also exercises the replacement
         # of the "Diff:" section.
 
-        p = testcase.run('git push origin hook-dump'.split())
+        p = testcase.run("git push origin hook-dump".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -652,7 +672,7 @@ To ../bare/repo.git
         # body (dumping the data given to the script), as well as suppress
         # the diff.
 
-        p = testcase.run('git push origin notes/commits'.split())
+        p = testcase.run("git push origin notes/commits".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -706,5 +726,5 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

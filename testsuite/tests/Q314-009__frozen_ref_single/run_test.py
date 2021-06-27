@@ -1,12 +1,12 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_retired_branch(testcase):
-        """Try pushing a branch update on a frozen branch.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing a branch update on a frozen branch."""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin gdb-7.5'.split())
+        p = testcase.run("git push origin gdb-7.5".split())
 
         assert p.status != 0, p.image
 
@@ -22,11 +22,10 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
     def test_force_push_retired_branch(testcase):
-        """Try force-pushing a branch update on a retired branch.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try force-pushing a branch update on a retired branch."""
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push -f origin gdb-7.5'.split())
+        p = testcase.run("git push -f origin gdb-7.5".split())
 
         assert p.status != 0, p.image
 
@@ -47,9 +46,9 @@ error: failed to push some refs to '../bare/repo.git'
         This is to verify that adding a hooks.frozen-ref does not
         inadvertantly freeze all branch updates...
         """
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
-        p = testcase.run('git push origin gdb-7.6'.split())
+        p = testcase.run("git push origin gdb-7.6".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
@@ -97,5 +96,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

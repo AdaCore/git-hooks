@@ -10,6 +10,6 @@ import sys
 filenames = sys.stdin.read().splitlines(False)
 
 for filename in filenames:
-    if filename == 'b':
+    if filename == "b":
         print("cvs_check: style check violation in %s" % filename, file=sys.stderr)
         sys.exit(1)

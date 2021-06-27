@@ -1,8 +1,9 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_on_branch_with_email_new_commits_only(testcase):
-        cd ('%s/repo' % TEST_DIR)
+        cd("%s/repo" % TEST_DIR)
 
         # This testcase verifies the behavior of the hooks relative
         # to a branch which has the hooks.email-new-commits-only
@@ -35,7 +36,7 @@ class TestRun(TestCase):
         #
         # We should see commit-emails for both F1 and F2, as usual.
 
-        p = testcase.run('git push origin feature'.split())
+        p = testcase.run("git push origin feature".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `f1'
 remote: *** cvs_check: `repo' < `f2'
@@ -135,7 +136,7 @@ To ../bare/repo.git
         # Because this is a non-fast-forward update, we need to
         # force push (-f).
 
-        p = testcase.run('git push -f origin feature-2:feature'.split())
+        p = testcase.run("git push -f origin feature-2:feature".split())
         expected_out = """\
 remote: *** !!! WARNING: This is *NOT* a fast-forward update.
 remote: *** !!! WARNING: You may have removed some important commits.
@@ -261,7 +262,7 @@ To ../bare/repo.git
         #
         # So, we expect commit emails to be sent for those 2 commits.
 
-        p = testcase.run('git push origin feature-3:feature'.split())
+        p = testcase.run("git push origin feature-3:feature".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `f3'
 remote: *** cvs_check: `repo' < `f4'
@@ -351,7 +352,7 @@ To ../bare/repo.git
         # for which a commit-email should be sent (besides the
         # summary-of-changes email).
 
-        p = testcase.run('git push origin feature-4:feature'.split())
+        p = testcase.run("git push origin feature-4:feature".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `d' `e'
 remote: DEBUG: MIME-Version: 1.0
@@ -426,7 +427,7 @@ To ../bare/repo.git
         # For that test, push a new branch, called `feature-no-emails'.
         # which matches both config options above. We expect the update
         # to be accepted, and no email to be sent.
-        p = testcase.run('git push origin feature-no-emails'.split())
+        p = testcase.run("git push origin feature-no-emails".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `n'
 remote: *** cvs_check: `repo' < `n2'
@@ -444,5 +445,6 @@ To ../bare/repo.git
         testcase.assertEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     runtests()

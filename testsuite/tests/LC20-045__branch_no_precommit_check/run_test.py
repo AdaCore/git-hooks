@@ -1,10 +1,10 @@
 from support import *
 
+
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
-        """Try pushing multi-file commit on master.
-        """
-        cd ('%s/repo' % TEST_DIR)
+        """Try pushing multi-file commit on master."""
+        cd("%s/repo" % TEST_DIR)
 
         # We want to force the "in hooks.no-precommit-check" debug trace...
         testcase.set_debug_level(1)
@@ -14,7 +14,7 @@ class TestRun(TestCase):
         #   - There are no cvs_check debug traces in the output;
         #   - The cvs_check script has been setup to reject everything;
         #     so if it gets called, the update will be rejected.
-        p = testcase.run('git push origin master'.split())
+        p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 9cbe95153dd093ef72c0dcb27094c9c6cdd97ad9, e7007066aeb5fefeba7d226e5a31c70971b67cdb)
 remote: DEBUG: update base: 9cbe95153dd093ef72c0dcb27094c9c6cdd97ad9
@@ -85,5 +85,5 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     runtests()

@@ -7,16 +7,6 @@ class TestRun(TestCase):
         """Try pushing too many new commits on master."""
         cd("%s/repo" % TEST_DIR)
 
-        # Change the HOME environment variable to TEST_DIR, to get
-        # the hooks to look for the .no_cvs_check file there,
-        # instead of the real HOME dir.
-        environ["HOME"] = TEST_DIR
-
-        # Create an empty .no_cvs_check file in the new HOME,
-        # to disable pre-commit checks.
-        no_cvs_check_fullpath = "%s/.no_cvs_check" % TEST_DIR
-        open(no_cvs_check_fullpath, "w").close()
-
         # Push master to the `origin' remote.  The remote should
         # reject it saying that there are too many new commits.
         # The goal is to verify that the no-cvs-check override

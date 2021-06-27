@@ -12,7 +12,6 @@ from enum import Enum
 from errors import InvalidUpdate
 import json
 from git import git, is_null_rev, commit_parents, commit_rev
-from os.path import expanduser, isfile, getmtime
 from pre_commit_checks import (
     check_revision_history,
     style_check_commit,
@@ -23,12 +22,10 @@ from pre_commit_checks import (
 import re
 import shlex
 import sys
-from syslog import syslog
-import time
 from updates.commits import commit_info_list
 from updates.emails import EmailCustomContents, EmailInfo, Email
 from updates.mailinglists import expanded_mailing_list
-from utils import debug, warn, get_user_name, indent, ref_matches_regexp
+from utils import debug, warn, indent, ref_matches_regexp
 
 
 # The different kinds of references we handle.
@@ -290,11 +287,6 @@ class AbstractUpdate(object):
                 # Pre-commit checks are explicitly disabled on this branch.
                 debug("(hooks.no-precommit-check match: `%s')" % exp)
                 return
-
-        if self.__no_cvs_check_user_override():
-            # Just return. All necessary traces have already been
-            # handled by the __no_cvs_check_user_override method.
-            return
 
         # Perform the check against merge commits early, for a couple
         # of reasons: (1) this is a relatively inexpensive check to be
@@ -829,44 +821,6 @@ class AbstractUpdate(object):
             return False
 
         # All other commits should be checked.
-        return True
-
-    def __no_cvs_check_user_override(self):
-        """Return True iff pre-commit-checks are turned off by user override...
-
-        ... via the ~/.no_cvs_check file.
-
-        This function also performs all necessary debug traces, warnings,
-        etc.
-        """
-        no_cvs_check_fullpath = expanduser("~/.no_cvs_check")
-        # Make sure the tilde expansion worked.  Since we are only using
-        # "~" rather than "~username", the expansion should really never
-        # fail...
-        assert not no_cvs_check_fullpath.startswith("~")
-
-        if not isfile(no_cvs_check_fullpath):
-            return False
-
-        # The no_cvs_check file exists.  Verify its age.
-        age = time.time() - getmtime(no_cvs_check_fullpath)
-        one_day_in_seconds = 24 * 60 * 60
-
-        if age > one_day_in_seconds:
-            warn("%s is too old and will be ignored." % no_cvs_check_fullpath)
-            return False
-
-        debug("%s found - pre-commit checks disabled" % no_cvs_check_fullpath)
-        syslog(
-            "Pre-commit checks disabled for %(rev)s on %(repo)s by user"
-            " %(user)s using %(no_cvs_check_fullpath)s"
-            % {
-                "rev": self.new_rev,
-                "repo": self.email_info.project_name,
-                "user": get_user_name(),
-                "no_cvs_check_fullpath": no_cvs_check_fullpath,
-            }
-        )
         return True
 
     def __check_max_commit_emails(self):

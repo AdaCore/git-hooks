@@ -20,6 +20,20 @@ TEST_DIR = os.path.abspath(TEST_DIR)
 
 
 class TestCase(unittest.TestCase):
+    @property
+    def hooks_src_dir(self):
+        """Return the directory where the git-hooks sources are located."""
+        # The sources for the git-hooks ca be found in the "hooks"
+        # directory, two directory levels up from this unit.
+        return os.path.abspath(
+            os.path.join(
+                os.path.dirname(__file__),
+                "..",
+                "..",
+                "hooks",
+            )
+        )
+
     def setUp(self):
         # Override the global git user name, to help making sure
         # the output does not depend on who is running the testsuite.
@@ -108,9 +122,76 @@ class TestCase(unittest.TestCase):
         else:
             os.environ["GIT_HOOKS_MINIMAL_EMAIL_DEBUG_TRACE"] = "set"
 
+    def run_unit_test_script(
+        self,
+        expected_out,
+        cwd=None,
+        env=None,
+        ignore_environ=False,
+    ):
+        """Run the script unit_test_script.py in unit test mode.
+
+        This method runs the script "unit_test_script.py" (located in
+        the same directory as the run_test.py" script), with its
+        environment set such that the script is able to import
+        code directly from the git-hooks sources. This is useful
+        when trying to test certain parts of the git-hooks code
+        which is too difficult or even impossible to reach with
+        our standard testing techniques.
+
+        The purpose of this is to allow protect the testcase from
+        any change in environment necessary as part of performing
+        the unit testing.
+
+        PARAMETERS
+            expected_out: The unit test script's expected output.
+            cwd: The directory from which the script should be
+                executed. If None, we executed the script from
+                the root of the testcase's bare repository.
+            env: Same as self.run.
+            ignore_environ: Same as self.run.
+        """
+        # The git-hooks infrastructure assume that the current working
+        # directory when being called is the root of the git repository.
+        # So unless cwd was explicitly specified, assume we always want
+        # to perform the unit test using that directory.
+        if cwd is None:
+            cwd = os.path.join(TEST_DIR, "bare", "repo.git")
+
+        # Create a copy of the environment we want to pass to the unit test
+        # script, and then modify it to set unit-testing up.
+        augmented_env = {}
+        if not ignore_environ:
+            augmented_env = os.environ.copy()
+        if env is not None:
+            augmented_env.update(env)
+
+        # Set PYTHONPATH up to include the path to the git-hooks sources.
+        augmented_env["PYTHONPATH"] = ":".join(
+            [self.hooks_src_dir, augmented_env.get("PYTHONPATH", "")]
+        )
+
+        augmented_env["PYTHONUNBUFFERED"] = "yes"
+
+        p = self.run(
+            [
+                sys.executable,
+                # Force the stdout and stderr streams to be unbuffered.
+                # That way, if the unit test script writes to both stdout
+                # and stderr, the output will be in the correct order.
+                "-u",
+                os.path.join(TEST_DIR, "unit_test_script.py"),
+            ],
+            cwd=cwd,
+            env=augmented_env,
+            ignore_environ=ignore_environ,
+        )
+        assert p.status == 0, p.image
+        self.assertRunOutputEqual(p, expected_out)
+
     def enable_unit_test(self):
         """Setup the environment in a way that allows us to perform unit test."""
-        sys.path.insert(0, "%s/bare/repo.git/hooks" % TEST_DIR)
+        sys.path.insert(0, self.hooks_src_dir)
         # Also, we need to cd to the bare repository, as the hooks
         # assumes we are being called from there.
         os.chdir("%s/bare/repo.git" % TEST_DIR)

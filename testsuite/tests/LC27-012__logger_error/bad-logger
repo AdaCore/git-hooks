@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 import sys
 
-print >>sys.stderr, "Error trying to connect to syslog server:"
-print >>sys.stderr, "Connection reset by peer"
+sys.stderr.write("Error trying to connect to syslog server:\n")
+sys.stderr.write("Connection reset by peer\n")
 sys.exit(1)

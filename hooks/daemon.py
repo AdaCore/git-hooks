@@ -46,7 +46,7 @@ def daemonize(output_fd=None):
         if pid > 0:
             # In the second parent. Exit.
             sys.exit(0)
-    except OSError as e:
+    except OSError as e:  # pragma: no cover (really hard to cover -- see U627-007)
         syslog("git-hooks: fork #2 failed: (%d) %s" % (e.errno, e.strerror))
         sys.exit(1)
 

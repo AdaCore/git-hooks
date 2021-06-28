@@ -4,20 +4,27 @@ from support import *
 class TestRun(TestCase):
     def test_check_update(testcase):
         """Unit test update.check_update."""
-        testcase.enable_unit_test()
+        p = testcase.run_unit_test_script(
+            expected_out="""\
+Unable to determine the type of reference for: some/dummy_refname
 
-        from update import check_update
-        from utils import InvalidUpdate
+This repository currently recognizes the following types
+of references:
 
-        with testcase.assertRaisesRegexp(
-            InvalidUpdate,
-            r"Unable to determine the type of reference for: " "some/dummy_refname",
-        ):
-            check_update(
-                "some/dummy_refname",
-                "8ef2d60c830f70e70268ce886209805f5010db1f",
-                "d065089ff184d97934c010ccd0e7e8ed94cb7165",
-            )
+ * Branches:
+      refs/heads/.*
+      refs/meta/.*
+      refs/drafts/.*
+      refs/for/.*
+      refs/publish/.*
+
+ * Git Notes:
+      refs/notes/.*
+
+ * Tags:
+      refs/tags/.*
+"""
+        )
 
 
 if __name__ == "__main__":

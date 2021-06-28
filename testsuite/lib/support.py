@@ -189,13 +189,6 @@ class TestCase(unittest.TestCase):
         assert p.status == 0, p.image
         self.assertRunOutputEqual(p, expected_out)
 
-    def enable_unit_test(self):
-        """Setup the environment in a way that allows us to perform unit test."""
-        sys.path.insert(0, self.hooks_src_dir)
-        # Also, we need to cd to the bare repository, as the hooks
-        # assumes we are being called from there.
-        os.chdir("%s/bare/repo.git" % TEST_DIR)
-
     def git_version(self):
         """Return the git version number (a LooseVersion object)."""
         from distutils.version import LooseVersion

@@ -49,11 +49,11 @@ remote: ***     Subject: This commit iznogoud because colliding names...
 remote: ***
 remote: *** The matching files are:
 remote: ***
-remote: ***     README
-remote: ***     readme
-remote: ***
 remote: ***     Hello.txt
 remote: ***     hello.txt
+remote: ***
+remote: ***     README
+remote: ***     readme
 remote: error: hook declined to update refs/heads/two-files
 To ../bare/repo.git
  ! [remote rejected] two-files -> two-files (hook declined)

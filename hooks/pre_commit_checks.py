@@ -358,9 +358,9 @@ def check_filename_collisions(commit):
             "",
             "The matching files are:",
         ]
-        for matching_names in collisions:
+        for matching_names in sorted(collisions):
             info.append("")  # Empty line to separate each group...
-            info += ["    %s" % filename for filename in matching_names]
+            info += ["    %s" % filename for filename in sorted(matching_names)]
         raise InvalidUpdate(*info)
 
 

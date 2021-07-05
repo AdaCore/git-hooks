@@ -1,11 +1,9 @@
-from support import TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, runtests
 
 
 class TestRun(TestCase):
     def test_delete_branch_with_standard_name(testcase):
         """Delete a new branch with a standard reference name."""
-        cd("%s/repo" % TEST_DIR)
-
         # First, try deleting with a branch name which exists and
         # is recognized by the repository's branch namespace.
 

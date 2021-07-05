@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing tag referencing new commit."""
-        cd("%s/repo" % TEST_DIR)
-
         # We need some debug traces to be enabled, in order to verify
         # certain assertions.
         testcase.set_debug_level(1)

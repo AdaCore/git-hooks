@@ -3,8 +3,6 @@ from support import *
 
 class TestRun(TestCase):
     def test_push_on_branch_with_email_new_commits_only(testcase):
-        cd("%s/repo" % TEST_DIR)
-
         # This testcase verifies the behavior of the hooks relative
         # to a branch which has the hooks.email-new-commits-only
         # option set. To do so, this testcase repository has been

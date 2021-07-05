@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master_and_release_x(testcase):
         """Try pushing a commit on two branches."""
-        cd("%s/repo" % TEST_DIR)
-
         # First, adjust the project.config file to use a script to
         # compute the email recipients.  We have to do it manually
         # here, because we need to provide the full path to that

@@ -1,11 +1,9 @@
-from support import TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, runtests
 
 
 class TestRun(TestCase):
     def test_delete_branch_with_std_name(testcase):
         """Push a branch deletion using a standard reference name."""
-        cd("%s/repo" % TEST_DIR)
-
         # First, try a branch which we are not allowed to delete.
         #
         # Note that the choice of branch to delete is not entirely innocent.
@@ -75,8 +73,6 @@ To ../bare/repo.git
 
     def test_delete_branch_with_custom_name(testcase):
         """Push a branch deletion using a custom reference name."""
-        cd("%s/repo" % TEST_DIR)
-
         # First, try a branch which we are not allowed to delete.
 
         p = testcase.run("git push origin :refs/user/to-delete".split())

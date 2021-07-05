@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_new_branch(testcase):
         """Try pushing a new branch which creates no new commit at all."""
-        cd("%s/repo" % TEST_DIR)
-
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
         p = testcase.run("git push origin my-topic".split())

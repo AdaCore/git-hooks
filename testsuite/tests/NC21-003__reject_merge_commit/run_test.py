@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_branch_with_merge_commit(testcase):
         """Test merge-commit reject on branches where they are not allowed."""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** Merge commits are not allowed on refs/heads/master.

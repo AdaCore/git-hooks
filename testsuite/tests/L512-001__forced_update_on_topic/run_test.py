@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try non-fast-forward push on master."""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push -f origin topic/new-feature".split())
         expected_out = """\
 remote: *** !!! WARNING: This is *NOT* a fast-forward update.

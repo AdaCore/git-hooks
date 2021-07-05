@@ -8,8 +8,6 @@ class TestRun(TestCase):
         The purpose is to verify that the style checker gets called
         on the correct set of files.
         """
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `gprbuild_utils.py' `tests/ada_project_path/test.py'

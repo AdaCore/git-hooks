@@ -5,8 +5,6 @@ import re
 class TestRun(TestCase):
     def test_push_annotated_tag(testcase):
         """Try pushing an annotated tag."""
-        cd("%s/repo" % TEST_DIR)
-
         # Delete a tag in the standard naming scheme.
 
         p = testcase.run("git push origin :full-tag".split())

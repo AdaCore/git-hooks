@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing multi-file commit on master."""
-        cd("%s/repo" % TEST_DIR)
-
         # The push should fail, because the pre-commit checker will
         # refuse one of the updates.
         p = testcase.run("git push origin master".split())

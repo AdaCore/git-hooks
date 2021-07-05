@@ -1,4 +1,4 @@
-from support import TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, runtests
 
 
 class TestRun(TestCase):
@@ -12,8 +12,6 @@ class TestRun(TestCase):
         We want to make sure we handle these situations gracefullly
         in any case.
         """
-        cd("%s/repo" % TEST_DIR)
-
         # Push refs/tags/v1, which is a tag, to a reference whose name
         # suggests it is a branch. We should get an error.
         p = testcase.run("git push origin refs/tags/v1:refs/heads/v1".split())

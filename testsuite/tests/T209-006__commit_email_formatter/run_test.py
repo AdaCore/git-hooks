@@ -1,5 +1,5 @@
 import os
-from support import cd, runtests, TestCase, TEST_DIR
+from support import runtests, TestCase, TEST_DIR
 
 
 class TestRun(TestCase):
@@ -18,8 +18,6 @@ class TestRun(TestCase):
         differently based on the commit (generally speaking, it takes
         cues from the commit's revision log).
         """
-        cd("%s/repo" % TEST_DIR)
-
         # First, update the git-hooks configuration to install our
         # the script we want to use as our commit-email-formatter.
 

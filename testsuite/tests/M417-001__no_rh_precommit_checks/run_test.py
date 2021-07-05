@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commits(testcase):
         """See comments below."""
-        cd("%s/repo" % TEST_DIR)
-
         # Branch master is 2 commits ahead of the remote. But we push
         # the commits one by one, because we want to verify that the
         # push is successful with the first commit, but trips the

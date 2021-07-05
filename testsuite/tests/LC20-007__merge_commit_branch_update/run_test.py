@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_branch_with_merge_commit(testcase):
         """Try pushing an update to master adding one merge commit."""
-        cd("%s/repo" % TEST_DIR)
-
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
         p = testcase.run("git push origin master".split())

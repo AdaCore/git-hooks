@@ -9,8 +9,6 @@ class TestRun(TestCase):
         a special keyword telling the hooks to skip the pre-commit-checks
         phase entirely.
         """
-        cd("%s/repo" % TEST_DIR)
-
         # Set the debug level to 1, in order to see the debug trace
         # confirming that the no-precommit-check keyword was picked up
         # by the hooks.

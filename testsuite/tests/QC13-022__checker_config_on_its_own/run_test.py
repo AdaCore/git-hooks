@@ -3,8 +3,6 @@ from support import *
 
 class TestRun(TestCase):
     def test_push_commits_on_master(testcase):
-        cd("%s/repo" % TEST_DIR)
-
         # Push the commit adding the style-checker-config-file option
         # to the refs/meta/config branch. However, the file it points
         # to does not exist in that reference, nor is is added by

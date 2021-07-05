@@ -1,11 +1,9 @@
-from support import TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, runtests
 
 
 class TestRun(TestCase):
     def test_update_branch_in_custom_namespace(testcase):
         """Create a new branch with a custom reference name."""
-        cd("%s/repo" % TEST_DIR)
-
         # First, try pushing with a branch name which is recognized
         # by the repository's branch namespace.
 

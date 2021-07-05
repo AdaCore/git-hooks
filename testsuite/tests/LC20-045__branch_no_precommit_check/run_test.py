@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing multi-file commit on master."""
-        cd("%s/repo" % TEST_DIR)
-
         # We want to force the "in hooks.no-precommit-check" debug trace...
         testcase.set_debug_level(1)
 

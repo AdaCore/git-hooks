@@ -1,11 +1,9 @@
-from support import TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, runtests
 
 
 class TestRun(TestCase):
     def test_delete_nonexistant(testcase):
         """Try deleting a references that don't exist on the remote."""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin :does-not-exist".split())
         expected_out = """\
 error: unable to delete 'does-not-exist': remote ref does not exist

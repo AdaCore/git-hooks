@@ -6,8 +6,6 @@ class TestRun(TestCase):
         """Test the rejection of revision histories missing an empty line
         after the commit subject.
         """
-        cd("%s/repo" % TEST_DIR)
-
         # Enable pre-commit-check debug traces...
         testcase.set_debug_level(1)
 

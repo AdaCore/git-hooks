@@ -7,8 +7,6 @@ class TestRun(TestCase):
 
         ... knowing that this will cause several commits to be lost.
         """
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin :retired/gdb-7.2".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0

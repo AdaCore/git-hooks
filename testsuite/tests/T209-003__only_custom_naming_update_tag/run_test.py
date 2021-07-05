@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_tag(testcase):
         """Try pushing a new value for an annotated tag."""
-        cd("%s/repo" % TEST_DIR)
-
         # Push "full-tag". The repository has been configured to
         # ignore the standard namespace for tags, so this should be
         # rejected as "not recognized".

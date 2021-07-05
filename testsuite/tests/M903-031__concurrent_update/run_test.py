@@ -7,8 +7,6 @@ import socket
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing one single-file commit on master."""
-        cd("%s/repo" % TEST_DIR)
-
         # Simulate a push happening while another user is pushing
         # to the same repository, but using a bit of internal knowledge
         # to create a lock on the repository.

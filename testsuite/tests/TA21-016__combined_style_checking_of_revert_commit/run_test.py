@@ -18,8 +18,6 @@ class TestRun(TestCase):
         of that list. Trying to do so in this case would lead to a crash
         due to an indext out of range.
         """
-        cd("%s/repo" % TEST_DIR)
-
         # For this testcase, the contents of the emails being sent
         # is not important, so reduce their verbosity.
         testcase.change_email_sending_verbosity(full_verbosity=False)

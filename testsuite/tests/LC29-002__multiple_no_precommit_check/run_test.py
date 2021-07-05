@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing multi-file commit on master."""
-        cd("%s/repo" % TEST_DIR)
-
         # There should be no pre-commit checks on branch master.
         # This is verified two ways:
         #   - There are no cvs_check debug traces in the output;

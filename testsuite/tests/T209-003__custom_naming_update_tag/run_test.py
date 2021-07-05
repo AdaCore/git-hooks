@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_tag(testcase):
         """Try pushing a new value for an annotated tag."""
-        cd("%s/repo" % TEST_DIR)
-
         # Push "full-tag".
 
         p = testcase.run("git push --force origin full-tag".split())

@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_pushes(testcase):
         """Test various pushes to multi-project repository."""
-        cd("%s/repo" % TEST_DIR)
-
         # First, adjust the project.config file to use a script to
         # compute the email recipients.  We have to do it manually
         # here, because we need to provide the full path to that

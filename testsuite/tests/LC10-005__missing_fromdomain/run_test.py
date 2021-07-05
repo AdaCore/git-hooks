@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing one single-file commit on master."""
-        cd("%s/repo" % TEST_DIR)
-
         # Push master to the `origin' remote.
         # The update should be refused because hooks.from-domain config
         # is not set.

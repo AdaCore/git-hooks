@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_annotated_tag(testcase):
         """Try pushing an anotated tag."""
-        cd("%s/repo" % TEST_DIR)
-
         # Try pushing tag v0.1.
         p = testcase.run("git push origin v0.1".split())
         testcase.assertEqual(p.status, 0, p.image)

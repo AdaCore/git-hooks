@@ -11,8 +11,6 @@ class TestRun(TestCase):
         the check against merge commits) and thus incorrectly allowing
         this commit.
         """
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** Merge commits are not allowed on refs/heads/master.

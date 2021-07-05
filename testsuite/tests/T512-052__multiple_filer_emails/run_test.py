@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing one single-file commit on master."""
-        cd("%s/repo" % TEST_DIR)
-
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
         #

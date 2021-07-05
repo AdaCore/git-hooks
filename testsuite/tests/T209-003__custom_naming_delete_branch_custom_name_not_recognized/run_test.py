@@ -1,11 +1,9 @@
-from support import TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, runtests
 
 
 class TestRun(TestCase):
     def test_delete_branch_custom_name_not_recognized(testcase):
         """Push a branch deletion using a custom reference name."""
-        cd("%s/repo" % TEST_DIR)
-
         # Try to delete a reference which does exist in the remote
         # but has a name which does not match any of the known
         # namespaces (meaning we cannot determine the kind of

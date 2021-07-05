@@ -6,8 +6,6 @@ from os.path import isdir
 class TestRun(TestCase):
     def test_push_commit(testcase):
         """Try pushing a commit that creates a subproject."""
-        cd("%s/repo" % TEST_DIR)
-
         # First, add the submodule...
         p = testcase.run(["git", "submodule", "add", "%s/bare/subm.git" % TEST_DIR])
         assert p.status == 0, p.image

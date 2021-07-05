@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_annotated_tag(testcase):
         """Try pushing an annotated tag."""
-        cd("%s/repo" % TEST_DIR)
-
         # Try deleting full-tag.  The remote is setup to refuse this request.
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0

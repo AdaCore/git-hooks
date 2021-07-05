@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_notes(testcase):
         """Try pushing our notes."""
-        cd("%s/repo" % TEST_DIR)
-
         # Try pushing the notes.  The problem is that the one note
         # that needs to be pushed references a commit from master
         # which has not been pushed, yet.  So the update should be

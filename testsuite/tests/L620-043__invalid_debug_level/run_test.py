@@ -9,8 +9,6 @@ class TestRun(TestCase):
         having an invalid value, or GIT_HOOKS_DEBUG_LEVEL having
         an invalid value.
         """
-        cd("%s/repo" % TEST_DIR)
-
         # Push master to the `origin' remote.
         p = testcase.run("git push origin master".split())
         expected_out = """\

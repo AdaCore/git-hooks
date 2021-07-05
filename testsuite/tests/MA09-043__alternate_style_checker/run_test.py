@@ -5,8 +5,6 @@ import os
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing one single-file commit on master."""
-        cd("%s/repo" % TEST_DIR)
-
         # Create an adapted version of the environment we can then
         # pass when calling Git for the purpose of this testcase.
         env = os.environ.copy()

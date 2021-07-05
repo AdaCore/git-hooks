@@ -1,11 +1,9 @@
-from support import cd, runtests, TestCase, TEST_DIR
+from support import runtests, TestCase, TEST_DIR
 
 
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Push the refs/notes/review note."""
-        cd("%s/repo" % TEST_DIR)
-
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
         p = testcase.run("git push origin refs/notes/review:refs/notes/review".split())

@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_lightweight_tag(testcase):
         """Try pushing a lightweight tag."""
-        cd("%s/repo" % TEST_DIR)
-
         # Create a tag called 'new-tag'...
         p = testcase.run("git tag new-tag".split())
         testcase.assertEqual(p.status, 0, p.image)

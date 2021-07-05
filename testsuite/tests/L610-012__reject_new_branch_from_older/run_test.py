@@ -10,8 +10,6 @@ class TestRun(TestCase):
         (master does not have any commit that release-0.1-branch does
         not have).
         """
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin release-0.1-branch".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `b'

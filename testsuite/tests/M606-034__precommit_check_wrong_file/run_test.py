@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_branch_with_merge_commit(testcase):
         """Try pushing an update to master adding one merge commit."""
-        cd("%s/repo" % TEST_DIR)
-
         # Enable some logging, in order to be able to see which
         # commits get checked, and what commits are being used
         # as their reference.

@@ -1,11 +1,9 @@
-from support import TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, runtests
 
 
 class TestRun(TestCase):
     def test_update_branch_custom_name_not_recognized(testcase):
         """Push a branch updates using invalid custom reference names."""
-        cd("%s/repo" % TEST_DIR)
-
         # Push to a reference which does exist in the remote repository,
         # but does not follow any of the repository's naming schemes.
         p = testcase.run(

@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_delete_lightweight_tag(testcase):
         """Try deleting a lightweight tag."""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin :some-tag".split())
         testcase.assertEqual(p.status, 0, p.image)
 

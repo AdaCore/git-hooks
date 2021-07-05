@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_delete_notes(testcase):
         """Try deleting the notes/commits branch."""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin :refs/notes/commits".split())
         expected_out = """\
 remote: *** Deleting the Git Notes is not allowed.

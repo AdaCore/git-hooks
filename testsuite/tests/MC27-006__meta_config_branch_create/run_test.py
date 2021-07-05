@@ -17,9 +17,6 @@ class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Test creating the refs/meta/config branch on the remote."""
         testcase.__bare_repo_fixup()
-
-        cd("%s/repo" % TEST_DIR)
-
         # Push the `meta/config' local branch as the new `refs/meta/config'
         # reference. This should be allowed.
         p = testcase.run("git push origin meta/config:refs/meta/config".split())

@@ -7,8 +7,6 @@ class TestRun(TestCase):
 
         The purpose of this testcase is to test combined style checking.
         """
-        cd("%s/repo" % TEST_DIR)
-
         testcase.set_debug_level(1)
 
         # Push master to the `origin' remote.  The delta should be one

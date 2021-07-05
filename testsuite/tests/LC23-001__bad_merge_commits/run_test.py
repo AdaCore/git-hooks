@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push(testcase):
         """Try pushing branches with bad merges..."""
-        cd("%s/repo" % TEST_DIR)
-
         # Try pushing "master".
         #
         # It contains a merge commit whose RH is the default RH

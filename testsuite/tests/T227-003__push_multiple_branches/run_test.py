@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing one single-file commit on master."""
-        cd("%s/repo" % TEST_DIR)
-
         # Do a git push without specifying which branch to push.
         # The repository has been configured (via .git/config)
         # so as to push both the "master" and "second" branches.

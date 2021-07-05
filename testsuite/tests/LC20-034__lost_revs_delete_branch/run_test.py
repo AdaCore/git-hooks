@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_delete_branch(testcase):
         """Test deleting topic branch causing commits to be lost."""
-        cd("%s/repo" % TEST_DIR)
-
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
         p = testcase.run("git push origin :topic/experiment1".split())

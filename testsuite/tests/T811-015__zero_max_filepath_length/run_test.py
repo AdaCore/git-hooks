@@ -16,9 +16,6 @@ class TestRun(TestCase):
         # and try again. Once the config is set to zero, the same commit
         # that was previously rejected should now be accepted, proving
         # that the length check is no longer applied.
-
-        cd("%s/repo" % TEST_DIR)
-
         # For this testcase, the contents of the emails being sent
         # is not important, so reduce their verbosity.
         testcase.change_email_sending_verbosity(full_verbosity=False)

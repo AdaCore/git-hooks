@@ -16,8 +16,6 @@ class TestRun(TestCase):
         have that internal reference, and now we're going to push
         the commit on master.
         """
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'

@@ -5,8 +5,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing one commit on master."""
-        cd("%s/repo" % TEST_DIR)
-
         # First, update the git-hooks configuration to install our
         # the script we want to use as our commit-email-formatter.
 

@@ -27,9 +27,6 @@ class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing one single-file commit on master."""
         testcase.__bare_repo_fixup()
-
-        cd("%s/repo" % TEST_DIR)
-
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
         p = testcase.run("git push origin master".split())

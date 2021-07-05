@@ -8,8 +8,6 @@ class TestRun(TestCase):
         In this testcase, the release-0.1-branch points to a commit
         that's one of the older commits in the "master" branch.
         """
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin release-0.1-branch".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `b'

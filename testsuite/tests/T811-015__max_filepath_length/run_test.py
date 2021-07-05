@@ -3,8 +3,6 @@ from support import *
 
 class TestRun(TestCase):
     def test_push_commits(testcase):
-        cd("%s/repo" % TEST_DIR)
-
         # For this testcase, the contents of the emails being sent
         # is not important, so reduce their verbosity.
         testcase.change_email_sending_verbosity(full_verbosity=False)

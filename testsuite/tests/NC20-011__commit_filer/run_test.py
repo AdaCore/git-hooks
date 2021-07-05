@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_branch_with_merge_commit(testcase):
         """Try pushing an update to master adding one merge commit."""
-        cd("%s/repo" % TEST_DIR)
-
         # First, adjust the project.config file to use a commit-filer
         # script.  We have to do it manually here, because we need to
         # provide the full path to that script.

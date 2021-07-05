@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_filename_collisions(testcase):
         """Test filename-collision detector."""
-        cd("%s/repo" % TEST_DIR)
-
         # Push master to the `origin' remote.  The operation should
         # fail due to some filename collisions...
         p = testcase.run("git push origin master".split())

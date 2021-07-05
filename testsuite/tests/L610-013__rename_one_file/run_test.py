@@ -9,8 +9,6 @@ class TestRun(TestCase):
         to treat renames as a new file, and thus expect to apply
         the pre-commit checks on the new file.
         """
-        cd("%s/repo" % TEST_DIR)
-
         testcase.set_debug_level(2)
 
         # Push master to the `origin' remote.  The delta should be one

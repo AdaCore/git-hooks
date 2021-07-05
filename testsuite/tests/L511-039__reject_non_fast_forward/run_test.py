@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try non-fast-forward push on master."""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin master".split())
         expected_out = """\
 To ../bare/repo.git

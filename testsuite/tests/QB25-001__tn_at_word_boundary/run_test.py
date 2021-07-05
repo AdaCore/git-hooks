@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_before(testcase):
         """Try pushing before..."""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin before".split())
         expected_out = """\
 remote: *** The following commit is missing a ticket number inside
@@ -26,8 +24,6 @@ error: failed to push some refs to '../bare/repo.git'
 
     def test_push_commit_on_after(testcase):
         """Try pushing after..."""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin after".split())
         expected_out = """\
 remote: *** The following commit is missing a ticket number inside

@@ -7,8 +7,6 @@ class TestRun(TestCase):
 
         The purpose of this testcase is to test combined style checking.
         """
-        cd("%s/repo" % TEST_DIR)
-
         # Push master to the `origin' remote.  The update should
         # fail because hooks.combined-style-checking does not have
         # a valid value (simulating a typo).

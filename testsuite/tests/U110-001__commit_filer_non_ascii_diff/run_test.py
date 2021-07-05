@@ -38,8 +38,6 @@ class TestRun(TestCase):
         nonetheless so as to make sure we test this scenario should
         we decide to pas that inforamtion, one day...
         """
-        cd("%s/repo" % TEST_DIR)
-
         # First, update the git-hooks configuration to install
         # the script we want to use as our file-commit-cmd.
 

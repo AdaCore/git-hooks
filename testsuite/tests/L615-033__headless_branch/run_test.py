@@ -8,8 +8,6 @@ class TestRun(TestCase):
         The test with the "one-commit" branch is just to test the
         situation where the new head-less branch only has one commit.
         """
-        cd("%s/repo" % TEST_DIR)
-
         # Enable debugs to verify that the hooks pick the correct
         # commit as the first commit.
         testcase.set_debug_level(1)

@@ -9,8 +9,6 @@ class TestRun(TestCase):
         (accessible from another branch, called topic/merge-stuff
         in this case).
         """
-        cd("%s/repo" % TEST_DIR)
-
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
         p = testcase.run("git push origin master".split())

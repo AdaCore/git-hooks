@@ -10,8 +10,6 @@ class TestRun(TestCase):
             - One pushing some changes in tests, with a couple of files
               modified. Only one of them should be checked via cvs_check.
         """
-        cd("%s/repo" % TEST_DIR)
-
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
         p = testcase.run("git push origin master".split())

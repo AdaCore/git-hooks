@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push(testcase):
         """Test pushing master..."""
-        cd("%s/repo" % TEST_DIR)
-
         # Push master to the `origin' remote.  The should push
         # one merge commit which also references a commit from
         # the thirdparty branch.  It is the commit from thirdparty

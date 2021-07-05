@@ -9,8 +9,6 @@ class TestRun(TestCase):
         a NEW branch which brings a few new commits, while at the same
         time sharing some commits from a branch marked as "no-emails".
         """
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin head".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `.gitignore'

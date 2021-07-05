@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_notes(testcase):
         """Try pushing a note under refs/notes/deploy"""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin notes/deploy".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0

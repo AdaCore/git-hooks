@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_delete_branch(testcase):
         """Try deleting a branch on the remote."""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin :old-branch".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0

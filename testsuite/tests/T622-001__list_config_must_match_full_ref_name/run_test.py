@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_pushes(testcase):
         """Push commits, and check effect (or not) of hooks.no-emails."""
-        cd("%s/repo" % TEST_DIR)
-
         # First, try pushing branch "master". The hooks.no-emails config
         # contains "refs/heads/master", so this push should have no emails
         # being sent.

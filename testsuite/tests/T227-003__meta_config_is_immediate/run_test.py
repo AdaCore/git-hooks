@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_refs_meta_config_update(testcase):
         """Try pushing an update of the refs/meta/config:project.config file"""
-        cd("%s/repo" % TEST_DIR)
-
         # Push an update to the refs/meta/config reference, where
         # we modify the hooks's configuration file. The goal of
         # this test is to verify that the new configuration is

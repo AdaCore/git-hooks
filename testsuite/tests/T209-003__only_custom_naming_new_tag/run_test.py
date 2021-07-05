@@ -4,8 +4,6 @@ import re
 
 class TestRun(TestCase):
     def test_push_annotated_tag_std_namespace(testcase):
-        cd("%s/repo" % TEST_DIR)
-
         # Try pushing tag v0.1. This repository is configured to ignore
         # the standard naming scheme for reference, so this should be
         # rejected as "not recognized".
@@ -40,8 +38,6 @@ error: failed to push some refs to '../bare/repo.git'
         testcase.assertRunOutputEqual(p, expected_out)
 
     def test_push_annotated_tag_custom_namespace(testcase):
-        cd("%s/repo" % TEST_DIR)
-
         # Try pushing tag v0.1.
         p = testcase.run("git push origin v0.1:refs/user/myself/tags/v0.1".split())
         expected_out = """\
@@ -74,8 +70,6 @@ To ../bare/repo.git
         testcase.assertRunOutputEqual(p, expected_out)
 
     def test_push_annotated_tag_custom_namespace_not_recognized(testcase):
-        cd("%s/repo" % TEST_DIR)
-
         # Try pushing tag v0.1.
         p = testcase.run("git push origin v0.1:refs/nogo/tags/v0.1".split())
         expected_out = """\

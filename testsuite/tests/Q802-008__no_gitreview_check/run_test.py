@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_github_pull_19(testcase):
         """Try pushing the branch named "github/pull/19" """
-        cd("%s/repo" % TEST_DIR)
-
         # This branch contains a .gitreview whose defaultbranch setting
         # points to another branch name. So normally, the hooks should
         # reject this update, asking for the config to be changed instead.

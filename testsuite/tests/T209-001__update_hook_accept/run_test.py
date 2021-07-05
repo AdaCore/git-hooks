@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing multiple commits on master."""
-        cd("%s/repo" % TEST_DIR)
-
         # First, adjust the project.config file to use an update-hook
         # script.  We have to do it manually here, because we need to
         # provide the full path to that script.

@@ -13,8 +13,6 @@ class TestRun(TestCase):
         hook which overrides the email_body, with the returned email body
         containing some non-ascii characters.
         """
-        cd("%s/repo" % TEST_DIR)
-
         # First, update the git-hooks configuration to install our
         # the script we want to use as our commit-email-formatter.
 

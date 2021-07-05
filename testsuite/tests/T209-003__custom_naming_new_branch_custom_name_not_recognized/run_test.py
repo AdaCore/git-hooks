@@ -1,4 +1,4 @@
-from support import TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, runtests
 
 
 class TestRun(TestCase):
@@ -9,8 +9,6 @@ class TestRun(TestCase):
         the repository's naming scheme, and so the update should
         be rejected.
         """
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run(
             "git push origin master:refs/does-not-exist/my-feature".split()
         )

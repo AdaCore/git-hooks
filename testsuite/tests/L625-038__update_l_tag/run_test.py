@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_delete_lightweight_tag(testcase):
         """Try updating a lightweight tag."""
-        cd("%s/repo" % TEST_DIR)
-
         # Enable debug traces.  We use them to make certain verifications,
         # such as verifying that each commit gets checked individually.
         testcase.set_debug_level(1)

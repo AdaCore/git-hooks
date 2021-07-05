@@ -1,11 +1,9 @@
-from support import TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, runtests
 
 
 class TestRun(TestCase):
     def test_create_branch_with_standard_name(testcase):
         """Create a new branch with a standard reference name."""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin master:new-master".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0

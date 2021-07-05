@@ -12,8 +12,6 @@ def has_rejection(out, tag_name):
 class TestRun(TestCase):
     def test_push_lightweight_tag(testcase):
         """Try pushing an lightweight tag."""
-        cd("%s/repo" % TEST_DIR)
-
         # Create a tag called 'new-tag'...
         p = testcase.run("git tag new-tag".split())
         testcase.assertEqual(p.status, 0, p.image)

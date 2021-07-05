@@ -31,8 +31,6 @@ class TestRun(TestCase):
                 hook which returns a custom email body, and try pushing
                 the same commit again to branch "with-email-formatter".
         """
-        cd("%s/repo" % TEST_DIR)
-
         # First, update the git-hooks configuration to install
         # the script we want to use as our commit-email-formatter.
 

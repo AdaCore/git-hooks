@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_meta_config_and_master(testcase):
         """Try pushing refs/meta/config at same time as other branch"""
-        cd("%s/repo" % TEST_DIR)
-
         # Do a simple "git push" without any information about the remote
         # or the references to push; in that case, the (non-bare) repository
         # has been configured via its .git/config file so that two references

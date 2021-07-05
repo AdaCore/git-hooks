@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_too_many_new_commits_on_master(testcase):
         """Try pushing too many new commits on master."""
-        cd("%s/repo" % TEST_DIR)
-
         # Push master to the `origin' remote.  The remote should
         # reject it saying that there are too many new commits.
         p = testcase.run("git push origin master".split())

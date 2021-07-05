@@ -7,8 +7,6 @@ from shutil import copy
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try an update when update-hook points to a non-existant script."""
-        cd("%s/repo" % TEST_DIR)
-
         # First, adjust the project.config file to use an update-hook
         # script.  We have to do it manually here because we want to
         # provide a name of a script we are sure does not exist.

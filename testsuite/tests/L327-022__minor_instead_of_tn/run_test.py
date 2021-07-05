@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push(testcase):
         """Try pushing master..."""
-        cd("%s/repo" % TEST_DIR)
-
         # The revision log of the commit we are trying to push
         # has the word "minor" in it, which used to be a valid
         # substitute for a TN, but this is no longer the case

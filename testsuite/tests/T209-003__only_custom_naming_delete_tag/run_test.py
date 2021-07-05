@@ -5,8 +5,6 @@ import re
 class TestRun(TestCase):
     def test_push_annotated_tag(testcase):
         """Try pushing an annotated tag."""
-        cd("%s/repo" % TEST_DIR)
-
         # Delete a tag in the standard naming scheme. The repository
         # has been configured to ignore the standard namespace for
         # tags, so this should be rejected as "not recognized".

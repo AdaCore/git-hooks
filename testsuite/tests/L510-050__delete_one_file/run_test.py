@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing multiple commits on master."""
-        cd("%s/repo" % TEST_DIR)
-
         # Enable debug traces.  We use them to make certain verifications,
         # such as verifying that each commit gets checked individually.
         testcase.set_debug_level(2)

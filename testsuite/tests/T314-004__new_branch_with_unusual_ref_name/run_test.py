@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Push master as new ref with name outside standard namespace."""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin master:refs/for/master".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'

@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Push new branch wavefront (one of the commits is a merge commit)."""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin wavefront".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `c.txt'

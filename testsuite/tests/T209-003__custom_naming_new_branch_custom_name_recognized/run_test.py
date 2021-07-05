@@ -1,4 +1,4 @@
-from support import TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, runtests
 
 
 class TestRun(TestCase):
@@ -8,8 +8,6 @@ class TestRun(TestCase):
         This reference name is recognized as a branch by the repository's
         naming scheme.
         """
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin master:refs/vendor/name/topic".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0

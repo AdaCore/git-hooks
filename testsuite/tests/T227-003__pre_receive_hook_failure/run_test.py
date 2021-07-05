@@ -6,8 +6,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing one single-file commit on master."""
-        cd("%s/repo" % TEST_DIR)
-
         # First, adjust the project.config file to use a pre-receive-hook
         # script.  We can't do it any earlier, because we don't know
         # which temporary directory will be used when running this test.

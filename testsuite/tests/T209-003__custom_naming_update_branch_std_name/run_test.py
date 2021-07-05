@@ -1,11 +1,9 @@
-from support import TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, runtests
 
 
 class TestRun(TestCase):
     def test_update_branch_with_std_name(testcase):
         """Push a branch update using a standard reference name."""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin my-topic".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'

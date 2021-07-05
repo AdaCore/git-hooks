@@ -8,8 +8,6 @@ class TestRun(TestCase):
         In this situation, release-0.1-branch points to the same
         commit as the master branch.
         """
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin release-0.1-branch".split())
         expected_out = """\
 remote: DEBUG: MIME-Version: 1.0

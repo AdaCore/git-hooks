@@ -11,8 +11,6 @@ class TestRun(TestCase):
         in terms of requiring TNs in the revision log and should
         normally reject commits that don't follow this rule.
         """
-        cd("%s/repo" % TEST_DIR)
-
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
         p = testcase.run("git push origin master".split())
@@ -43,8 +41,6 @@ error: failed to push some refs to '../bare/repo.git'
         set up to always return an error, so this will allow us
         to verify that no file is style-checked.
         """
-        cd("%s/repo" % TEST_DIR)
-
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.
         p = testcase.run("git push origin revert".split())

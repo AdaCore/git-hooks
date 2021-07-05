@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commits(testcase):
         """See comments below."""
-        cd("%s/repo" % TEST_DIR)
-
         # Push not-ok-104 on master. It introduces a new commit
         # where one line in the RH is 104 characters long.  It should
         # therefore be rejected.

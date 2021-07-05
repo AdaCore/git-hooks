@@ -1,5 +1,5 @@
 import os
-from support import cd, runtests, TestCase, TEST_DIR
+from support import runtests, TestCase, TEST_DIR
 
 
 class TestRun(TestCase):
@@ -22,8 +22,6 @@ class TestRun(TestCase):
             for commits we want the script to reject, we add that string
             to the commit's revision log.
         """
-        cd("%s/repo" % TEST_DIR)
-
         # In this testcase, the contents of the emails being sent
         # by the git-hooks is not important, so reduce verbosity at
         # that level to reduce the noise in the hooks' output.

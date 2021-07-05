@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push(testcase):
         """Try pushing master..."""
-        cd("%s/repo" % TEST_DIR)
-
         # First, try pushing the comming in the tn-missing branch
         # on fsf-master.  This is to verify that, even though,
         # style checks are disabled on this branch, other checks

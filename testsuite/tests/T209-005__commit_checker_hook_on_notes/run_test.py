@@ -3,8 +3,6 @@ from support import *
 
 class TestRun(TestCase):
     def test_push_notes(testcase):
-        cd("%s/repo" % TEST_DIR)
-
         # In this testcase, the contents of the emails being sent
         # by the git-hooks is not important, so reduce verbosity at
         # that level to reduce the noise in the hooks' output.

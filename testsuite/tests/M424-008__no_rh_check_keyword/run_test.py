@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing master..."""
-        cd("%s/repo" % TEST_DIR)
-
         # Push a first change on master.  The revision log is violating
         # a couple of rules (empty line after subject, missing TN),
         # but the "(no-rh-check)" keyword/tag in the revision log

@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_commit_on_master(testcase):
         """Try pushing master..."""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** cvs_check: `repo' < `a'
@@ -58,8 +56,6 @@ To ../bare/repo.git
 
     def test_push_commit_on_badleft(testcase):
         """Try pushing badleft..."""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin badleft".split())
         expected_out = """\
 remote: *** The following commit is missing a ticket number inside
@@ -80,8 +76,6 @@ error: failed to push some refs to '../bare/repo.git'
 
     def test_push_commit_on_badright(testcase):
         """Try pushing badright..."""
-        cd("%s/repo" % TEST_DIR)
-
         p = testcase.run("git push origin badright".split())
         expected_out = """\
 remote: *** The following commit is missing a ticket number inside

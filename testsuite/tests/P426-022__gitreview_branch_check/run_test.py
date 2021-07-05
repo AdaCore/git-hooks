@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_push_forgot(testcase):
         """Try pushing the branch named "forgot" """
-        cd("%s/repo" % TEST_DIR)
-
         # "forgot" is a new branch. In the root directory of that
         # branch, there is a file named .gitreview, whose default
         # branch is still "master". Make sure the git-hooks reject
@@ -30,8 +28,6 @@ error: failed to push some refs to '../bare/repo.git'
 
     def test_push_fixed(testcase):
         """Try pushing the branch named "fixed" """
-        cd("%s/repo" % TEST_DIR)
-
         # "fixed" is a new branch. In the root directory of that
         # branch, there is a file named .gitreview, whose default
         # branch is now set to "fixed". So this branch creation

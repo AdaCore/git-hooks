@@ -1,11 +1,9 @@
-from support import TEST_DIR, TestCase, cd, runtests
+from support import TEST_DIR, TestCase, runtests
 
 
 class TestRun(TestCase):
     def test_delete_branch_custom_name_recognized(testcase):
         """Push a branch deletion using a custom reference name."""
-        cd("%s/repo" % TEST_DIR)
-
         # Try to delete a branch with a custom name which does exist
         # in the remote repository, and is recognized by the naming
         # scheme as a branch. This should be accepted.

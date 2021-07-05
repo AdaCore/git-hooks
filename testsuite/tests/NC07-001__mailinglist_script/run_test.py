@@ -12,7 +12,7 @@ class TestRun(TestCase):
         # script, which isn't known until now.
         with open("%s/hooks_config" % TEST_DIR) as f:
             project_config = f.read() % {"TEST_DIR": TEST_DIR}
-        with open("project.config", "w") as f:
+        with open(os.path.join(testcase.repo_dir, "project.config"), "w") as f:
             f.write(project_config)
         p = testcase.run(
             ["git", "commit", "-m", "fix hooks.mailinglist", "project.config"]

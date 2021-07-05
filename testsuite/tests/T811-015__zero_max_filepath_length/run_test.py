@@ -42,7 +42,7 @@ class TestRun(TestCase):
         TEST_FILE_PATH_LENGTH = 160
 
         new_file_name = "a" * TEST_FILE_PATH_LENGTH
-        with open(new_file_name, "w") as f:
+        with open(os.path.join(testcase.repo_dir, new_file_name), "w") as f:
             f.write("Hello world\n")
 
         p = testcase.run(["git", "add", new_file_name])

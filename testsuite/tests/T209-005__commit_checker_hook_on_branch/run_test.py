@@ -1,5 +1,5 @@
 import os
-from support import runtests, TestCase, TEST_DIR
+from support import runtests, TestCase
 
 
 class TestRun(TestCase):
@@ -44,7 +44,7 @@ class TestRun(TestCase):
                 "--file",
                 "project.config",
                 "hooks.commit-extra-checker",
-                os.path.join(TEST_DIR, "commit-extra-checker.py"),
+                os.path.join(testcase.work_dir, "commit-extra-checker.py"),
             ]
         )
         testcase.assertEqual(p.status, 0, p.image)

@@ -6,9 +6,6 @@ import sys
 from tempfile import mkdtemp
 import unittest
 
-TEST_DIR = os.path.dirname(sys.modules["__main__"].__file__)
-TEST_DIR = os.path.abspath(TEST_DIR)
-
 
 class TestCase(unittest.TestCase):
     @property
@@ -26,14 +23,18 @@ class TestCase(unittest.TestCase):
         )
 
     @property
+    def work_dir(self):
+        return os.path.abspath(os.path.dirname(sys.modules["__main__"].__file__))
+
+    @property
     def repo_dir(self):
         """Return the path to the testcase's non-bare repository."""
-        return os.path.join(TEST_DIR, "repo")
+        return os.path.join(self.work_dir, "repo")
 
     @property
     def bare_repo_dir(self):
         """Return the path the testcase's bare repository."""
-        return os.path.join(TEST_DIR, "bare", "repo.git")
+        return os.path.join(self.work_dir, "bare", "repo.git")
 
     def setUp(self):
         # Override the global git user name, to help making sure
@@ -60,7 +61,7 @@ class TestCase(unittest.TestCase):
         # By default, the testcase's cvs_check script is called
         # cvs_check.py and is located at the root of the testcase
         # directory.
-        os.environ["GIT_HOOKS_STYLE_CHECKER"] = "%s/cvs_check.py" % TEST_DIR
+        os.environ["GIT_HOOKS_STYLE_CHECKER"] = "%s/cvs_check.py" % self.work_dir
 
         # Create a directory to be used as tmp by this testcase.
         # We want that directory to be inside the testsuite's
@@ -182,7 +183,7 @@ class TestCase(unittest.TestCase):
         # So unless cwd was explicitly specified, assume we always want
         # to perform the unit test using that directory.
         if cwd is None:
-            cwd = os.path.join(TEST_DIR, "bare", "repo.git")
+            cwd = os.path.join(self.work_dir, "bare", "repo.git")
 
         # Create a copy of the environment we want to pass to the unit test
         # script, and then modify it to set unit-testing up.
@@ -206,7 +207,7 @@ class TestCase(unittest.TestCase):
                 # That way, if the unit test script writes to both stdout
                 # and stderr, the output will be in the correct order.
                 "-u",
-                os.path.join(TEST_DIR, "unit_test_script.py"),
+                os.path.join(self.work_dir, "unit_test_script.py"),
             ],
             cwd=cwd,
             env=augmented_env,

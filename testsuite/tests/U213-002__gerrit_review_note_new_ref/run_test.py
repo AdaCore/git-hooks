@@ -1,4 +1,4 @@
-from support import runtests, TestCase, TEST_DIR
+from support import runtests, TestCase
 
 
 class TestRun(TestCase):

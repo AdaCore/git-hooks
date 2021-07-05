@@ -13,7 +13,7 @@ class TestRun(TestCase):
         bad_update_hook_filename = os.path.abspath("bad-update-hook")
         assert not os.path.exists(bad_update_hook_filename)
 
-        with open("%s/hooks_config" % TEST_DIR) as f:
+        with open("%s/hooks_config" % testcase.work_dir) as f:
             project_config = f.read() % {"hook_filename": bad_update_hook_filename}
         with open(os.path.join(testcase.repo_dir, "project.config"), "w") as f:
             f.write(project_config)
@@ -49,7 +49,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         # For that, we need a script; re-use 'cvs_check.py', which
         # does nothing.
-        copy(os.path.join(TEST_DIR, "cvs_check.py"), bad_update_hook_filename)
+        copy(os.path.join(testcase.work_dir, "cvs_check.py"), bad_update_hook_filename)
         assert os.path.exists(bad_update_hook_filename)
 
         # Try pushing the config update again. This time, it should work.

@@ -23,7 +23,7 @@ class TestRun(TestCase):
                 "project.config",
                 "--add",
                 "hooks.pre-receive-hook",
-                os.path.join(TEST_DIR, "pre-receive-hook"),
+                os.path.join(testcase.work_dir, "pre-receive-hook"),
             ]
         )
         assert p.status == 0, p.image

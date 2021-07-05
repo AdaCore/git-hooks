@@ -7,8 +7,8 @@ class TestRun(TestCase):
         # First, adjust the project.config file to use an update-hook
         # script.  We have to do it manually here, because we need to
         # provide the full path to that script.
-        with open("%s/hooks_config" % TEST_DIR) as f:
-            project_config = f.read() % {"TEST_DIR": TEST_DIR}
+        with open("%s/hooks_config" % testcase.work_dir) as f:
+            project_config = f.read() % {"TEST_DIR": testcase.work_dir}
         with open(os.path.join(testcase.repo_dir, "project.config"), "w") as f:
             f.write(project_config)
         p = testcase.run(

@@ -54,7 +54,7 @@ class TestRun(TestCase):
                 "--file",
                 "project.config",
                 "hooks.file-commit-cmd",
-                os.path.join(TEST_DIR, "commit-filer"),
+                os.path.join(testcase.work_dir, "commit-filer"),
             ]
         )
         testcase.assertEqual(p.status, 0, p.image)
@@ -156,7 +156,7 @@ To ../bare/repo.git
         # uses non-ascii characters.
 
         COMMIT_EMAIL_FORMATTER_FILENAME = os.path.join(
-            TEST_DIR, "commit-email-formatter.py"
+            testcase.work_dir, "commit-email-formatter.py"
         )
         with open(COMMIT_EMAIL_FORMATTER_FILENAME, "w") as f:
             f.write(COMMIT_EMAIL_FORMATTER_HOOK)

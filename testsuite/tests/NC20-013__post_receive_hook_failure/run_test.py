@@ -7,8 +7,8 @@ class TestRun(TestCase):
         # First, adjust the project.config file to use a commit-filer
         # script.  We have to do it manually here, because we need to
         # provide the full path to that script.
-        with open("%s/hooks_config" % TEST_DIR) as f:
-            project_config = f.read() % {"TEST_DIR": TEST_DIR}
+        with open("%s/hooks_config" % testcase.work_dir) as f:
+            project_config = f.read() % {"TEST_DIR": testcase.work_dir}
         with open(os.path.join(testcase.repo_dir, "project.config"), "w") as f:
             f.write(project_config)
         p = testcase.run(
@@ -195,11 +195,11 @@ remote: -----[ post-receive-hook args ]-----
 remote: -----[ post-receive-hook stdin ]-----
 remote: 426fba3571947f6de7f967e885a3168b9df7004a dd6165c96db712d3e918fb5c61088b171b5e7cab refs/heads/master
 remote: -----[ post-recieve-hook end ]-----
-remote: *** !!! WARNING: %(TEST_DIR)s/post-receive-hook returned code: 1.
+remote: *** !!! WARNING: %(testcase.work_dir)s/post-receive-hook returned code: 1.
 To ../bare/repo.git
    426fba3..dd6165c  master -> master
 """ % {
-            "TEST_DIR": TEST_DIR
+            "testcase.work_dir": testcase.work_dir
         }
         assert p.status == 0, p.image
         testcase.assertRunOutputEqual(p, expected_out)

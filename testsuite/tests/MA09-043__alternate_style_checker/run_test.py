@@ -18,7 +18,7 @@ class TestRun(TestCase):
         # The hooks.style-checker option only contains the name
         # of the program to call, but not the full path to that
         # program. Update the PATH so that the git-hooks find it.
-        env["PATH"] = TEST_DIR + ":" + env["PATH"]
+        env["PATH"] = testcase.work_dir + ":" + env["PATH"]
 
         # Push master to the `origin' remote.  The delta should be one
         # commit with one file being modified.

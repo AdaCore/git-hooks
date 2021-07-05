@@ -29,7 +29,7 @@ class TestRun(TestCase):
                 "--file",
                 "project.config",
                 "hooks.commit-email-formatter",
-                os.path.join(TEST_DIR, "commit-email-formatter.py"),
+                os.path.join(testcase.work_dir, "commit-email-formatter.py"),
             ]
         )
         testcase.assertEqual(p.status, 0, p.image)

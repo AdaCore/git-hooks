@@ -4,7 +4,7 @@ from support import *
 class TestRun(TestCase):
     def test_logger_returning_nonzero(testcase):
         testcase.run_unit_test_script(
-            env={"GIT_HOOKS_LOGGER": os.path.join(TEST_DIR, "bad-logger")},
+            env={"GIT_HOOKS_LOGGER": os.path.join(testcase.work_dir, "bad-logger")},
             expected_out="""\
 *** Failed to file the following syslog entry:
 ***   - message: some message

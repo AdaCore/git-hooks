@@ -1,5 +1,5 @@
 import os
-from support import runtests, TestCase, TEST_DIR
+from support import runtests, TestCase
 
 
 class TestRun(TestCase):
@@ -34,7 +34,7 @@ class TestRun(TestCase):
                 "--file",
                 "project.config",
                 "hooks.commit-email-formatter",
-                os.path.join(TEST_DIR, "commit-email-formatter.py"),
+                os.path.join(testcase.work_dir, "commit-email-formatter.py"),
             ]
         )
         testcase.assertEqual(p.status, 0, p.image)
@@ -317,7 +317,7 @@ remote: | WARNING:
 remote: | hooks.commit-email-formatter returned nonzero: 1.
 remote: | Falling back to default email format.
 remote: |
-remote: | $ {TEST_DIR}/commit-email-formatter.py refs/heads/master 4131b4399e258bd3c36119d026455a4abce2e971
+remote: | $ {testcase.work_dir}/commit-email-formatter.py refs/heads/master 4131b4399e258bd3c36119d026455a4abce2e971
 remote: | Something went wrong, ouh la la, this is me crashing, no good!
 remote: |
 remote:
@@ -334,7 +334,7 @@ remote: @@ -1 +1,2 @@
 remote:  New file with some interesting contents.
 remote: +Let's start with some background: dark.
 """.format(
-            TEST_DIR=TEST_DIR
+            testcase=testcase
         )
 
         # | commit 3d75bd9d3a551d8b66b8ec7b79eedc7496bb804f
@@ -425,7 +425,7 @@ remote: | WARNING:
 remote: | hooks.commit-email-formatter returned invalid JSON.
 remote: | Falling back to default email format.
 remote: |
-remote: | $ {TEST_DIR}/commit-email-formatter.py refs/heads/master ee3e1d03e6decce59fce06f3a2fe256f0221cb80
+remote: | $ {testcase.work_dir}/commit-email-formatter.py refs/heads/master ee3e1d03e6decce59fce06f3a2fe256f0221cb80
 remote: | {{
 remote: |
 remote:
@@ -443,7 +443,7 @@ remote:  New file with some interesting contents.
 remote:  Let's start with some background: dark.
 remote: +Let's then look at the foreground: Bright colorful.
 """.format(
-            TEST_DIR=TEST_DIR
+            testcase=testcase
         )
 
         # | commit e617216033a96c18bad5b2235d960c784dd3efa7
@@ -524,7 +524,7 @@ remote: | WARNING:
 remote: | hooks.commit-email-formatter output is not JSON dict.
 remote: | Falling back to default email format.
 remote: |
-remote: | $ {TEST_DIR}/commit-email-formatter.py refs/heads/master c47a7f0a65557eb1551b5fd80e753d81c529c69a
+remote: | $ {testcase.work_dir}/commit-email-formatter.py refs/heads/master c47a7f0a65557eb1551b5fd80e753d81c529c69a
 remote: | [1, 2, 3]
 remote: |
 remote:
@@ -545,7 +545,7 @@ remote: -It will provide detailed information on this thing.
 remote: +It will provide detailed information on this thing, including
 remote: +information that you might never have thought about.
 """.format(
-            TEST_DIR=TEST_DIR
+            testcase=testcase
         )
 
         # | commit 699356fb0903efbe73a18e2573a9ca67bc7c35a5 (HEAD -> master)

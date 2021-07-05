@@ -8,8 +8,8 @@ class TestRun(TestCase):
         # compute the email recipients.  We have to do it manually
         # here, because we need to provide the full path to that
         # script, which isn't known until now.
-        with open("%s/hooks_config" % TEST_DIR) as f:
-            project_config = f.read() % {"TEST_DIR": TEST_DIR}
+        with open("%s/hooks_config" % testcase.work_dir) as f:
+            project_config = f.read() % {"TEST_DIR": testcase.work_dir}
         with open(os.path.join(testcase.repo_dir, "project.config"), "w") as f:
             f.write(project_config)
         p = testcase.run(
@@ -28,10 +28,10 @@ class TestRun(TestCase):
         # Push branch master.
         p = testcase.run(["git", "push", "origin", "master"])
         expected_out = """\
-remote: *** !!! %(TEST_DIR)s/email_to.py failed with error code: 3.
-remote: *** !!! %(TEST_DIR)s/email_to.py failed with error code: 3.
-remote: *** !!! %(TEST_DIR)s/email_to.py failed with error code: 3.
-remote: *** !!! %(TEST_DIR)s/email_to.py failed with error code: 3.
+remote: *** !!! %(testcase.work_dir)s/email_to.py failed with error code: 3.
+remote: *** !!! %(testcase.work_dir)s/email_to.py failed with error code: 3.
+remote: *** !!! %(testcase.work_dir)s/email_to.py failed with error code: 3.
+remote: *** !!! %(testcase.work_dir)s/email_to.py failed with error code: 3.
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -183,7 +183,7 @@ remote: +AC_INIT(bfd/bfd-in.h)
 To ../bare/repo.git
    ab5227e..0ed035c  master -> master
 """ % {
-            "TEST_DIR": TEST_DIR
+            "testcase.work_dir": testcase.work_dir
         }
         assert p.status == 0, p.image
         testcase.assertRunOutputEqual(p, expected_out)

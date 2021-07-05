@@ -16,7 +16,7 @@ To ../bare/repo.git
  ! [remote rejected] master -> master (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
-            % TEST_DIR
+            % testcase.work_dir
         )
 
         testcase.assertNotEqual(p.status, 0, p.image)

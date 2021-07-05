@@ -15,8 +15,8 @@ class TestRun(TestCase):
         p = testcase.run(["git", "checkout", "FETCH_HEAD"])
         assert p.status == 0, p.image
 
-        with open("%s/hooks_config" % TEST_DIR) as f:
-            project_config = f.read() % {"TEST_DIR": TEST_DIR}
+        with open("%s/hooks_config" % testcase.work_dir) as f:
+            project_config = f.read() % {"TEST_DIR": testcase.work_dir}
         with open(os.path.join(testcase.repo_dir, "project.config"), "w") as f:
             f.write(project_config)
         p = testcase.run(

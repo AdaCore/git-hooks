@@ -23,7 +23,7 @@ class TestRun(TestCase):
                 "project.config",
                 "--add",
                 "hooks.pre-receive-hook",
-                os.path.join(TEST_DIR, "pre-receive-hook"),
+                os.path.join(testcase.work_dir, "pre-receive-hook"),
             ]
         )
         assert p.status == 0, p.image
@@ -48,7 +48,7 @@ class TestRun(TestCase):
         p = testcase.run("git push origin master".split())
         expected_out = """\
 remote: *** Update rejected by this repository's hooks.pre-receive-hook script
-remote: *** ({TEST_DIR}/pre-receive-hook):
+remote: *** ({testcase.work_dir}/pre-receive-hook):
 remote: *** -----[ pre-receive-hook args ]-----
 remote: *** -----[ pre-receive-hook stdin ]-----
 remote: *** d065089ff184d97934c010ccd0e7e8ed94cb7165 a60540361d47901d3fe254271779f380d94645f7 refs/heads/master
@@ -58,7 +58,7 @@ To ../bare/repo.git
  ! [remote rejected] master -> master (pre-receive hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """.format(
-            TEST_DIR=TEST_DIR
+            testcase=testcase
         )
 
         testcase.assertNotEqual(p.status, 0, p.image)

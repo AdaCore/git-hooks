@@ -7,7 +7,9 @@ class TestRun(TestCase):
     def test_push_commit(testcase):
         """Try pushing a commit that creates a subproject."""
         # First, add the submodule...
-        p = testcase.run(["git", "submodule", "add", "%s/bare/subm.git" % TEST_DIR])
+        p = testcase.run(
+            ["git", "submodule", "add", "%s/bare/subm.git" % testcase.work_dir]
+        )
         assert p.status == 0, p.image
 
         # Verify that subm is a directory that exists...
@@ -54,7 +56,7 @@ class TestRun(TestCase):
         # on all other machines. For matching purposes of the
         # expected output, both scripts must produce the same output.
         del os.environ["GIT_HOOKS_STYLE_CHECKER"]
-        os.environ["PATH"] = TEST_DIR + ":" + os.environ["PATH"]
+        os.environ["PATH"] = testcase.work_dir + ":" + os.environ["PATH"]
 
         # And finally, try pushing that commit.
         # For verification purposes, we enable tracing to level 2,
@@ -106,7 +108,7 @@ remote: +++ b/.gitmodules
 remote: @@ -0,0 +1,3 @@
 remote: +[submodule "subm"]
 remote: +	path = subm
-remote: +	url = %(TEST_DIR)s/bare/subm.git
+remote: +	url = %(testcase.work_dir)s/bare/subm.git
 remote: diff --git a/subm b/subm
 remote: new file mode 160000
 remote: index 0000000..8adf3db
@@ -121,7 +123,7 @@ To ../bare/repo.git
             "short_subm_rev": subm_rev[0:7],
             "author_date": author_date,
             "gitmodules_short_hash": gitmodules_hash[:7],
-            "TEST_DIR": TEST_DIR,
+            "testcase.work_dir": testcase.work_dir,
         }
 
         assert p.status == 0, p.image

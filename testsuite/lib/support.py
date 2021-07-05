@@ -35,6 +35,11 @@ class TestCase(unittest.TestCase):
         )
 
     @property
+    def repo_dir(self):
+        """Return the path to the testcase's non-bare repository."""
+        return os.path.join(TEST_DIR, "repo")
+
+    @property
     def bare_repo_dir(self):
         """Return the path the testcase's bare repository."""
         return os.path.join(TEST_DIR, "bare", "repo.git")

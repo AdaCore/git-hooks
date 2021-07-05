@@ -82,8 +82,18 @@ class TestCase(unittest.TestCase):
         os.environ["TMP"] = self.testcase_tmp_dir
         os.environ["TMPDIR"] = self.testcase_tmp_dir
 
-        # Allow users to call self.run as if they were calling Run.
-        self.run = Run
+        # Allow users to call self.run as if they were calling self._run,
+        # which is a wrapper around Run.
+        #
+        # The reason why do it this way rather than simply define
+        # the "run" method as usual, is because unittest.TestCase
+        # actuall does provide one already, and uses that method to
+        # run the testcase. It means our choice to use "self.run"
+        # is conflicting with the unittest.TestCase framework.
+        # This is only temporary, however, as we're working on
+        # transitioning this testcase to pytest instead, at which
+        # point this will no longer be an issue.
+        self.run = self._run
 
     def tearDown(self):
         # One last check: Verify that the scripts did not leak any
@@ -126,6 +136,18 @@ class TestCase(unittest.TestCase):
                 del os.environ[verbosity_varname]
         else:
             os.environ["GIT_HOOKS_MINIMAL_EMAIL_DEBUG_TRACE"] = "set"
+
+    def _run(self, cmds, input=None, cwd=None, env=None, ignore_environ=False):
+        """A convenience wrapper to run a program.
+
+        PARAMETERS
+            cmds: Same as Run.
+            input: Same as Run.
+            cwd: Same as Run.
+            env: Same as Run.
+            ignore_environ: Same as Run.
+        """
+        return Run(cmds, input=input, cwd=cwd, env=env, ignore_environ=ignore_environ)
 
     def run_unit_test_script(
         self,

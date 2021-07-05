@@ -148,10 +148,13 @@ class TestCase(unittest.TestCase):
         PARAMETERS
             cmds: Same as Run.
             input: Same as Run.
-            cwd: Same as Run.
+            cwd: The directory from which to run the command, or
+                self.repo_dir if None.
             env: Same as Run.
             ignore_environ: Same as Run.
         """
+        if cwd is None:
+            cwd = self.repo_dir
         return Run(cmds, input=input, cwd=cwd, env=env, ignore_environ=ignore_environ)
 
     def run_unit_test_script(

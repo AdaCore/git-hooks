@@ -15,13 +15,13 @@ class TestRun(TestCase):
         # location.
         cfg_txt = check_output(
             "git show refs/meta/config:project.config".split(),
-            cwd="%s/bare/repo.git" % TEST_DIR,
+            cwd=testcase.bare_repo_dir,
         )
-        with open("%s/bare/repo.git/config" % TEST_DIR, "a") as f:
+        with open(os.path.join(testcase.bare_repo_dir, "config"), "a") as f:
             f.write(cfg_txt)
         check_call(
             "git update-ref -d refs/meta/config".split(),
-            cwd="%s/bare/repo.git" % TEST_DIR,
+            cwd=testcase.bare_repo_dir,
         )
 
     def test_push_commit_on_master(testcase):

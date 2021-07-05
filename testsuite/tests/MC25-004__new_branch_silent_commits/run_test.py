@@ -150,7 +150,7 @@ To ../bare/repo.git
         # Verify that the branch has been created in the remote
         # repository and that it points to the expected commit.
 
-        cd("%s/bare/repo.git" % TEST_DIR)
+        cd(testcase.bare_repo_dir)
 
         p = testcase.run("git show-ref -s head".split())
         expected_out = """\

@@ -29,7 +29,7 @@ error: failed to push some refs to '../bare/repo.git'
 
         # Verify that the branch does not exist on the remote...
 
-        cd("%s/bare/repo.git" % TEST_DIR)
+        cd(testcase.bare_repo_dir)
 
         p = testcase.run("git show-ref -s release-0.1-branch".split())
 

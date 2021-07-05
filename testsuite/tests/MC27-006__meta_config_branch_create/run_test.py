@@ -11,7 +11,7 @@ class TestRun(TestCase):
         """
         check_call(
             "git update-ref -d refs/meta/config".split(),
-            cwd="%s/bare/repo.git" % TEST_DIR,
+            cwd=testcase.bare_repo_dir,
         )
 
     def test_push_commit_on_master(testcase):

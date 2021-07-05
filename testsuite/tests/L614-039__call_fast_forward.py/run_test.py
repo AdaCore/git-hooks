@@ -7,7 +7,7 @@ class TestRun(TestCase):
         """Test calling fast_forward.py many ways."""
         # fast_foward.py assumes it is being called from the bare
         # repo's location.
-        cd("%s/bare/repo.git" % TEST_DIR)
+        cd(testcase.bare_repo_dir)
 
         # First, call it with the wrong usage...
         p = testcase.run([sys.executable, "hooks/fast_forward.py"])

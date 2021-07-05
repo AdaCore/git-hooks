@@ -14,7 +14,7 @@ class TestRun(TestCase):
         # to create a lock on the repository.
 
         lock_filename = os.path.join(
-            TEST_DIR, "bare", "repo.git", "git-hooks::update.token.lock"
+            testcase.bare_repo_dir, "git-hooks::update.token.lock"
         )
         f = open(lock_filename, "w")
         f.write("locked by testsuite at <now> (pid = %d)" % os.getpid())

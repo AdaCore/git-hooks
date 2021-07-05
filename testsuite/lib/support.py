@@ -34,6 +34,11 @@ class TestCase(unittest.TestCase):
             )
         )
 
+    @property
+    def bare_repo_dir(self):
+        """Return the path the testcase's bare repository."""
+        return os.path.join(TEST_DIR, "bare", "repo.git")
+
     def setUp(self):
         # Override the global git user name, to help making sure
         # the output does not depend on who is running the testsuite.

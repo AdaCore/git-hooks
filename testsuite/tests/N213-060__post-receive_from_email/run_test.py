@@ -4,7 +4,7 @@ from support import *
 class TestRun(TestCase):
     def test_submitter_email(testcase):
         """Call post-receive hook with --submitter-email."""
-        cd("%s/bare/repo.git" % TEST_DIR)
+        cd(testcase.bare_repo_dir)
 
         p = testcase.run(
             ["./hooks/post-receive", "--submitter-email=Dave Smith <ds@example.com>"],

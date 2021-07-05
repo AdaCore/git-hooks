@@ -4,8 +4,6 @@ from support import *
 class TestRun(TestCase):
     def test_submitter_email(testcase):
         """Call post-receive hook with --submitter-email."""
-        cd(testcase.bare_repo_dir)
-
         p = testcase.run(
             ["./hooks/post-receive", "--submitter-email=Dave Smith <ds@example.com>"],
             input=(
@@ -13,6 +11,7 @@ class TestRun(TestCase):
                 " a60540361d47901d3fe254271779f380d94645f7"
                 " refs/heads/master"
             ),
+            cwd=testcase.bare_repo_dir,
         )
 
         expected_out = """\

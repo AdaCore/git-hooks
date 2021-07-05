@@ -37,9 +37,9 @@ To ../bare/repo.git
         # Verify that the branch has been created in the remote
         # repository and that it points to the expected commit.
 
-        cd(testcase.bare_repo_dir)
-
-        p = testcase.run("git show-ref -s release-0.1-branch".split())
+        p = testcase.run(
+            "git show-ref -s release-0.1-branch".split(), cwd=testcase.bare_repo_dir
+        )
         expected_out = """\
 4a325b31f594b1dc2c66ac15c4b6b68702bd0cdf
 """

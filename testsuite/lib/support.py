@@ -183,7 +183,7 @@ class TestCase(unittest.TestCase):
         # So unless cwd was explicitly specified, assume we always want
         # to perform the unit test using that directory.
         if cwd is None:
-            cwd = os.path.join(self.work_dir, "bare", "repo.git")
+            cwd = self.bare_repo_dir
 
         # Create a copy of the environment we want to pass to the unit test
         # script, and then modify it to set unit-testing up.

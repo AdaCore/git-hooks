@@ -5,7 +5,7 @@ class TestRun(TestCase):
     def test_git_config(testcase):
         """Unit test AbstractUpdate child class missing methods."""
         testcase.run_unit_test_script(
-            cwd=os.path.join(testcase.work_dir, "repo"),
+            cwd=testcase.repo_dir,
             expected_out="""\
 DEBUG: Test the git --switch=False attribute
 d065089ff184d97934c010ccd0e7e8ed94cb7165

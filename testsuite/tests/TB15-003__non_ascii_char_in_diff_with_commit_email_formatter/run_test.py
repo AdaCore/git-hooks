@@ -1,5 +1,6 @@
 # coding=utf-8
 from support import *
+import os
 
 
 class TestRun(TestCase):

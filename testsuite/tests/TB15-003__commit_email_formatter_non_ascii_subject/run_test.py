@@ -1,6 +1,7 @@
 from support import *
 
 from email.header import Header
+import os
 
 
 class TestRun(TestCase):

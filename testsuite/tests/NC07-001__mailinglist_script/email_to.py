@@ -27,7 +27,7 @@ def ml_from_filename(filename):
 result = set()
 for filename in sys.stdin:
     ml = ml_from_filename(filename)
-    if isinstance(ml, basestring):
+    if isinstance(ml, str):
         result.add(ml)
     else:
         result.update(ml)

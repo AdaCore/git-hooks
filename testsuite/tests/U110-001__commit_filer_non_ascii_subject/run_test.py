@@ -2,6 +2,7 @@
 from support import *
 
 from email.header import Header
+import os
 import stat
 
 # The contents of the script to use as a commit-email-formatter hook.

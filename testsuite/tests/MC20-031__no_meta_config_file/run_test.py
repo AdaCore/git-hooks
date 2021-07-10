@@ -1,5 +1,6 @@
 from support import *
 from subprocess import check_output, check_call
+import os
 
 
 class TestRun(TestCase):

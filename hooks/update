@@ -49,5 +49,5 @@ for cvs_check_dir in /svn/Dev/hooks /usr/local/svn-hooks \
   fi
 done
 
-python `dirname $0`/update.py "$@"
+python -u `dirname $0`/update.py "$@"
 

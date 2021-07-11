@@ -27,4 +27,4 @@ done
 # baseline version installed in /gnatmail.
 export PATH=/gnatmail/local/gnatpython/bin:$PATH
 
-python `dirname $0`/post_receive.py "$@"
+python -u `dirname $0`/post_receive.py "$@"

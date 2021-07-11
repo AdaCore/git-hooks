@@ -215,7 +215,27 @@ error: failed to push some refs to '../bare/repo.git'
         # pre-existing behavior.
 
         p = testcase.run("git push origin multiple-commits-reject-middle".split())
-        expected_out = """\
+        # Note: The output is a bit hard to decipher and follow, so
+        # we split it into smaller pieces to make it easier to understand
+        # what we expect and why.
+        expected_out = (
+            # The first commit being checked by our commit-extra-checker.
+            # This commit is expected to be accepted by the extra-checker,
+            # so the extra-checker's output is relayed back to us by
+            # the git-hoooks.
+            """\
+remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-reject-middle 26107593d14c75d8146f24d635a7f3b3a4282e37
+remote: -----[ stdin ]-----
+remote: {"ref_kind": "branch", "body": "Modify `a' and add `b'", "author_email": "brobecker@adacore.com", "subject": "Modify `a' and add `b'", "object_type": "commit", "rev": "26107593d14c75d8146f24d635a7f3b3a4282e37", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-reject-middle"}
+remote: ---[ end stdin ]---
+"""
+            +
+            # The second commit, on the other hand, is expected to be
+            # rejected by our commit-extra-checker. So we expect to see
+            # the git-hooks error message reporting this issue, with
+            # the error message including the output of our
+            # commit-extra-checker at the end of the error message.
+            """\
 remote: *** The following commit was rejected by your hooks.commit-extra-checker script (status: 1)
 remote: *** commit: 6822734adebb636e8d3f9e664215d56f3d319282
 remote: *** DEBUG: commit-extra-checker.py refs/heads/multiple-commits-reject-middle 6822734adebb636e8d3f9e664215d56f3d319282
@@ -223,15 +243,17 @@ remote: *** -----[ stdin ]-----
 remote: *** {"ref_kind": "branch", "body": "Fix `a' and delete `b' (bad-commit)", "author_email": "brobecker@adacore.com", "subject": "Fix `a' and delete `b' (bad-commit)", "object_type": "commit", "rev": "6822734adebb636e8d3f9e664215d56f3d319282", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-reject-middle"}
 remote: *** ---[ end stdin ]---
 remote: *** Error: Invalid bla bla bla. Rejecting Update.
-remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-reject-middle 26107593d14c75d8146f24d635a7f3b3a4282e37
-remote: -----[ stdin ]-----
-remote: {"ref_kind": "branch", "body": "Modify `a' and add `b'", "author_email": "brobecker@adacore.com", "subject": "Modify `a' and add `b'", "object_type": "commit", "rev": "26107593d14c75d8146f24d635a7f3b3a4282e37", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-reject-middle"}
-remote: ---[ end stdin ]---
+"""
+            +
+            # The rest of the output is the standard output from Git
+            # when a reference update is rejected.
+            """\
 remote: error: hook declined to update refs/heads/multiple-commits-reject-middle
 To ../bare/repo.git
  ! [remote rejected] multiple-commits-reject-middle -> multiple-commits-reject-middle (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
+        )
 
         testcase.assertNotEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)
@@ -252,14 +274,14 @@ error: failed to push some refs to '../bare/repo.git'
         # pre-existing behavior.
 
         p = testcase.run("git push origin multiple-commits-reject-last".split())
-        expected_out = """\
-remote: *** The following commit was rejected by your hooks.commit-extra-checker script (status: 1)
-remote: *** commit: d2593aef8aaaef1a6a43336277afe5c02b2fe04e
-remote: *** DEBUG: commit-extra-checker.py refs/heads/multiple-commits-reject-last d2593aef8aaaef1a6a43336277afe5c02b2fe04e
-remote: *** -----[ stdin ]-----
-remote: *** {"ref_kind": "branch", "body": "Really fix `a' this time (bad-commit)", "author_email": "brobecker@adacore.com", "subject": "Really fix `a' this time (bad-commit)", "object_type": "commit", "rev": "d2593aef8aaaef1a6a43336277afe5c02b2fe04e", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-reject-last"}
-remote: *** ---[ end stdin ]---
-remote: *** Error: Invalid bla bla bla. Rejecting Update.
+        # Note: The output is a bit hard to decipher and follow, so
+        # we split it into smaller pieces to make it easier to understand
+        # what we expect and why.
+        expected_out = (
+            # The first two commits being checked by our commit-extra-checker.
+            # These commits are expected to be accepted by the extra-checker,
+            # so their output should be printed verbatim.
+            """\
 remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-reject-last 37b8b3265f6649a0609d3473f932c55cfbe1b186
 remote: -----[ stdin ]-----
 remote: {"ref_kind": "branch", "body": "Modify `a' and add `b'", "author_email": "brobecker@adacore.com", "subject": "Modify `a' and add `b'", "object_type": "commit", "rev": "37b8b3265f6649a0609d3473f932c55cfbe1b186", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-reject-last"}
@@ -268,11 +290,32 @@ remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-reject-last 3
 remote: -----[ stdin ]-----
 remote: {"ref_kind": "branch", "body": "Fix `a' and delete `b' (no longer needed, after all)", "author_email": "brobecker@adacore.com", "subject": "Fix `a' and delete `b' (no longer needed, after all)", "object_type": "commit", "rev": "3df475a99cc07966432aaf471054ead01a7a8cbb", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-reject-last"}
 remote: ---[ end stdin ]---
+"""
+            +
+            # The third commit, on the other hand, is expected to be
+            # rejected by our commit-extra-checker. So we expect to see
+            # the git-hooks error message reporting this issue, with
+            # the error message including the output of our
+            # commit-extra-checker at the end of the error message.
+            """\
+remote: *** The following commit was rejected by your hooks.commit-extra-checker script (status: 1)
+remote: *** commit: d2593aef8aaaef1a6a43336277afe5c02b2fe04e
+remote: *** DEBUG: commit-extra-checker.py refs/heads/multiple-commits-reject-last d2593aef8aaaef1a6a43336277afe5c02b2fe04e
+remote: *** -----[ stdin ]-----
+remote: *** {"ref_kind": "branch", "body": "Really fix `a' this time (bad-commit)", "author_email": "brobecker@adacore.com", "subject": "Really fix `a' this time (bad-commit)", "object_type": "commit", "rev": "d2593aef8aaaef1a6a43336277afe5c02b2fe04e", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-reject-last"}
+remote: *** ---[ end stdin ]---
+remote: *** Error: Invalid bla bla bla. Rejecting Update.
+"""
+            +
+            # The rest of the output is the standard output from Git
+            # when a reference update is rejected.
+            """\
 remote: error: hook declined to update refs/heads/multiple-commits-reject-last
 To ../bare/repo.git
  ! [remote rejected] multiple-commits-reject-last -> multiple-commits-reject-last (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
+        )
 
         testcase.assertNotEqual(p.status, 0, p.image)
         testcase.assertRunOutputEqual(p, expected_out)

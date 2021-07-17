@@ -72,7 +72,14 @@ class TestRun(TestCase):
         expected_out = """\
 remote: DEBUG: commit-extra-checker.py refs/heads/single-commit-accept f109361240e74d710e8e7927495104ab40943060
 remote: -----[ stdin ]-----
-remote: {"ref_kind": "branch", "body": "This is an ok commit touching file a.", "author_email": "brobecker@adacore.com", "subject": "This is an ok commit touching file a.", "object_type": "commit", "rev": "f109361240e74d710e8e7927495104ab40943060", "author_name": "Joel Brobecker", "ref_name": "refs/heads/single-commit-accept"}
+remote:   . author_email: brobecker@adacore.com
+remote:   . author_name: Joel Brobecker
+remote:   . body: This is an ok commit touching file a.
+remote:   . object_type: commit
+remote:   . ref_kind: branch
+remote:   . ref_name: refs/heads/single-commit-accept
+remote:   . rev: f109361240e74d710e8e7927495104ab40943060
+remote:   . subject: This is an ok commit touching file a.
 remote: ---[ end stdin ]---
 remote: DEBUG: Sending email: [repo/single-commit-accept] This is an ok commit touching file a....
 To ../bare/repo.git
@@ -91,7 +98,14 @@ remote: *** The following commit was rejected by your hooks.commit-extra-checker
 remote: *** commit: 2c27994b8413d8b9515ebd38a0b229639809e5c1
 remote: *** DEBUG: commit-extra-checker.py refs/heads/single-commit-reject 2c27994b8413d8b9515ebd38a0b229639809e5c1
 remote: *** -----[ stdin ]-----
-remote: *** {"ref_kind": "branch", "body": "modify a with some contents (bad-commit)", "author_email": "brobecker@adacore.com", "subject": "modify a with some contents (bad-commit)", "object_type": "commit", "rev": "2c27994b8413d8b9515ebd38a0b229639809e5c1", "author_name": "Joel Brobecker", "ref_name": "refs/heads/single-commit-reject"}
+remote: ***   . author_email: brobecker@adacore.com
+remote: ***   . author_name: Joel Brobecker
+remote: ***   . body: modify a with some contents (bad-commit)
+remote: ***   . object_type: commit
+remote: ***   . ref_kind: branch
+remote: ***   . ref_name: refs/heads/single-commit-reject
+remote: ***   . rev: 2c27994b8413d8b9515ebd38a0b229639809e5c1
+remote: ***   . subject: modify a with some contents (bad-commit)
 remote: *** ---[ end stdin ]---
 remote: *** Error: Invalid bla bla bla. Rejecting Update.
 remote: error: hook declined to update refs/heads/single-commit-reject
@@ -116,15 +130,36 @@ error: failed to push some refs to '../bare/repo.git'
         expected_out = """\
 remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-accept-all-new 4a250d3fd87947c594579e14b5688d1e60514883
 remote: -----[ stdin ]-----
-remote: {"ref_kind": "branch", "body": "Add b", "author_email": "brobecker@adacore.com", "subject": "Add b", "object_type": "commit", "rev": "4a250d3fd87947c594579e14b5688d1e60514883", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-accept-all-new"}
+remote:   . author_email: brobecker@adacore.com
+remote:   . author_name: Joel Brobecker
+remote:   . body: Add b
+remote:   . object_type: commit
+remote:   . ref_kind: branch
+remote:   . ref_name: refs/heads/multiple-commits-accept-all-new
+remote:   . rev: 4a250d3fd87947c594579e14b5688d1e60514883
+remote:   . subject: Add b
 remote: ---[ end stdin ]---
 remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-accept-all-new 97ce4ee0f0bbb3a56c5075b9037f4caf1ce5047f
 remote: -----[ stdin ]-----
-remote: {"ref_kind": "branch", "body": "Add c", "author_email": "brobecker@adacore.com", "subject": "Add c", "object_type": "commit", "rev": "97ce4ee0f0bbb3a56c5075b9037f4caf1ce5047f", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-accept-all-new"}
+remote:   . author_email: brobecker@adacore.com
+remote:   . author_name: Joel Brobecker
+remote:   . body: Add c
+remote:   . object_type: commit
+remote:   . ref_kind: branch
+remote:   . ref_name: refs/heads/multiple-commits-accept-all-new
+remote:   . rev: 97ce4ee0f0bbb3a56c5075b9037f4caf1ce5047f
+remote:   . subject: Add c
 remote: ---[ end stdin ]---
 remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-accept-all-new 309196cc8cf49451d8030e4c25013f3791f6a946
 remote: -----[ stdin ]-----
-remote: {"ref_kind": "branch", "body": "Remove a (not needed anymore)", "author_email": "brobecker@adacore.com", "subject": "Remove a (not needed anymore)", "object_type": "commit", "rev": "309196cc8cf49451d8030e4c25013f3791f6a946", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-accept-all-new"}
+remote:   . author_email: brobecker@adacore.com
+remote:   . author_name: Joel Brobecker
+remote:   . body: Remove a (not needed anymore)
+remote:   . object_type: commit
+remote:   . ref_kind: branch
+remote:   . ref_name: refs/heads/multiple-commits-accept-all-new
+remote:   . rev: 309196cc8cf49451d8030e4c25013f3791f6a946
+remote:   . subject: Remove a (not needed anymore)
 remote: ---[ end stdin ]---
 remote: DEBUG: Sending email: [repo/multiple-commits-accept-all-new] Add b...
 remote: DEBUG: inter-email delay...
@@ -168,7 +203,14 @@ To ../bare/repo.git
         expected_out = """\
 remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-accept-some-preexisting 25f07c061174291b3126b1df487937ea3408f291
 remote: -----[ stdin ]-----
-remote: {"ref_kind": "branch", "body": "Really fix `a' this time (I think?!?)", "author_email": "brobecker@adacore.com", "subject": "Really fix `a' this time (I think?!?)", "object_type": "commit", "rev": "25f07c061174291b3126b1df487937ea3408f291", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-accept-some-preexisting"}
+remote:   . author_email: brobecker@adacore.com
+remote:   . author_name: Joel Brobecker
+remote:   . body: Really fix `a' this time (I think?!?)
+remote:   . object_type: commit
+remote:   . ref_kind: branch
+remote:   . ref_name: refs/heads/multiple-commits-accept-some-preexisting
+remote:   . rev: 25f07c061174291b3126b1df487937ea3408f291
+remote:   . subject: Really fix `a' this time (I think?!?)
 remote: ---[ end stdin ]---
 remote: DEBUG: Sending email: [repo/multiple-commits-accept-some-preexisting] Modify `a' and add `b'...
 remote: DEBUG: inter-email delay...
@@ -192,7 +234,14 @@ remote: *** The following commit was rejected by your hooks.commit-extra-checker
 remote: *** commit: 8ce0d28d635cd7dd490f6d574baecf079fd363d3
 remote: *** DEBUG: commit-extra-checker.py refs/heads/multiple-commits-reject-first 8ce0d28d635cd7dd490f6d574baecf079fd363d3
 remote: *** -----[ stdin ]-----
-remote: *** {"ref_kind": "branch", "body": "Modify `a' and add `b' (bad-commit)", "author_email": "brobecker@adacore.com", "subject": "Modify `a' and add `b' (bad-commit)", "object_type": "commit", "rev": "8ce0d28d635cd7dd490f6d574baecf079fd363d3", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-reject-first"}
+remote: ***   . author_email: brobecker@adacore.com
+remote: ***   . author_name: Joel Brobecker
+remote: ***   . body: Modify `a' and add `b' (bad-commit)
+remote: ***   . object_type: commit
+remote: ***   . ref_kind: branch
+remote: ***   . ref_name: refs/heads/multiple-commits-reject-first
+remote: ***   . rev: 8ce0d28d635cd7dd490f6d574baecf079fd363d3
+remote: ***   . subject: Modify `a' and add `b' (bad-commit)
 remote: *** ---[ end stdin ]---
 remote: *** Error: Invalid bla bla bla. Rejecting Update.
 remote: error: hook declined to update refs/heads/multiple-commits-reject-first
@@ -226,7 +275,14 @@ error: failed to push some refs to '../bare/repo.git'
             """\
 remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-reject-middle 26107593d14c75d8146f24d635a7f3b3a4282e37
 remote: -----[ stdin ]-----
-remote: {"ref_kind": "branch", "body": "Modify `a' and add `b'", "author_email": "brobecker@adacore.com", "subject": "Modify `a' and add `b'", "object_type": "commit", "rev": "26107593d14c75d8146f24d635a7f3b3a4282e37", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-reject-middle"}
+remote:   . author_email: brobecker@adacore.com
+remote:   . author_name: Joel Brobecker
+remote:   . body: Modify `a' and add `b'
+remote:   . object_type: commit
+remote:   . ref_kind: branch
+remote:   . ref_name: refs/heads/multiple-commits-reject-middle
+remote:   . rev: 26107593d14c75d8146f24d635a7f3b3a4282e37
+remote:   . subject: Modify `a' and add `b'
 remote: ---[ end stdin ]---
 """
             +
@@ -240,7 +296,14 @@ remote: *** The following commit was rejected by your hooks.commit-extra-checker
 remote: *** commit: 6822734adebb636e8d3f9e664215d56f3d319282
 remote: *** DEBUG: commit-extra-checker.py refs/heads/multiple-commits-reject-middle 6822734adebb636e8d3f9e664215d56f3d319282
 remote: *** -----[ stdin ]-----
-remote: *** {"ref_kind": "branch", "body": "Fix `a' and delete `b' (bad-commit)", "author_email": "brobecker@adacore.com", "subject": "Fix `a' and delete `b' (bad-commit)", "object_type": "commit", "rev": "6822734adebb636e8d3f9e664215d56f3d319282", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-reject-middle"}
+remote: ***   . author_email: brobecker@adacore.com
+remote: ***   . author_name: Joel Brobecker
+remote: ***   . body: Fix `a' and delete `b' (bad-commit)
+remote: ***   . object_type: commit
+remote: ***   . ref_kind: branch
+remote: ***   . ref_name: refs/heads/multiple-commits-reject-middle
+remote: ***   . rev: 6822734adebb636e8d3f9e664215d56f3d319282
+remote: ***   . subject: Fix `a' and delete `b' (bad-commit)
 remote: *** ---[ end stdin ]---
 remote: *** Error: Invalid bla bla bla. Rejecting Update.
 """
@@ -284,11 +347,25 @@ error: failed to push some refs to '../bare/repo.git'
             """\
 remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-reject-last 37b8b3265f6649a0609d3473f932c55cfbe1b186
 remote: -----[ stdin ]-----
-remote: {"ref_kind": "branch", "body": "Modify `a' and add `b'", "author_email": "brobecker@adacore.com", "subject": "Modify `a' and add `b'", "object_type": "commit", "rev": "37b8b3265f6649a0609d3473f932c55cfbe1b186", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-reject-last"}
+remote:   . author_email: brobecker@adacore.com
+remote:   . author_name: Joel Brobecker
+remote:   . body: Modify `a' and add `b'
+remote:   . object_type: commit
+remote:   . ref_kind: branch
+remote:   . ref_name: refs/heads/multiple-commits-reject-last
+remote:   . rev: 37b8b3265f6649a0609d3473f932c55cfbe1b186
+remote:   . subject: Modify `a' and add `b'
 remote: ---[ end stdin ]---
 remote: DEBUG: commit-extra-checker.py refs/heads/multiple-commits-reject-last 3df475a99cc07966432aaf471054ead01a7a8cbb
 remote: -----[ stdin ]-----
-remote: {"ref_kind": "branch", "body": "Fix `a' and delete `b' (no longer needed, after all)", "author_email": "brobecker@adacore.com", "subject": "Fix `a' and delete `b' (no longer needed, after all)", "object_type": "commit", "rev": "3df475a99cc07966432aaf471054ead01a7a8cbb", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-reject-last"}
+remote:   . author_email: brobecker@adacore.com
+remote:   . author_name: Joel Brobecker
+remote:   . body: Fix `a' and delete `b' (no longer needed, after all)
+remote:   . object_type: commit
+remote:   . ref_kind: branch
+remote:   . ref_name: refs/heads/multiple-commits-reject-last
+remote:   . rev: 3df475a99cc07966432aaf471054ead01a7a8cbb
+remote:   . subject: Fix `a' and delete `b' (no longer needed, after all)
 remote: ---[ end stdin ]---
 """
             +
@@ -302,7 +379,14 @@ remote: *** The following commit was rejected by your hooks.commit-extra-checker
 remote: *** commit: d2593aef8aaaef1a6a43336277afe5c02b2fe04e
 remote: *** DEBUG: commit-extra-checker.py refs/heads/multiple-commits-reject-last d2593aef8aaaef1a6a43336277afe5c02b2fe04e
 remote: *** -----[ stdin ]-----
-remote: *** {"ref_kind": "branch", "body": "Really fix `a' this time (bad-commit)", "author_email": "brobecker@adacore.com", "subject": "Really fix `a' this time (bad-commit)", "object_type": "commit", "rev": "d2593aef8aaaef1a6a43336277afe5c02b2fe04e", "author_name": "Joel Brobecker", "ref_name": "refs/heads/multiple-commits-reject-last"}
+remote: ***   . author_email: brobecker@adacore.com
+remote: ***   . author_name: Joel Brobecker
+remote: ***   . body: Really fix `a' this time (bad-commit)
+remote: ***   . object_type: commit
+remote: ***   . ref_kind: branch
+remote: ***   . ref_name: refs/heads/multiple-commits-reject-last
+remote: ***   . rev: d2593aef8aaaef1a6a43336277afe5c02b2fe04e
+remote: ***   . subject: Really fix `a' this time (bad-commit)
 remote: *** ---[ end stdin ]---
 remote: *** Error: Invalid bla bla bla. Rejecting Update.
 """
@@ -331,7 +415,14 @@ remote: *** The following commit was rejected by your hooks.commit-extra-checker
 remote: *** commit: 8ce0d28d635cd7dd490f6d574baecf079fd363d3
 remote: *** DEBUG: commit-extra-checker.py refs/heads/new-branch-multiple-commits-reject-first 8ce0d28d635cd7dd490f6d574baecf079fd363d3
 remote: *** -----[ stdin ]-----
-remote: *** {"ref_kind": "branch", "body": "Modify `a' and add `b' (bad-commit)", "author_email": "brobecker@adacore.com", "subject": "Modify `a' and add `b' (bad-commit)", "object_type": "commit", "rev": "8ce0d28d635cd7dd490f6d574baecf079fd363d3", "author_name": "Joel Brobecker", "ref_name": "refs/heads/new-branch-multiple-commits-reject-first"}
+remote: ***   . author_email: brobecker@adacore.com
+remote: ***   . author_name: Joel Brobecker
+remote: ***   . body: Modify `a' and add `b' (bad-commit)
+remote: ***   . object_type: commit
+remote: ***   . ref_kind: branch
+remote: ***   . ref_name: refs/heads/new-branch-multiple-commits-reject-first
+remote: ***   . rev: 8ce0d28d635cd7dd490f6d574baecf079fd363d3
+remote: ***   . subject: Modify `a' and add `b' (bad-commit)
 remote: *** ---[ end stdin ]---
 remote: *** Error: Invalid bla bla bla. Rejecting Update.
 remote: error: hook declined to update refs/heads/new-branch-multiple-commits-reject-first

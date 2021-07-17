@@ -85,11 +85,25 @@ To ../bare/repo.git
         expected_out = """\
 remote: DEBUG: commit-extra-checker.py refs/tags/annotated-tag-new-commits-good 81792e975fbabb737876018499cb76123a2a599e
 remote: -----[ stdin ]-----
-remote: {"ref_kind": "tag", "body": "update a", "author_email": "brobecker@adacore.com", "subject": "update a", "object_type": "tag", "rev": "81792e975fbabb737876018499cb76123a2a599e", "author_name": "Joel Brobecker", "ref_name": "refs/tags/annotated-tag-new-commits-good"}
+remote:   . author_email: brobecker@adacore.com
+remote:   . author_name: Joel Brobecker
+remote:   . body: update a
+remote:   . object_type: tag
+remote:   . ref_kind: tag
+remote:   . ref_name: refs/tags/annotated-tag-new-commits-good
+remote:   . rev: 81792e975fbabb737876018499cb76123a2a599e
+remote:   . subject: update a
 remote: ---[ end stdin ]---
 remote: DEBUG: commit-extra-checker.py refs/tags/annotated-tag-new-commits-good e3713ac0f17aea443e937dd38d0ef5f5fc360173
 remote: -----[ stdin ]-----
-remote: {"ref_kind": "tag", "body": "revert previous commit (unnecessary after all)", "author_email": "brobecker@adacore.com", "subject": "revert previous commit (unnecessary after all)", "object_type": "tag", "rev": "e3713ac0f17aea443e937dd38d0ef5f5fc360173", "author_name": "Joel Brobecker", "ref_name": "refs/tags/annotated-tag-new-commits-good"}
+remote:   . author_email: brobecker@adacore.com
+remote:   . author_name: Joel Brobecker
+remote:   . body: revert previous commit (unnecessary after all)
+remote:   . object_type: tag
+remote:   . ref_kind: tag
+remote:   . ref_name: refs/tags/annotated-tag-new-commits-good
+remote:   . rev: e3713ac0f17aea443e937dd38d0ef5f5fc360173
+remote:   . subject: revert previous commit (unnecessary after all)
 remote: ---[ end stdin ]---
 remote: DEBUG: Sending email: [repo] Created tag 'annotated-tag-new-commits-good'...
 remote: DEBUG: inter-email delay...
@@ -117,7 +131,14 @@ remote: *** The following commit was rejected by your hooks.commit-extra-checker
 remote: *** commit: 4be0bf1ff4ecc4a1f28641bba9dee46ae846a834
 remote: *** DEBUG: commit-extra-checker.py refs/tags/annotated-tag-new-commits-bad 4be0bf1ff4ecc4a1f28641bba9dee46ae846a834
 remote: *** -----[ stdin ]-----
-remote: *** {"ref_kind": "tag", "body": "Update A to say \\"Now\\". This is bad form, hence (bad-commit)", "author_email": "brobecker@adacore.com", "subject": "Update A to say \\"Now\\". This is bad form, hence (bad-commit)", "object_type": "tag", "rev": "4be0bf1ff4ecc4a1f28641bba9dee46ae846a834", "author_name": "Joel Brobecker", "ref_name": "refs/tags/annotated-tag-new-commits-bad"}
+remote: ***   . author_email: brobecker@adacore.com
+remote: ***   . author_name: Joel Brobecker
+remote: ***   . body: Update A to say "Now". This is bad form, hence (bad-commit)
+remote: ***   . object_type: tag
+remote: ***   . ref_kind: tag
+remote: ***   . ref_name: refs/tags/annotated-tag-new-commits-bad
+remote: ***   . rev: 4be0bf1ff4ecc4a1f28641bba9dee46ae846a834
+remote: ***   . subject: Update A to say "Now". This is bad form, hence (bad-commit)
 remote: *** ---[ end stdin ]---
 remote: *** Error: Invalid bla bla bla. Rejecting Update.
 remote: error: hook declined to update refs/tags/annotated-tag-new-commits-bad

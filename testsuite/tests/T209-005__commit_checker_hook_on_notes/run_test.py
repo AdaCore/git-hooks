@@ -50,11 +50,25 @@ class TestRun(TestCase):
         expected_out = """\
 remote: DEBUG: commit-extra-checker.py refs/notes/commits 58e8efaaf0dee13edea66b1abbd4b669132b3d77
 remote: -----[ stdin ]-----
-remote: {"ref_kind": "notes", "body": "Notes added by 'git notes add'", "author_email": "brobecker@adacore.com", "subject": "Notes added by 'git notes add'", "object_type": "commit", "rev": "58e8efaaf0dee13edea66b1abbd4b669132b3d77", "author_name": "Joel Brobecker", "ref_name": "refs/notes/commits"}
+remote:   . author_email: brobecker@adacore.com
+remote:   . author_name: Joel Brobecker
+remote:   . body: Notes added by 'git notes add'
+remote:   . object_type: commit
+remote:   . ref_kind: notes
+remote:   . ref_name: refs/notes/commits
+remote:   . rev: 58e8efaaf0dee13edea66b1abbd4b669132b3d77
+remote:   . subject: Notes added by 'git notes add'
 remote: ---[ end stdin ]---
 remote: DEBUG: commit-extra-checker.py refs/notes/commits 0892f7e8d41c265fc0ffcbe604f0e7ce784bd9d2
 remote: -----[ stdin ]-----
-remote: {"ref_kind": "notes", "body": "Notes added by 'git notes add'", "author_email": "brobecker@adacore.com", "subject": "Notes added by 'git notes add'", "object_type": "commit", "rev": "0892f7e8d41c265fc0ffcbe604f0e7ce784bd9d2", "author_name": "Joel Brobecker", "ref_name": "refs/notes/commits"}
+remote:   . author_email: brobecker@adacore.com
+remote:   . author_name: Joel Brobecker
+remote:   . body: Notes added by 'git notes add'
+remote:   . object_type: commit
+remote:   . ref_kind: notes
+remote:   . ref_name: refs/notes/commits
+remote:   . rev: 0892f7e8d41c265fc0ffcbe604f0e7ce784bd9d2
+remote:   . subject: Notes added by 'git notes add'
 remote: ---[ end stdin ]---
 remote: DEBUG: Sending email: [notes][repo] New file: a....
 remote: DEBUG: inter-email delay...

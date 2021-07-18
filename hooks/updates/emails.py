@@ -267,7 +267,7 @@ class Email(object):
         # the "unicode" type, so as to avoid the Python3-based style_checker
         # flagging it as being undefined.
         if sys.version_info[0] < 3:
-            if not isinstance(e_msg_body, str):
+            if not isinstance(e_msg_body, str):  # pragma: py2-only
                 # See __email_body_with_diff for more information about
                 # when this happens.
                 #
@@ -514,7 +514,7 @@ class Email(object):
         # and non-unicode strings, always calling the "encode" method below.
 
         if sys.version_info[0] < 3:
-            if not isinstance(to_be_filed, str):
+            if not isinstance(to_be_filed, str):  # pragma: py2-only
                 to_be_filed = to_be_filed.encode("UTF-8", errors="backslashreplace")
 
         p = Popen(self.filer_cmd, stdin=PIPE, stdout=PIPE, stderr=STDOUT)

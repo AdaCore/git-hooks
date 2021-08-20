@@ -526,8 +526,8 @@ class Email(object):
 def guess_encoding(text):
     """Try to guess the given string's encoding.
 
-    The guessing is done by simply trying to decode the string using
-    the more popular encodings.
+    The guessing is done by simply trying the more popular encodings
+    against the given text.
 
     PARAMETERS
         text: The string whose encoding we are trying to guess.
@@ -536,26 +536,43 @@ def guess_encoding(text):
         The name of the encoding (e.g. 'ascii', or 'UTF-8') if that
         encoding is able to decode the given string. None otherwise.
 
-        Note that one of the encodings that this function tries is
-        the 'iso-8859-15' encoding which, as of this writing (using
-        Python 2.7.10), appears to be an encoding accepting any sequence
-        of bytes. So, as of now, the implementation of this function
-        is such that it should never return None. However, users of
-        this function should still be prepared for that as the above
-        may not last forever, since some codes are not legal with
-        that encoding.
+        NOTE WHEN RUNNING THE HOOKS WITH PYTHON 2.X:
+        | One of the encodings that this function tries is
+        | the 'iso-8859-15' encoding which, as of this writing (using
+        | Python 2.7.10), appears to be an encoding accepting any sequence
+        | of bytes. So, as of now, the implementation of this function
+        | is such that it should never return None. However, users of
+        | this function should still be prepared for that as the above
+        | may not last forever, since some codes are not legal with
+        | that encoding.
     """
-    for potential_encoding in ("ascii", "UTF-8", "iso-8859-15"):
-        # Note: It looks like iso-8859-15 accepts any sequence of bytes.
-        # So, always place it last in the list above, so as to try all
-        # the other encodings before defaulting to that one.  We do try
-        # it before using it, though, just in case it starts failing
-        # for some reason.
-        try:
-            text.decode(potential_encoding)
-            return potential_encoding
-        except Exception:
-            pass
+    if hasattr(text, "decode"):  # pragma: py2-only
+        # The string is a byte-string, which is something we only expect
+        # when running the hooks using Python 2.x as the interpreter
+        # (with Python 3.x, we'll be converting everything to unicode
+        # strings early on, so we should never reach this code).
+        #
+        # Find the encoding that manages to decode the given text.
+        for potential_encoding in ("ascii", "UTF-8", "iso-8859-15"):
+            # Note: It looks like iso-8859-15 accepts any sequence of bytes.
+            # So, always place it last in the list above, so as to try all
+            # the other encodings before defaulting to that one.  We do try
+            # it before using it, though, just in case it starts failing
+            # for some reason.
+            try:
+                text.decode(potential_encoding)
+                return potential_encoding
+            except Exception:
+                pass
+    else:  # pragma: py3-only
+        # Test the more popular encodings, starting with the smaller
+        # charsets first.
+        for potential_encoding in ("ascii", "iso-8859-15", "UTF-8"):
+            try:
+                text.encode(potential_encoding)
+                return potential_encoding
+            except Exception:
+                pass
 
 
 def sanitized_email_header_field(field_body):

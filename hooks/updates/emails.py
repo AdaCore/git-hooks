@@ -410,7 +410,7 @@ class Email(object):
             # Note that the code is written in a way so as to avoid
             # referencing the "unicode" type, so as to avoid
             # the Python3-based style_checker flagging it as being undefined.
-            if sys.version_info[0] < 3:
+            if sys.version_info[0] < 3:  # pragma: py2-only
                 # By default, email_body and diff are of type "str".
                 # However, projects can override these defaults via
                 # the commit-email-formatter hook, which returns

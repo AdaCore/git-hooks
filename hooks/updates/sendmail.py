@@ -6,7 +6,7 @@ from subprocess import Popen, PIPE, STDOUT
 
 
 def sendmail(from_email, to_emails, mail_as_string, smtp_server):
-    """Send an email with sendmail or stmplib
+    """Send an email with sendmail.
 
     PARAMETERS
       from_email: the address sending this email (e.g. user@example.com)
@@ -29,10 +29,4 @@ def sendmail(from_email, to_emails, mail_as_string, smtp_server):
                 print(out)
             return p.returncode == 0
 
-    # Else try using smtplib
-    import smtplib
-
-    s = smtplib.SMTP(smtp_server)
-    s.sendmail(from_email, to_emails, mail_as_string)
-    s.quit()
-    return True
+    return False

@@ -1,0 +1,17 @@
+#! /usr/bin/env bash
+#
+# A small wrapper around our stdout-sendmail program which unsets
+# COVERAGE_PROCESS_START prior to calling it. The purpose is to disable
+# code coverage prior to calling this script, because leaving it enabled
+# causes a fatal error while trying to save the coverage data into a file
+# at the end of the script's execution (during the atexit call). The error
+# comes from the fact that the git-hooks daemonizes the execution of
+# the call to sendmail, which results in the process changing its current
+# working directory to /, and thus causes the coverage module to think
+# that it should save its coverage data files there, resulting in
+# an IOError:
+#
+#    IOError: [Errno 13] Permission denied: '/.coverage.xxx.189363.572044'
+
+unset COVERAGE_PROCESS_START
+python -u `dirname $0`/stdout-sendmail "$@"

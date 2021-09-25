@@ -354,27 +354,12 @@ class Email(object):
             )
         ]
 
-        if "GIT_HOOKS_TESTSUITE_MODE" in os.environ:
-            if "GIT_HOOKS_MINIMAL_EMAIL_DEBUG_TRACE" in os.environ:
-                # This environment variable is set when the testcase
-                # doesn't really care about the full contents of
-                # the email. Just print a simple trace showing that
-                # the email _is_ being sent, and that's it.
-                #
-                # Use debug level 0 to make sure that the trace is always
-                # printed.
-                debug("Sending email: {e_msg[Subject]}...".format(e_msg=e_msg), level=0)
-            else:
-                # Use debug level 0 to make sure that the trace is always
-                # printed.
-                debug(e_msg.as_string(), level=0)
-        else:  # pragma: no cover (do not want real emails during testing)
-            sendmail(
-                self.email_info.email_from,
-                email_recipients,
-                e_msg.as_string(),
-                "localhost",
-            )
+        sendmail(
+            self.email_info.email_from,
+            email_recipients,
+            e_msg.as_string(),
+            "localhost",
+        )
 
         if self.filer_cmd is not None:
             self.__call_filer_cmd()

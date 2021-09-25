@@ -37,11 +37,7 @@ EOF
 $root/run-testsuite $@
 
 GIT_HOOKS_DIR="$root/../hooks"
-# ??? Exclude hooks/updates/sendmail.py from the list of modules,
-# since it is a copy of gnatpython's sendmail module.
-# This is going to be necessary until we have a gnatpython release
-# which provides the sendmail module.
-GIT_HOOKS_MODULES=`find $GIT_HOOKS_DIR -name '*.py' -print | grep -v hooks/updates/sendmail.py`
+GIT_HOOKS_MODULES=`find $GIT_HOOKS_DIR -name '*.py' -print`
 coverage combine
 coverage report --rcfile=coverage.rc $GIT_HOOKS_MODULES
 coverage html --rcfile=coverage.rc $GIT_HOOKS_MODULES

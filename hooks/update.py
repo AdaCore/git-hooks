@@ -7,6 +7,7 @@ from config import ThirdPartyHook
 from errors import InvalidUpdate
 from git import get_object_type, git_show_ref
 from init import init_all_globals
+from requirements import check_minimum_system_requirements
 from utils import debug, warn, create_scratch_dir, FileLock
 
 # We have to import utils, because we cannot import scratch_dir
@@ -82,6 +83,9 @@ def check_update(ref_name, old_rev, new_rev):
         % (ref_name, old_rev, new_rev),
         level=2,
     )
+
+    check_minimum_system_requirements()
+
     update_cls = new_update(
         ref_name, old_rev, new_rev, git_show_ref(), submitter_email=None
     )

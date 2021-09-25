@@ -13,6 +13,7 @@ from config import ThirdPartyHook
 from daemon import run_in_daemon
 from git import git_show_ref
 from init import init_all_globals
+from requirements import check_minimum_system_requirements
 from updates.emails import EmailQueue
 from updates.factory import new_update
 from utils import debug, warn
@@ -34,6 +35,8 @@ def post_receive_one(ref_name, old_rev, new_rev, refs, submitter_email):
         "                        old_rev=%s\n"
         "                        new_rev=%s)" % (ref_name, old_rev, new_rev)
     )
+
+    check_minimum_system_requirements()
 
     update = new_update(ref_name, old_rev, new_rev, refs, submitter_email)
     if update is None:

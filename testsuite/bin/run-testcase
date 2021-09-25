@@ -58,6 +58,12 @@ class TestGitHooks(TestRunner):
         os.environ['GIT_HOOKS_LOGGER'] = \
             '%s/testsuite/bin/stdout-logger' % root_dir
 
+        # Similarly, tell the hooks to use our fake sendmail script,
+        # rather than the real one (we want those emails to be dumped
+        # on stdout, rather than actually sent out).
+        os.environ["GIT_HOOKS_SENDMAIL"] = os.path.join(
+            root_dir, "testsuite", "bin", "stdout-sendmail-wrapper")
+
     def apply_output_filter(self, str_list):
         """The test is succesful iff the output ends with `OK'.
         """

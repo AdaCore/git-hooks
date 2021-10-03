@@ -14,6 +14,7 @@ import sys
 
 def stdout_sendmail():
     email_str = sys.stdin.read()
+    e_msg = Parser().parsestr(email_str)
 
     if "GIT_HOOKS_MINIMAL_EMAIL_DEBUG_TRACE" in os.environ:
         # This environment variable is set when the testcase
@@ -21,7 +22,6 @@ def stdout_sendmail():
         # the email. Just print a simple trace showing that
         # the email _is_ being sent, and that's it.
 
-        e_msg = Parser().parsestr(email_str)
         subject = e_msg["Subject"]
         if "\n" in subject:
             # The email subject got split across multiple lines during
@@ -31,7 +31,23 @@ def stdout_sendmail():
 
     else:
         sys.stdout.write("DEBUG: ")
-        sys.stdout.write(email_str)
+        for field, value in e_msg.items():
+            sys.stdout.write("{field}: {value}\n".format(field=field, value=value))
+        payload = e_msg.get_payload(decode=True)
+        # The payload is in bytes; decode it before we send it to stdout
+        # (which wants str objects).
+        #
+        # Only do this decoding when Python >= 3.x, as we are getting
+        # some errors with Python 2.x which are not worth investigating
+        # at this stage (we are moving away from 2.x support).
+        if sys.version_info[0] >= 3:
+            # The payload is in bytes, and needs to be decoded
+            # in order to be
+            charset = e_msg.get_content_charset()
+            payload = payload.decode(charset)
+        sys.stdout.write("\n")
+        sys.stdout.write(payload)
+
     sys.stdout.flush()
 
 

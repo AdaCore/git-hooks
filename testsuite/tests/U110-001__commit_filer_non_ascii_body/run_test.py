@@ -1,7 +1,6 @@
 # coding=utf-8
 from support import *
 
-from email.header import Header
 import os
 import stat
 

@@ -5,6 +5,7 @@ from __future__ import print_function
 from os import environ
 from subprocess import Popen, PIPE, STDOUT
 
+from io_utils import safe_decode
 from utils import warn
 
 
@@ -24,6 +25,7 @@ def syslog(message, tag="style_checker", priority="local0.warn"):
         [logger_exe, "-t", tag, "-p", priority, message], stdout=PIPE, stderr=STDOUT
     )
     out, _ = p.communicate()
+    out = safe_decode(out)
     if p.returncode != 0:
         info = [
             "Failed to file the following syslog entry:",

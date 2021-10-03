@@ -7,6 +7,7 @@ from email.mime.text import MIMEText
 from email.utils import getaddresses, parseaddr
 from errors import InvalidUpdate
 from git import get_module_name
+from io_utils import encode_utf8, safe_decode
 import os
 from subprocess import Popen, PIPE, STDOUT
 import sys
@@ -503,9 +504,9 @@ class Email(object):
                 to_be_filed = to_be_filed.encode("UTF-8", errors="backslashreplace")
 
         p = Popen(self.filer_cmd, stdin=PIPE, stdout=PIPE, stderr=STDOUT)
-        out, _ = p.communicate(to_be_filed)
+        out, _ = p.communicate(encode_utf8(to_be_filed))
         if p.returncode != 0:
-            print(out)
+            print(safe_decode(out))
 
 
 def guess_encoding(text):

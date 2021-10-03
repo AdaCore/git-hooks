@@ -465,7 +465,7 @@ def style_check_commit(old_rev, new_rev, project_name):
     # We allow users to explicitly disable pre-commit checks for
     # specific commits via the use of a special keyword placed anywhere
     # in the revision log. If found, then return immediately.
-    raw_revlog = git.log("-1", new_rev, pretty="format:%B")
+    raw_revlog = git.log("-1", new_rev, pretty="format:%B", _decode=True)
     if "no-precommit-check" in raw_revlog:
         debug("pre-commit checks explicity disabled for commit %s" % new_rev)
         return

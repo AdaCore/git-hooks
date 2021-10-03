@@ -104,7 +104,7 @@ class BranchCreation(BranchUpdate):
 
         gitreview_contents = git.show("%s:%s" % (self.new_rev, GITREVIEW_FILENAME))
         gitreview_configs = git.config(
-            "-z", "-l", "--file", "-", _input=gitreview_contents
+            "-z", "-l", "--file", "-", _input=gitreview_contents, _decode=True
         ).split("\x00")
 
         config_map = {}

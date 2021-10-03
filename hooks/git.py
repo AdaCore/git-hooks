@@ -29,6 +29,8 @@ import re
 from subprocess import Popen, PIPE, STDOUT
 import subprocess
 
+from io_utils import safe_decode
+
 
 class CalledProcessError(subprocess.CalledProcessError):
     """An exception raised in case of failure in this module."""
@@ -59,6 +61,16 @@ def git_run(command, *args, **kwargs):
            _input=<str>: Feed <str> to stdinin of the command
            _outfile=<file): Use <file> as the output file descriptor
            _split_lines: Return an array with one string per returned line
+           _decode: This only applies if the _outfile parameter is not used.
+               Decode the command's output using safe_decode. Otherwise,
+               return the output as a byte string.
+
+               Note: We do not do the decoding  by default, because some
+               commands can return some output which aggregates data
+               from multiple sources where the data may have inconsistent
+               encodings (e.g. commands that provide a list of commit authors'
+               names will output the names using the encoding that the authors
+               themselves used at the time the commits were created).
     """
     to_run = ["git", command.replace("_", "-")]
 
@@ -67,6 +79,7 @@ def git_run(command, *args, **kwargs):
     input = None
     outfile = None
     do_split_lines = False
+    do_decode = False
     for (k, v) in kwargs.items():
         if k == "_cwd":
             cwd = v
@@ -78,6 +91,8 @@ def git_run(command, *args, **kwargs):
             outfile = v
         elif k == "_split_lines":
             do_split_lines = True
+        elif k == "_decode":
+            do_decode = True
         elif v is True:
             if len(k) == 1:
                 to_run.append("-" + k)
@@ -103,6 +118,9 @@ def git_run(command, *args, **kwargs):
     if outfile:
         return None
     else:
+        if do_decode:
+            output = safe_decode(output)
+
         # Strip any trailing whitespaces and newlines at the end of
         # the output. This is because Git commands often add an extra
         # newline at the end of the data we're querying.
@@ -160,7 +178,7 @@ def get_git_dir():
     # this is a bare repository or not), or when calling it
     # from the .git directory itself (in which case it returns
     # '.').
-    return os.path.abspath(git.rev_parse(git_dir=True))
+    return os.path.abspath(git.rev_parse(git_dir=True, _decode=True))
 
 
 def is_null_rev(rev):
@@ -177,7 +195,7 @@ def empty_tree_rev():
     # To compute this SHA1 requires a call to git, so cache
     # the result in an attribute called 'cached_rev'.
     if not hasattr(empty_tree_rev, "cached_rev"):
-        empty_tree_rev.cached_rev = git.mktree(_input="")
+        empty_tree_rev.cached_rev = git.mktree(_input="", _decode=True)
     return empty_tree_rev.cached_rev
 
 
@@ -207,7 +225,7 @@ def get_object_type(rev):
     if is_null_rev(rev):
         rev_type = "delete"
     else:
-        rev_type = git.cat_file(rev, t=True)
+        rev_type = git.cat_file(rev, t=True, _decode=True)
     return rev_type
 
 
@@ -221,7 +239,7 @@ def commit_rev(rev):
     PARAMETERS
         rev: A revision.
     """
-    return git.rev_list("-n1", rev)
+    return git.rev_list("-n1", rev, _decode=True)
 
 
 def commit_oneline(rev):
@@ -230,7 +248,7 @@ def commit_oneline(rev):
     PARAMETERS
         rev: A commit revision (SHA1).
     """
-    info = git.rev_list(rev, max_count="1", oneline=True)
+    info = git.rev_list(rev, max_count="1", oneline=True, _decode=True)
     (short_rev, subject) = info.split(None, 1)
     return "%s... %s" % (short_rev, subject[0:59])
 
@@ -329,7 +347,7 @@ def parse_tag_object(tag_name):
     # rev-log/signature extraction issue by calling "git cat-file"
     # (as we used to do before).
 
-    for line in git.show(tag_name, _split_lines=True):
+    for line in git.show(tag_name, _split_lines=True, _decode=True):
         if line.strip() == "":
             break
         elif line.startswith("Tagger:"):
@@ -350,7 +368,7 @@ def parse_tag_object(tag_name):
     revision_log = []
     section_no = 1
 
-    for line in git.cat_file(tag_name, p=True, _split_lines=True):
+    for line in git.cat_file(tag_name, p=True, _split_lines=True, _decode=True):
         if section_no == 1:
             if line.strip() == "":
                 # We have reached the end of this section, moving on
@@ -393,7 +411,7 @@ def git_show_ref(*args):
 
     ignore_refs_list = [regex.strip() for regex in git_config("hooks.ignore-refs")]
 
-    matching_refs = git.show_ref(*args, _split_lines=True)
+    matching_refs = git.show_ref(*args, _split_lines=True, _decode=True)
     result = {}
     for ref_info in matching_refs:
         rev, ref = ref_info.split(None, 2)
@@ -416,7 +434,7 @@ def commit_parents(rev):
         (ie: the first parent is first on the list, etc). If this is
         a headeless commit, return an empty list.
     """
-    return git.log("-n1", "--pretty=format:%P", rev).strip().split()
+    return git.log("-n1", "--pretty=format:%P", rev, _decode=True).strip().split()
 
 
 def commit_subject(rev):
@@ -425,7 +443,7 @@ def commit_subject(rev):
     PARAMETERS
         rev: A commit revision.
     """
-    return git.log("-n1", "--pretty=format:%s", rev)
+    return git.log("-n1", "--pretty=format:%s", rev, _decode=True)
 
 
 def diff_tree(*args):
@@ -455,7 +473,7 @@ def diff_tree(*args):
     # pairs of lines, with the first line containing the information
     # about a given file, and the line following it containing
     # the name of the file.
-    diff_data = git.diff_tree("-z", *args).split("\x00")
+    diff_data = git.diff_tree("-z", *args, _decode=True).split("\x00")
 
     # When doing a "git diff-tree" with a single tree-ish, the output
     # starts with the hash of what is being compared. We're not

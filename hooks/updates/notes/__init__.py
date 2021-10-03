@@ -94,7 +94,7 @@ class GitNotes(object):
             notes_filename: The filename containing the notes.
         """
         try:
-            return git.show("%s:%s" % (notes_rev, notes_filename))
+            return git.show("%s:%s" % (notes_rev, notes_filename), _decode=True)
         except CalledProcessError:
             # The note was probably deleted, so no more notes.
             return None

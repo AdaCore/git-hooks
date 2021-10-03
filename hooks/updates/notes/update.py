@@ -95,7 +95,9 @@ class NotesUpdate(AbstractUpdate):
         # whereas what we needs is the contents at the commit.rev.
         # This makes a difference when a single push updates the notes
         # of the same commit multiple times.
-        annotated_rev_log = git.log(annotated_commit.rev, no_notes=True, max_count="1")
+        annotated_rev_log = git.log(
+            annotated_commit.rev, no_notes=True, max_count="1", _decode=True
+        )
         notes_contents = (
             None if notes.contents is None else indent(notes.contents, " " * 4)
         )
@@ -131,7 +133,7 @@ class NotesUpdate(AbstractUpdate):
         # Prevent this from happening by putting an artificial
         # character at the start of the format string, and then
         # by stripping it from the output.
-        diff = git.show(commit.rev, pretty="format:|", p=True)[1:]
+        diff = git.show(commit.rev, pretty="format:|", p=True, _decode=True)[1:]
 
         email_bcc = git_config("hooks.filer-email")
 
@@ -158,7 +160,7 @@ class NotesUpdate(AbstractUpdate):
         # there is at least one commit that is accessible from the old
         # revision which would no longer be accessible from the new
         # revision.
-        if git.rev_list("%s..%s" % (self.new_rev, self.old_rev)) == "":
+        if git.rev_list("%s..%s" % (self.new_rev, self.old_rev), _decode=True) == "":
             return
 
         raise InvalidUpdate(

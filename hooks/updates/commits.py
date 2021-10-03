@@ -1,6 +1,7 @@
 """Management of git commits during updates..."""
 
 from git import git, empty_tree_rev, diff_tree
+from io_utils import safe_decode
 from updates.mailinglists import expanded_mailing_list
 from utils import debug
 
@@ -70,7 +71,9 @@ class CommitInfo(object):
         Note that the revlog is computed lazily and then cached.
         """
         if self.__raw_revlog is None:
-            self.__raw_revlog = git.log(self.rev, max_count="1", pretty="format:%B")
+            self.__raw_revlog = git.log(
+                self.rev, max_count="1", pretty="format:%B", _decode=True
+            )
         return self.__raw_revlog
 
     @property
@@ -245,7 +248,9 @@ class CommitInfo(object):
         Note that unlike in the all_files method, the result of
         this method is not cached.
         """
-        return git.ls_tree("--full-tree", "--name-only", "-r", rev, _split_lines=True)
+        return git.ls_tree(
+            "--full-tree", "--name-only", "-r", rev, _split_lines=True, _decode=True
+        )
 
 
 def commit_info_list(*args):
@@ -254,11 +259,13 @@ def commit_info_list(*args):
     PARAMETERS
         Same as in the "git rev-list" command.
     """
-    rev_info = git.rev_list(
+    rev_info_in_bytes = git.rev_list(
         *args, pretty="format:%P%n%an%n%ae%n%s", _split_lines=True, reverse=True
     )
     # Each commit should generate 5 lines of output.
-    assert len(rev_info) % 5 == 0
+    assert len(rev_info_in_bytes) % 5 == 0
+
+    rev_info = [safe_decode(b) for b in rev_info_in_bytes]
 
     result = []
     while rev_info:

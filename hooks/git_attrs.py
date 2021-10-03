@@ -165,6 +165,7 @@ def git_attribute(commit_rev, filename_list, attr_name):
         _cwd=tmp_git_dir,
         _env=tmp_git_dir_env,
         _input=check_attr_input,
+        _decode=True,
     ).split("\x00")
     if len(attr_info) % 3 == 1 and not attr_info[-1]:
         # The attribute information for each filename ends with

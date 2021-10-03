@@ -22,6 +22,8 @@ from pre_commit_checks import (
 import re
 import shlex
 import sys
+
+from io_utils import safe_decode_by_line
 from updates.commits import commit_info_list
 from updates.emails import EmailCustomContents, EmailInfo, Email
 from updates.mailinglists import expanded_mailing_list
@@ -187,19 +189,27 @@ class AbstractUpdate(object):
         """Send all email notifications associated to this update."""
         no_email_re = self.search_config_option_list("hooks.no-emails")
         if no_email_re is not None:
-            warn(
-                *[
-                    "-" * 70,
-                    "--  The hooks.no-emails config option contains `%s',"
-                    % no_email_re,
-                    "--  which matches the name of the reference being" " updated ",
-                    "--  (%s)." % self.ref_name,
-                    "--",
-                    "--  Commit emails will therefore not be sent.",
-                    "-" * 70,
-                ],
-                prefix=""
-            )
+            # Python-2.x compatibility: When the list of arguments in a call
+            # are so long that they get formatted over multiple lines, black
+            # adds a comma at the end of the last argument. Unfortunately,
+            # it looks like Python 2.x doesn't like that comma when one of
+            # the parameter is a non-keyworded variable-length argument list
+            # (aka *args).
+            #
+            # So, work around this issue until the transition to Python 3.x
+            # by building a list with all the unnamed arguments, and then
+            # use that list to make the call, thus ensuring that the call
+            # is short-enough to fit in a single line.
+            warn_msg = [
+                "-" * 70,
+                "--  The hooks.no-emails config option contains `%s'," % no_email_re,
+                "--  which matches the name of the reference being" " updated ",
+                "--  (%s)." % self.ref_name,
+                "--",
+                "--  Commit emails will therefore not be sent.",
+                "-" * 70,
+            ]
+            warn(*warn_msg, prefix="")
             return
         # This phase needs all added commits to have certain attributes
         # to be computed.  Do it now.
@@ -382,7 +392,7 @@ class AbstractUpdate(object):
         # is to prevent bugtool from searching for TNs in the patch
         # itself.
 
-        body = git.log(commit.rev, max_count="1") + "\n"
+        body = git.log(commit.rev, max_count="1", _decode=True) + "\n"
         if git_config("hooks.commit-url") is not None:
             url_info = {"rev": commit.rev, "ref_name": self.ref_name}
             body = git_config("hooks.commit-url") % url_info + "\n\n" + body
@@ -391,6 +401,13 @@ class AbstractUpdate(object):
             diff = None
         else:
             diff = git.show(commit.rev, p=True, M=True, stat=True, pretty="format:")
+            # Decode the diff line-by-line:
+            #
+            # It seems conceivable that the diff may cover multiple files,
+            # and that the files may have different encodings, so we cannot
+            # assume that the entire output follows the same encoding.
+            diff = safe_decode_by_line(diff)
+
             # Add a small "---" separator line at the beginning of
             # the diff section we just computed. This mimicks what
             # "git show" would do if we hadn't provided an empty
@@ -685,13 +702,24 @@ class AbstractUpdate(object):
                 hook_args=(self.ref_name, commit.rev),
             )
             if p.returncode != 0:
-                raise InvalidUpdate(
+                # Python-2.x compatibility: When the list of arguments in a call
+                # are so long that they get formatted over multiple lines, black
+                # adds a comma at the end of the last argument. Unfortunately,
+                # it looks like Python 2.x doesn't like that comma when one of
+                # the parameter is a non-keyworded variable-length argument list
+                # (aka *args).
+                #
+                # So, work around this issue until the transition to Python 3.x
+                # by building a list with all the unnamed arguments, and then
+                # use that list to make the call, thus ensuring that the call
+                # is short-enough to fit in a single line.
+                invalid_update_msg = [
                     "The following commit was rejected by your"
                     " hooks.commit-extra-checker script"
                     " (status: {p.returncode})".format(p=p),
                     "commit: {commit.rev}".format(commit=commit),
-                    *out.splitlines()
-                )
+                ] + out.splitlines()
+                raise InvalidUpdate(*invalid_update_msg)
             else:
                 sys.stdout.write(out)
 
@@ -723,7 +751,7 @@ class AbstractUpdate(object):
             exclude.append("^%s" % self.old_rev)
 
         new_repo_revs = git.rev_list(
-            self.new_rev, *exclude, reverse=True, _split_lines=True
+            self.new_rev, *exclude, reverse=True, _split_lines=True, _decode=True
         )
 
         # If this is a reference creation (base_rev is null), try to
@@ -1072,7 +1100,9 @@ class AbstractUpdate(object):
             base_rev = commit_list[0].base_rev_for_display()
             if base_rev is not None:
                 exclude.append("^%s" % base_rev)
-            included_refs = git.rev_list(self.new_rev, *exclude, _split_lines=True)
+            included_refs = git.rev_list(
+                self.new_rev, *exclude, _split_lines=True, _decode=True
+            )
 
             for commit in commit_list:
                 commit.send_email_p = commit.rev in included_refs
@@ -1098,7 +1128,9 @@ class AbstractUpdate(object):
             # Also reduce the list already present in this branch
             # prior to the update.
             exclude.append("^%s" % base_rev)
-        included_refs = git.rev_list(self.new_rev, *exclude, _split_lines=True)
+        included_refs = git.rev_list(
+            self.new_rev, *exclude, _split_lines=True, _decode=True
+        )
 
         # Also, we always send emails for first-parent commits.
         # This is useful in the following scenario:
@@ -1123,9 +1155,22 @@ class AbstractUpdate(object):
         first_parents_expr = [self.new_rev]
         if base_rev is not None:
             first_parents_expr.append("^%s" % base_rev)
-        first_parents = git.rev_list(
-            *first_parents_expr, first_parent=True, _split_lines=True
-        )
+        # Python-2.x compatibility: When the list of arguments in a call
+        # are so long that they get formatted over multiple lines, black
+        # adds a comma at the end of the last argument. Unfortunately,
+        # it looks like Python 2.x doesn't like that comma when one of
+        # the parameter is a non-keyworded variable-length argument list
+        # (aka *args).
+        #
+        # So, work around this issue until the transition to Python 3.x
+        # is complete by passing the named arguments via a kwargs dict
+        # so as to keep the call short-enough to fit in a single line.
+        rev_list_kwargs = {
+            "first_parent": True,
+            "_split_lines": True,
+            "_decode": True,
+        }
+        first_parents = git.rev_list(*first_parents_expr, **rev_list_kwargs)
 
         for commit in commit_list:
             commit.send_email_p = (

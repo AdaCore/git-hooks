@@ -300,7 +300,9 @@ def initialize_git_config_map():
         # Also, use the nul character as the separator between each
         # entry (-z option) so as to not confuse them with potential
         # newlines being used inside the value of an option.
-        all_configs = git.config("-z", "-l", "--file", cfg_file).split("\x00")
+        all_configs = git.config("-z", "-l", "--file", cfg_file, _decode=True).split(
+            "\x00"
+        )
     finally:
         os.unlink(tmp_file)
 

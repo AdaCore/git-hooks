@@ -2,6 +2,7 @@
 """
 from __future__ import print_function
 from errors import InvalidUpdate
+from io_utils import encode_utf8, safe_decode
 import os
 from subprocess import Popen, PIPE, STDOUT
 
@@ -79,7 +80,7 @@ def sendmail(from_email, to_emails, mail_as_string, smtp_server):
     sendmail = get_sendmail_exe()
 
     p = Popen([sendmail] + to_emails, stdin=PIPE, stdout=PIPE, stderr=STDOUT)
-    out, _ = p.communicate(mail_as_string)
+    out, _ = p.communicate(encode_utf8(mail_as_string))
     if p.returncode != 0 or "GIT_HOOKS_TESTSUITE_MODE" in os.environ:
-        print(out)
+        print(safe_decode(out))
     return p.returncode == 0

@@ -83,3 +83,27 @@ def safe_decode_by_line(b):
         A unicode string.
     """
     return "\n".join(safe_decode(line) for line in b.splitlines())
+
+
+def encode_utf8(s):
+    """Return s.encode("UTF-8") if running with Python 3.x, else return s.
+
+    This function is here to help us prepare for the transition to
+    Python 3.x, where strings that we want to write or pass to another
+    process need to be converted to bytes, while at the same time
+    retaining the current behavior when running with Python 2.x
+    (pass the string as is, without any transformation).
+
+    This is therefore a temporary function that we should get rid of
+    as soon as we stop supporting Python 2.x (FIXME).
+
+    PARAMETERS
+        s: A string to be encoded.
+
+    RETURN VALUE
+        A byte string.
+    """
+    if sys.version_info[0] < 3:
+        return s  # pragma: py2-only
+    else:  # pragma: py3-only
+        return s.encode("UTF-8")

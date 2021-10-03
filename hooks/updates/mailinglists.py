@@ -1,6 +1,7 @@
 """Handling of the hooks.mailinglist config...
 """
 from config import git_config
+from io_utils import encode_utf8, safe_decode
 import os
 from subprocess import Popen, PIPE
 from utils import warn
@@ -37,10 +38,10 @@ def get_emails_from_script(script_filename, ref_name, changed_files):
     input_str = "" if changed_files is None else "\n".join(changed_files)
 
     p = Popen([script_filename, ref_name], stdin=PIPE, stdout=PIPE)
-    (output, _) = p.communicate(input=input_str)
+    (output, _) = p.communicate(input=encode_utf8(input_str))
     if p.returncode != 0:
         warn("!!! %s failed with error code: %d." % (script_filename, p.returncode))
-    return output.splitlines()
+    return safe_decode(output).splitlines()
 
 
 def expanded_mailing_list(ref_name, get_files_changed_cb):

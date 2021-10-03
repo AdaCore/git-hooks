@@ -552,7 +552,7 @@ def guess_encoding(text):
     else:  # pragma: py3-only
         # Test the more popular encodings, starting with the smaller
         # charsets first.
-        for potential_encoding in ("ascii", "iso-8859-15", "UTF-8"):
+        for potential_encoding in ("ascii", "UTF-8"):
             try:
                 text.encode(potential_encoding)
                 return potential_encoding

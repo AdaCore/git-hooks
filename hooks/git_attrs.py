@@ -10,6 +10,7 @@ from os.path import isfile
 from shutil import copy
 
 from git import git, file_exists
+from io_utils import encode_utf8
 from tempfile import mkdtemp
 import utils
 
@@ -164,7 +165,7 @@ def git_attribute(commit_rev, filename_list, attr_name):
         attr_name,
         _cwd=tmp_git_dir,
         _env=tmp_git_dir_env,
-        _input=check_attr_input,
+        _input=encode_utf8(check_attr_input),
         _decode=True,
     ).split("\x00")
     if len(attr_info) % 3 == 1 and not attr_info[-1]:

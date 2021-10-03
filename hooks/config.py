@@ -1,5 +1,6 @@
 from errors import InvalidUpdate
 from git import git, CalledProcessError
+from io_utils import encode_utf8, safe_decode
 from type_conversions import to_type
 
 import os
@@ -182,9 +183,11 @@ class ThirdPartyHook(object):
                 "{err_info}".format(self=self, err_info=str(E))
             )
 
+        if hook_input is not None:
+            hook_input = encode_utf8(hook_input)
         out, _ = p.communicate(hook_input)
 
-        return (self.hook_exe, p, out)
+        return (self.hook_exe, p, safe_decode(out))
 
     def call_if_defined(self, hook_input=None, hook_args=None, cwd=None):
         """If defined, call the script specified via self.hook_option_name.

@@ -22,9 +22,4 @@ do
   fi
 done
 
-# The following is AdaCore-specific: It allows us to make sure that
-# we are not running a random version of Python, but rather the
-# baseline version installed in /gnatmail.
-export PATH=/gnatmail/local/gnatpython/bin:$PATH
-
 python -u `dirname $0`/post_receive.py "$@"

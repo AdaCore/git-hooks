@@ -34,11 +34,6 @@ do
   fi
 done
 
-# The following is AdaCore-specific: It allows us to make sure that
-# we are not running a random version of Python, but rather the
-# baseline version installed in /gnatmail.
-export PATH=/gnatmail/local/gnatpython/bin:$PATH
-
 # Similarly, update the PATH and LD_LIBRARY_PATH to include the location
 # where cvs_check is installed.
 for cvs_check_dir in /svn/Dev/hooks /usr/local/svn-hooks \

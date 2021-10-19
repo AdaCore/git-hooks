@@ -5,9 +5,4 @@
 # from stdin. A non-zero status code causes the entire push request
 # to be rejected, meaning that none of the references get updated.
 
-# The following is AdaCore-specific: It allows us to make sure that
-# we are not running a random version of Python, but rather the
-# baseline version installed in /gnatmail.
-export PATH=/gnatmail/local/gnatpython/bin:$PATH
-
 python -u `dirname $0`/pre_receive.py "$@"

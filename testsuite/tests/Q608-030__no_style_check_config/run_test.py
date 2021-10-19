@@ -1,16 +1,12 @@
-from support import *
+def test_push(testcase):
+    """Try pushing master..."""
+    # First, try pushing the comming in the tn-missing branch
+    # on fsf-master.  This is to verify that, even though,
+    # style checks are disabled on this branch, other checks
+    # are not.
 
-
-class TestRun(TestCase):
-    def test_push(testcase):
-        """Try pushing master..."""
-        # First, try pushing the comming in the tn-missing branch
-        # on fsf-master.  This is to verify that, even though,
-        # style checks are disabled on this branch, other checks
-        # are not.
-
-        p = testcase.run("git push origin tn-missing:fsf-master".split())
-        expected_out = """\
+    p = testcase.run("git push origin tn-missing:fsf-master".split())
+    expected_out = """\
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently
 remote: *** minor that a ticket number is not meaningful, please use
@@ -24,14 +20,14 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Next, try pushing master.  We should be failing the style
-        # checks.
+    # Next, try pushing master.  We should be failing the style
+    # checks.
 
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: *** pre-commit check failed for commit: 217d35d3043af4087f10cfaadfa0abf1a4b87d4b
 remote: *** a: bad style, please fix.
 remote: error: hook declined to update refs/heads/master
@@ -40,15 +36,15 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # And finally, try pushing master, but on fsf-master.
-        # That branch has style checks disabled, so it should
-        # work.
+    # And finally, try pushing master, but on fsf-master.
+    # That branch has style checks disabled, so it should
+    # work.
 
-        p = testcase.run("git push origin master:fsf-master".split())
-        expected_out = """\
+    p = testcase.run("git push origin master:fsf-master".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -93,9 +89,5 @@ To ../bare/repo.git
    d065089..217d35d  master -> fsf-master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

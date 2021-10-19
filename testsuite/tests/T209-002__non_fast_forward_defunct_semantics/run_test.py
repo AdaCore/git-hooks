@@ -1,11 +1,7 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try non-fast-forward push on master."""
-        p = testcase.run("git push -f origin master".split())
-        expected_out = """\
+def test_push_commit_on_master(testcase):
+    """Try non-fast-forward push on master."""
+    p = testcase.run("git push -f origin master".split())
+    expected_out = """\
 remote: *** Non-fast-forward updates are not allowed for this reference.
 remote: *** Please rebase your changes on top of the latest HEAD,
 remote: *** and then try pushing again.
@@ -25,9 +21,5 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

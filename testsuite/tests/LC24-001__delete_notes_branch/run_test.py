@@ -1,11 +1,7 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_delete_notes(testcase):
-        """Try deleting the notes/commits branch."""
-        p = testcase.run("git push origin :refs/notes/commits".split())
-        expected_out = """\
+def test_delete_notes(testcase):
+    """Try deleting the notes/commits branch."""
+    p = testcase.run("git push origin :refs/notes/commits".split())
+    expected_out = """\
 remote: *** Deleting the Git Notes is not allowed.
 remote: error: hook declined to update refs/notes/commits
 To ../bare/repo.git
@@ -13,9 +9,5 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

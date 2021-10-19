@@ -1,21 +1,17 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push(testcase):
-        """Test pushing master..."""
-        # Push master to the `origin' remote.  The should push
-        # one merge commit which also references a commit from
-        # the thirdparty branch.  It is the commit from thirdparty
-        # which has an invalid revision history where a ticket
-        # number is missing from the revision history.
-        #
-        # As the invalid commit is has not been pushed to the remote
-        # repository yet, it counts as "new", and thus should be
-        # validated through the pre-commit checks, which means
-        # that we expect the update to fail.
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+def test_push(testcase):
+    """Test pushing master..."""
+    # Push master to the `origin' remote.  The should push
+    # one merge commit which also references a commit from
+    # the thirdparty branch.  It is the commit from thirdparty
+    # which has an invalid revision history where a ticket
+    # number is missing from the revision history.
+    #
+    # As the invalid commit is has not been pushed to the remote
+    # repository yet, it counts as "new", and thus should be
+    # validated through the pre-commit checks, which means
+    # that we expect the update to fail.
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently
 remote: *** minor that a ticket number is not meaningful, please use
@@ -29,14 +25,14 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Now, push the thirdparty branch.  This branch is setup
-        # to avoid the pre-commit checks, so this should allow
-        # the problematic commit.
-        p = testcase.run("git push origin thirdparty".split())
-        expected_out = """\
+    # Now, push the thirdparty branch.  This branch is setup
+    # to avoid the pre-commit checks, so this should allow
+    # the problematic commit.
+    p = testcase.run("git push origin thirdparty".split())
+    expected_out = """\
 remote: ----------------------------------------------------------------------
 remote: --  The hooks.no-emails config option contains `refs/heads/thirdparty',
 remote: --  which matches the name of the reference being updated
@@ -48,14 +44,14 @@ To ../bare/repo.git
    52723db..ef602fc  thirdparty -> thirdparty
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # And finally, try pushing the "master" branch again.
-        # This time, the problematic commit is already in, and
-        # so should not go through the pre-commit-checks again.
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    # And finally, try pushing the "master" branch again.
+    # This time, the problematic commit is already in, and
+    # so should not go through the pre-commit-checks again.
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `top'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -130,9 +126,5 @@ To ../bare/repo.git
    96cc482..3c75c8d  master -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

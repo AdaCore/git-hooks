@@ -1,11 +1,7 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_annotated_tag(testcase):
-        """Try pushing an annotated tag."""
-        # Try deleting full-tag.  The remote is setup to refuse this request.
-        expected_out = """\
+def test_push_annotated_tag(testcase):
+    """Try pushing an annotated tag."""
+    # Try deleting full-tag.  The remote is setup to refuse this request.
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -26,16 +22,16 @@ To ../bare/repo.git
  - [deleted]         full-tag
 """
 
-        p = testcase.run("git push origin :full-tag".split())
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    p = testcase.run("git push origin :full-tag".split())
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Same as above: Try deleting a tag, except we are passing
-        # the tag's full reference name instead of just passing
-        # the tag's name.
+    # Same as above: Try deleting a tag, except we are passing
+    # the tag's full reference name instead of just passing
+    # the tag's name.
 
-        p = testcase.run("git push origin :refs/tags/other-full-tag".split())
-        expected_out = """\
+    p = testcase.run("git push origin :refs/tags/other-full-tag".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -56,9 +52,5 @@ To ../bare/repo.git
  - [deleted]         other-full-tag
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

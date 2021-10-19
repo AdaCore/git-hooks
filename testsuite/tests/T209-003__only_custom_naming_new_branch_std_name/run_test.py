@@ -1,14 +1,10 @@
-from support import TestCase, runtests
+def test_create_branch_with_standard_name(testcase):
+    """Create a new branch with a standard reference name."""
+    # First, try pushing with a branch name which is recognized
+    # by the repository's branch namespace.
 
-
-class TestRun(TestCase):
-    def test_create_branch_with_standard_name(testcase):
-        """Create a new branch with a standard reference name."""
-        # First, try pushing with a branch name which is recognized
-        # by the repository's branch namespace.
-
-        p = testcase.run("git push origin master:branches/release-x".split())
-        expected_out = """\
+    p = testcase.run("git push origin master:branches/release-x".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -28,15 +24,15 @@ To ../bare/repo.git
  * [new branch]      master -> branches/release-x
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Next, try pushing with a branch name which is not recognized
-        # by the repository's branch namespace. E.g., try creating
-        # a "release-y" branch directly in "refs/heads".
+    # Next, try pushing with a branch name which is not recognized
+    # by the repository's branch namespace. E.g., try creating
+    # a "release-y" branch directly in "refs/heads".
 
-        p = testcase.run("git push origin master:release-y".split())
-        expected_out = """\
+    p = testcase.run("git push origin master:release-y".split())
+    expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/heads/release-y
 remote: ***
 remote: *** This repository currently recognizes the following types
@@ -59,9 +55,5 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

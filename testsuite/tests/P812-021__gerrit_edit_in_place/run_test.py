@@ -1,23 +1,19 @@
-from support import *
+def test_push_edit_from_gerrit_web_interface(testcase):
+    """Try pushing one single-file commit on master.
 
+    This test simulates the following situation: After a first
+    patch is sent for review on gerrit, a reviewer uses gerrit's
+    edit interface to create a second version of the patch.
+    Once the edit is done, what gerrit does is create an internal
+    reference pointing to that commit (Eg: refs/changes/20/884120/1),
+    and then triggers the update hook.
 
-class TestRun(TestCase):
-    def test_push_edit_from_gerrit_web_interface(testcase):
-        """Try pushing one single-file commit on master.
-
-        This test simulates the following situation: After a first
-        patch is sent for review on gerrit, a reviewer uses gerrit's
-        edit interface to create a second version of the patch.
-        Once the edit is done, what gerrit does is create an internal
-        reference pointing to that commit (Eg: refs/changes/20/884120/1),
-        and then triggers the update hook.
-
-        In this test, we've already setup the remote repository to
-        have that internal reference, and now we're going to push
-        the commit on master.
-        """
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    In this test, we've already setup the remote repository to
+    have that internal reference, and now we're going to push
+    the commit on master.
+    """
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -61,9 +57,5 @@ To ../bare/repo.git
    d065089..a605403  master -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

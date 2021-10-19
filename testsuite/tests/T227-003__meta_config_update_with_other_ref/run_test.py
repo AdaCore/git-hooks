@@ -1,17 +1,13 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_meta_config_and_master(testcase):
-        """Try pushing refs/meta/config at same time as other branch"""
-        # Do a simple "git push" without any information about the remote
-        # or the references to push; in that case, the (non-bare) repository
-        # has been configured via its .git/config file so that two references
-        # get pushed, with one of the references to update being the special
-        # reference refs/meta/config. We expect this update attempt to be
-        # rejected.
-        p = testcase.run("git push".split())
-        expected_out = """\
+def test_push_meta_config_and_master(testcase):
+    """Try pushing refs/meta/config at same time as other branch"""
+    # Do a simple "git push" without any information about the remote
+    # or the references to push; in that case, the (non-bare) repository
+    # has been configured via its .git/config file so that two references
+    # get pushed, with one of the references to update being the special
+    # reference refs/meta/config. We expect this update attempt to be
+    # rejected.
+    p = testcase.run("git push".split())
+    expected_out = """\
 remote: *** You are trying to push multiple references at the same time:
 remote: ***   - refs/heads/master
 remote: ***   - refs/meta/config
@@ -25,13 +21,13 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Now, push the refs/meta/config update on its own, as requested.
+    # Now, push the refs/meta/config update on its own, as requested.
 
-        p = testcase.run("git push origin meta/config:refs/meta/config".split())
-        expected_out = """\
+    p = testcase.run("git push origin meta/config:refs/meta/config".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `project.config'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -71,15 +67,15 @@ To ../bare/repo.git
    87e99cb..dbef16c  meta/config -> refs/meta/config
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # And now that the refs/meta/config update is out of the way,
-        # the simple "git push" command we tried earlier should work,
-        # now.
+    # And now that the refs/meta/config update is out of the way,
+    # the simple "git push" command we tried earlier should work,
+    # now.
 
-        p = testcase.run("git push".split())
-        expected_out = """\
+    p = testcase.run("git push".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -123,9 +119,5 @@ To ../bare/repo.git
    d065089..a605403  master -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

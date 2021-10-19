@@ -1,14 +1,10 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_commits(testcase):
-        """See comments below."""
-        # Push not-ok-104 on master. It introduces a new commit
-        # where one line in the RH is 104 characters long.  It should
-        # therefore be rejected.
-        p = testcase.run("git push origin not-ok-104:master".split())
-        expected_out = """\
+def test_push_commits(testcase):
+    """See comments below."""
+    # Push not-ok-104 on master. It introduces a new commit
+    # where one line in the RH is 104 characters long.  It should
+    # therefore be rejected.
+    p = testcase.run("git push origin not-ok-104:master".split())
+    expected_out = """\
 remote: *** Invalid revision history for commit 8f9e357b53cc88eb0e7a57ee8c7d1ccd74db1ae3:
 remote: ***
 remote: *** The following line in the revision history is too long
@@ -21,14 +17,14 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push not-ok-77 on master. It introduces a new commit
-        # where one line in the RH is 77 characters long, which
-        # is just over the limit.  It should be rejected also.
-        p = testcase.run("git push origin not-ok-77:master".split())
-        expected_out = """\
+    # Push not-ok-77 on master. It introduces a new commit
+    # where one line in the RH is 77 characters long, which
+    # is just over the limit.  It should be rejected also.
+    p = testcase.run("git push origin not-ok-77:master".split())
+    expected_out = """\
 remote: *** Invalid revision history for commit a80d278157a3a10c955360723b6520614f3c717c:
 remote: ***
 remote: *** The following line in the revision history is too long
@@ -41,14 +37,14 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push ok-76 on master. It introduces a new commit
-        # where one line in the RH is 76 characters long, which
-        # is just at the limit.  It should be accepted.
-        p = testcase.run("git push origin ok-76:master".split())
-        expected_out = """\
+    # Push ok-76 on master. It introduces a new commit
+    # where one line in the RH is 76 characters long, which
+    # is just at the limit.  It should be accepted.
+    p = testcase.run("git push origin ok-76:master".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -93,15 +89,15 @@ To ../bare/repo.git
    d065089..04687d3  ok-76 -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push not-ok-77 on third-party. It introduces a new commit
-        # where one line in the RH is 77 characters long, which is
-        # just over the limit.  But the third-party branch is configured
-        # with no-precommit-checks, so it should be accepted anyway.
-        p = testcase.run("git push origin not-ok-77:third-party".split())
-        expected_out = """\
+    # Push not-ok-77 on third-party. It introduces a new commit
+    # where one line in the RH is 77 characters long, which is
+    # just over the limit.  But the third-party branch is configured
+    # with no-precommit-checks, so it should be accepted anyway.
+    p = testcase.run("git push origin not-ok-77:third-party".split())
+    expected_out = """\
 remote: ----------------------------------------------------------------------
 remote: --  The hooks.no-emails config option contains `refs/heads/third-party',
 remote: --  which matches the name of the reference being updated
@@ -113,9 +109,5 @@ To ../bare/repo.git
    d065089..a80d278  not-ok-77 -> third-party
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

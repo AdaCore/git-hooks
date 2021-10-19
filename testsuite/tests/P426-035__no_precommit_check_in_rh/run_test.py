@@ -1,23 +1,19 @@
-from support import *
+def test_push_gdb_head(testcase):
+    """Try pushing gdb-head.
 
+    The push introduces a merge commit whose revision log contains
+    a special keyword telling the hooks to skip the pre-commit-checks
+    phase entirely.
+    """
+    # Set the debug level to 1, in order to see the debug trace
+    # confirming that the no-precommit-check keyword was picked up
+    # by the hooks.
+    testcase.set_debug_level(1)
 
-class TestRun(TestCase):
-    def test_push_gdb_head(testcase):
-        """Try pushing gdb-head.
-
-        The push introduces a merge commit whose revision log contains
-        a special keyword telling the hooks to skip the pre-commit-checks
-        phase entirely.
-        """
-        # Set the debug level to 1, in order to see the debug trace
-        # confirming that the no-precommit-check keyword was picked up
-        # by the hooks.
-        testcase.set_debug_level(1)
-
-        # Push gdb-head to the `origin' remote.  The delta should be one
-        # commit with one file being modified.
-        p = testcase.run("git push origin gdb-head".split())
-        expected_out = """\
+    # Push gdb-head to the `origin' remote.  The delta should be one
+    # commit with one file being modified.
+    p = testcase.run("git push origin gdb-head".split())
+    expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/gdb-head, 2c2cd0d654cc6cf460024feb845ee7ea760290c4, 8da5e84724007accbaf409022c3c9f07776a8c8b)
 remote: DEBUG: update base: 2c2cd0d654cc6cf460024feb845ee7ea760290c4
 remote: DEBUG: (commit-per-commit style checking)
@@ -32,8 +28,7 @@ remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: nowhere@example.com
-remote: Subject: [repo/gdb-head] (2 commits) Resync from fsf-master as of today --
-remote:  no-precommit-check
+remote: Subject: [repo/gdb-head] (2 commits) Resync from fsf-master as of today -- no-precommit-check
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Test Suite <testsuite@adacore.com>
 remote: X-Git-Refname: refs/heads/gdb-head
@@ -66,8 +61,7 @@ remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: nowhere@example.com
 remote: Bcc: filer@example.com
-remote: Subject: [repo/gdb-head] Resync from fsf-master as of today --
-remote:  no-precommit-check
+remote: Subject: [repo/gdb-head] Resync from fsf-master as of today -- no-precommit-check
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/gdb-head
@@ -102,9 +96,5 @@ To ../bare/repo.git
    2c2cd0d..8da5e84  gdb-head -> gdb-head
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

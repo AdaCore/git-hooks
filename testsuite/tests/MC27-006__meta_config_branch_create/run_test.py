@@ -1,26 +1,26 @@
-from support import *
 from subprocess import check_output, check_call
 
 
-class TestRun(TestCase):
-    def __bare_repo_fixup(testcase):
-        """Fix the bare repository to implement legacy hooks configuration.
+def bare_repo_fixup(testcase):
+    """Fix the bare repository to implement legacy hooks configuration.
 
-        Reproduce the situation where the project.config file in
-        refs/meta/config does not exist, yet.
-        """
-        check_call(
-            "git update-ref -d refs/meta/config".split(),
-            cwd=testcase.bare_repo_dir,
-        )
+    Reproduce the situation where the project.config file in
+    refs/meta/config does not exist, yet.
+    """
+    check_call(
+        "git update-ref -d refs/meta/config".split(),
+        cwd=testcase.bare_repo_dir,
+    )
 
-    def test_push_commit_on_master(testcase):
-        """Test creating the refs/meta/config branch on the remote."""
-        testcase.__bare_repo_fixup()
-        # Push the `meta/config' local branch as the new `refs/meta/config'
-        # reference. This should be allowed.
-        p = testcase.run("git push origin meta/config:refs/meta/config".split())
-        expected_out = """\
+
+def test_push_commit_on_master(testcase):
+    """Test creating the refs/meta/config branch on the remote."""
+    bare_repo_fixup(testcase)
+
+    # Push the `meta/config' local branch as the new `refs/meta/config'
+    # reference. This should be allowed.
+    p = testcase.run("git push origin meta/config:refs/meta/config".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `project.config'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -76,9 +76,5 @@ To ../bare/repo.git
  * [new branch]      meta/config -> refs/meta/config
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

@@ -1,13 +1,9 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing one single-file commit on master."""
-        # Push master to the `origin' remote.  The delta should be one
-        # commit with one file being modified.
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+def test_push_commit_on_master(testcase):
+    """Try pushing one single-file commit on master."""
+    # Push master to the `origin' remote.  The delta should be one
+    # commit with one file being modified.
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -56,9 +52,5 @@ To ../bare/repo.git
    937ea8a..4b27b37  master -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

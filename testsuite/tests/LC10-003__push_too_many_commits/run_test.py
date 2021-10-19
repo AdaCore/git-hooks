@@ -1,13 +1,9 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_too_many_new_commits_on_master(testcase):
-        """Try pushing too many new commits on master."""
-        # Push master to the `origin' remote.  The remote should
-        # reject it saying that there are too many new commits.
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+def test_push_too_many_new_commits_on_master(testcase):
+    """Try pushing too many new commits on master."""
+    # Push master to the `origin' remote.  The remote should
+    # reject it saying that there are too many new commits.
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: *** This update introduces too many new commits (4), which would
 remote: *** trigger as many emails, exceeding the current limit (3).
 remote: *** Contact your repository adminstrator if you really meant
@@ -18,14 +14,14 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        assert p.status != 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status != 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Now, try pushing only HEAD~, which should only push
-        # 3 new commits, which should be under the limit, and
-        # thus be accepted.
-        p = testcase.run("git push origin master~:master".split())
-        expected_out = """\
+    # Now, try pushing only HEAD~, which should only push
+    # 3 new commits, which should be under the limit, and
+    # thus be accepted.
+    p = testcase.run("git push origin master~:master".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -136,13 +132,13 @@ To ../bare/repo.git
    d065089..c32bed0  master~ -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Now, try push master again.  We should have one last
-        # new commit left to push...
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    # Now, try push master again.  We should have one last
+    # new commit left to push...
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -180,9 +176,5 @@ To ../bare/repo.git
    c32bed0..4ca9852  master -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

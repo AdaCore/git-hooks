@@ -1,14 +1,10 @@
-from support import *
+def test_push_retired_branch(testcase):
+    """Try pushing a branch update on a frozen branch."""
+    p = testcase.run("git push origin gdb-7.5".split())
 
+    assert p.status != 0, p.image
 
-class TestRun(TestCase):
-    def test_push_retired_branch(testcase):
-        """Try pushing a branch update on a frozen branch."""
-        p = testcase.run("git push origin gdb-7.5".split())
-
-        assert p.status != 0, p.image
-
-        expected_out = """\
+    expected_out = """\
 remote: *** Updates to the gdb-7.5 branch are no longer allowed because
 remote: *** this branch is now frozen (see "hooks.frozen-ref" in file
 remote: *** project.config, from the special branch refs/meta/config).
@@ -17,15 +13,16 @@ To ../bare/repo.git
  ! [remote rejected] gdb-7.5 -> gdb-7.5 (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_force_push_retired_branch(testcase):
-        """Try force-pushing a branch update on a retired branch."""
-        p = testcase.run("git push -f origin gdb-7.5".split())
 
-        assert p.status != 0, p.image
+def test_force_push_retired_branch(testcase):
+    """Try force-pushing a branch update on a retired branch."""
+    p = testcase.run("git push -f origin gdb-7.5".split())
 
-        expected_out = """\
+    assert p.status != 0, p.image
+
+    expected_out = """\
 remote: *** Updates to the gdb-7.5 branch are no longer allowed because
 remote: *** this branch is now frozen (see "hooks.frozen-ref" in file
 remote: *** project.config, from the special branch refs/meta/config).
@@ -34,12 +31,13 @@ To ../bare/repo.git
  ! [remote rejected] gdb-7.5 -> gdb-7.5 (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_other_frozen_branch(testcase):
-        """Try pushing another branch which is also frozen"""
-        p = testcase.run("git push origin gdb-7.6".split())
-        expected_out = """\
+
+def test_push_other_frozen_branch(testcase):
+    """Try pushing another branch which is also frozen"""
+    p = testcase.run("git push origin gdb-7.6".split())
+    expected_out = """\
 remote: *** Updates to the gdb-7.6 branch are no longer allowed because
 remote: *** this branch is now frozen (see "hooks.frozen-ref" in file
 remote: *** project.config, from the special branch refs/meta/config).
@@ -49,23 +47,25 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        assert p.status != 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status != 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_master(testcase):
-        """Try pushing master, which is not frozen"""
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+
+def test_push_master(testcase):
+    """Try pushing master, which is not frozen"""
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 Everything up-to-date
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_frozen_tag(testcase):
-        """Try pushing a tag which has a "frozen-ref" entry."""
-        p = testcase.run("git push origin gdb-7.5-release".split())
-        expected_out = """\
+
+def test_push_frozen_tag(testcase):
+    """Try pushing a tag which has a "frozen-ref" entry."""
+    p = testcase.run("git push origin gdb-7.5-release".split())
+    expected_out = """\
 remote: *** Updates to refs/tags/gdb-7.5-release are no longer allowed because
 remote: *** this reference is now frozen (see "hooks.frozen-ref" in file
 remote: *** project.config, from the special branch refs/meta/config).
@@ -75,13 +75,14 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        assert p.status != 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status != 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_ok_tag(testcase):
-        """Try pushing a tag which does not have a frozen-ref entry."""
-        p = testcase.run("git push origin gdb-7.6-release".split())
-        expected_out = """\
+
+def test_push_ok_tag(testcase):
+    """Try pushing a tag which does not have a frozen-ref entry."""
+    p = testcase.run("git push origin gdb-7.6-release".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -154,9 +155,5 @@ To ../bare/repo.git
  * [new tag]         gdb-7.6-release -> gdb-7.6-release
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

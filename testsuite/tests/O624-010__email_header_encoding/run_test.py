@@ -1,14 +1,10 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing multiple commits on master."""
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 8bit
-remote: Content-Type: text/plain; charset="utf-8"
+def test_push_commit_on_master(testcase):
+    """Try pushing multiple commits on master."""
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: base64
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com, =?utf-8?b?TcOibsO8IFNjcmlwdA==?= <ms@example.com>
 remote: Bcc: filer@example.com
@@ -20,7 +16,7 @@ remote: X-Git-Oldrev: 426fba3571947f6de7f967e885a3168b9df7004a
 remote: X-Git-Newrev: 15f28e076a944b3fbe98ebb1053e60cb43bc6751
 remote:
 remote: commit 15f28e076a944b3fbe98ebb1053e60cb43bc6751
-remote: Author: J\xc3\xa9r\xc3\xb4me N\xc3\xafm\xc3\xb8 <nimo@nowhere.com>
+remote: Author: Jérôme Nïmø <nimo@nowhere.com>
 remote: Date:   Sun Sep 20 16:09:45 2015 -0700
 remote:
 remote:     Expand contents of file A.
@@ -39,21 +35,21 @@ remote:  This is a file
 remote:  with a second line.
 remote: +And now a third line.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 8bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: base64
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com, =?utf-8?b?TcOibsO8IFNjcmlwdA==?= <ms@example.com>
 remote: Bcc: filer@example.com
 remote: Subject: [repo] Remove useless comment in "b"
 remote: X-Act-Checkin: repo
-remote: X-Git-Author: =?iso-8859-15?q?M=E3n=FC_Script?= <script@example.com>
+remote: X-Git-Author: =?utf-8?b?TcOjbsO8IFNjcmlwdA==?= <script@example.com>
 remote: X-Git-Refname: refs/heads/master
 remote: X-Git-Oldrev: 15f28e076a944b3fbe98ebb1053e60cb43bc6751
 remote: X-Git-Newrev: 98bda8f3aa783282348a39ddf816413e54847d6d
 remote:
 remote: commit 98bda8f3aa783282348a39ddf816413e54847d6d
-remote: Author: M\xe3n\xfc Script <script@example.com>
+remote: Author: Mãnü Script <script@example.com>
 remote: Date:   Sun Sep 20 16:17:06 2015 -0700
 remote:
 remote:     Remove useless comment in "b"
@@ -74,9 +70,5 @@ remote: -that isn't really all that interesting.
 To ../bare/repo.git
    426fba3..98bda8f  master -> master
 """
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

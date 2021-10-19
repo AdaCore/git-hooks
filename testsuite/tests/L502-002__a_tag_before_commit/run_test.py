@@ -1,22 +1,18 @@
-from support import *
+def test_push_commit_on_master(testcase):
+    """Try pushing tag referencing new commit."""
+    # We need some debug traces to be enabled, in order to verify
+    # certain assertions.
+    testcase.set_debug_level(1)
 
+    # Scenario: The user made some changes, and then committed them
+    # in his repo. Then created an annotated tag (release-0.1a).
+    # Next, he pushes the annotated tag before having pushed his
+    # new commit.  What the commit hooks should do in this case
+    # is do the same as in a branch update (pre-commit checks,
+    # commit emails, etc).
 
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing tag referencing new commit."""
-        # We need some debug traces to be enabled, in order to verify
-        # certain assertions.
-        testcase.set_debug_level(1)
-
-        # Scenario: The user made some changes, and then committed them
-        # in his repo. Then created an annotated tag (release-0.1a).
-        # Next, he pushes the annotated tag before having pushed his
-        # new commit.  What the commit hooks should do in this case
-        # is do the same as in a branch update (pre-commit checks,
-        # commit emails, etc).
-
-        p = testcase.run("git push origin version-0.1a".split())
-        expected_out = """\
+    p = testcase.run("git push origin version-0.1a".split())
+    expected_out = """\
 remote: DEBUG: validate_ref_update (refs/tags/version-0.1a, 0000000000000000000000000000000000000000, b03c3952e1cd29c6ec0cad2590689c0b22d02197)
 remote: DEBUG: update base: 426fba3571947f6de7f967e885a3168b9df7004a
 remote: DEBUG: (commit-per-commit style checking)
@@ -111,15 +107,15 @@ To ../bare/repo.git
  * [new tag]         version-0.1a -> version-0.1a
 """
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Next, push the changes.  The commits are no longer "new",
-        # and thus nothing other than the reference change should
-        # be done.
+    # Next, push the changes.  The commits are no longer "new",
+    # and thus nothing other than the reference change should
+    # be done.
 
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 426fba3571947f6de7f967e885a3168b9df7004a, 4f0f08f46daf6f5455cf90cdc427443fe3b32fa3)
 remote: DEBUG: update base: 426fba3571947f6de7f967e885a3168b9df7004a
 remote: DEBUG: post_receive_one(ref_name=refs/heads/master
@@ -180,9 +176,5 @@ To ../bare/repo.git
    426fba3..4f0f08f  master -> master
 """
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

@@ -1,15 +1,11 @@
-from support import *
+def test_push_commit_on_master(testcase):
+    """Try pushing new branch on remote.
 
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing new branch on remote.
-
-        In this testcase, the release-0.1-branch points to a commit
-        that's one of the older commits in the "master" branch.
-        """
-        p = testcase.run("git push origin release-0.1-branch".split())
-        expected_out = """\
+    In this testcase, the release-0.1-branch points to a commit
+    that's one of the older commits in the "master" branch.
+    """
+    p = testcase.run("git push origin release-0.1-branch".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `b'
 remote: *** cvs_check: `repo' < `a' `c' `d'
 remote: DEBUG: MIME-Version: 1.0
@@ -118,22 +114,18 @@ To ../bare/repo.git
  * [new branch]      release-0.1-branch -> release-0.1-branch
 """
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Verify that the branch has been created in the remote
-        # repository and that it points to the expected commit.
+    # Verify that the branch has been created in the remote
+    # repository and that it points to the expected commit.
 
-        p = testcase.run(
-            "git show-ref -s release-0.1-branch".split(), cwd=testcase.bare_repo_dir
-        )
-        expected_out = """\
+    p = testcase.run(
+        "git show-ref -s release-0.1-branch".split(), cwd=testcase.bare_repo_dir
+    )
+    expected_out = """\
 4205e52273adad6b014e19fb1cf1fe1c9b8b4089
 """
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

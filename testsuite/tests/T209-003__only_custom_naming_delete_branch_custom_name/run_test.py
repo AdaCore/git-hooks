@@ -1,14 +1,10 @@
-from support import TestCase, runtests
+def test_delete_branch_with_standard_name(testcase):
+    """Delete a new branch with a standard reference name."""
+    # First, try deleting with a branch name which exists and
+    # is recognized by the repository's branch namespace.
 
-
-class TestRun(TestCase):
-    def test_delete_branch_with_standard_name(testcase):
-        """Delete a new branch with a standard reference name."""
-        # First, try deleting with a branch name which exists and
-        # is recognized by the repository's branch namespace.
-
-        p = testcase.run("git push origin :branches/release-x".split())
-        expected_out = """\
+    p = testcase.run("git push origin :branches/release-x".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -29,25 +25,25 @@ To ../bare/repo.git
  - [deleted]         branches/release-x
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Next, try deleting a branch which does not exist.
+    # Next, try deleting a branch which does not exist.
 
-        p = testcase.run("git push origin :branches/release-y".split())
-        expected_out = """\
+    p = testcase.run("git push origin :branches/release-y".split())
+    expected_out = """\
 error: unable to delete 'branches/release-y': remote ref does not exist
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Try deleting a branch which exists, but is not recognized
-        # as a valid reference name for a branch.
+    # Try deleting a branch which exists, but is not recognized
+    # as a valid reference name for a branch.
 
-        p = testcase.run("git push origin :my-topic".split())
-        expected_out = """\
+    p = testcase.run("git push origin :my-topic".split())
+    expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/heads/my-topic
 remote: ***
 remote: *** This repository currently recognizes the following types
@@ -70,9 +66,5 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

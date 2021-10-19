@@ -1,14 +1,10 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing one single-file commit on master."""
-        # Do a git push without specifying which branch to push.
-        # The repository has been configured (via .git/config)
-        # so as to push both the "master" and "second" branches.
-        p = testcase.run("git push origin".split())
-        expected_out = """\
+def test_push_commit_on_master(testcase):
+    """Try pushing one single-file commit on master."""
+    # Do a git push without specifying which branch to push.
+    # The repository has been configured (via .git/config)
+    # so as to push both the "master" and "second" branches.
+    p = testcase.run("git push origin".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -92,9 +88,5 @@ To ../bare/repo.git
    d065089..a605403  second -> second
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

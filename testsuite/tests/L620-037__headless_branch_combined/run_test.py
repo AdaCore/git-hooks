@@ -1,21 +1,17 @@
-from support import *
+def test_push(testcase):
+    """Try pushing head-less branch (called "headless") on master.
+    Same with head-less branch (called "one-commit") on master.
+    The test with the "one-commit" branch is just to test the
+    situation where the new head-less branch only has one commit.
+    """
+    # Enable debugs to verify that the hooks pick the correct
+    # commit as the first commit.
+    testcase.set_debug_level(1)
 
+    # First, push the headless branch.
 
-class TestRun(TestCase):
-    def test_push(testcase):
-        """Try pushing head-less branch (called "headless") on master.
-        Same with head-less branch (called "one-commit") on master.
-        The test with the "one-commit" branch is just to test the
-        situation where the new head-less branch only has one commit.
-        """
-        # Enable debugs to verify that the hooks pick the correct
-        # commit as the first commit.
-        testcase.set_debug_level(1)
-
-        # First, push the headless branch.
-
-        p = testcase.run("git push origin headless".split())
-        expected_out = """\
+    p = testcase.run("git push origin headless".split())
+    expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/headless, 0000000000000000000000000000000000000000, 902092ffe1cf61b28e28c86949a447b9fc2591a4)
 remote: DEBUG: update base: None
 remote: DEBUG: (combined style checking)
@@ -156,13 +152,13 @@ To ../bare/repo.git
  * [new branch]      headless -> headless
 """
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Next, push the one-commit branch.
+    # Next, push the one-commit branch.
 
-        p = testcase.run("git push origin one-commit".split())
-        expected_out = """\
+    p = testcase.run("git push origin one-commit".split())
+    expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/one-commit, 0000000000000000000000000000000000000000, ef3ab848df2bef804d5bd0880475d40cb6aab0bf)
 remote: DEBUG: update base: None
 remote: DEBUG: (combined style checking)
@@ -231,9 +227,5 @@ To ../bare/repo.git
  * [new branch]      one-commit -> one-commit
 """
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

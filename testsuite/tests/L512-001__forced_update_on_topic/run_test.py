@@ -1,11 +1,7 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try non-fast-forward push on master."""
-        p = testcase.run("git push -f origin topic/new-feature".split())
-        expected_out = """\
+def test_push_commit_on_master(testcase):
+    """Try non-fast-forward push on master."""
+    p = testcase.run("git push -f origin topic/new-feature".split())
+    expected_out = """\
 remote: *** !!! WARNING: This is *NOT* a fast-forward update.
 remote: *** !!! WARNING: You may have removed some important commits.
 remote: *** cvs_check: `repo' < `a' `b'
@@ -54,9 +50,5 @@ To ../bare/repo.git
  + a605403...14d1fa2 topic/new-feature -> topic/new-feature (forced update)
 """
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

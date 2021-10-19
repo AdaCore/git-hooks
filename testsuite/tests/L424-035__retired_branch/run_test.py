@@ -1,14 +1,10 @@
-from support import *
+def test_create_retired_branch(testcase):
+    """Try pushing the (newly-created branch) retired/gdb-5.0."""
+    p = testcase.run("git push origin retired/gdb-5.0".split())
 
+    assert p.status == 0, p.image
 
-class TestRun(TestCase):
-    def test_create_retired_branch(testcase):
-        """Try pushing the (newly-created branch) retired/gdb-5.0."""
-        p = testcase.run("git push origin retired/gdb-5.0".split())
-
-        assert p.status == 0, p.image
-
-        expected_out = """\
+    expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -68,15 +64,16 @@ To ../bare/repo.git
  * [new branch]      retired/gdb-5.0 -> retired/gdb-5.0
 """
 
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_retired_branch(testcase):
-        """Try pushing a branch update on a retired branch."""
-        p = testcase.run("git push origin gdb-7.5".split())
 
-        assert p.status != 0, p.image
+def test_push_retired_branch(testcase):
+    """Try pushing a branch update on a retired branch."""
+    p = testcase.run("git push origin gdb-7.5".split())
 
-        expected_out = """\
+    assert p.status != 0, p.image
+
+    expected_out = """\
 remote: *** Updates to the gdb-7.5 branch are no longer allowed, because
 remote: *** this branch has been retired (and renamed into `retired/gdb-7.5').
 remote: error: hook declined to update refs/heads/gdb-7.5
@@ -84,15 +81,16 @@ To ../bare/repo.git
  ! [remote rejected] gdb-7.5 -> gdb-7.5 (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_force_push_retired_branch(testcase):
-        """Try force-pushing a branch update on a retired branch."""
-        p = testcase.run("git push -f origin gdb-7.5".split())
 
-        assert p.status != 0, p.image
+def test_force_push_retired_branch(testcase):
+    """Try force-pushing a branch update on a retired branch."""
+    p = testcase.run("git push -f origin gdb-7.5".split())
 
-        expected_out = """\
+    assert p.status != 0, p.image
+
+    expected_out = """\
 remote: *** Updates to the gdb-7.5 branch are no longer allowed, because
 remote: *** this branch has been retired (and renamed into `retired/gdb-7.5').
 remote: error: hook declined to update refs/heads/gdb-7.5
@@ -100,19 +98,20 @@ To ../bare/repo.git
  ! [remote rejected] gdb-7.5 -> gdb-7.5 (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_retired_branch_as_tag(testcase):
-        """Try pushing a branch update on a retired branch...
 
-        ... where the branch has been marked as retired thanks to
-        a tag named retired/<branch-name>
-        """
-        p = testcase.run("git push origin gdb-7.6".split())
+def test_push_retired_branch_as_tag(testcase):
+    """Try pushing a branch update on a retired branch...
 
-        assert p.status != 0, p.image
+    ... where the branch has been marked as retired thanks to
+    a tag named retired/<branch-name>
+    """
+    p = testcase.run("git push origin gdb-7.6".split())
 
-        expected_out = """\
+    assert p.status != 0, p.image
+
+    expected_out = """\
 remote: *** Updates to the gdb-7.6 branch are no longer allowed, because
 remote: *** this branch has been retired (a tag called `retired/gdb-7.6' has been
 remote: *** created in its place).
@@ -121,19 +120,20 @@ To ../bare/repo.git
  ! [remote rejected] gdb-7.6 -> gdb-7.6 (hook declined)
 error: failed to push some refs to '../bare/repo.git'
 """
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_force_push_retired_branch_as_tag(testcase):
-        """Try force-pushing a branch update on a retired branch...
 
-        ... where the branch has been marked as retired thanks to
-        a tag named retired/<branch-name>
-        """
-        p = testcase.run("git push -f origin gdb-7.6".split())
+def test_force_push_retired_branch_as_tag(testcase):
+    """Try force-pushing a branch update on a retired branch...
 
-        assert p.status != 0, p.image
+    ... where the branch has been marked as retired thanks to
+    a tag named retired/<branch-name>
+    """
+    p = testcase.run("git push -f origin gdb-7.6".split())
 
-        expected_out = """\
+    assert p.status != 0, p.image
+
+    expected_out = """\
 remote: *** Updates to the gdb-7.6 branch are no longer allowed, because
 remote: *** this branch has been retired (a tag called `retired/gdb-7.6' has been
 remote: *** created in its place).
@@ -143,8 +143,4 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertRunOutputEqual(p, expected_out)

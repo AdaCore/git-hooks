@@ -1,19 +1,15 @@
-from support import *
+def test_push_lightweight_tag(testcase):
+    """Try pushing a lightweight tag."""
+    # Create a tag called 'new-tag'...
+    p = testcase.run("git tag new-tag".split())
+    testcase.assertEqual(p.status, 0, p.image)
 
+    # Try pushing that new-tag.  The repository has been configured
+    # to accept such updates.
+    p = testcase.run("git push origin new-tag".split())
+    testcase.assertEqual(p.status, 0, p.image)
 
-class TestRun(TestCase):
-    def test_push_lightweight_tag(testcase):
-        """Try pushing a lightweight tag."""
-        # Create a tag called 'new-tag'...
-        p = testcase.run("git tag new-tag".split())
-        testcase.assertEqual(p.status, 0, p.image)
-
-        # Try pushing that new-tag.  The repository has been configured
-        # to accept such updates.
-        p = testcase.run("git push origin new-tag".split())
-        testcase.assertEqual(p.status, 0, p.image)
-
-        expected_out = """\
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -33,8 +29,4 @@ To ../bare/repo.git
  * [new tag]         new-tag -> new-tag
 """
 
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertRunOutputEqual(p, expected_out)

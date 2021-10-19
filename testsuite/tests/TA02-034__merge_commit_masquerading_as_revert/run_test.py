@@ -1,18 +1,14 @@
-from support import *
+def test_push_branch_with_merge_commit(testcase):
+    """Test merge-commit reject on branches where they are not allowed.
 
-
-class TestRun(TestCase):
-    def test_push_branch_with_merge_commit(testcase):
-        """Test merge-commit reject on branches where they are not allowed.
-
-        The extra "trick" here, comes from the fact that the merge commit
-        has a revision log which makes it look like the file is a revert,
-        which might tempt the git-hooks to skip all checks (including
-        the check against merge commits) and thus incorrectly allowing
-        this commit.
-        """
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    The extra "trick" here, comes from the fact that the merge commit
+    has a revision log which makes it look like the file is a revert,
+    which might tempt the git-hooks to skip all checks (including
+    the check against merge commits) and thus incorrectly allowing
+    this commit.
+    """
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: *** Merge commits are not allowed on refs/heads/master.
 remote: *** The commit that caused this error is:
 remote: ***
@@ -27,9 +23,5 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

@@ -1,20 +1,16 @@
-from support import *
+def test_push_commit_on_master(testcase):
+    """Try pushing one single-file commit on master.
 
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing one single-file commit on master.
-
-        This is just to verify that revision-log checks are enabled,
-        and in particular that we get an error if the TN is missing.
-        That way, we know that our repository is correctly configured
-        in terms of requiring TNs in the revision log and should
-        normally reject commits that don't follow this rule.
-        """
-        # Push master to the `origin' remote.  The delta should be one
-        # commit with one file being modified.
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    This is just to verify that revision-log checks are enabled,
+    and in particular that we get an error if the TN is missing.
+    That way, we know that our repository is correctly configured
+    in terms of requiring TNs in the revision log and should
+    normally reject commits that don't follow this rule.
+    """
+    # Push master to the `origin' remote.  The delta should be one
+    # commit with one file being modified.
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently
 remote: *** minor that a ticket number is not meaningful, please use
@@ -28,23 +24,24 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_commit_on_revert(testcase):
-        """Try pushing one single-file commit on revert.
 
-        This verifies that all checks are disabled when pushing
-        a commit which has been created using "git revert". In
-        particular, this commit violates a number of requirements
-        in the revision log. And the cvs_check.py script is also
-        set up to always return an error, so this will allow us
-        to verify that no file is style-checked.
-        """
-        # Push master to the `origin' remote.  The delta should be one
-        # commit with one file being modified.
-        p = testcase.run("git push origin revert".split())
-        expected_out = """\
+def test_push_commit_on_revert(testcase):
+    """Try pushing one single-file commit on revert.
+
+    This verifies that all checks are disabled when pushing
+    a commit which has been created using "git revert". In
+    particular, this commit violates a number of requirements
+    in the revision log. And the cvs_check.py script is also
+    set up to always return an error, so this will allow us
+    to verify that no file is style-checked.
+    """
+    # Push master to the `origin' remote.  The delta should be one
+    # commit with one file being modified.
+    p = testcase.run("git push origin revert".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -86,9 +83,5 @@ To ../bare/repo.git
    d065089..d669d66  revert -> revert
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

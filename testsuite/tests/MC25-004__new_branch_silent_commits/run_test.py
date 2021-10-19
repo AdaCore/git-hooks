@@ -1,16 +1,12 @@
-from support import *
+def test_push_head(testcase):
+    """Try pushing new branch on remote.
 
-
-class TestRun(TestCase):
-    def test_push_head(testcase):
-        """Try pushing new branch on remote.
-
-        The purpose of this test is to check what happens when pushing
-        a NEW branch which brings a few new commits, while at the same
-        time sharing some commits from a branch marked as "no-emails".
-        """
-        p = testcase.run("git push origin head".split())
-        expected_out = """\
+    The purpose of this test is to check what happens when pushing
+    a NEW branch which brings a few new commits, while at the same
+    time sharing some commits from a branch marked as "no-emails".
+    """
+    p = testcase.run("git push origin head".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `.gitignore'
 remote: *** cvs_check: `repo' < `source.c'
 remote: *** cvs_check: `repo' < `use_source.c'
@@ -142,20 +138,16 @@ To ../bare/repo.git
  * [new branch]      head -> head
 """
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Verify that the branch has been created in the remote
-        # repository and that it points to the expected commit.
+    # Verify that the branch has been created in the remote
+    # repository and that it points to the expected commit.
 
-        p = testcase.run("git show-ref -s head".split(), cwd=testcase.bare_repo_dir)
-        expected_out = """\
+    p = testcase.run("git show-ref -s head".split(), cwd=testcase.bare_repo_dir)
+    expected_out = """\
 53ec7dc719ba973a33490a696250b2bdeb931e7b
 """
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

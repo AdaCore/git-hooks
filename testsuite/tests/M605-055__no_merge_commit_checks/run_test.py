@@ -1,17 +1,13 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push(testcase):
-        """Try pushing branches with bad merges..."""
-        # Try pushing "master".
-        #
-        # It contains a merge commit whose RH is the default RH
-        # for merge commits.  The hooks should normally reject it,
-        # except that the repository has been configured to disable
-        # the associated check.  So the push should work.
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+def test_push(testcase):
+    """Try pushing branches with bad merges..."""
+    # Try pushing "master".
+    #
+    # It contains a merge commit whose RH is the default RH
+    # for merge commits.  The hooks should normally reject it,
+    # except that the repository has been configured to disable
+    # the associated check.  So the push should work.
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -74,18 +70,18 @@ To ../bare/repo.git
    a89ee05..3c799a3  master -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Try pushing "master2".
-        #
-        # This time, it contains a merge commit whose revision
-        # history was edited as expected, but the user forgot
-        # to remove the "Conflicts:" section.  The push should
-        # still be rejected despite the merge-commit-check config
-        # option being set.
-        p = testcase.run("git push origin master2".split())
-        expected_out = """\
+    # Try pushing "master2".
+    #
+    # This time, it contains a merge commit whose revision
+    # history was edited as expected, but the user forgot
+    # to remove the "Conflicts:" section.  The push should
+    # still be rejected despite the merge-commit-check config
+    # option being set.
+    p = testcase.run("git push origin master2".split())
+    expected_out = """\
 remote: *** Pattern "Conflicts:" has been detected.
 remote: *** (in commit 2c7f984bac68db52f1f14cc312509c7242686390)
 remote: ***
@@ -101,9 +97,5 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

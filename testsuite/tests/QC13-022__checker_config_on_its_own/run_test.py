@@ -1,15 +1,11 @@
-from support import *
+def test_push_commits_on_master(testcase):
+    # Push the commit adding the style-checker-config-file option
+    # to the refs/meta/config branch. However, the file it points
+    # to does not exist in that reference, nor is is added by
+    # the commit we're pusing. So this should be rejected.
 
-
-class TestRun(TestCase):
-    def test_push_commits_on_master(testcase):
-        # Push the commit adding the style-checker-config-file option
-        # to the refs/meta/config branch. However, the file it points
-        # to does not exist in that reference, nor is is added by
-        # the commit we're pusing. So this should be rejected.
-
-        p = testcase.run("git push origin meta-config-missing:refs/meta/config".split())
-        expected_out = """\
+    p = testcase.run("git push origin meta-config-missing:refs/meta/config".split())
+    expected_out = """\
 remote: *** Cannot find style_checker config file: `style.yaml'.
 remote: ***
 remote: *** Your repository is configured to provide a configuration file to
@@ -24,16 +20,16 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Do the same as above, but this time with a commit which
-        # provides both the config file at the same time it adds
-        # the style-checker-config-file option.  This time, the update
-        # should be accepted.
+    # Do the same as above, but this time with a commit which
+    # provides both the config file at the same time it adds
+    # the style-checker-config-file option.  This time, the update
+    # should be accepted.
 
-        p = testcase.run("git push origin meta-config:refs/meta/config".split())
-        expected_out = """\
+    p = testcase.run("git push origin meta-config:refs/meta/config".split())
+    expected_out = """\
 remote: *** cvs_check: `--config' `style.yaml' `repo' < `project.config' `style.yaml'
 remote: *** # A YaML file (with nothing in it)
 remote: ***
@@ -82,14 +78,14 @@ To ../bare/repo.git
    ac4cd5a..9142bec  meta-config -> refs/meta/config
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push a commit to the repository to a branch where
-        # the style checker's config file does not exist yet...
+    # Push a commit to the repository to a branch where
+    # the style checker's config file does not exist yet...
 
-        p = testcase.run("git push origin step-1/checker_config_missing:master".split())
-        expected_out = """\
+    p = testcase.run("git push origin step-1/checker_config_missing:master".split())
+    expected_out = """\
 remote: *** Cannot find style_checker config file: `style.yaml'.
 remote: ***
 remote: *** Your repository is configured to provide a configuration file to
@@ -104,16 +100,14 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Once the checkin above did not work, push a commit which
-        # adds the missing config file (on its own)
+    # Once the checkin above did not work, push a commit which
+    # adds the missing config file (on its own)
 
-        p = testcase.run(
-            "git push origin step-2/add_checker_config_file:master".split()
-        )
-        expected_out = """\
+    p = testcase.run("git push origin step-2/add_checker_config_file:master".split())
+    expected_out = """\
 remote: *** cvs_check: `--config' `style.yaml' `repo' < `style.yaml'
 remote: *** # A YaML file (with nothing in it)
 remote: ***
@@ -152,16 +146,14 @@ To ../bare/repo.git
    b3a13b3..c84b233  step-2/add_checker_config_file -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Once the config file is in, we should now be able to push
-        # our commit, this time.
+    # Once the config file is in, we should now be able to push
+    # our commit, this time.
 
-        p = testcase.run(
-            "git push origin step-3/try_initial_commit_again:master".split()
-        )
-        expected_out = """\
+    p = testcase.run("git push origin step-3/try_initial_commit_again:master".split())
+    expected_out = """\
 remote: *** cvs_check: `--config' `style.yaml' `repo' < `b.adb'
 remote: *** # A YaML file (with nothing in it)
 remote: ***
@@ -205,19 +197,17 @@ To ../bare/repo.git
    c84b233..bf95cd2  step-3/try_initial_commit_again -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Simulate a change where we only change the config file...
-        # We expect that config file to be effective immediately,
-        # so we verify that the contents of that file as passed
-        # to our style_checker (cvs_check in our testsuite) shows
-        # the updated contents.
+    # Simulate a change where we only change the config file...
+    # We expect that config file to be effective immediately,
+    # so we verify that the contents of that file as passed
+    # to our style_checker (cvs_check in our testsuite) shows
+    # the updated contents.
 
-        p = testcase.run(
-            "git push origin step-4/modify_checker_config_only:master".split()
-        )
-        expected_out = """\
+    p = testcase.run("git push origin step-4/modify_checker_config_only:master".split())
+    expected_out = """\
 remote: *** cvs_check: `--config' `style.yaml' `repo' < `style.yaml'
 remote: *** # A YaML file (with nothing in it)
 remote: *** hello: world
@@ -257,21 +247,21 @@ To ../bare/repo.git
    bf95cd2..2e2c5c5  step-4/modify_checker_config_only -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # And finally, simulate a commit which changes both the config
-        # file and other files.
-        #
-        # Same as above, we expect the update config file to be effective
-        # immediately, so we verify that the contents of that file as
-        # passed to our style_checker (cvs_check in our testsuite) shows
-        # the updated contents.
+    # And finally, simulate a commit which changes both the config
+    # file and other files.
+    #
+    # Same as above, we expect the update config file to be effective
+    # immediately, so we verify that the contents of that file as
+    # passed to our style_checker (cvs_check in our testsuite) shows
+    # the updated contents.
 
-        p = testcase.run(
-            "git push origin step-5/modify_code_and_checker_config:master".split()
-        )
-        expected_out = """\
+    p = testcase.run(
+        "git push origin step-5/modify_code_and_checker_config:master".split()
+    )
+    expected_out = """\
 remote: *** cvs_check: `--config' `style.yaml' `repo' < `a.ads' `style.yaml'
 remote: *** # A YaML file (with nothing in it)
 remote: *** hello: world
@@ -323,9 +313,5 @@ To ../bare/repo.git
    2e2c5c5..bdd1bbb  step-5/modify_code_and_checker_config -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

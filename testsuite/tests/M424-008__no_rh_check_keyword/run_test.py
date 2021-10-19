@@ -1,17 +1,13 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing master..."""
-        # Push a first change on master.  The revision log is violating
-        # a couple of rules (empty line after subject, missing TN),
-        # but the "(no-rh-check)" keyword/tag in the revision log
-        # should turn all rh-checks to be accepted.
-        p = testcase.run(
-            "git push origin c16481a7e16f7d1632319922e84a9cc32dcf876b:master".split()
-        )
-        expected_out = """\
+def test_push_commit_on_master(testcase):
+    """Try pushing master..."""
+    # Push a first change on master.  The revision log is violating
+    # a couple of rules (empty line after subject, missing TN),
+    # but the "(no-rh-check)" keyword/tag in the revision log
+    # should turn all rh-checks to be accepted.
+    p = testcase.run(
+        "git push origin c16481a7e16f7d1632319922e84a9cc32dcf876b:master".split()
+    )
+    expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -58,15 +54,15 @@ To ../bare/repo.git
    d065089..c16481a  c16481a7e16f7d1632319922e84a9cc32dcf876b -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Now, push a second change on master.  Same thing, but
-        # the commit introduces some changes that the cvs_check'er
-        # will reject.
+    # Now, push a second change on master.  Same thing, but
+    # the commit introduces some changes that the cvs_check'er
+    # will reject.
 
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: *** pre-commit check failed for commit: 7b299989f3305ad611c2c9774cc0e587571beb84
 remote: *** cvs_check: `repo' < `b'
 remote: *** *** cvs_check: some style errors in: b
@@ -76,9 +72,5 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

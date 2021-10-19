@@ -1,11 +1,7 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_delete_meta_config(testcase):
-        """Try deleting the refs/meta/config branch (not allowed)"""
-        p = testcase.run("git push origin :refs/meta/config".split())
-        expected_out = """\
+def test_delete_meta_config(testcase):
+    """Try deleting the refs/meta/config branch (not allowed)"""
+    p = testcase.run("git push origin :refs/meta/config".split())
+    expected_out = """\
 remote: *** Deleting the reference refs/meta/config is not allowed.
 remote: ***
 remote: *** This reference provides important configuration information
@@ -15,9 +11,5 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

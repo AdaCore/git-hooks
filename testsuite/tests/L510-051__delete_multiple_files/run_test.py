@@ -1,16 +1,12 @@
-from support import *
+def test_push_commit_on_master(testcase):
+    """Try pushing commit on master."""
+    # Enable debug traces.  We use them to make certain verifications,
+    # such as verifying that certain files are not being checked
+    # because they are being deleted.
+    testcase.set_debug_level(2)
 
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing commit on master."""
-        # Enable debug traces.  We use them to make certain verifications,
-        # such as verifying that certain files are not being checked
-        # because they are being deleted.
-        testcase.set_debug_level(2)
-
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote:   DEBUG: check_update(ref_name=refs/heads/master, old_rev=f82624871b6cfc46d5a7c5be518bc20e8f42be42, new_rev=0c702ad3051f00b1251bca7a0241a3a9bf19bf0d)
 remote: DEBUG: validate_ref_update (refs/heads/master, f82624871b6cfc46d5a7c5be518bc20e8f42be42, 0c702ad3051f00b1251bca7a0241a3a9bf19bf0d)
 remote: DEBUG: update base: f82624871b6cfc46d5a7c5be518bc20e8f42be42
@@ -73,9 +69,5 @@ remote: -end B;
 To ../bare/repo.git
    f826248..0c702ad  master -> master
 """
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

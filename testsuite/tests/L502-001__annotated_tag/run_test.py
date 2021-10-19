@@ -1,14 +1,10 @@
-from support import *
+def test_push_annotated_tag(testcase):
+    """Try pushing an anotated tag."""
+    # Try pushing tag v0.1.
+    p = testcase.run("git push origin v0.1".split())
+    testcase.assertEqual(p.status, 0, p.image)
 
-
-class TestRun(TestCase):
-    def test_push_annotated_tag(testcase):
-        """Try pushing an anotated tag."""
-        # Try pushing tag v0.1.
-        p = testcase.run("git push origin v0.1".split())
-        testcase.assertEqual(p.status, 0, p.image)
-
-        expected_out = """\
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -34,8 +30,4 @@ To ../bare/repo.git
  * [new tag]         v0.1 -> v0.1
 """
 
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertRunOutputEqual(p, expected_out)

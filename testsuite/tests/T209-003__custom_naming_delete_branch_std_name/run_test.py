@@ -1,11 +1,7 @@
-from support import TestCase, runtests
-
-
-class TestRun(TestCase):
-    def test_delete_branch_with_std_name(testcase):
-        """Push a branch deletion using a standard reference name."""
-        p = testcase.run("git push origin :to-delete".split())
-        expected_out = """\
+def test_delete_branch_with_std_name(testcase):
+    """Push a branch deletion using a standard reference name."""
+    p = testcase.run("git push origin :to-delete".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -26,9 +22,5 @@ To ../bare/repo.git
  - [deleted]         to-delete
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

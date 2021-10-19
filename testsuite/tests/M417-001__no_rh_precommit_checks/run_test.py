@@ -1,21 +1,17 @@
-from support import *
+def test_push_commits(testcase):
+    """See comments below."""
+    # Branch master is 2 commits ahead of the remote. But we push
+    # the commits one by one, because we want to verify that the
+    # push is successful with the first commit, but trips the
+    # precommit-check on the second.
 
-
-class TestRun(TestCase):
-    def test_push_commits(testcase):
-        """See comments below."""
-        # Branch master is 2 commits ahead of the remote. But we push
-        # the commits one by one, because we want to verify that the
-        # push is successful with the first commit, but trips the
-        # precommit-check on the second.
-
-        # Push the first commit. The RH should normally fail the RH
-        # style check, but we deactivated it for all branches, and
-        # thus the push is expected to pass.
-        p = testcase.run(
-            "git push origin bf43717d61e2a67cf9b3d040e9c40d6041a8444d:master".split()
-        )
-        expected_out = """\
+    # Push the first commit. The RH should normally fail the RH
+    # style check, but we deactivated it for all branches, and
+    # thus the push is expected to pass.
+    p = testcase.run(
+        "git push origin bf43717d61e2a67cf9b3d040e9c40d6041a8444d:master".split()
+    )
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -55,15 +51,15 @@ To ../bare/repo.git
    8fcbf01..bf43717  bf43717d61e2a67cf9b3d040e9c40d6041a8444d -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push the second commit. This time, verify that having the RH
-        # style check disabled does not prevent the precommit-check
-        # checks from being applied. cvs_check has been setup to reject
-        # the update, and thus cause the push to fail.
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    # Push the second commit. This time, verify that having the RH
+    # style check disabled does not prevent the precommit-check
+    # checks from being applied. cvs_check has been setup to reject
+    # the update, and thus cause the push to fail.
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: *** pre-commit check failed for commit: e4dede9e45c3b88fd57aab5edbce1cd4d1da0850
 remote: *** cvs_check: style check violation in b
 remote: error: hook declined to update refs/heads/master
@@ -72,9 +68,5 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

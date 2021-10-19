@@ -1,2 +1,7 @@
+# Generated files and directories...
+.coverage
+htmlcov/
+
+# Temporary files...
 *.pyc
 *.swp

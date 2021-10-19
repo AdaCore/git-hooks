@@ -1,20 +1,16 @@
-from support import *
+def test_push_commit_on_master(testcase):
+    """Try pushing one single-file commit on master.
 
+    The commit contains one file rename, but we tell the hooks
+    to treat renames as a new file, and thus expect to apply
+    the pre-commit checks on the new file.
+    """
+    testcase.set_debug_level(2)
 
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing one single-file commit on master.
-
-        The commit contains one file rename, but we tell the hooks
-        to treat renames as a new file, and thus expect to apply
-        the pre-commit checks on the new file.
-        """
-        testcase.set_debug_level(2)
-
-        # Push master to the `origin' remote.  The delta should be one
-        # commit with one file being modified.
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    # Push master to the `origin' remote.  The delta should be one
+    # commit with one file being modified.
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote:   DEBUG: check_update(ref_name=refs/heads/master, old_rev=a60540361d47901d3fe254271779f380d94645f7, new_rev=6a48cdab9b100506a387a8398af4751b33a4bfd0)
 remote: DEBUG: validate_ref_update (refs/heads/master, a60540361d47901d3fe254271779f380d94645f7, 6a48cdab9b100506a387a8398af4751b33a4bfd0)
 remote: DEBUG: update base: a60540361d47901d3fe254271779f380d94645f7
@@ -58,9 +54,5 @@ To ../bare/repo.git
    a605403..6a48cda  master -> master
 """
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

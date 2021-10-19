@@ -1,11 +1,7 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_branch_with_merge_commit(testcase):
-        """Test merge-commit reject on branches where they are not allowed."""
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+def test_push_branch_with_merge_commit(testcase):
+    """Test merge-commit reject on branches where they are not allowed."""
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: *** Merge commits are not allowed on refs/heads/master.
 remote: *** The commit that caused this error is:
 remote: ***
@@ -20,11 +16,11 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        p = testcase.run("git push origin gdb-7.8-branch".split())
-        expected_out = """\
+    p = testcase.run("git push origin gdb-7.8-branch".split())
+    expected_out = """\
 remote: *** Merge commits are not allowed on refs/heads/gdb-7.8-branch.
 remote: *** The commit that caused this error is:
 remote: ***
@@ -39,11 +35,11 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        p = testcase.run("git push origin topic/accept-merges".split())
-        expected_out = """\
+    p = testcase.run("git push origin topic/accept-merges".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -182,9 +178,5 @@ To ../bare/repo.git
    33e7556..ffb05b4  topic/accept-merges -> topic/accept-merges
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

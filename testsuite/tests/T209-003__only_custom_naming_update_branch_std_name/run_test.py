@@ -1,14 +1,10 @@
-from support import TestCase, runtests
+def test_update_branch_in_standard_namespace(testcase):
+    """Create a new branch with a standard reference name."""
+    # First, try pushing with a branch name which is recognized
+    # by the repository's branch namespace.
 
-
-class TestRun(TestCase):
-    def test_update_branch_in_standard_namespace(testcase):
-        """Create a new branch with a standard reference name."""
-        # First, try pushing with a branch name which is recognized
-        # by the repository's branch namespace.
-
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -47,17 +43,17 @@ To ../bare/repo.git
    d065089..5f5c774  master -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Next, try pushing with a branch name which is not recognized
-        # by the repository's branch namespace. E.g., try updating
-        # the branch called "my-topic", which exists in the remote
-        # repository, but is not recognized as a branch reference
-        # (could be a legacy branch).
+    # Next, try pushing with a branch name which is not recognized
+    # by the repository's branch namespace. E.g., try updating
+    # the branch called "my-topic", which exists in the remote
+    # repository, but is not recognized as a branch reference
+    # (could be a legacy branch).
 
-        p = testcase.run("git push origin my-topic".split())
-        expected_out = """\
+    p = testcase.run("git push origin my-topic".split())
+    expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/heads/my-topic
 remote: ***
 remote: *** This repository currently recognizes the following types
@@ -80,9 +76,5 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

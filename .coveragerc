@@ -1,0 +1,9 @@
+[run]
+cover_pylib = True
+parallel = True
+[report]
+exclude_lines =
+    pragma: no cover
+    pragma: py2-only
+omit =
+    testsuite/*

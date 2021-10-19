@@ -1,18 +1,14 @@
-from support import *
+def test_push_branch_with_merge_commit(testcase):
+    """Try pushing an update to master adding one merge commit.
 
-
-class TestRun(TestCase):
-    def test_push_branch_with_merge_commit(testcase):
-        """Try pushing an update to master adding one merge commit.
-
-        But the new master points to an already-existing commit
-        (accessible from another branch, called topic/merge-stuff
-        in this case).
-        """
-        # Push master to the `origin' remote.  The delta should be one
-        # commit with one file being modified.
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    But the new master points to an already-existing commit
+    (accessible from another branch, called topic/merge-stuff
+    in this case).
+    """
+    # Push master to the `origin' remote.  The delta should be one
+    # commit with one file being modified.
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -151,9 +147,5 @@ To ../bare/repo.git
    33e7556..ffb05b4  master -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

@@ -1,6 +1,4 @@
 # coding=utf-8
-from support import *
-
 import os
 import stat
 
@@ -14,90 +12,89 @@ json.dump({'diff': u'My \\u2192 Email diff \\u2190\\n'}, sys.stdout)
 """
 
 
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing ia single-file commit.
+def test_push_commit_on_master(testcase):
+    """Try pushing ia single-file commit.
 
-        The purpose of this testcase is to verify that the git-hooks
-        behave as expected when the repository uses a file-commit-cmd
-        hook, when the diff contains some non-ascii characters.
+    The purpose of this testcase is to verify that the git-hooks
+    behave as expected when the repository uses a file-commit-cmd
+    hook, when the diff contains some non-ascii characters.
 
-        We perform the test with two variations:
+    We perform the test with two variations:
 
-            (1) First on branch "master", where the file-commit-cmd
-                hook is used, without any other hook being used.
+        (1) First on branch "master", where the file-commit-cmd
+            hook is used, without any other hook being used.
 
-            (2) As a second step, we then install a commit-email-formatter
-                hook which returns a custom diff, and try pushing the same
-                commit again to branch "with-email-formatter".
+        (2) As a second step, we then install a commit-email-formatter
+            hook which returns a custom diff, and try pushing the same
+            commit again to branch "with-email-formatter".
 
-        In pratice, this non-ascii character in the diff should have
-        no impact on the use of this hook since, as of today, we
-        explicitly exclude the diff from the data being sent to
-        the filer hook ;-). However, we're adding this testcase
-        nonetheless so as to make sure we test this scenario should
-        we decide to pas that inforamtion, one day...
-        """
-        # First, update the git-hooks configuration to install
-        # the script we want to use as our file-commit-cmd.
+    In pratice, this non-ascii character in the diff should have
+    no impact on the use of this hook since, as of today, we
+    explicitly exclude the diff from the data being sent to
+    the filer hook ;-). However, we're adding this testcase
+    nonetheless so as to make sure we test this scenario should
+    we decide to pas that inforamtion, one day...
+    """
+    # First, update the git-hooks configuration to install
+    # the script we want to use as our file-commit-cmd.
 
-        p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
-        testcase.assertEqual(p.status, 0, p.image)
+    p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
+    testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(["git", "checkout", "FETCH_HEAD"])
-        testcase.assertEqual(p.status, 0, p.image)
+    p = testcase.run(["git", "checkout", "FETCH_HEAD"])
+    testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(
-            [
-                "git",
-                "config",
-                "--file",
-                "project.config",
-                "hooks.file-commit-cmd",
-                os.path.join(testcase.work_dir, "commit-filer"),
-            ]
-        )
-        testcase.assertEqual(p.status, 0, p.image)
+    p = testcase.run(
+        [
+            "git",
+            "config",
+            "--file",
+            "project.config",
+            "hooks.file-commit-cmd",
+            os.path.join(testcase.work_dir, "commit-filer"),
+        ]
+    )
+    testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(
-            ["git", "commit", "-m", "Add hooks.commit-filer", "project.config"]
-        )
-        testcase.assertEqual(p.status, 0, p.image)
+    p = testcase.run(
+        ["git", "commit", "-m", "Add hooks.commit-filer", "project.config"]
+    )
+    testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
-        testcase.assertEqual(p.status, 0, p.image)
-        # Check the last line that git printed, and verify that we have
-        # another piece of evidence that the change was succesfully pushed.
-        assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
+    p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
+    testcase.assertEqual(p.status, 0, p.image)
+    # Check the last line that git printed, and verify that we have
+    # another piece of evidence that the change was succesfully pushed.
+    assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
 
-        # Return our current HEAD to branch "master". Not critical for
-        # our testing, but it helps the testcase be closer to the more
-        # typical scenarios.
-        p = testcase.run(["git", "checkout", "master"])
-        testcase.assertEqual(p.status, 0, p.image)
+    # Return our current HEAD to branch "master". Not critical for
+    # our testing, but it helps the testcase be closer to the more
+    # typical scenarios.
+    p = testcase.run(["git", "checkout", "master"])
+    testcase.assertEqual(p.status, 0, p.image)
 
-        # Push master to the `origin' remote.  The delta should be one
-        # commit with one file being modified.
-        #
-        # While doing so, we also force the email-sending verbosity
-        # to "full". While we do not really need to verify the contents
-        # of the email being sent in the context of this testcase,
-        # having the full email contents allows us to verify the contents
-        # of the commit's "diff", and make sure there are indeed some
-        # non-ascii caracters in it.  Note that maximum email-sending
-        # verbosity is currently the default, so forcing it is not
-        # necessary either, but doing so reduces the chance that someone
-        # (probably me) accidently reduces the verbosity without
-        # at least reviewing all the considerations that went into
-        # that decision.
+    # Push master to the `origin' remote.  The delta should be one
+    # commit with one file being modified.
+    #
+    # While doing so, we also force the email-sending verbosity
+    # to "full". While we do not really need to verify the contents
+    # of the email being sent in the context of this testcase,
+    # having the full email contents allows us to verify the contents
+    # of the commit's "diff", and make sure there are indeed some
+    # non-ascii caracters in it.  Note that maximum email-sending
+    # verbosity is currently the default, so forcing it is not
+    # necessary either, but doing so reduces the chance that someone
+    # (probably me) accidently reduces the verbosity without
+    # at least reviewing all the considerations that went into
+    # that decision.
 
-        testcase.change_email_sending_verbosity(full_verbosity=True)
+    testcase.change_email_sending_verbosity(full_verbosity=True)
 
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 8bit
-remote: Content-Type: text/plain; charset="utf-8"
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: base64
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -151,68 +148,68 @@ To ../bare/repo.git
    d065089..764f229  master -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Second part of the testcase: Create and then install a simple
-        # commit-email-formatter hook, which changes email bodies and
-        # uses non-ascii characters.
+    # Second part of the testcase: Create and then install a simple
+    # commit-email-formatter hook, which changes email bodies and
+    # uses non-ascii characters.
 
-        COMMIT_EMAIL_FORMATTER_FILENAME = os.path.join(
-            testcase.work_dir, "commit-email-formatter.py"
-        )
-        with open(COMMIT_EMAIL_FORMATTER_FILENAME, "w") as f:
-            f.write(COMMIT_EMAIL_FORMATTER_HOOK)
-        os.chmod(
-            COMMIT_EMAIL_FORMATTER_FILENAME, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR
-        )
+    COMMIT_EMAIL_FORMATTER_FILENAME = os.path.join(
+        testcase.work_dir, "commit-email-formatter.py"
+    )
+    with open(COMMIT_EMAIL_FORMATTER_FILENAME, "w") as f:
+        f.write(COMMIT_EMAIL_FORMATTER_HOOK)
+    os.chmod(
+        COMMIT_EMAIL_FORMATTER_FILENAME, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR
+    )
 
-        p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
-        testcase.assertEqual(p.status, 0, p.image)
+    p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
+    testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(["git", "checkout", "FETCH_HEAD"])
-        testcase.assertEqual(p.status, 0, p.image)
+    p = testcase.run(["git", "checkout", "FETCH_HEAD"])
+    testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(
-            [
-                "git",
-                "config",
-                "--file",
-                "project.config",
-                "hooks.commit-email-formatter",
-                COMMIT_EMAIL_FORMATTER_FILENAME,
-            ]
-        )
-        testcase.assertEqual(p.status, 0, p.image)
+    p = testcase.run(
+        [
+            "git",
+            "config",
+            "--file",
+            "project.config",
+            "hooks.commit-email-formatter",
+            COMMIT_EMAIL_FORMATTER_FILENAME,
+        ]
+    )
+    testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(
-            [
-                "git",
-                "commit",
-                "-m",
-                "Add hooks.commit-email-formatter",
-                "project.config",
-            ]
-        )
-        testcase.assertEqual(p.status, 0, p.image)
+    p = testcase.run(
+        [
+            "git",
+            "commit",
+            "-m",
+            "Add hooks.commit-email-formatter",
+            "project.config",
+        ]
+    )
+    testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
-        testcase.assertEqual(p.status, 0, p.image)
-        # Check the last line that git printed, and verify that we have
-        # another piece of evidence that the change was succesfully pushed.
-        assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
+    p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
+    testcase.assertEqual(p.status, 0, p.image)
+    # Check the last line that git printed, and verify that we have
+    # another piece of evidence that the change was succesfully pushed.
+    assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
 
-        # Return our current HEAD to branch "master". Not critical for
-        # our testing, but it helps the testcase be closer to the more
-        # typical scenarios.
-        p = testcase.run(["git", "checkout", "master"])
-        testcase.assertEqual(p.status, 0, p.image)
+    # Return our current HEAD to branch "master". Not critical for
+    # our testing, but it helps the testcase be closer to the more
+    # typical scenarios.
+    p = testcase.run(["git", "checkout", "master"])
+    testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run("git push origin master:with-email-formatter".split())
-        expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 8bit
-remote: Content-Type: text/plain; charset="utf-8"
+    p = testcase.run("git push origin master:with-email-formatter".split())
+    expected_out = """\
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: base64
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -253,9 +250,5 @@ To ../bare/repo.git
    d065089..764f229  master -> with-email-formatter
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

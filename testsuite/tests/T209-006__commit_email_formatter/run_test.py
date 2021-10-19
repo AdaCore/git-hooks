@@ -1,95 +1,93 @@
 import os
-from support import runtests, TestCase
 
 
-class TestRun(TestCase):
-    def test_commit_commit_email_formatter(testcase):
-        """Test the hooks.commit-email-formatter hook.
+def test_commit_commit_email_formatter(testcase):
+    """Test the hooks.commit-email-formatter hook.
 
-        The purpose of this testcase is to perform a sanity check
-        of the behavior of the git-hooks when a user pushes some changes
-        to a repository where the hooks.commit-email-formatter config
-        option is set.
+    The purpose of this testcase is to perform a sanity check
+    of the behavior of the git-hooks when a user pushes some changes
+    to a repository where the hooks.commit-email-formatter config
+    option is set.
 
-        The script we use for that is called commit-email-formatter.py,
-        and was written to facilitate testing of the various possible
-        scenarios we want to support with this commit-email-formatter
-        hook. It does so by inspecting the various commits and react
-        differently based on the commit (generally speaking, it takes
-        cues from the commit's revision log).
-        """
-        # First, update the git-hooks configuration to install our
-        # the script we want to use as our commit-email-formatter.
+    The script we use for that is called commit-email-formatter.py,
+    and was written to facilitate testing of the various possible
+    scenarios we want to support with this commit-email-formatter
+    hook. It does so by inspecting the various commits and react
+    differently based on the commit (generally speaking, it takes
+    cues from the commit's revision log).
+    """
+    # First, update the git-hooks configuration to install our
+    # the script we want to use as our commit-email-formatter.
 
-        p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
-        testcase.assertEqual(p.status, 0, p.image)
+    p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
+    testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(["git", "checkout", "FETCH_HEAD"])
-        testcase.assertEqual(p.status, 0, p.image)
+    p = testcase.run(["git", "checkout", "FETCH_HEAD"])
+    testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(
-            [
-                "git",
-                "config",
-                "--file",
-                "project.config",
-                "hooks.commit-email-formatter",
-                os.path.join(testcase.work_dir, "commit-email-formatter.py"),
-            ]
-        )
-        testcase.assertEqual(p.status, 0, p.image)
+    p = testcase.run(
+        [
+            "git",
+            "config",
+            "--file",
+            "project.config",
+            "hooks.commit-email-formatter",
+            os.path.join(testcase.work_dir, "commit-email-formatter.py"),
+        ]
+    )
+    testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(
-            [
-                "git",
-                "commit",
-                "-m",
-                "Add hooks.commit-email-formatter",
-                "project.config",
-            ]
-        )
-        testcase.assertEqual(p.status, 0, p.image)
+    p = testcase.run(
+        [
+            "git",
+            "commit",
+            "-m",
+            "Add hooks.commit-email-formatter",
+            "project.config",
+        ]
+    )
+    testcase.assertEqual(p.status, 0, p.image)
 
-        p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
-        testcase.assertEqual(p.status, 0, p.image)
-        # Check the last line that git printed, and verify that we have
-        # another piece of evidence that the change was succesfully pushed.
-        assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
+    p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
+    testcase.assertEqual(p.status, 0, p.image)
+    # Check the last line that git printed, and verify that we have
+    # another piece of evidence that the change was succesfully pushed.
+    assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
 
-        # Return our current HEAD to branch "master". Not critical for
-        # our testing, but it helps the testcase be closer to the more
-        # typical scenarios.
-        p = testcase.run(["git", "checkout", "master"])
-        testcase.assertEqual(p.status, 0, p.image)
+    # Return our current HEAD to branch "master". Not critical for
+    # our testing, but it helps the testcase be closer to the more
+    # typical scenarios.
+    p = testcase.run(["git", "checkout", "master"])
+    testcase.assertEqual(p.status, 0, p.image)
 
-        # Push the "master" branch, which introduces a series of commits.
-        # Each commit will be handled by our commit-email-formatter.py
-        # script based on its contents, with the commits being created
-        # so as to help us cover the whole range of options we support.
-        # This makes for a fairly long list of commits, which means
-        # a correspondingly long output. We are testing it this way
-        # (one push of multiple commits) so as to verify that unexpected
-        # behavior of the commit-email-formatter hook doesn't affect
-        # the next commit.
+    # Push the "master" branch, which introduces a series of commits.
+    # Each commit will be handled by our commit-email-formatter.py
+    # script based on its contents, with the commits being created
+    # so as to help us cover the whole range of options we support.
+    # This makes for a fairly long list of commits, which means
+    # a correspondingly long output. We are testing it this way
+    # (one push of multiple commits) so as to verify that unexpected
+    # behavior of the commit-email-formatter hook doesn't affect
+    # the next commit.
 
-        p = testcase.run("git push origin master".split())
+    p = testcase.run("git push origin master".split())
 
-        # Let's split the expected_out by commits, so we can add comments
-        # describing each commit prior to being processed by our hook.
-        expected_out = ""
+    # Let's split the expected_out by commits, so we can add comments
+    # describing each commit prior to being processed by our hook.
+    expected_out = ""
 
-        # | commit 433a74237b4d8849da6bd33f6cfdda1919086358
-        # | Author: Joel Brobecker <brobecker@adacore.com>
-        # | Date:   Sun Aug 2 10:27:19 2020 -0700
-        # |
-        # |     Add "Introduction" section title
-        #
-        # We expected the subject and email body to be customized.
-        # We should also see a "diff" section, even though the hook
-        # didn't provide a value for "diff". This verifies that
-        # we handle the default properly.
+    # | commit 433a74237b4d8849da6bd33f6cfdda1919086358
+    # | Author: Joel Brobecker <brobecker@adacore.com>
+    # | Date:   Sun Aug 2 10:27:19 2020 -0700
+    # |
+    # |     Add "Introduction" section title
+    #
+    # We expected the subject and email body to be customized.
+    # We should also see a "diff" section, even though the hook
+    # didn't provide a value for "diff". This verifies that
+    # we handle the default properly.
 
-        expected_out += """\
+    expected_out += """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -122,16 +120,16 @@ remote: +
 remote:  Hello.
 """
 
-        # | commit 5fee44f6ec23bde253ac8e4a80fb10c5b7469e48
-        # | Author: Joel Brobecker <brobecker@adacore.com>
-        # | Date:   Sun Aug 2 10:34:59 2020 -0700
-        # |
-        # |     Improve introduction
-        #
-        # We expect the subject to be customized, and the rest should be
-        # the same as the default commit email.
+    # | commit 5fee44f6ec23bde253ac8e4a80fb10c5b7469e48
+    # | Author: Joel Brobecker <brobecker@adacore.com>
+    # | Date:   Sun Aug 2 10:34:59 2020 -0700
+    # |
+    # |     Improve introduction
+    #
+    # We expect the subject to be customized, and the rest should be
+    # the same as the default commit email.
 
-        expected_out += """\
+    expected_out += """\
 remote: DEBUG: inter-email delay...
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -169,16 +167,16 @@ remote: -Hello.
 remote: +Hello. This is going to be a useful document.
 """
 
-        # | commit 3a81561f42669f8ae85304a67ca30225afe780f9
-        # | Author: Joel Brobecker <brobecker@adacore.com>
-        # | Date:   Sun Aug 2 10:36:43 2020 -0700
-        # |
-        # |     Add new file: b
-        #
-        # The email body should be customized, and the "Diff: section should
-        # be absent (because the hook returned "diff" set to None).
+    # | commit 3a81561f42669f8ae85304a67ca30225afe780f9
+    # | Author: Joel Brobecker <brobecker@adacore.com>
+    # | Date:   Sun Aug 2 10:36:43 2020 -0700
+    # |
+    # |     Add new file: b
+    #
+    # The email body should be customized, and the "Diff: section should
+    # be absent (because the hook returned "diff" set to None).
 
-        expected_out += """\
+    expected_out += """\
 remote: DEBUG: inter-email delay...
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -198,17 +196,17 @@ remote:
 remote: [Diff removed for reason X and Y]
 """
 
-        # | commit 83b7d3bc13428241abb3f27aad2e226c809e5e56
-        # | Author: Joel Brobecker <brobecker@adacore.com>
-        # | Date:   Sun Aug 2 14:31:49 2020 -0700
-        # |
-        # |     Update b
-        # |
-        # |     (no-diff-in-email)
-        #
-        # We expect the email to be the same as the default email,
-        # except that the "diff" section has been removed.
-        expected_out += """\
+    # | commit 83b7d3bc13428241abb3f27aad2e226c809e5e56
+    # | Author: Joel Brobecker <brobecker@adacore.com>
+    # | Date:   Sun Aug 2 14:31:49 2020 -0700
+    # |
+    # |     Update b
+    # |
+    # |     (no-diff-in-email)
+    #
+    # We expect the email to be the same as the default email,
+    # except that the "diff" section has been removed.
+    expected_out += """\
 remote: DEBUG: inter-email delay...
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -233,16 +231,16 @@ remote:     (no-diff-in-email)
 remote:
 """
 
-        # | commit 6b65d08866b52c750df5ace3f18357133e352b4e
-        # | Author: Joel Brobecker <brobecker@adacore.com>
-        # | Date:   Sun Aug 2 14:34:01 2020 -0700
-        # |
-        # |     Update a
-        #
-        # A commit with nothing in particular. The hook should return
-        # an empty dict, signifying that nothing should be customized
-        # (meaning, the standard email should get sent).
-        expected_out += """\
+    # | commit 6b65d08866b52c750df5ace3f18357133e352b4e
+    # | Author: Joel Brobecker <brobecker@adacore.com>
+    # | Date:   Sun Aug 2 14:34:01 2020 -0700
+    # |
+    # |     Update a
+    #
+    # A commit with nothing in particular. The hook should return
+    # an empty dict, signifying that nothing should be customized
+    # (meaning, the standard email should get sent).
+    expected_out += """\
 remote: DEBUG: inter-email delay...
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -280,19 +278,19 @@ remote: -Hello. This is going to be a useful document.
 remote: +Hello. This is going to be a useful document for everyone to read.
 """
 
-        # | commit 4131b4399e258bd3c36119d026455a4abce2e971
-        # | Author: Joel Brobecker <brobecker@adacore.com>
-        # | Date:   Sun Aug 2 14:37:44 2020 -0700
-        # |
-        # |     Improve b (email-formatter:return-nonzero)
-        #
-        # This commit will cause the hook to return nonzero.
-        #
-        # In that situation, the git-hooks are expected to fall back
-        # to the default commit email, with a warning at the end of
-        # the email body (but before the diff).
+    # | commit 4131b4399e258bd3c36119d026455a4abce2e971
+    # | Author: Joel Brobecker <brobecker@adacore.com>
+    # | Date:   Sun Aug 2 14:37:44 2020 -0700
+    # |
+    # |     Improve b (email-formatter:return-nonzero)
+    #
+    # This commit will cause the hook to return nonzero.
+    #
+    # In that situation, the git-hooks are expected to fall back
+    # to the default commit email, with a warning at the end of
+    # the email body (but before the diff).
 
-        expected_out += """\
+    expected_out += """\
 remote: DEBUG: inter-email delay...
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -334,24 +332,24 @@ remote: @@ -1 +1,2 @@
 remote:  New file with some interesting contents.
 remote: +Let's start with some background: dark.
 """.format(
-            testcase=testcase
-        )
+        testcase=testcase
+    )
 
-        # | commit 3d75bd9d3a551d8b66b8ec7b79eedc7496bb804f
-        # | Author: Joel Brobecker <brobecker@adacore.com>
-        # | Date:   Sun Aug 2 14:40:46 2020 -0700
-        # |
-        # |     Improve introduction once more
-        #
-        # A commit for which no error is expected, to verify that
-        # the error handling in the previous commit does not affect
-        # the handling of this commit.
-        #
-        # The subject is set up so as to "trigger" commit-email-formatter.py
-        # to customize the subject and force the diff (which was the default
-        # anyway).
+    # | commit 3d75bd9d3a551d8b66b8ec7b79eedc7496bb804f
+    # | Author: Joel Brobecker <brobecker@adacore.com>
+    # | Date:   Sun Aug 2 14:40:46 2020 -0700
+    # |
+    # |     Improve introduction once more
+    #
+    # A commit for which no error is expected, to verify that
+    # the error handling in the previous commit does not affect
+    # the handling of this commit.
+    #
+    # The subject is set up so as to "trigger" commit-email-formatter.py
+    # to customize the subject and force the diff (which was the default
+    # anyway).
 
-        expected_out += """\
+    expected_out += """\
 remote: DEBUG: inter-email delay...
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -388,19 +386,19 @@ remote:  Hello. This is going to be a useful document for everyone to read.
 remote: +It will provide detailed information on this thing.
 """
 
-        # | commit ee3e1d03e6decce59fce06f3a2fe256f0221cb80
-        # | Author: Joel Brobecker <brobecker@adacore.com>
-        # | Date:   Sun Aug 2 14:42:05 2020 -0700
-        # |
-        # |     continue improving B (email-formatter:return-bad-json)
-        #
-        # This commit will cause the hook to return some output which
-        # is not valid JSON.
-        #
-        # In that situation, the git-hooks are expected to fall back
-        # to the default commit email, with a warning at the end of
-        # the email body (but before the diff).
-        expected_out += """\
+    # | commit ee3e1d03e6decce59fce06f3a2fe256f0221cb80
+    # | Author: Joel Brobecker <brobecker@adacore.com>
+    # | Date:   Sun Aug 2 14:42:05 2020 -0700
+    # |
+    # |     continue improving B (email-formatter:return-bad-json)
+    #
+    # This commit will cause the hook to return some output which
+    # is not valid JSON.
+    #
+    # In that situation, the git-hooks are expected to fall back
+    # to the default commit email, with a warning at the end of
+    # the email body (but before the diff).
+    expected_out += """\
 remote: DEBUG: inter-email delay...
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -443,25 +441,25 @@ remote:  New file with some interesting contents.
 remote:  Let's start with some background: dark.
 remote: +Let's then look at the foreground: Bright colorful.
 """.format(
-            testcase=testcase
-        )
+        testcase=testcase
+    )
 
-        # | commit e617216033a96c18bad5b2235d960c784dd3efa7
-        # | Author: Joel Brobecker <brobecker@adacore.com>
-        # | Date:   Sun Aug 2 14:46:51 2020 -0700
-        # |
-        # |     more information in b.
-        # |
-        # |     (no-diff-in-email)
-        #
-        # A commit for which no error is expected, to verify that
-        # the error handling in the previous commit does not affect
-        # the handling of this commit.
-        #
-        # The email should be as per the default, except that the "Diff:"
-        # section is omitted.
+    # | commit e617216033a96c18bad5b2235d960c784dd3efa7
+    # | Author: Joel Brobecker <brobecker@adacore.com>
+    # | Date:   Sun Aug 2 14:46:51 2020 -0700
+    # |
+    # |     more information in b.
+    # |
+    # |     (no-diff-in-email)
+    #
+    # A commit for which no error is expected, to verify that
+    # the error handling in the previous commit does not affect
+    # the handling of this commit.
+    #
+    # The email should be as per the default, except that the "Diff:"
+    # section is omitted.
 
-        expected_out += """\
+    expected_out += """\
 remote: DEBUG: inter-email delay...
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -486,19 +484,19 @@ remote:     (no-diff-in-email)
 remote:
 """
 
-        # | commit c47a7f0a65557eb1551b5fd80e753d81c529c69a
-        # | Author: Joel Brobecker <brobecker@adacore.com>
-        # | Date:   Sun Aug 2 14:49:14 2020 -0700
-        # |
-        # |     More [snip snip] (email-formatter:return-not-dict)
-        #
-        # This commit will cause the hook to return nonzero.
-        #
-        # In that situation, the git-hooks are expected to fall back
-        # to the default commit email, with a warning at the end of
-        # the email body (but before the diff).
+    # | commit c47a7f0a65557eb1551b5fd80e753d81c529c69a
+    # | Author: Joel Brobecker <brobecker@adacore.com>
+    # | Date:   Sun Aug 2 14:49:14 2020 -0700
+    # |
+    # |     More [snip snip] (email-formatter:return-not-dict)
+    #
+    # This commit will cause the hook to return nonzero.
+    #
+    # In that situation, the git-hooks are expected to fall back
+    # to the default commit email, with a warning at the end of
+    # the email body (but before the diff).
 
-        expected_out += """\
+    expected_out += """\
 remote: DEBUG: inter-email delay...
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -506,8 +504,7 @@ remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
-remote: Subject: [repo] More text in a's introduction section
-remote:  (email-formatter:return-not-dict)
+remote: Subject: [repo] More text in a's introduction section (email-formatter:return-not-dict)
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
@@ -545,23 +542,23 @@ remote: -It will provide detailed information on this thing.
 remote: +It will provide detailed information on this thing, including
 remote: +information that you might never have thought about.
 """.format(
-            testcase=testcase
-        )
+        testcase=testcase
+    )
 
-        # | commit 699356fb0903efbe73a18e2573a9ca67bc7c35a5 (HEAD -> master)
-        # | Author: Joel Brobecker <brobecker@adacore.com>
-        # | Date:   Sun Aug 2 14:52:44 2020 -0700
-        # |
-        # |     Provide information about the sky (no-diff-in-email)
-        #
-        # A commit for which no error is expected, to verify that
-        # the error handling in the previous commit does not affect
-        # the handling of this commit.
-        #
-        # The email should be as per the default, except that the "diff"
-        # section is omitted.
+    # | commit 699356fb0903efbe73a18e2573a9ca67bc7c35a5 (HEAD -> master)
+    # | Author: Joel Brobecker <brobecker@adacore.com>
+    # | Date:   Sun Aug 2 14:52:44 2020 -0700
+    # |
+    # |     Provide information about the sky (no-diff-in-email)
+    #
+    # A commit for which no error is expected, to verify that
+    # the error handling in the previous commit does not affect
+    # the handling of this commit.
+    #
+    # The email should be as per the default, except that the "diff"
+    # section is omitted.
 
-        expected_out += """\
+    expected_out += """\
 remote: DEBUG: inter-email delay...
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -586,17 +583,17 @@ To ../bare/repo.git
    bb7753f..699356f  master -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Now, push branch "hook-dump", which has a single commit
-        # whose subject is such that commit-email-formatter.py will
-        # know to replace the email's body with the data it was given
-        # via stdin. While at it, it also exercises the replacement
-        # of the "Diff:" section.
+    # Now, push branch "hook-dump", which has a single commit
+    # whose subject is such that commit-email-formatter.py will
+    # know to replace the email's body with the data it was given
+    # via stdin. While at it, it also exercises the replacement
+    # of the "Diff:" section.
 
-        p = testcase.run("git push origin hook-dump".split())
-        expected_out = """\
+    p = testcase.run("git push origin hook-dump".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -660,18 +657,18 @@ To ../bare/repo.git
  * [new branch]      hook-dump -> hook-dump
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push a notes commit.
-        #
-        # Our commit-email-formatter.py script is expected to notice that
-        # this is a notes commit, and customize the email's subject and
-        # body (dumping the data given to the script), as well as suppress
-        # the diff.
+    # Push a notes commit.
+    #
+    # Our commit-email-formatter.py script is expected to notice that
+    # this is a notes commit, and customize the email's subject and
+    # body (dumping the data given to the script), as well as suppress
+    # the diff.
 
-        p = testcase.run("git push origin notes/commits".split())
-        expected_out = """\
+    p = testcase.run("git push origin notes/commits".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -720,9 +717,5 @@ To ../bare/repo.git
  * [new branch]      refs/notes/commits -> refs/notes/commits
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

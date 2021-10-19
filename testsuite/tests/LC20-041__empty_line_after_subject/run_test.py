@@ -1,26 +1,22 @@
-from support import *
+def test_empty_line_after_subject(testcase):
+    """Test the rejection of revision histories missing an empty line
+    after the commit subject.
+    """
+    # Enable pre-commit-check debug traces...
+    testcase.set_debug_level(1)
 
-
-class TestRun(TestCase):
-    def test_empty_line_after_subject(testcase):
-        """Test the rejection of revision histories missing an empty line
-        after the commit subject.
-        """
-        # Enable pre-commit-check debug traces...
-        testcase.set_debug_level(1)
-
-        # Push master to the `origin' remote.  The should push
-        # one merge commit which also references a commit from
-        # the thirdparty branch.  It is the commit from thirdparty
-        # which has an invalid revision history where the empty
-        # line after the commit subject is missing.
-        #
-        # As the invalid commit is has not been pushed to the remote
-        # repository yet, it counts as "new", and thus should be
-        # validated through the pre-commit checks, which means
-        # that we expect the update to fail.
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    # Push master to the `origin' remote.  The should push
+    # one merge commit which also references a commit from
+    # the thirdparty branch.  It is the commit from thirdparty
+    # which has an invalid revision history where the empty
+    # line after the commit subject is missing.
+    #
+    # As the invalid commit is has not been pushed to the remote
+    # repository yet, it counts as "new", and thus should be
+    # validated through the pre-commit checks, which means
+    # that we expect the update to fail.
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 96cc4826ed3f82bee77514177ff3944601d1800d, bd6c0a7343402a7a5d1e5b42e5d338e5c1e3cb35)
 remote: DEBUG: update base: 96cc4826ed3f82bee77514177ff3944601d1800d
 remote: *** Invalid revision history for commit 492fd2fae27c2f358c1d59c59a2e13ec2a3a880f:
@@ -40,14 +36,14 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Now, push the thirdparty branch.  This branch is setup
-        # to avoid the pre-commit checks, so this should allow
-        # the problematic commit.
-        p = testcase.run("git push origin thirdparty".split())
-        expected_out = """\
+    # Now, push the thirdparty branch.  This branch is setup
+    # to avoid the pre-commit checks, so this should allow
+    # the problematic commit.
+    p = testcase.run("git push origin thirdparty".split())
+    expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/thirdparty, 52723db7f709396057df819f73e66b846858217e, 492fd2fae27c2f358c1d59c59a2e13ec2a3a880f)
 remote: DEBUG: update base: 52723db7f709396057df819f73e66b846858217e
 remote: DEBUG: (hooks.no-precommit-check match: `refs/heads/thirdparty')
@@ -65,14 +61,14 @@ To ../bare/repo.git
    52723db..492fd2f  thirdparty -> thirdparty
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # And finally, try pushing the "master" branch again.
-        # This time, the problematic commit is already in, and
-        # so should not go through the pre-commit-checks again.
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    # And finally, try pushing the "master" branch again.
+    # This time, the problematic commit is already in, and
+    # so should not go through the pre-commit-checks again.
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 96cc4826ed3f82bee77514177ff3944601d1800d, bd6c0a7343402a7a5d1e5b42e5d338e5c1e3cb35)
 remote: DEBUG: update base: 96cc4826ed3f82bee77514177ff3944601d1800d
 remote: DEBUG: (commit-per-commit style checking)
@@ -156,9 +152,5 @@ To ../bare/repo.git
    96cc482..bd6c0a7  master -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

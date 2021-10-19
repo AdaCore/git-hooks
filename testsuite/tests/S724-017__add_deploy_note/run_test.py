@@ -1,11 +1,7 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_notes(testcase):
-        """Try pushing a note under refs/notes/deploy"""
-        p = testcase.run("git push origin notes/deploy".split())
-        expected_out = """\
+def test_push_notes(testcase):
+    """Try pushing a note under refs/notes/deploy"""
+    p = testcase.run("git push origin notes/deploy".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -44,9 +40,5 @@ To ../bare/repo.git
    bbcc356..58e8efa  refs/notes/deploy -> refs/notes/deploy
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

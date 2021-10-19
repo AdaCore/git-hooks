@@ -1,32 +1,28 @@
-from support import *
 import os
 
 
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing multiple commits on master."""
-        # First, adjust the project.config file to use a commit-filer
-        # script.  We have to do it manually here, because we need to
-        # provide the full path to that script.
-        with open("%s/hooks_config" % testcase.work_dir) as f:
-            project_config = f.read() % {"TEST_DIR": testcase.work_dir}
-        with open(os.path.join(testcase.repo_dir, "project.config"), "w") as f:
-            f.write(project_config)
-        p = testcase.run(
-            ["git", "commit", "-m", "fix hooks.mailinglist", "project.config"]
-        )
-        assert p.status == 0, p.image
+def test_push_commit_on_master(testcase):
+    """Try pushing multiple commits on master."""
+    # First, adjust the project.config file to use a commit-filer
+    # script.  We have to do it manually here, because we need to
+    # provide the full path to that script.
+    with open("%s/hooks_config" % testcase.work_dir) as f:
+        project_config = f.read() % {"TEST_DIR": testcase.work_dir}
+    with open(os.path.join(testcase.repo_dir, "project.config"), "w") as f:
+        f.write(project_config)
+    p = testcase.run(["git", "commit", "-m", "fix hooks.mailinglist", "project.config"])
+    assert p.status == 0, p.image
 
-        p = testcase.run(
-            ["git", "push", "origin", "refs/heads/meta/config:refs/meta/config"]
-        )
-        assert p.status == 0, p.image
+    p = testcase.run(
+        ["git", "push", "origin", "refs/heads/meta/config:refs/meta/config"]
+    )
+    assert p.status == 0, p.image
 
-        p = testcase.run("git checkout master".split())
-        assert p.status == 0, p.image
+    p = testcase.run("git checkout master".split())
+    assert p.status == 0, p.image
 
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -200,11 +196,7 @@ remote: *** !!! WARNING: %(testcase.work_dir)s/post-receive-hook returned code: 
 To ../bare/repo.git
    426fba3..dd6165c  master -> master
 """ % {
-            "testcase.work_dir": testcase.work_dir
-        }
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+        "testcase.work_dir": testcase.work_dir
+    }
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

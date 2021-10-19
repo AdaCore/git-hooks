@@ -1,13 +1,9 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing one single-file commit on master."""
-        # Push master to the `origin' remote.  The delta should be one
-        # commit with one file being modified.
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+def test_push_commit_on_master(testcase):
+    """Try pushing one single-file commit on master."""
+    # Push master to the `origin' remote.  The delta should be one
+    # commit with one file being modified.
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -48,16 +44,12 @@ remote:
 To ../bare/repo.git
    d065089..1becc1a  master -> master
 """
-        # There are some slight variations in the output of the stat
-        # section of the diff, causing the truncation to occur at
-        # a different location when using older versions of git
-        # (1.7.8.2 in our case). Adjust the expected output accordingly.
-        if testcase.git_version() < "1.7.10":
-            expected_out = expected_out.replace("remote: -Se", "remote: -")
+    # There are some slight variations in the output of the stat
+    # section of the diff, causing the truncation to occur at
+    # a different location when using older versions of git
+    # (1.7.8.2 in our case). Adjust the expected output accordingly.
+    if testcase.git_version() < "1.7.10":
+        expected_out = expected_out.replace("remote: -Se", "remote: -")
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

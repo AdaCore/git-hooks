@@ -1,20 +1,16 @@
-from support import *
+def test_submitter_email(testcase):
+    """Call post-receive hook with --submitter-email."""
+    p = testcase.run(
+        ["./hooks/post-receive", "--submitter-email=Dave Smith <ds@example.com>"],
+        input=(
+            "|d065089ff184d97934c010ccd0e7e8ed94cb7165"
+            " a60540361d47901d3fe254271779f380d94645f7"
+            " refs/heads/master"
+        ),
+        cwd=testcase.bare_repo_dir,
+    )
 
-
-class TestRun(TestCase):
-    def test_submitter_email(testcase):
-        """Call post-receive hook with --submitter-email."""
-        p = testcase.run(
-            ["./hooks/post-receive", "--submitter-email=Dave Smith <ds@example.com>"],
-            input=(
-                "|d065089ff184d97934c010ccd0e7e8ed94cb7165"
-                " a60540361d47901d3fe254271779f380d94645f7"
-                " refs/heads/master"
-            ),
-            cwd=testcase.bare_repo_dir,
-        )
-
-        expected_out = """\
+    expected_out = """\
 DEBUG: MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="utf-8"
@@ -55,9 +51,5 @@ index 01d0f12..a90d851 100644
 +
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

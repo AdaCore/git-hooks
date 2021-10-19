@@ -1,19 +1,15 @@
-from support import TestCase, runtests
+def test_delete_branch_with_std_name(testcase):
+    """Push a branch deletion using a standard reference name."""
+    # First, try a branch which we are not allowed to delete.
+    #
+    # Note that the choice of branch to delete is not entirely innocent.
+    # The repository's configuration has been set so that a branch
+    # whose name is "to" can be deleted. This test _also_ makes sure
+    # that this doesn't cause all branches whose name start with "to"
+    # to be deletable.
 
-
-class TestRun(TestCase):
-    def test_delete_branch_with_std_name(testcase):
-        """Push a branch deletion using a standard reference name."""
-        # First, try a branch which we are not allowed to delete.
-        #
-        # Note that the choice of branch to delete is not entirely innocent.
-        # The repository's configuration has been set so that a branch
-        # whose name is "to" can be deleted. This test _also_ makes sure
-        # that this doesn't cause all branches whose name start with "to"
-        # to be deletable.
-
-        p = testcase.run("git push origin :to-delete".split())
-        expected_out = """\
+    p = testcase.run("git push origin :to-delete".split())
+    expected_out = """\
 remote: *** Deleting branch 'to-delete' is not allowed.
 remote: ***
 remote: *** This repository currently only allow the deletion of references
@@ -35,19 +31,19 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Next, try with a branch which is allowed.
-        #
-        # Notice how we chose branch "to", here, to make sure that,
-        # when we rejected the deletion of branch "to-delete" above,
-        # it was because we missed the configuration allowing branch "to"
-        # to be deleted, but rather because we decided that configuration
-        # wasn't relevant for branch "to-delete".
+    # Next, try with a branch which is allowed.
+    #
+    # Notice how we chose branch "to", here, to make sure that,
+    # when we rejected the deletion of branch "to-delete" above,
+    # it was because we missed the configuration allowing branch "to"
+    # to be deleted, but rather because we decided that configuration
+    # wasn't relevant for branch "to-delete".
 
-        p = testcase.run("git push origin :to".split())
-        expected_out = """\
+    p = testcase.run("git push origin :to".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -68,15 +64,16 @@ To ../bare/repo.git
  - [deleted]         to
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_delete_branch_with_custom_name(testcase):
-        """Push a branch deletion using a custom reference name."""
-        # First, try a branch which we are not allowed to delete.
 
-        p = testcase.run("git push origin :refs/user/to-delete".split())
-        expected_out = """\
+def test_delete_branch_with_custom_name(testcase):
+    """Push a branch deletion using a custom reference name."""
+    # First, try a branch which we are not allowed to delete.
+
+    p = testcase.run("git push origin :refs/user/to-delete".split())
+    expected_out = """\
 remote: *** Deleting branch 'to-delete' in namespace 'refs/user' is not allowed.
 remote: ***
 remote: *** This repository currently only allow the deletion of references
@@ -98,13 +95,13 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Next, try with a branch which is allowed.
+    # Next, try with a branch which is allowed.
 
-        p = testcase.run("git push origin :refs/user/myself/my-feature".split())
-        expected_out = """\
+    p = testcase.run("git push origin :refs/user/myself/my-feature".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -125,9 +122,5 @@ To ../bare/repo.git
  - [deleted]         refs/user/myself/my-feature
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

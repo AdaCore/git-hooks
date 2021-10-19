@@ -1,11 +1,7 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try non-fast-forward push on master."""
-        p = testcase.run("git push -f origin master".split())
-        expected_out = """\
+def test_push_commit_on_master(testcase):
+    """Try non-fast-forward push on master."""
+    p = testcase.run("git push -f origin master".split())
+    expected_out = """\
 remote: *** !!! WARNING: This is *NOT* a fast-forward update.
 remote: *** !!! WARNING: You may have removed some important commits.
 remote: DEBUG: MIME-Version: 1.0
@@ -85,9 +81,5 @@ To ../bare/repo.git
  + 4f0f08f...86c3276 master -> master (forced update)
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

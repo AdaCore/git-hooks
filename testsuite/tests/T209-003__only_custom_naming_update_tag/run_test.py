@@ -1,15 +1,11 @@
-from support import *
+def test_push_tag(testcase):
+    """Try pushing a new value for an annotated tag."""
+    # Push "full-tag". The repository has been configured to
+    # ignore the standard namespace for tags, so this should be
+    # rejected as "not recognized".
 
-
-class TestRun(TestCase):
-    def test_push_tag(testcase):
-        """Try pushing a new value for an annotated tag."""
-        # Push "full-tag". The repository has been configured to
-        # ignore the standard namespace for tags, so this should be
-        # rejected as "not recognized".
-
-        p = testcase.run("git push --force origin full-tag".split())
-        expected_out = """\
+    p = testcase.run("git push --force origin full-tag".split())
+    expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/tags/full-tag
 remote: ***
 remote: *** This repository currently recognizes the following types
@@ -34,16 +30,16 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push "full-tag" to a reference which already exists in
-        # the remote and is recognized as a tag.
+    # Push "full-tag" to a reference which already exists in
+    # the remote and is recognized as a tag.
 
-        p = testcase.run(
-            "git push --force origin" " full-tag:refs/user/myself/tags/full-tag".split()
-        )
-        expected_out = """\
+    p = testcase.run(
+        "git push --force origin" " full-tag:refs/user/myself/tags/full-tag".split()
+    )
+    expected_out = """\
 remote: *** ---------------------------------------------------------------
 remote: *** --  IMPORTANT NOTICE:
 remote: *** --
@@ -132,16 +128,16 @@ To ../bare/repo.git
    a69eaab..17b9d4a  full-tag -> refs/user/myself/tags/full-tag
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push "full-tag" to a reference which already exists in
-        # the remote but is not recognized as a tag.
+    # Push "full-tag" to a reference which already exists in
+    # the remote but is not recognized as a tag.
 
-        p = testcase.run(
-            "git push --force origin" " full-tag:refs/nogo/myself/tags/full-tag".split()
-        )
-        expected_out = """\
+    p = testcase.run(
+        "git push --force origin" " full-tag:refs/nogo/myself/tags/full-tag".split()
+    )
+    expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/nogo/myself/tags/full-tag
 remote: ***
 remote: *** This repository currently recognizes the following types
@@ -166,9 +162,5 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

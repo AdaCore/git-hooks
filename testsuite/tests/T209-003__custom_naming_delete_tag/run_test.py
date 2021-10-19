@@ -1,14 +1,12 @@
-from support import *
 import re
 
 
-class TestRun(TestCase):
-    def test_push_annotated_tag(testcase):
-        """Try pushing an annotated tag."""
-        # Delete a tag in the standard naming scheme.
+def test_push_annotated_tag(testcase):
+    """Try pushing an annotated tag."""
+    # Delete a tag in the standard naming scheme.
 
-        p = testcase.run("git push origin :full-tag".split())
-        expected_out = """\
+    p = testcase.run("git push origin :full-tag".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -29,15 +27,15 @@ To ../bare/repo.git
  - [deleted]         full-tag
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Same as above: Try deleting a tag, except we are passing
-        # the tag's full reference name instead of just passing
-        # the tag's name.
+    # Same as above: Try deleting a tag, except we are passing
+    # the tag's full reference name instead of just passing
+    # the tag's name.
 
-        p = testcase.run("git push origin :refs/tags/other-full-tag".split())
-        expected_out = """\
+    p = testcase.run("git push origin :refs/tags/other-full-tag".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -58,14 +56,14 @@ To ../bare/repo.git
  - [deleted]         other-full-tag
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Delete a tag with a custom reference name which is recognized
-        # as a tag reference.
+    # Delete a tag with a custom reference name which is recognized
+    # as a tag reference.
 
-        p = testcase.run("git push origin :refs/vendor/me/tags/v1".split())
-        expected_out = """\
+    p = testcase.run("git push origin :refs/vendor/me/tags/v1".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -86,14 +84,14 @@ To ../bare/repo.git
  - [deleted]         refs/vendor/me/tags/v1
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Delete a custom reference name which is recognized as a tag,
-        # but does not exist on the remote.
+    # Delete a custom reference name which is recognized as a tag,
+    # but does not exist on the remote.
 
-        p = testcase.run("git push origin :refs/vendor/me/tags/unknown".split())
-        expected_out = """\
+    p = testcase.run("git push origin :refs/vendor/me/tags/unknown".split())
+    expected_out = """\
 remote: *** unable to delete 'refs/vendor/me/tags/unknown': remote ref does not exist
 remote: error: hook declined to update refs/vendor/me/tags/unknown
 To ../bare/repo.git
@@ -101,9 +99,5 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

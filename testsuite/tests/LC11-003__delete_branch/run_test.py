@@ -1,11 +1,7 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_delete_branch(testcase):
-        """Try deleting a branch on the remote."""
-        p = testcase.run("git push origin :old-branch".split())
-        expected_out = """\
+def test_delete_branch(testcase):
+    """Try deleting a branch on the remote."""
+    p = testcase.run("git push origin :old-branch".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -25,16 +21,16 @@ remote:  cc8d2c2... Modify `c', delete `b'.
 To ../bare/repo.git
  - [deleted]         old-branch
 """
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Same as above: Delete a branch, but passing the branch's
-        # full reference name to the push command, instead of using
-        # the (short) branch name (i.e 'refs/heads/other-old-branch'
-        # instead of just 'other-old-branch').
+    # Same as above: Delete a branch, but passing the branch's
+    # full reference name to the push command, instead of using
+    # the (short) branch name (i.e 'refs/heads/other-old-branch'
+    # instead of just 'other-old-branch').
 
-        p = testcase.run("git push origin :refs/heads/other-old-branch".split())
-        expected_out = """\
+    p = testcase.run("git push origin :refs/heads/other-old-branch".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -54,9 +50,5 @@ remote:  cc8d2c2... Modify `c', delete `b'.
 To ../bare/repo.git
  - [deleted]         other-old-branch
 """
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

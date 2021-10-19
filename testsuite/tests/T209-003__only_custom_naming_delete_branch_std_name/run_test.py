@@ -1,14 +1,10 @@
-from support import TestCase, runtests
+def test_delete_branch_with_custom_name(testcase):
+    """Delete a new branch with a custom reference name."""
+    # First, try deleting with a branch name which exists and
+    # is recognized by the repository's branch namespace.
 
-
-class TestRun(TestCase):
-    def test_delete_branch_with_custom_name(testcase):
-        """Delete a new branch with a custom reference name."""
-        # First, try deleting with a branch name which exists and
-        # is recognized by the repository's branch namespace.
-
-        p = testcase.run("git push origin :refs/user/to-delete".split())
-        expected_out = """\
+    p = testcase.run("git push origin :refs/user/to-delete".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -29,13 +25,13 @@ To ../bare/repo.git
  - [deleted]         refs/user/to-delete
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Next, try deleting a branch which does not exist.
+    # Next, try deleting a branch which does not exist.
 
-        p = testcase.run("git push origin :refs/user/does-not-exist".split())
-        expected_out = """\
+    p = testcase.run("git push origin :refs/user/does-not-exist".split())
+    expected_out = """\
 remote: *** unable to delete 'refs/user/does-not-exist': remote ref does not exist
 remote: error: hook declined to update refs/user/does-not-exist
 To ../bare/repo.git
@@ -43,14 +39,14 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Try deleting a branch which exists, but is not recognized
-        # as a valid reference name for a branch.
+    # Try deleting a branch which exists, but is not recognized
+    # as a valid reference name for a branch.
 
-        p = testcase.run("git push origin :refs/others/exists-but-unrecognized".split())
-        expected_out = """\
+    p = testcase.run("git push origin :refs/others/exists-but-unrecognized".split())
+    expected_out = """\
 remote: *** Unable to determine the type of reference for: refs/others/exists-but-unrecognized
 remote: ***
 remote: *** This repository currently recognizes the following types
@@ -73,14 +69,14 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Try deleting a reference which does not exist not is
-        # recognized by the branch namespace.
+    # Try deleting a reference which does not exist not is
+    # recognized by the branch namespace.
 
-        p = testcase.run("git push origin :refs/does-not-exist/my-feature".split())
-        expected_out = """\
+    p = testcase.run("git push origin :refs/does-not-exist/my-feature".split())
+    expected_out = """\
 remote: *** unable to delete 'refs/does-not-exist/my-feature': remote ref does not exist
 remote: error: hook declined to update refs/does-not-exist/my-feature
 To ../bare/repo.git
@@ -88,9 +84,5 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

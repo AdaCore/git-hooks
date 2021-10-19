@@ -1,16 +1,12 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing multi-file commit on master."""
-        # There should be no pre-commit checks on branch master.
-        # This is verified two ways:
-        #   - There are no cvs_check debug traces in the output;
-        #   - The cvs_check script has been setup to reject everything;
-        #     so if it gets called, the update will be rejected.
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+def test_push_commit_on_master(testcase):
+    """Try pushing multi-file commit on master."""
+    # There should be no pre-commit checks on branch master.
+    # This is verified two ways:
+    #   - There are no cvs_check debug traces in the output;
+    #   - The cvs_check script has been setup to reject everything;
+    #     so if it gets called, the update will be rejected.
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -69,9 +65,5 @@ To ../bare/repo.git
    9cbe951..e700706  master -> master
 """
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

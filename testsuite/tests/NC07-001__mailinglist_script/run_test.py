@@ -1,37 +1,33 @@
-from support import *
 import os
 
 
-class TestRun(TestCase):
-    def test_pushes(testcase):
-        """Test various pushes to multi-project repository."""
-        # First, adjust the project.config file to use a script to
-        # compute the email recipients.  We have to do it manually
-        # here, because we need to provide the full path to that
-        # script, which isn't known until now.
-        with open("%s/hooks_config" % testcase.work_dir) as f:
-            project_config = f.read() % {"TEST_DIR": testcase.work_dir}
-        with open(os.path.join(testcase.repo_dir, "project.config"), "w") as f:
-            f.write(project_config)
-        p = testcase.run(
-            ["git", "commit", "-m", "fix hooks.mailinglist", "project.config"]
-        )
-        assert p.status == 0, p.image
+def test_pushes(testcase):
+    """Test various pushes to multi-project repository."""
+    # First, adjust the project.config file to use a script to
+    # compute the email recipients.  We have to do it manually
+    # here, because we need to provide the full path to that
+    # script, which isn't known until now.
+    with open("%s/hooks_config" % testcase.work_dir) as f:
+        project_config = f.read() % {"TEST_DIR": testcase.work_dir}
+    with open(os.path.join(testcase.repo_dir, "project.config"), "w") as f:
+        f.write(project_config)
+    p = testcase.run(["git", "commit", "-m", "fix hooks.mailinglist", "project.config"])
+    assert p.status == 0, p.image
 
-        p = testcase.run(
-            ["git", "push", "origin", "refs/heads/meta/config:refs/meta/config"]
-        )
-        assert p.status == 0, p.image
+    p = testcase.run(
+        ["git", "push", "origin", "refs/heads/meta/config:refs/meta/config"]
+    )
+    assert p.status == 0, p.image
 
-        p = testcase.run("git checkout master".split())
-        assert p.status == 0, p.image
+    p = testcase.run("git checkout master".split())
+    assert p.status == 0, p.image
 
-        # Push the first commit. This is a binutils commit, so
-        # should be sent to the binutils ml only.
-        p = testcase.run(
-            ["git", "push", "origin", "4207b94cadc3c1be0edb4f6df5670f0311c267f3:master"]
-        )
-        expected_out = """\
+    # Push the first commit. This is a binutils commit, so
+    # should be sent to the binutils ml only.
+    p = testcase.run(
+        ["git", "push", "origin", "4207b94cadc3c1be0edb4f6df5670f0311c267f3:master"]
+    )
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -72,15 +68,15 @@ remote: +};
 To ../bare/repo.git
    ab5227e..4207b94  4207b94cadc3c1be0edb4f6df5670f0311c267f3 -> master
 """
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push the next commit, which is a GDB commit and thus should
-        # be sent to the gdb ml only.
-        p = testcase.run(
-            ["git", "push", "origin", "cd2f5d40776eee5a47dc821eddd9a7c6c0ed436d:master"]
-        )
-        expected_out = """\
+    # Push the next commit, which is a GDB commit and thus should
+    # be sent to the gdb ml only.
+    p = testcase.run(
+        ["git", "push", "origin", "cd2f5d40776eee5a47dc821eddd9a7c6c0ed436d:master"]
+    )
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -116,16 +112,16 @@ remote: +extern void start_mainloop (void);
 To ../bare/repo.git
    4207b94..cd2f5d4  cd2f5d40776eee5a47dc821eddd9a7c6c0ed436d -> master
 """
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push the next commit, which is a commit touching both
-        # a binutile file and GDB file, and so should be emailed
-        # to both projects.
-        p = testcase.run(
-            ["git", "push", "origin", "4c7588eee23d6d42e8d50ba05343e3d0f31dd286:master"]
-        )
-        expected_out = """\
+    # Push the next commit, which is a commit touching both
+    # a binutile file and GDB file, and so should be emailed
+    # to both projects.
+    p = testcase.run(
+        ["git", "push", "origin", "4c7588eee23d6d42e8d50ba05343e3d0f31dd286:master"]
+    )
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -174,15 +170,15 @@ remote: +Note that GDB depends on BFD.
 To ../bare/repo.git
    cd2f5d4..4c7588e  4c7588eee23d6d42e8d50ba05343e3d0f31dd286 -> master
 """
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push the next commit, which is a commit touching a file
-        # which is common to both binutils and GDB.
-        p = testcase.run(
-            ["git", "push", "origin", "0ed035c4417a51987594586016b061bed362ec9b:master"]
-        )
-        expected_out = """\
+    # Push the next commit, which is a commit touching a file
+    # which is common to both binutils and GDB.
+    p = testcase.run(
+        ["git", "push", "origin", "0ed035c4417a51987594586016b061bed362ec9b:master"]
+    )
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -217,13 +213,13 @@ remote: +AC_INIT(bfd/bfd-in.h)
 To ../bare/repo.git
    4c7588e..0ed035c  0ed035c4417a51987594586016b061bed362ec9b -> master
 """
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push the final commit, which is a merge commit with one
-        # pre-existing commit.
-        p = testcase.run(["git", "push", "origin", "master"])
-        expected_out = """\
+    # Push the final commit, which is a merge commit with one
+    # pre-existing commit.
+    p = testcase.run(["git", "push", "origin", "master"])
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -283,12 +279,12 @@ remote:  1 file changed, 1 insertion(+)
 To ../bare/repo.git
    0ed035c..5884482  master -> master
 """
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push a tag to a bfd commit.
-        p = testcase.run(["git", "push", "origin", "bfd-tag"])
-        expected_out = """\
+    # Push a tag to a bfd commit.
+    p = testcase.run(["git", "push", "origin", "bfd-tag"])
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -313,12 +309,12 @@ remote:     A binutils change...
 To ../bare/repo.git
  * [new tag]         bfd-tag -> bfd-tag
 """
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push a tag to a GDB commit.
-        p = testcase.run(["git", "push", "origin", "gdb-tag"])
-        expected_out = """\
+    # Push a tag to a GDB commit.
+    p = testcase.run(["git", "push", "origin", "gdb-tag"])
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -337,12 +333,12 @@ remote:  5884482... Merge new feature from branch contrib/new-feature.
 To ../bare/repo.git
  * [new tag]         gdb-tag -> gdb-tag
 """
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push a tag to a common commit.
-        p = testcase.run(["git", "push", "origin", "common-tag"])
-        expected_out = """\
+    # Push a tag to a common commit.
+    p = testcase.run(["git", "push", "origin", "common-tag"])
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -361,14 +357,12 @@ remote:  0ed035c... Call AC_INIT in configure.ac
 To ../bare/repo.git
  * [new tag]         common-tag -> common-tag
 """
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push all git notes.
-        p = testcase.run(
-            ["git", "push", "origin", "refs/notes/commits:refs/notes/commits"]
-        )
-        expected_out = """\
+    # Push all git notes.
+    p = testcase.run(["git", "push", "origin", "refs/notes/commits:refs/notes/commits"])
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -481,9 +475,5 @@ remote: +Synchronized change between binutils and GDB.
 To ../bare/repo.git
  * [new branch]      refs/notes/commits -> refs/notes/commits
 """
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

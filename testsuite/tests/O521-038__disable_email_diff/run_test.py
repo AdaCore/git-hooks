@@ -1,11 +1,7 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing multiple commits on master."""
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+def test_push_commit_on_master(testcase):
+    """Try pushing multiple commits on master."""
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -88,9 +84,5 @@ remote:
 To ../bare/repo.git
    426fba3..dd6165c  master -> master
 """
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

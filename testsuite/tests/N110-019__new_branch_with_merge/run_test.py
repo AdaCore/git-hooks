@@ -1,11 +1,7 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Push new branch wavefront (one of the commits is a merge commit)."""
-        p = testcase.run("git push origin wavefront".split())
-        expected_out = """\
+def test_push_commit_on_master(testcase):
+    """Push new branch wavefront (one of the commits is a merge commit)."""
+    p = testcase.run("git push origin wavefront".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `c.txt'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -63,9 +59,5 @@ remote:  1 file changed, 2 insertions(+)
 To ../bare/repo.git
  * [new branch]      wavefront -> wavefront
 """
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

@@ -1,15 +1,11 @@
-from support import TestCase, runtests
+def test_create_branch_custom_name_recognized(testcase):
+    """Create a new branch with a custom reference name.
 
-
-class TestRun(TestCase):
-    def test_create_branch_custom_name_recognized(testcase):
-        """Create a new branch with a custom reference name.
-
-        This reference name is recognized as a branch by the repository's
-        naming scheme.
-        """
-        p = testcase.run("git push origin master:refs/vendor/name/topic".split())
-        expected_out = """\
+    This reference name is recognized as a branch by the repository's
+    naming scheme.
+    """
+    p = testcase.run("git push origin master:refs/vendor/name/topic".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -29,9 +25,5 @@ To ../bare/repo.git
  * [new branch]      master -> refs/vendor/name/topic
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

@@ -1,0 +1,236 @@
+#! /usr/bin/env python3
+
+from argparse import ArgumentParser
+from distutils.version import StrictVersion
+from e3.os.process import command_line_image, PIPE, Run
+import json
+import os
+import shutil
+import sys
+
+# The minimum version of Python we need to run the validation testing.
+MINIMUM_PYTHON_VERSION = "3.8"
+
+# The testsuite's root directory. By construction, it is the directory
+# containing this script.
+TESTSUITE_ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# The location where to store the html coverage output.
+HTML_COV_DIR = os.path.join(TESTSUITE_ROOT_DIR, "htmlcov")
+
+# The root directory of this repository. By construction, it is
+# the parent directory of the TESTSUITE_ROOT_DIR.
+REPOSITORY_ROOT_DIR = os.path.dirname(TESTSUITE_ROOT_DIR)
+
+
+def run(cmds, **kwargs):
+    """Run a program from the root of the style_checker repository.
+
+    This function first prints on stdout the command being executed,
+    and then executes the given command using e3.os.process.Run.
+
+    The API is the same as e3.os.process.Run.__init__ with the following
+    exceptions:
+        - The default value for the "cwd" paramater is the root of
+          this repository (because this is where the Python tools are
+          expected to be run from in order to find the various pieces).
+        - The default value for "output" is None (no redirection).
+        - The default value for "error" is None (no redirection).
+
+    :return: The e3.os.process.Run object.
+    """
+    print("Running: {}".format(command_line_image(cmds)))
+    kwargs.setdefault("cwd", REPOSITORY_ROOT_DIR)
+    kwargs.setdefault("output", None)
+    kwargs.setdefault("error", None)
+
+    return Run(cmds, **kwargs)
+
+
+def check_dependencies(args):
+    """Check that all necessary dependencies for running the testsuite are met.
+
+    This includes dependencies coming from the style_checker itself,
+    as well as dependencies coming from the testsuite framework.
+
+    :param args: The object returned by ArgumentParser.parse_args.
+    """
+    missing_deps = []
+
+    # The list of programs we need to be installed and accessible
+    # through the PATH.
+    required_programs = [
+        ("pip3", "pip3"),
+    ]
+
+    # The list of packages we need to be available in the Python
+    # distribution.
+    required_packages = [
+        "black",
+        "e3-core",
+        "pre-commit",
+        "pytest",
+        "pytest-cov",
+        "pytest-xdist",
+    ]
+    if args.verify_style_conformance:
+        required_packages.append("flake8")
+
+    # First, check that the Python being used is recent enough.
+    python_version = StrictVersion("{v.major}.{v.minor}".format(v=sys.version_info))
+    if python_version < MINIMUM_PYTHON_VERSION:
+        print(
+            "ERROR: Your version of Python is too old: "
+            "({v.major}.{v.minor}.{v.micro}-{v.releaselevel})".format(
+                v=sys.version_info
+            )
+        )
+        print("       Minimum version required: {}".format(MINIMUM_PYTHON_VERSION))
+        print("Aborting.")
+        sys.exit(1)
+
+    # Next, check that all required dependencies are there.
+    #
+    # Check the required programs are there first, as one of
+    # those programs (pip3) is used to check that all required
+    # packages have been installed.
+
+    for exe, description in required_programs:
+        if shutil.which(exe) is None:
+            missing_deps.append(description)
+
+    # If pip3 is available, use it to get the list of packages installed,
+    # and compare it against our list of required_packages.
+
+    if "pip3" not in missing_deps:
+        p = Run(["pip3", "list", "--format=json"], error=PIPE)
+        if p.status != 0:
+            print(f"ERROR: pip3 command returned nonzero: {p.status}")
+            print("$ " + p.command_line_image())
+            print(f"{p.out}")
+            print(f"{p.err}")
+            sys.exit(1)
+
+        # Load the JSON data returned by pip3, and post process it
+        # a little to make it more convenient to search it: pip3
+        # returns a list where each item is a dict representing
+        # a package (with "name", and "version" info provided).
+        #
+        # For our purposes, we only need the name...
+        package_list_from_pip3 = json.loads(p.out)
+        all_packages = [pkg_info["name"] for pkg_info in package_list_from_pip3]
+
+        for package_name in required_packages:
+            if package_name not in all_packages:
+                missing_deps.append(f"Python package: {package_name}")
+
+    # If anything was missing, report it and abort.
+    if missing_deps:
+        print("ERROR: The testing environment is missing the following:")
+        for dep in missing_deps:
+            print(f" - {dep}")
+        sys.exit(1)
+
+
+def run_testsuite(args):
+    """Run the testsuite part of the testing.
+
+    :param args: The object returned by ArgumentParser.parse_args.
+    """
+    testsuite_cmd = ["python3", "-m", "pytest", "-v", "-vv"]
+
+    # Run the testsuite with --import-mode=importlib (new in pytest-6.0):
+    # This is an enhancement which, for our purposes, allows each testcase,
+    # which is implemented as one directory with one test module, to have
+    # the same name for that module...
+    #
+    # Note that, according to the pytest documentation, the pytest project's
+    # intent is to make this the default at some point.
+    testsuite_cmd.append("--import-mode=importlib")
+
+    if args.jobs != "1":
+        # We only pass the number of jobs when parallelism is actually
+        # requested. It avoids the pytest-xdist plugin being unnecessarily
+        # activated.
+        testsuite_cmd.extend(["-n", args.jobs])
+    if args.include_coverage:
+        testsuite_cmd.extend(
+            [f"--cov={REPOSITORY_ROOT_DIR}", f"--cov-report=html:{HTML_COV_DIR}"]
+        )
+    if args.testsuite_filter is not None:
+        testsuite_cmd.extend(["-k", args.testsuite_filter])
+
+    run(testsuite_cmd)
+    if args.include_coverage:
+        run(["python3", "-m", "coverage", "report"])
+
+
+def run_style_conformance_checks(args):
+    """Perform style-conformance testing.
+
+    :param args: The object returned by ArgumentParser.parse_args.
+    """
+    return run(["pre-commit", "run", "--all-files"])
+
+
+def main():
+    """Implement the main subprogram for this script."""
+    parser = ArgumentParser(description="Run the style_checker testsuite")
+    parser.add_argument(
+        "--jobs",
+        "-j",
+        metavar="N",
+        default="auto",
+        help="Run the testsuite with N jobs in parallel."
+        " If not provided, the system determines the number"
+        " of jobs based on the number of CPU cores available.",
+    )
+    parser.add_argument(
+        "--no-testsuite",
+        dest="run_testsuite",
+        default=True,
+        action="store_false",
+        help="Skip running the testsuite (useful when"
+        " only trying to perform coding style conformance"
+        " checks",
+    )
+    parser.add_argument(
+        "--no-coverage",
+        dest="include_coverage",
+        default=True,
+        action="store_false",
+        help="Run the testsuite with coverage analysis",
+    )
+    parser.add_argument(
+        "--no-style-checking",
+        dest="verify_style_conformance",
+        default=True,
+        action="store_false",
+        help="Skip the coding style conformance checks",
+    )
+    parser.add_argument(
+        "testsuite_filter",
+        metavar="EXPRESSION",
+        nargs="?",
+        help="Ask pytest to restring the testing to the tests"
+        " matching the given substring expression (passed"
+        " to pytest -via -k)",
+    )
+    args = parser.parse_args()
+
+    check_dependencies(args)
+
+    print(f"Repository root dir: {REPOSITORY_ROOT_DIR}")
+    if args.verify_style_conformance:
+        p = run_style_conformance_checks(args)
+        if p.status != 0:
+            print(f"ERROR: style violations detected (status: {p.status}).")
+            print("       Aborting")
+            sys.exit(p.status)
+
+    if args.run_testsuite:
+        run_testsuite(args)
+
+
+if __name__ == "__main__":
+    main()

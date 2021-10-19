@@ -1,18 +1,14 @@
-from support import *
+def test_push_github_pull_19(testcase):
+    """Try pushing the branch named "github/pull/19" """
+    # This branch contains a .gitreview whose defaultbranch setting
+    # points to another branch name. So normally, the hooks should
+    # reject this update, asking for the config to be changed instead.
+    # However, the repository has been configured to allow updates
+    # for branches whose name start with "github/pull/", so we expect
+    # the push to be accepted.
 
-
-class TestRun(TestCase):
-    def test_push_github_pull_19(testcase):
-        """Try pushing the branch named "github/pull/19" """
-        # This branch contains a .gitreview whose defaultbranch setting
-        # points to another branch name. So normally, the hooks should
-        # reject this update, asking for the config to be changed instead.
-        # However, the repository has been configured to allow updates
-        # for branches whose name start with "github/pull/", so we expect
-        # the push to be accepted.
-
-        p = testcase.run("git push origin github/pull/19".split())
-        expected_out = """\
+    p = testcase.run("git push origin github/pull/19".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -64,9 +60,5 @@ To ../bare/repo.git
  * [new branch]      github/pull/19 -> github/pull/19
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

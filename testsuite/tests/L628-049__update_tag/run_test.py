@@ -1,18 +1,14 @@
-from support import *
+def test_push_tag(testcase):
+    """Try pushing a new value for an annotated tag."""
+    # Enable debug traces.  We use them to make certain verifications,
+    # such as verifying that each commit gets checked individually.
+    testcase.set_debug_level(1)
 
-
-class TestRun(TestCase):
-    def test_push_tag(testcase):
-        """Try pushing a new value for an annotated tag."""
-        # Enable debug traces.  We use them to make certain verifications,
-        # such as verifying that each commit gets checked individually.
-        testcase.set_debug_level(1)
-
-        # Push "full-tag". This tag has a new value, different from
-        # that is on the remote.  We should get an email notification,
-        # and a warning about how bad it is to do that.
-        p = testcase.run("git push --force origin full-tag".split())
-        expected_out = """\
+    # Push "full-tag". This tag has a new value, different from
+    # that is on the remote.  We should get an email notification,
+    # and a warning about how bad it is to do that.
+    p = testcase.run("git push --force origin full-tag".split())
+    expected_out = """\
 remote: DEBUG: validate_ref_update (refs/tags/full-tag, a69eaaba59ea6d7574a9c5437805a628ea652c8e, 17b9d4acf8505cd1da487ad62e37819b93779a27)
 remote: *** ---------------------------------------------------------------
 remote: *** --  IMPORTANT NOTICE:
@@ -109,9 +105,5 @@ To ../bare/repo.git
  + a69eaab...17b9d4a full-tag -> full-tag (forced update)
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

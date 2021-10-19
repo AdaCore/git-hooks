@@ -1,29 +1,27 @@
-from support import *
 import os
 
 
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing one single-file commit on master."""
-        # Create an adapted version of the environment we can then
-        # pass when calling Git for the purpose of this testcase.
-        env = os.environ.copy()
+def test_push_commit_on_master(testcase):
+    """Try pushing one single-file commit on master."""
+    # Create an adapted version of the environment we can then
+    # pass when calling Git for the purpose of this testcase.
+    env = os.environ.copy()
 
-        # We are trying to test the use of the hooks.style-checker config
-        # option, which means we need to unset GIT_HOOKS_STYLE_CHECKER.
-        # Otherwise, the latter overrides the operational behavior
-        # which we are trying to test.
-        del env["GIT_HOOKS_STYLE_CHECKER"]
+    # We are trying to test the use of the hooks.style-checker config
+    # option, which means we need to unset GIT_HOOKS_STYLE_CHECKER.
+    # Otherwise, the latter overrides the operational behavior
+    # which we are trying to test.
+    del env["GIT_HOOKS_STYLE_CHECKER"]
 
-        # The hooks.style-checker option only contains the name
-        # of the program to call, but not the full path to that
-        # program. Update the PATH so that the git-hooks find it.
-        env["PATH"] = testcase.work_dir + ":" + env["PATH"]
+    # The hooks.style-checker option only contains the name
+    # of the program to call, but not the full path to that
+    # program. Update the PATH so that the git-hooks find it.
+    env["PATH"] = testcase.work_dir + ":" + env["PATH"]
 
-        # Push master to the `origin' remote.  The delta should be one
-        # commit with one file being modified.
-        p = testcase.run("git push origin master".split(), env=env, ignore_environ=True)
-        expected_out = """\
+    # Push master to the `origin' remote.  The delta should be one
+    # commit with one file being modified.
+    p = testcase.run("git push origin master".split(), env=env, ignore_environ=True)
+    expected_out = """\
 remote: *** alt_style_checker: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -67,9 +65,5 @@ To ../bare/repo.git
    d065089..a605403  master -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

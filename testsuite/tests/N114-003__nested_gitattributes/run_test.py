@@ -1,19 +1,15 @@
-from support import *
+def test_push_commit_on_master(testcase):
+    """Try pushing master.
 
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing master.
-
-        2 new commits:
-            - One creating a .gitattributes;
-            - One pushing some changes in tests, with a couple of files
-              modified. Only one of them should be checked via cvs_check.
-        """
-        # Push master to the `origin' remote.  The delta should be one
-        # commit with one file being modified.
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    2 new commits:
+        - One creating a .gitattributes;
+        - One pushing some changes in tests, with a couple of files
+          modified. Only one of them should be checked via cvs_check.
+    """
+    # Push master to the `origin' remote.  The delta should be one
+    # commit with one file being modified.
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `testsuite/tests/.gitattributes'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -21,8 +17,7 @@ remote: Content-Type: text/plain; charset="utf-8"
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
-remote: Subject: [repo] Do not perform precommit checks on test.py files in
-remote:  testsuite/tests.
+remote: Subject: [repo] Do not perform precommit checks on test.py files in testsuite/tests.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/heads/master
@@ -83,9 +78,5 @@ To ../bare/repo.git
    cf7aa60..83afb60  master -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

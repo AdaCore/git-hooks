@@ -1,11 +1,7 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_delete_tag(testcase):
-        """Delete a lightweight tag causing multiple commits to be lost."""
-        p = testcase.run("git push origin :retired/gdb-7.2".split())
-        expected_out = """\
+def test_delete_tag(testcase):
+    """Delete a lightweight tag causing multiple commits to be lost."""
+    p = testcase.run("git push origin :retired/gdb-7.2".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -35,9 +31,5 @@ remote:   4f0f08f... Minor modifications.
 To ../bare/repo.git
  - [deleted]         retired/gdb-7.2
 """
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

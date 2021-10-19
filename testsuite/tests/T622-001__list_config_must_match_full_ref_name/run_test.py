@@ -1,15 +1,11 @@
-from support import *
+def test_pushes(testcase):
+    """Push commits, and check effect (or not) of hooks.no-emails."""
+    # First, try pushing branch "master". The hooks.no-emails config
+    # contains "refs/heads/master", so this push should have no emails
+    # being sent.
 
-
-class TestRun(TestCase):
-    def test_pushes(testcase):
-        """Push commits, and check effect (or not) of hooks.no-emails."""
-        # First, try pushing branch "master". The hooks.no-emails config
-        # contains "refs/heads/master", so this push should have no emails
-        # being sent.
-
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: ----------------------------------------------------------------------
 remote: --  The hooks.no-emails config option contains `refs/heads/master',
 remote: --  which matches the name of the reference being updated
@@ -21,15 +17,15 @@ To ../bare/repo.git
    426fba3..4f0f08f  master -> master
 """
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Next, try pushing branch "master-with-emails". The no-emails
-        # entry for "refs/heads/master" should be ignored in this case,
-        # and thus emails are expected to be sent.
+    # Next, try pushing branch "master-with-emails". The no-emails
+    # entry for "refs/heads/master" should be ignored in this case,
+    # and thus emails are expected to be sent.
 
-        p = testcase.run("git push origin master-with-emails".split())
-        expected_out = """\
+    p = testcase.run("git push origin master-with-emails".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -84,9 +80,5 @@ To ../bare/repo.git
    426fba3..8661ec1  master-with-emails -> master-with-emails
 """
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

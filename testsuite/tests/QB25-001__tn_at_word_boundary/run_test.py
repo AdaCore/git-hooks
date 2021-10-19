@@ -1,11 +1,7 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_commit_on_before(testcase):
-        """Try pushing before..."""
-        p = testcase.run("git push origin before".split())
-        expected_out = """\
+def test_push_commit_on_before(testcase):
+    """Try pushing before..."""
+    p = testcase.run("git push origin before".split())
+    expected_out = """\
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently
 remote: *** minor that a ticket number is not meaningful, please use
@@ -19,13 +15,14 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-    def test_push_commit_on_after(testcase):
-        """Try pushing after..."""
-        p = testcase.run("git push origin after".split())
-        expected_out = """\
+
+def test_push_commit_on_after(testcase):
+    """Try pushing after..."""
+    p = testcase.run("git push origin after".split())
+    expected_out = """\
 remote: *** The following commit is missing a ticket number inside
 remote: *** its revision history.  If the change is sufficiently
 remote: *** minor that a ticket number is not meaningful, please use
@@ -39,9 +36,5 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

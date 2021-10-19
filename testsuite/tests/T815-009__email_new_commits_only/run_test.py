@@ -1,41 +1,37 @@
-from support import *
+def test_push_on_branch_with_email_new_commits_only(testcase):
+    # This testcase verifies the behavior of the hooks relative
+    # to a branch which has the hooks.email-new-commits-only
+    # option set. To do so, this testcase repository has been
+    # created with:
+    #
+    # - A branch called `master', with the commits as shown, and
+    #   already pushed to origin:
+    #
+    #       A  <--  B  <-- C  <-- D  <-- E <-- master
+    #
+    # - A branch called `feature', which simulates a branch created
+    #   by a user to work on a given feature outside of the main
+    #   development branch (master);
+    #
+    #   The hooks configuration for this repository is such that
+    #   the hooks.email-new-commits-only matches this branch name.
+    #
+    # - A number of branches called `feature-1', `feature-2',
+    #   `feature-3', etc, where each branch represents a further
+    #   state of the `feature' branch after some work done by
+    #   the user. Each branch has been created to simulate different
+    #   scenarios, which we will explain via comments while pushing
+    #   those branches.
 
+    # Push branch `feature', which contains two commits on top of
+    # commit A from master:
+    #
+    #       A  <-- F1 <-- F2 <-- feature
+    #
+    # We should see commit-emails for both F1 and F2, as usual.
 
-class TestRun(TestCase):
-    def test_push_on_branch_with_email_new_commits_only(testcase):
-        # This testcase verifies the behavior of the hooks relative
-        # to a branch which has the hooks.email-new-commits-only
-        # option set. To do so, this testcase repository has been
-        # created with:
-        #
-        # - A branch called `master', with the commits as shown, and
-        #   already pushed to origin:
-        #
-        #       A  <--  B  <-- C  <-- D  <-- E <-- master
-        #
-        # - A branch called `feature', which simulates a branch created
-        #   by a user to work on a given feature outside of the main
-        #   development branch (master);
-        #
-        #   The hooks configuration for this repository is such that
-        #   the hooks.email-new-commits-only matches this branch name.
-        #
-        # - A number of branches called `feature-1', `feature-2',
-        #   `feature-3', etc, where each branch represents a further
-        #   state of the `feature' branch after some work done by
-        #   the user. Each branch has been created to simulate different
-        #   scenarios, which we will explain via comments while pushing
-        #   those branches.
-
-        # Push branch `feature', which contains two commits on top of
-        # commit A from master:
-        #
-        #       A  <-- F1 <-- F2 <-- feature
-        #
-        # We should see commit-emails for both F1 and F2, as usual.
-
-        p = testcase.run("git push origin feature".split())
-        expected_out = """\
+    p = testcase.run("git push origin feature".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `f1'
 remote: *** cvs_check: `repo' < `f2'
 remote: DEBUG: MIME-Version: 1.0
@@ -121,21 +117,21 @@ To ../bare/repo.git
  * [new branch]      feature -> feature
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push branch `feature-2' as `feature'.
-        #
-        # This branch contains the same two commits as branch `feature',
-        # but rebased on top of commit C from master:
-        #
-        #       ... <-- C <-- F1' <-- F2' <-- feature-2
-        #
-        # Because this is a non-fast-forward update, we need to
-        # force push (-f).
+    # Push branch `feature-2' as `feature'.
+    #
+    # This branch contains the same two commits as branch `feature',
+    # but rebased on top of commit C from master:
+    #
+    #       ... <-- C <-- F1' <-- F2' <-- feature-2
+    #
+    # Because this is a non-fast-forward update, we need to
+    # force push (-f).
 
-        p = testcase.run("git push -f origin feature-2:feature".split())
-        expected_out = """\
+    p = testcase.run("git push -f origin feature-2:feature".split())
+    expected_out = """\
 remote: *** !!! WARNING: This is *NOT* a fast-forward update.
 remote: *** !!! WARNING: You may have removed some important commits.
 remote: *** cvs_check: `repo' < `f1'
@@ -249,19 +245,19 @@ To ../bare/repo.git
  + c305de8...33c342b feature-2 -> feature (forced update)
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push branch `feature-3' as `feature'.
-        #
-        # This branch adds two new commits on top of `feature-2':
-        #
-        #       ... <-- F2' <-- F3 <-- F4 <-- feature-3
-        #
-        # So, we expect commit emails to be sent for those 2 commits.
+    # Push branch `feature-3' as `feature'.
+    #
+    # This branch adds two new commits on top of `feature-2':
+    #
+    #       ... <-- F2' <-- F3 <-- F4 <-- feature-3
+    #
+    # So, we expect commit emails to be sent for those 2 commits.
 
-        p = testcase.run("git push origin feature-3:feature".split())
-        expected_out = """\
+    p = testcase.run("git push origin feature-3:feature".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `f3'
 remote: *** cvs_check: `repo' < `f4'
 remote: DEBUG: MIME-Version: 1.0
@@ -331,27 +327,27 @@ To ../bare/repo.git
    33c342b..4bb270f  feature-3 -> feature
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Push branch `feature-4' as `feature'.
-        #
-        # This branch simulates a user updating his feature branch
-        # via a merge of branch master. Since `feature-3' already
-        # had commits A, B and C from master, this gives us the following
-        # graph for `feature-4' (knowing that `feature-3' points to F4):
-        #
-        #       ... <-- D <-- E <---+- F5 <-- feature-4
-        #                          /
-        #            ... <-- F4 <-+
-        #
-        # When pushing this commit, the only commit that's new for
-        # this repository is commit F5, so this is the only commit
-        # for which a commit-email should be sent (besides the
-        # summary-of-changes email).
+    # Push branch `feature-4' as `feature'.
+    #
+    # This branch simulates a user updating his feature branch
+    # via a merge of branch master. Since `feature-3' already
+    # had commits A, B and C from master, this gives us the following
+    # graph for `feature-4' (knowing that `feature-3' points to F4):
+    #
+    #       ... <-- D <-- E <---+- F5 <-- feature-4
+    #                          /
+    #            ... <-- F4 <-+
+    #
+    # When pushing this commit, the only commit that's new for
+    # this repository is commit F5, so this is the only commit
+    # for which a commit-email should be sent (besides the
+    # summary-of-changes email).
 
-        p = testcase.run("git push origin feature-4:feature".split())
-        expected_out = """\
+    p = testcase.run("git push origin feature-4:feature".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `d' `e'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -416,17 +412,17 @@ To ../bare/repo.git
    4bb270f..785f3f1  feature-4 -> feature
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Verify that the hooks.no-emails config takes precendence
-        # over the hooks.email-new-commits-only config.
-        #
-        # For that test, push a new branch, called `feature-no-emails'.
-        # which matches both config options above. We expect the update
-        # to be accepted, and no email to be sent.
-        p = testcase.run("git push origin feature-no-emails".split())
-        expected_out = """\
+    # Verify that the hooks.no-emails config takes precendence
+    # over the hooks.email-new-commits-only config.
+    #
+    # For that test, push a new branch, called `feature-no-emails'.
+    # which matches both config options above. We expect the update
+    # to be accepted, and no email to be sent.
+    p = testcase.run("git push origin feature-no-emails".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `n'
 remote: *** cvs_check: `repo' < `n2'
 remote: ----------------------------------------------------------------------
@@ -440,9 +436,5 @@ To ../bare/repo.git
  * [new branch]      feature-no-emails -> feature-no-emails
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

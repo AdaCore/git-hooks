@@ -1,13 +1,9 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_delete_branch(testcase):
-        """Test deleting topic branch causing commits to be lost."""
-        # Push master to the `origin' remote.  The delta should be one
-        # commit with one file being modified.
-        p = testcase.run("git push origin :topic/experiment1".split())
-        expected_out = """\
+def test_delete_branch(testcase):
+    """Test deleting topic branch causing commits to be lost."""
+    # Push master to the `origin' remote.  The delta should be one
+    # commit with one file being modified.
+    p = testcase.run("git push origin :topic/experiment1".split())
+    expected_out = """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -35,9 +31,5 @@ To ../bare/repo.git
  - [deleted]         topic/experiment1
 """
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

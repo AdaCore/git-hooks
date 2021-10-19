@@ -1,34 +1,30 @@
-from support import *
+def test_push_branch_with_merge_commit(testcase):
+    """Try pushing an update to master adding one merge commit."""
+    # Enable some logging, in order to be able to see which
+    # commits get checked, and what commits are being used
+    # as their reference.
+    testcase.set_debug_level(1)
 
+    # Push master to the `origin' remote. This brings in two commits:
+    #
+    #   - One commit from the 'topic' branch which modifies foo.c.
+    #   - The merge commit itself.
+    #
+    # The pre-commit check should:
+    #   - Check the commit from the 'topic' branch, which means
+    #     style-checking 'foo.c';
+    #   - Check the merge commit, this time against the old 'master',
+    #     which means style-checking 'foo.c' instead.
+    #
+    # The difficulty for the git-hooks comes from the fact that,
+    # from the time the 'topic' branch was created, the 'README'
+    # file was updated. If the git-hooks were to use the wrong
+    # commit as the reference for the commit from the 'topic'
+    # branch, the hooks would then be style-checking the 'README'
+    # file even though it has NOT changed!
 
-class TestRun(TestCase):
-    def test_push_branch_with_merge_commit(testcase):
-        """Try pushing an update to master adding one merge commit."""
-        # Enable some logging, in order to be able to see which
-        # commits get checked, and what commits are being used
-        # as their reference.
-        testcase.set_debug_level(1)
-
-        # Push master to the `origin' remote. This brings in two commits:
-        #
-        #   - One commit from the 'topic' branch which modifies foo.c.
-        #   - The merge commit itself.
-        #
-        # The pre-commit check should:
-        #   - Check the commit from the 'topic' branch, which means
-        #     style-checking 'foo.c';
-        #   - Check the merge commit, this time against the old 'master',
-        #     which means style-checking 'foo.c' instead.
-        #
-        # The difficulty for the git-hooks comes from the fact that,
-        # from the time the 'topic' branch was created, the 'README'
-        # file was updated. If the git-hooks were to use the wrong
-        # commit as the reference for the commit from the 'topic'
-        # branch, the hooks would then be style-checking the 'README'
-        # file even though it has NOT changed!
-
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: DEBUG: validate_ref_update (refs/heads/master, 128c4380beb275f9002a42e0b5da3618e00c11a9, 7277e89f8909d7279357489ccf0de81c7c0f3286)
 remote: DEBUG: update base: 128c4380beb275f9002a42e0b5da3618e00c11a9
 remote: DEBUG: (commit-per-commit style checking)
@@ -103,9 +99,5 @@ To ../bare/repo.git
    128c438..7277e89  master -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

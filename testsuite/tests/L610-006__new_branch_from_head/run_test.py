@@ -1,17 +1,13 @@
-from support import *
+def test_push_commit_on_master(testcase):
+    """Try pushing new branch on remote.
 
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing new branch on remote.
-
-        In this situation, release-0.1-branch is a branch containing
-        several commits attached to the HEAD of the master branch
-        (master does not have any commit that release-0.1-branch does
-        not have).
-        """
-        p = testcase.run("git push origin release-0.1-branch".split())
-        expected_out = """\
+    In this situation, release-0.1-branch is a branch containing
+    several commits attached to the HEAD of the master branch
+    (master does not have any commit that release-0.1-branch does
+    not have).
+    """
+    p = testcase.run("git push origin release-0.1-branch".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `a' `d'
 remote: *** cvs_check: `repo' < `a' `b'
 remote: DEBUG: MIME-Version: 1.0
@@ -122,22 +118,18 @@ To ../bare/repo.git
  * [new branch]      release-0.1-branch -> release-0.1-branch
 """
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Verify that the branch has been created in the remote
-        # repository and that it points to the expected commit.
+    # Verify that the branch has been created in the remote
+    # repository and that it points to the expected commit.
 
-        p = testcase.run(
-            "git show-ref -s release-0.1-branch".split(), cwd=testcase.bare_repo_dir
-        )
-        expected_out = """\
+    p = testcase.run(
+        "git show-ref -s release-0.1-branch".split(), cwd=testcase.bare_repo_dir
+    )
+    expected_out = """\
 dcc477c258baf8cf59db378fcc344dc962ad9a29
 """
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

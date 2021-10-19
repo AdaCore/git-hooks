@@ -1,13 +1,9 @@
-from support import *
-
-
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing one single-file commit on master."""
-        # Push master to the `origin' remote.  The delta should be one
-        # commit with one file being modified.
-        p = testcase.run("git push origin master".split())
-        expected_out = r"""
+def test_push_commit_on_master(testcase):
+    """Try pushing one single-file commit on master."""
+    # Push master to the `origin' remote.  The delta should be one
+    # commit with one file being modified.
+    p = testcase.run("git push origin master".split())
+    expected_out = r"""
 remote: *** cvs_check: `repo' < `"full-double"' `'full-single'' ``backtick`' `bad\dir/"two"' `bad\dir/'one'' `bad\dir/`lish' `bad\dir/nasa esa' `bad\dir/normal_filename' `bad\dir/one'two"3' `bad\dir/pet`ular' `front`tick' `one space' `subdir/"double"' `subdir/'single'' `subdir/another\bs.txt' `subdir/automa`' `subdir/hello:world' `subdir/sp ace' `subdir/time`tock' `weird:colon.h' `weird\backslash.c' `with"double-quote' `with'single-quote'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -139,12 +135,8 @@ remote: index 0000000..e69de29
 To ../bare/repo.git
    d065089..123f5e1  master -> master
 """[
-            1:
-        ]  # To strip the extra newline at the start introduce for visuals only
+        1:
+    ]  # To strip the extra newline at the start introduce for visuals only
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

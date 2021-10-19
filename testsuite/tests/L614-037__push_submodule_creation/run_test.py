@@ -1,70 +1,66 @@
-from support import *
 import os
 from os.path import isdir
 
 
-class TestRun(TestCase):
-    def test_push_commit(testcase):
-        """Try pushing a commit that creates a subproject."""
-        # First, add the submodule...
-        p = testcase.run(
-            ["git", "submodule", "add", "%s/bare/subm.git" % testcase.work_dir]
-        )
-        assert p.status == 0, p.image
+def test_push_commit(testcase):
+    """Try pushing a commit that creates a subproject."""
+    # First, add the submodule...
+    p = testcase.run(
+        ["git", "submodule", "add", "%s/bare/subm.git" % testcase.work_dir]
+    )
+    assert p.status == 0, p.image
 
-        # Verify that subm is a directory that exists...
-        assert isdir(os.path.join(testcase.repo_dir, "subm")), (
-            p.image
-            + "\n"
-            + testcase.run(["ls -la".split()], cwd=testcase.repo_dir).cmd_out
-        )
+    # Verify that subm is a directory that exists...
+    assert isdir(os.path.join(testcase.repo_dir, "subm")), (
+        p.image + "\n" + testcase.run(["ls -la".split()]).cmd_out
+    )
 
-        # Now that the setup phase is done, commit the change.
-        p = testcase.run(["git", "commit", "-m", "Add submodule subm"])
-        assert p.status == 0, p.image
+    # Now that the setup phase is done, commit the change.
+    p = testcase.run(["git", "commit", "-m", "Add submodule subm"])
+    assert p.status == 0, p.image
 
-        # Get the hash of our submodule commit.  We will need it
-        # to match the output of the push command.
-        p = testcase.run(["git rev-parse HEAD".split()])
-        assert p.status == 0, p.image
-        subm_rev = p.out.strip()
+    # Get the hash of our submodule commit.  We will need it
+    # to match the output of the push command.
+    p = testcase.run(["git rev-parse HEAD".split()])
+    assert p.status == 0, p.image
+    subm_rev = p.out.strip()
 
-        # Also get the "author date" for our commit.  We need this
-        # info as part of the expected output.
-        p = testcase.run(["git log -n1 --pretty=format:%ad".split()])
-        assert p.status == 0, p.image
-        author_date = p.out.strip()
+    # Also get the "author date" for our commit.  We need this
+    # info as part of the expected output.
+    p = testcase.run(["git log -n1 --pretty=format:%ad".split()])
+    assert p.status == 0, p.image
+    author_date = p.out.strip()
 
-        # Same for the hash of the .gitmodules file...
-        p = testcase.run(["git ls-tree HEAD .gitmodules".split()])
-        assert p.status == 0, p.image
-        gitmodules_hash = p.out.split()[2]
+    # Same for the hash of the .gitmodules file...
+    p = testcase.run(["git ls-tree HEAD .gitmodules".split()])
+    assert p.status == 0, p.image
+    gitmodules_hash = p.out.split()[2]
 
-        # For coverage purposes, we want to test the calling of
-        # the style-check program via the regular method (where
-        # GIT_HOOKS_STYLE_CHECKER is not defined. Ideally, we would
-        # still like to provide our own, and we try doing so by
-        # updating PATH with the path to our own cvs_check script.
-        # But this only works on machines where the cvs_check
-        # script is NOT installed in the standard location, because
-        # the "update" hook inserts the standard cvs_check path
-        # at the start of the PATH.
-        #
-        # This means that, on machines with cvs_check installed,
-        # deleting GIT_HOOKS_STYLE_CHECKER will cause the real cvs_check
-        # to be called, whereas our fake cvs_check will be called
-        # on all other machines. For matching purposes of the
-        # expected output, both scripts must produce the same output.
-        del os.environ["GIT_HOOKS_STYLE_CHECKER"]
-        os.environ["PATH"] = testcase.work_dir + ":" + os.environ["PATH"]
+    # For coverage purposes, we want to test the calling of
+    # the style-check program via the regular method (where
+    # GIT_HOOKS_STYLE_CHECKER is not defined. Ideally, we would
+    # still like to provide our own, and we try doing so by
+    # updating PATH with the path to our own cvs_check script.
+    # But this only works on machines where the cvs_check
+    # script is NOT installed in the standard location, because
+    # the "update" hook inserts the standard cvs_check path
+    # at the start of the PATH.
+    #
+    # This means that, on machines with cvs_check installed,
+    # deleting GIT_HOOKS_STYLE_CHECKER will cause the real cvs_check
+    # to be called, whereas our fake cvs_check will be called
+    # on all other machines. For matching purposes of the
+    # expected output, both scripts must produce the same output.
+    del os.environ["GIT_HOOKS_STYLE_CHECKER"]
+    os.environ["PATH"] = testcase.work_dir + ":" + os.environ["PATH"]
 
-        # And finally, try pushing that commit.
-        # For verification purposes, we enable tracing to level 2,
-        # in order to get the one that says that submodule entries
-        # are ignored.
-        testcase.set_debug_level(2)
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    # And finally, try pushing that commit.
+    # For verification purposes, we enable tracing to level 2,
+    # in order to get the one that says that submodule entries
+    # are ignored.
+    testcase.set_debug_level(2)
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote:   DEBUG: check_update(ref_name=refs/heads/master, old_rev=7a373b536b65b600a449b5c739c137301f6fd364, new_rev=%(subm_rev)s)
 remote: DEBUG: validate_ref_update (refs/heads/master, 7a373b536b65b600a449b5c739c137301f6fd364, %(subm_rev)s)
 remote: DEBUG: update base: 7a373b536b65b600a449b5c739c137301f6fd364
@@ -119,16 +115,12 @@ remote: +Subproject commit 8adf3dbfb04e35b0322bdcc12e96d1493f6e4502
 To ../bare/repo.git
    7a373b5..%(short_subm_rev)s  master -> master
 """ % {
-            "subm_rev": subm_rev,
-            "short_subm_rev": subm_rev[0:7],
-            "author_date": author_date,
-            "gitmodules_short_hash": gitmodules_hash[:7],
-            "testcase.work_dir": testcase.work_dir,
-        }
+        "subm_rev": subm_rev,
+        "short_subm_rev": subm_rev[0:7],
+        "author_date": author_date,
+        "gitmodules_short_hash": gitmodules_hash[:7],
+        "testcase.work_dir": testcase.work_dir,
+    }
 
-        assert p.status == 0, p.image
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    assert p.status == 0, p.image
+    testcase.assertRunOutputEqual(p, expected_out)

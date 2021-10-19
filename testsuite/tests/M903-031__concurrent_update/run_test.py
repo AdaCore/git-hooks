@@ -1,25 +1,21 @@
-from support import *
 import fcntl
 import os
 import socket
 
 
-class TestRun(TestCase):
-    def test_push_commit_on_master(testcase):
-        """Try pushing one single-file commit on master."""
-        # Simulate a push happening while another user is pushing
-        # to the same repository, but using a bit of internal knowledge
-        # to create a lock on the repository.
+def test_push_commit_on_master(testcase):
+    """Try pushing one single-file commit on master."""
+    # Simulate a push happening while another user is pushing
+    # to the same repository, but using a bit of internal knowledge
+    # to create a lock on the repository.
 
-        lock_filename = os.path.join(
-            testcase.bare_repo_dir, "git-hooks::update.token.lock"
-        )
-        f = open(lock_filename, "w")
-        f.write("locked by testsuite at <now> (pid = %d)" % os.getpid())
-        f.close()
+    lock_filename = os.path.join(testcase.bare_repo_dir, "git-hooks::update.token.lock")
+    f = open(lock_filename, "w")
+    f.write("locked by testsuite at <now> (pid = %d)" % os.getpid())
+    f.close()
 
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: ---------------------------------------------------------------------
 remote: --  Another user is currently pushing changes to this repository.  --
 remote: --  Please try again in another minute or two.                     --
@@ -30,13 +26,13 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Try it again, to make sure that the previous attempt did not
-        # accidently deleted the lock file.
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    # Try it again, to make sure that the previous attempt did not
+    # accidently deleted the lock file.
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: ---------------------------------------------------------------------
 remote: --  Another user is currently pushing changes to this repository.  --
 remote: --  Please try again in another minute or two.                     --
@@ -47,17 +43,17 @@ To ../bare/repo.git
 error: failed to push some refs to '../bare/repo.git'
 """
 
-        testcase.assertNotEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
+    testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
-        # Now, pretend that the concurrent push has finished by
-        # removing our artificial lock, and verify that the push
-        # now succeeds.
+    # Now, pretend that the concurrent push has finished by
+    # removing our artificial lock, and verify that the push
+    # now succeeds.
 
-        os.unlink(lock_filename)
+    os.unlink(lock_filename)
 
-        p = testcase.run("git push origin master".split())
-        expected_out = """\
+    p = testcase.run("git push origin master".split())
+    expected_out = """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -101,9 +97,5 @@ To ../bare/repo.git
    d065089..a605403  master -> master
 """
 
-        testcase.assertEqual(p.status, 0, p.image)
-        testcase.assertRunOutputEqual(p, expected_out)
-
-
-if __name__ == "__main__":
-    runtests()
+    testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

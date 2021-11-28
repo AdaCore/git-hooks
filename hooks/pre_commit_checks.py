@@ -134,16 +134,7 @@ def ensure_iso_8859_15_only(commit):
 
     for lineno, line in enumerate(commit.raw_revlog_lines, start=1):
         try:
-            if hasattr(line, "decode"):  # pragma: py2-only
-                # The line isn't a unicode string, so we need to decode it first,
-                # before we see if it can be re-encoded using ISO-8859-15.
-                #
-                # Use a temporary variable as we need to keep the original
-                # for the error message (when the conversion fails).
-                u = line.decode("UTF-8")
-                u.encode("ISO-8859-15")
-            else:  # pragma: py3-only
-                line.encode("ISO-8859-15")
+            line.encode("ISO-8859-15")
         except UnicodeEncodeError as e:
             raise InvalidUpdate(
                 "Invalid revision history for commit %s:" % commit.rev,

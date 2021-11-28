@@ -1,7 +1,8 @@
 def test_push_notes(testcase):
     """Try pushing our notes."""
     p = testcase.run("git push origin notes/commits".split())
-    expected_out = """\
+    expected_out = testcase.massage_git_output(
+        """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -40,8 +41,9 @@ remote: +++ b/a60540361d47901d3fe254271779f380d94645f7
 remote: @@ -0,0 +1 @@
 remote: +This is my first note.
 To ../bare/repo.git
- * [new branch]      refs/notes/commits -> refs/notes/commits
+ * [new reference]   refs/notes/commits -> refs/notes/commits
 """
+    )
 
     testcase.assertEqual(p.status, 0, p.image)
     testcase.assertRunOutputEqual(p, expected_out)

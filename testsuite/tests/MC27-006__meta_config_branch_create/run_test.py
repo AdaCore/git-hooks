@@ -20,7 +20,8 @@ def test_push_commit_on_master(testcase):
     # Push the `meta/config' local branch as the new `refs/meta/config'
     # reference. This should be allowed.
     p = testcase.run("git push origin meta/config:refs/meta/config".split())
-    expected_out = """\
+    expected_out = testcase.massage_git_output(
+        """\
 remote: *** cvs_check: `repo' < `project.config'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -73,8 +74,9 @@ remote: +        from-domain = adacore.com
 remote: +        mailinglist = git-hooks-ci@example.com
 remote: +        filer-email = filer@example.com
 To ../bare/repo.git
- * [new branch]      meta/config -> refs/meta/config
+ * [new reference]   meta/config -> refs/meta/config
 """
+    )
 
     testcase.assertEqual(p.status, 0, p.image)
     testcase.assertRunOutputEqual(p, expected_out)

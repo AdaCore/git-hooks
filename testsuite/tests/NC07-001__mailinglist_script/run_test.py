@@ -362,7 +362,8 @@ To ../bare/repo.git
 
     # Push all git notes.
     p = testcase.run(["git", "push", "origin", "refs/notes/commits:refs/notes/commits"])
-    expected_out = """\
+    expected_out = testcase.massage_git_output(
+        """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -473,7 +474,8 @@ remote: +++ b/4c7588eee23d6d42e8d50ba05343e3d0f31dd286
 remote: @@ -0,0 +1 @@
 remote: +Synchronized change between binutils and GDB.
 To ../bare/repo.git
- * [new branch]      refs/notes/commits -> refs/notes/commits
+ * [new reference]   refs/notes/commits -> refs/notes/commits
 """
+    )
     assert p.status == 0, p.image
     testcase.assertRunOutputEqual(p, expected_out)

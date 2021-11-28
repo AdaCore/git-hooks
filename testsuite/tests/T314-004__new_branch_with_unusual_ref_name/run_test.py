@@ -1,7 +1,8 @@
 def test_push_commit_on_master(testcase):
     """Push master as new ref with name outside standard namespace."""
     p = testcase.run("git push origin master:refs/for/master".split())
-    expected_out = """\
+    expected_out = testcase.massage_git_output(
+        """\
 remote: *** cvs_check: `repo' < `a'
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
@@ -58,8 +59,9 @@ remote: +In the middle too!
 remote:  Third line.
 remote: +
 To ../bare/repo.git
- * [new branch]      master -> refs/for/master
+ * [new reference]   master -> refs/for/master
 """
+    )
 
     assert p.status == 0, p.image
     testcase.assertRunOutputEqual(p, expected_out)

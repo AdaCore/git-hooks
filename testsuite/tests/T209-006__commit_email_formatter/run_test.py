@@ -668,7 +668,8 @@ To ../bare/repo.git
     # the diff.
 
     p = testcase.run("git push origin notes/commits".split())
-    expected_out = """\
+    expected_out = testcase.massage_git_output(
+        """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -714,8 +715,9 @@ remote: * ref_name: refs/notes/commits
 remote: * rev: 91dd8e566584e81b1d6cd69fed5aa0b34e8ede3a
 remote: * subject: Notes added by 'git notes add'
 To ../bare/repo.git
- * [new branch]      refs/notes/commits -> refs/notes/commits
+ * [new reference]   refs/notes/commits -> refs/notes/commits
 """
+    )
 
     testcase.assertEqual(p.status, 0, p.image)
     testcase.assertRunOutputEqual(p, expected_out)

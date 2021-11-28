@@ -5,7 +5,8 @@ def test_create_branch_custom_name_recognized(testcase):
     naming scheme.
     """
     p = testcase.run("git push origin master:refs/vendor/name/topic".split())
-    expected_out = """\
+    expected_out = testcase.massage_git_output(
+        """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -22,8 +23,9 @@ remote: The branch 'name/topic' was created in namespace 'refs/vendor' pointing 
 remote:
 remote:  d065089... New file: a.
 To ../bare/repo.git
- * [new branch]      master -> refs/vendor/name/topic
+ * [new reference]   master -> refs/vendor/name/topic
 """
+    )
 
     testcase.assertEqual(p.status, 0, p.image)
     testcase.assertRunOutputEqual(p, expected_out)

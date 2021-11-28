@@ -97,6 +97,7 @@ class TestcaseFixture:
         (e.g. unpacking of the test repo included in the testcase).
     :ivar repo_dir: The path to the non-bare repository to be used by our testcase.
     :ivar bare_repo_dir: The path to the bare repository to be used by our testcase.
+    :ivar git_output_massager: A GitOutputMassager object.
     """
 
     def __init__(self, root_dir, testcase_src_dir, testcase_work_dir):
@@ -113,6 +114,7 @@ class TestcaseFixture:
         self.work_dir = testcase_work_dir
         self.repo_dir = os.path.join(self.work_dir, "repo")
         self.bare_repo_dir = os.path.join(self.work_dir, "bare", "repo.git")
+        self.git_output_massager = GitOutputMassager(self.git_version())
 
         # Set the testcase up, by copying everything from the testcase's
         # source directory, into the current directory.
@@ -296,6 +298,13 @@ class TestcaseFixture:
         version_str = out[0].replace("git version ", "")
         return LooseVersion(version_str)
 
+    def massage_git_output(self, git_output):
+        """Massage git_output as explained in class GitOutputMassager's documentation.
+
+        :param git_output: Same as GitOutputMassager.massage.
+        """
+        return self.git_output_massager.massage(git_output)
+
     def assertEqual(self, lhs, rhs, msg_if_fails):
         """Verify that lhs is equal to rhs or else raise a failed assertion.
 
@@ -425,3 +434,43 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details."""
             ignore_white_chars=False,
         )
         return "%s\n\nDiff:\n\n%s" % (self.image, diff_str)
+
+
+class GitOutputMassager:
+    """A class to centralize the management of Git output across Git versions.
+
+    The purpose of this class is to automate the transformation of the output
+    we expect from the latest Git commands into the output that was produced
+    in earlier versions of Git. This allows us to run the testsuite, where
+    the check for test success is based on strict output comparison and is
+    therefore not flexible at all, with multiple versions of Git.
+
+    :ivar git_version: A LooseVersion object of the version of Git.
+    """
+
+    def __init__(self, git_version):
+        """Initialize self.
+
+        :param git_version: Same as the attribute.
+        """
+        self.git_version = git_version
+
+    def massage(self, git_output):
+        """Massage the given git_output as explained in the class's documentation.
+
+        :param git_output: The git command's output we want to adjust (an str).
+        """
+        result = git_output
+
+        if self.git_version < "2.29":
+            # When pushing new references which are not branches (such as
+            # refs/notes/commits, more recent versions of Git now print...
+            #
+            #    * [new reference]   xxx -> <ref_name>
+            #
+            # ... whereas, with older versions, we expect...
+            #
+            #    * [new branch]      xxx -> <ref_name>
+            result = result.replace(" * [new reference]", " * [new branch]   ")
+
+        return result

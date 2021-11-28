@@ -37,7 +37,8 @@ To ../bare/repo.git
 def test_push_annotated_tag_custom_namespace(testcase):
     # Try pushing tag v0.1.
     p = testcase.run("git push origin v0.1:refs/user/myself/tags/v0.1".split())
-    expected_out = """\
+    expected_out = testcase.massage_git_output(
+        """\
 remote: DEBUG: MIME-Version: 1.0
 remote: Content-Transfer-Encoding: 7bit
 remote: Content-Type: text/plain; charset="utf-8"
@@ -60,8 +61,9 @@ remote: Date: Tue Jun 26 07:51:14 2012 -0700
 remote:
 remote:     This is a new tag.
 To ../bare/repo.git
- * [new branch]      v0.1 -> refs/user/myself/tags/v0.1
+ * [new reference]   v0.1 -> refs/user/myself/tags/v0.1
 """
+    )
 
     testcase.assertEqual(p.status, 0, p.image)
     testcase.assertRunOutputEqual(p, expected_out)

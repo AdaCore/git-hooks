@@ -3,7 +3,8 @@ def test_push_commit_on_master(testcase):
     # Push master to the `origin' remote.  The delta should be one
     # commit with one file being modified.
     p = testcase.run("git push origin refs/notes/review:refs/notes/review".split())
-    expected_out = """\
+    expected_out = testcase.massage_git_output(
+        """\
 remote: ----------------------------------------------------------------------
 remote: --  The hooks.no-emails config option contains `refs/notes/review',
 remote: --  which matches the name of the reference being updated
@@ -12,8 +13,9 @@ remote: --
 remote: --  Commit emails will therefore not be sent.
 remote: ----------------------------------------------------------------------
 To ../bare/repo.git
- * [new branch]      refs/notes/review -> refs/notes/review
+ * [new reference]   refs/notes/review -> refs/notes/review
 """
+    )
 
     testcase.assertEqual(p.status, 0, p.image)
     testcase.assertRunOutputEqual(p, expected_out)

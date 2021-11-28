@@ -120,5 +120,5 @@ if __name__ == "__main__":
     except InvalidUpdate as E:
         # The update was rejected.  Print the rejection reason, and
         # exit with a nonzero status.
-        warn(*E)
+        warn(*E.args)
         sys.exit(1)

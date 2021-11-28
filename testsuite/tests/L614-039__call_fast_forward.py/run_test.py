@@ -20,7 +20,12 @@ def test_call_fast_foward_py(testcase):
         ],
         cwd=testcase.bare_repo_dir,
     )
+    expected_out = """\
+
+"""
+
     testcase.assertEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)
 
     # Call fast_forward.py with an invalid fast-forward
     # (just reversing the arguments above)...
@@ -34,4 +39,11 @@ def test_call_fast_foward_py(testcase):
         ],
         cwd=testcase.bare_repo_dir,
     )
+    expected_out = """\
+*** Non-fast-forward updates are not allowed for this reference.
+*** Please rebase your changes on top of the latest HEAD,
+*** and then try pushing again.
+"""
+
     testcase.assertNotEqual(p.status, 0, p.image)
+    testcase.assertRunOutputEqual(p, expected_out)

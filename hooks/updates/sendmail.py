@@ -1,6 +1,5 @@
 """A module to send emails...
 """
-from __future__ import print_function
 from errors import InvalidUpdate
 from io_utils import encode_utf8, safe_decode
 import os

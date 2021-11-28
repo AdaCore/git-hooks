@@ -1,6 +1,5 @@
 """Email helpers for sending update-related emails."""
 
-from __future__ import print_function
 from config import git_config
 from email.header import Header
 from email.mime.text import MIMEText

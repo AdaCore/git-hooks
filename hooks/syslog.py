@@ -1,7 +1,6 @@
 """Handling of syslog-ing...
 """
 
-from __future__ import print_function
 from os import environ
 from subprocess import Popen, PIPE, STDOUT
 

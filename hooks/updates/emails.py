@@ -10,7 +10,6 @@ from git import get_module_name
 from io_utils import encode_utf8, safe_decode
 import os
 from subprocess import Popen, PIPE, STDOUT
-import sys
 from time import sleep
 from updates.sendmail import sendmail
 from utils import debug, get_user_name, get_user_full_name
@@ -259,74 +258,6 @@ class Email(object):
 
         e_msg_body = self.__email_body_with_diff
 
-        # FIXME: The following is only needed when using Python 2.x,
-        # due to the fact that strings and unicode strings are
-        # distinct types. We'll be able to remove the following code
-        # once we drop support for Python 2.
-        #
-        # Note that the code is written in a way so as to avoid referencing
-        # the "unicode" type, so as to avoid the Python3-based style_checker
-        # flagging it as being undefined.
-        if sys.version_info[0] < 3:
-            if not isinstance(e_msg_body, str):  # pragma: py2-only
-                # See __email_body_with_diff for more information about
-                # when this happens.
-                #
-                # With Python 2.x, instantiating a MIMEText object with
-                # a unicode string as the email body triggers an immediate
-                # conversion (encoding) of that string to a byte string,
-                # to be used as the email's payload. Since we are doing
-                # the instantiation without specifying the _charset parameter,
-                # the encoding gets done using the (default) "ascii" charset,
-                # which fails as soon as any character is outside the ASCII
-                # range. We can avoid that failure by passing the _charset
-                # at instantiation time, but it then causes the text to be
-                # sent with a base64 Content-Transfer-Encoding. This is not
-                # a problem per se, except that this then makes is very hard
-                # for a human to double-check the contents of the email,
-                # something that we need to do when doing testing. So,
-                # we work around all of these issues by converting the unicode
-                # string back to a byte string using the charset we chose
-                # above.
-                #
-                # It's not clear what we'll want to do about this when
-                # switching to Python 3.x, where all strings are unicode
-                # strings. Maybe we'll do the same as what we're doing here,
-                # which is translate the unicode string to a byte string
-                # using the UTF-8 charset. This would probably be the best
-                # compromise for the majority of cases.
-                #
-                # One important consideration in favor of revisiting
-                # the Content-Transfer-Encoding value is the fact that
-                # email bodies end up being sent without consideration
-                # for any limits that SMTP servers might have. In particular,
-                # emails with characters outside the ASCII charset end up
-                # being sent with a the Content-Transfer-Encoding set to
-                # "8bit", something that RFC 1341 explicitly warns as not
-                # being legal (as of its writing, probably some 25+ years
-                # ago). Since then, RFC 6152 defines this as an extension,
-                # but still clearly warns about not solving all limitations:
-                #
-                #   | Note that this extension does NOT eliminate
-                #   | the possibility of an SMTP server limiting line
-                #   | length; servers are free to implement this extension
-                #   | but nevertheless set a line length limit no lower
-                #   | than 1000 octets.
-                #
-                # Since Git diffs are text only (for binary files, Git
-                # just mentions the two files as being different),
-                # it would be unusual to hit that limit, but it is
-                # still possible. Perhaps a better compromise that both
-                # avoids the transmission problems and the validation
-                # needs is to switch to Quoted Printable). The MIMEText
-                # class does not provide support for that, however.
-                # The EmailMessage class from email.message does seem,
-                # on the other hand, to provide that functionality.
-                # It means that we first need to modify this method
-                # to use EmailMessage instead of MIMEText if we want to
-                # be able to control the Content-Transfer-Encoding.
-                e_msg_body = e_msg_body.encode(e_msg_charset)
-
         e_msg = MIMEText(e_msg_body)
         if e_msg_charset is not None:
             e_msg.set_charset(e_msg_charset)
@@ -388,50 +319,6 @@ class Email(object):
                 diff = diff[:max_diff_size]
                 diff += "[...]\n\n[diff truncated at %d bytes]\n" % max_diff_size
 
-            # FIXME: The following is only needed when using Python 2.x,
-            # due to the fact that strings and unicode strings are
-            # distinct types. We'll be able to remove the following code
-            # once we drop support for Python 2.
-            #
-            # Note that the code is written in a way so as to avoid
-            # referencing the "unicode" type, so as to avoid
-            # the Python3-based style_checker flagging it as being undefined.
-            if sys.version_info[0] < 3:  # pragma: py2-only
-                # By default, email_body and diff are of type "str".
-                # However, projects can override these defaults via
-                # the commit-email-formatter hook, which returns
-                # new values via a JSON dict. As a side effect of
-                # using a JSON for the overrides, email_body and/or
-                # diff might be of type "unicode" rather than "str",
-                # (reading from JSON always results in all strings
-                # being unicode).
-                #
-                # This can cause problems when trying to concatenate
-                # the email_body with the diff as we are about to do
-                # below. More precisely, this causes problems when
-                # either email_body or diff was overridden (and is
-                # therefore unicode), while the other was not (and is
-                # therefore an str). In that scenario, concatenating
-                # the two triggers a conversion of the str object to
-                # unicode using the default encoding, which is "ascii".
-                # This triggers an exception if the string contains
-                # any non-ascii characters.
-                #
-                # The optimal solution is most likely to decode the various
-                # byte strings into unicode strings at the very point of
-                # origin (e.g. when reading the output of git commands),
-                # so that the entire application only uses unicode strings
-                # internally. This is a massive change which we will take
-                # care of during the transition to Python 3.x.
-                #
-                # In the meantime, we are a little pressed for time so,
-                # we deal with this issue locally for now, by converting
-                # the non-unicode string to unicode.
-                if isinstance(email_body, str) and not isinstance(diff, str):
-                    email_body = email_body.decode(guess_encoding(email_body))
-                if isinstance(diff, str) and not isinstance(email_body, str):
-                    diff = diff.decode(guess_encoding(diff))
-
             email_body += "\nDiff:\n"
             email_body += diff
         return email_body
@@ -456,52 +343,6 @@ class Email(object):
             + "\n\n"
             + self.email_body
         )
-
-        # Popen.communicate expects a byte string as its input parameter.
-        #
-        # With Python 2.x, this only makes a difference when "to_be_filed"
-        # is a unicode string, which happens when the email body was
-        # overwritten by a commit-email-formatter hook. When that happens,
-        # Popen.communicate automatically tries to encode that string,
-        # and does so while using the default encoding, which is 'ascii'.
-        # This triggers a UnicodeEncodeError as soon as the strings has
-        # any non-ASCII character. To prevent that from happening,
-        # we do the encoding ourselves using UTF-8, a more universal
-        # encoding. There is still a chance that the email body contains
-        # code points that UTF-8 does not support, but this should be
-        # extremely rare, given how prevalent UTF-8 now is. Nevertheless,
-        # to avoid triggering a UnicodeEncodeError exception when that
-        # happens, we ask the encoder to replace those unknown code points
-        # by their "backslashed escape sequence", by calling the encode
-        # method with error="backslashreplace". It's not as perfect as
-        # actually guessing the best encoding to use, but should be good
-        # enough in practice.
-        #
-        # Also, with Python 2.x, we must refrain from performing
-        # that encoding when "to_be_filed" is _not_ unicode, since
-        # its contents is already in encoded form by virtue of it
-        # never having been kept as is since being read in!
-        #
-        # With Python 3.x, on the other hand, all strings are unicode,
-        # so we always need to encode the string prior to passing it
-        # to POpen.communicate.
-        #
-        # FIXME: Unfortunately, because of the non-unicode case with
-        # Python 2.x, the above means that we are unable to handle
-        # this str-vs-bytes situation in a way that works with both
-        # Python 2.x and Python 3.x -- not without doing a significant
-        # revamp of that code to convert all strings to unicode at the point
-        # of input, something we'll look at during the transition to
-        # Python 3.x instead. For now, handle the situation for the case
-        # of Python 2.x. For Python 3.x, we cannot add extra code because
-        # we then introduce a line we can't cover anymore, so we will
-        # leave that to the transition to Python 3.x; all should have
-        # to do to fix the issue is just remove the checks for Python 2.x
-        # and non-unicode strings, always calling the "encode" method below.
-
-        if sys.version_info[0] < 3:
-            if not isinstance(to_be_filed, str):  # pragma: py2-only
-                to_be_filed = to_be_filed.encode("UTF-8", errors="backslashreplace")
 
         p = Popen(self.filer_cmd, stdin=PIPE, stdout=PIPE, stderr=STDOUT)
         out, _ = p.communicate(encode_utf8(to_be_filed))

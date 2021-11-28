@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 """A dummy cvs_check program that FAILs all files.
 """
-from __future__ import print_function
 import sys
 
 # To help with testing, print a trace containing the name of the module

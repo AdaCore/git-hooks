@@ -4,7 +4,6 @@
 It also prints a trace on stdout, in order to allow us to allow us
 to verify that the script was called with the correct arguments.
 """
-from __future__ import print_function
 import sys
 
 filenames = sys.stdin.read().splitlines(False)

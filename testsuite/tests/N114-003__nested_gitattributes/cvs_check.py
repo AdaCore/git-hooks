@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 """A dummy cvs_check program.
 """
-from __future__ import print_function
 import sys
 
 filenames = sys.stdin.read().splitlines(False)

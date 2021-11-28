@@ -4,7 +4,6 @@
 It also prints a trace on stdout, in order to allow us to verify that
 the script was called with the correct arguments for the correct files.
 """
-from __future__ import print_function
 import sys
 
 # To help with testing, print a trace containing the name of the module

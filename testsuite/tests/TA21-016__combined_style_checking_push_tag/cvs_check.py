@@ -3,7 +3,6 @@
 
 It also prints a trace on stdout, in order to allow us to allow us
 to verify when the script was called, and with what arguments."""
-from __future__ import print_function
 import sys
 
 # To help with testing, print a trace containing the name of the module

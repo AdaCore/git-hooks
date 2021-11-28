@@ -17,7 +17,6 @@ REMARKS
     into a single archive whereas, with bundles, we'd have to recreate
     the entire infrastructure.
 """
-from __future__ import print_function
 
 from os.path import isdir, isfile
 from shutil import move, rmtree

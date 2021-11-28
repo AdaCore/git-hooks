@@ -5,7 +5,6 @@ This script is expected to be called from a testcase directory,
 and unpackes the archive expected to contain the git directories
 used by the testcase.
 """
-from __future__ import print_function
 
 from os import unlink
 from os.path import exists, isdir, isfile

@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 """A dummy cvs_check program that passes all files.
 """
-from __future__ import print_function
 
 # There should not be any file to check, so this script should never
 # be called. Return an error if it happens.

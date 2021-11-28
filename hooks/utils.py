@@ -183,6 +183,30 @@ def ref_matches_regexp(ref_name, ref_re):
     return m.end() - m.start() == len(ref_name)
 
 
+def search_config_option_list(option_name, ref_name):
+    """Search the given config option as a list, and return the first match.
+
+    This function first extracts the value of the given config,
+    expecting it to be a list of regular expressions.  It then
+    iterates over that list until it finds one that matches
+    REF_NAME.
+
+    PARAMETERS
+        option_name: The name of the config option to be using
+            as the source for our list of regular expressions.
+        ref_name: The name of the reference used for the search.
+
+    RETURN VALUE
+        The first regular expression matching REF_NAME, or None.
+    """
+    ref_re_list = git_config(option_name)
+    for ref_re in ref_re_list:
+        ref_re = ref_re.strip()
+        if ref_matches_regexp(ref_name, ref_re):
+            return ref_re
+    return None
+
+
 class FileLock(object):
     """An object implementing file locking (work in "with" statement only).
 

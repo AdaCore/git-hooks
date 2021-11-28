@@ -27,7 +27,7 @@ from io_utils import safe_decode_by_line
 from updates.commits import commit_info_list
 from updates.emails import EmailCustomContents, EmailInfo, Email
 from updates.mailinglists import expanded_mailing_list
-from utils import debug, warn, indent, ref_matches_regexp
+from utils import debug, warn, indent, search_config_option_list
 
 
 # The different kinds of references we handle.
@@ -473,17 +473,13 @@ class AbstractUpdate(object):
         )
 
     def search_config_option_list(self, option_name, ref_name=None):
-        """Search the given config option as a list, and return the first match.
+        """See utils.search_config_option_list
 
-        This function first extracts the value of the given config,
-        expecting it to be a list of regular expressions.  It then
-        iterates over that list until it finds one that matches
-        REF_NAME.
+        This is a convenient wrapper around utils.search_config_option_list.
 
         PARAMETERS
-            option_name: The name of the config option to be using
-                as the source for our list of regular expressions.
-            ref_name: The name of the reference used for the search.
+            option_name: Same as in utils.search_config_option_list.
+            ref_name: Same as in utils.search_config_option_list.
                 If None, use self.ref_name.
 
         RETURN VALUE
@@ -491,12 +487,7 @@ class AbstractUpdate(object):
         """
         if ref_name is None:
             ref_name = self.ref_name
-        ref_re_list = git_config(option_name)
-        for ref_re in ref_re_list:
-            ref_re = ref_re.strip()
-            if ref_matches_regexp(ref_name, ref_re):
-                return ref_re
-        return None
+        return search_config_option_list(option_name, ref_name)
 
     def get_refs_matching_config(self, config_name):
         """Return the list of references matching the given config option."""

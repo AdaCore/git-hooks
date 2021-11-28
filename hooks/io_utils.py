@@ -4,14 +4,6 @@ import sys
 def safe_decode(b):
     """Decode the given byte string after trying to guess the encoding...
 
-    *** TEMPORARY: WHEN RUNNING UNDER PYTHON 2.X, THIS FUNCTION RETURNS
-    *** THE GIVEN ARGUMENT WITHOUT ANY TRANSFORMATION.
-    ***
-    *** While, with Python 3.x, we do want to convert the bytes we read
-    *** from external sources to strings, with Python 2.x, we prefer
-    *** to avoid doing that conversion, as it introduces unicode strings
-    *** which we have found don't mix easily with the rest of the code.
-
     This function tries to decode the given byte string by guessing
     the encoding. Guessing is not ideal, but is often necessary when
     trying to decode some output obtained from running some external
@@ -44,22 +36,19 @@ def safe_decode(b):
     RETURN VALUE
         A unicode string.
     """
-    if sys.version_info[0] < 3:
-        return b  # pragma: py2-only
-    else:  # pragma: py3-only
-        for potential_encoding in (
-            # The most popular encoding, by far, and also the encoding that
-            # Git itself uses in some cases (e.g. storing path names), is UTF-8.
-            # Try that first.
-            "UTF-8",
-            # Finally, the iso-8859-15; try this one last, as explained in
-            # the function's documentation above (this one will always succeed).
-            "iso-8859-15",
-        ):
-            try:
-                return b.decode(potential_encoding)
-            except UnicodeDecodeError:
-                pass
+    for potential_encoding in (
+        # The most popular encoding, by far, and also the encoding that
+        # Git itself uses in some cases (e.g. storing path names), is UTF-8.
+        # Try that first.
+        "UTF-8",
+        # Finally, the iso-8859-15; try this one last, as explained in
+        # the function's documentation above (this one will always succeed).
+        "iso-8859-15",
+    ):
+        try:
+            return b.decode(potential_encoding)
+        except UnicodeDecodeError:
+            pass
 
 
 def safe_decode_by_line(b):

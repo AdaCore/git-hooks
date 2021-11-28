@@ -17,11 +17,9 @@ the Free Software Foundation; see COPYING3 for a copy of the license.
 Python Requirements
 -------------------
 
-These hooks are currently compatible with Python 2.7 and Python 3.x
-(3.8 or more recent). The Python interpreter used by the hooks is
-the first executable called "python" found on the PATH.
-
-Note that the testsuite can only be run with Python 2.7, at the moment.
+These hooks require Python 3.8 or more recent.  The Python
+interpreter used by the hooks is the first executable called
+"python" found on the PATH.
 
 Enabling the Hooks
 ------------------

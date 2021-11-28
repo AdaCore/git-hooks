@@ -1,6 +1,3 @@
-import sys
-
-
 def safe_decode(b):
     """Decode the given byte string after trying to guess the encoding...
 
@@ -75,16 +72,21 @@ def safe_decode_by_line(b):
 
 
 def encode_utf8(s):
-    """Return s.encode("UTF-8") if running with Python 3.x, else return s.
+    """Return s.encode("UTF-8").
 
-    This function is here to help us prepare for the transition to
-    Python 3.x, where strings that we want to write or pass to another
-    process need to be converted to bytes, while at the same time
-    retaining the current behavior when running with Python 2.x
-    (pass the string as is, without any transformation).
+    This function was first born to help us through the transition
+    from Python 2.x to Python 3.x, by having a different behavior
+    pased on the version of Python being used. Now that we no longer
+    support Python 2.x, we could certainly delete this function
+    entirely, and just use the "encode" method instead.
 
-    This is therefore a temporary function that we should get rid of
-    as soon as we stop supporting Python 2.x (FIXME).
+    Let's try to keep this function nonetheless as the common way
+    to encode unicode strings into bytes for external consumption.
+    That way, if we want to switch to a different encoding, or
+    implement a smarter strategy (such as automatic management
+    of code points which are not available in UTF-8), we can do
+    so very simply, without having to track down all calls to
+    the encode method.
 
     PARAMETERS
         s: A string to be encoded.
@@ -92,7 +94,4 @@ def encode_utf8(s):
     RETURN VALUE
         A byte string.
     """
-    if sys.version_info[0] < 3:
-        return s  # pragma: py2-only
-    else:  # pragma: py3-only
-        return s.encode("UTF-8")
+    return s.encode("UTF-8")

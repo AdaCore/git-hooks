@@ -16,7 +16,7 @@ from init import init_all_globals
 from requirements import check_minimum_system_requirements
 from updates.emails import EmailQueue
 from updates.factory import new_update
-from utils import debug, warn
+from utils import debug, warn, search_config_option_list
 
 
 def post_receive_one(ref_name, old_rev, new_rev, refs, submitter_email):
@@ -37,6 +37,12 @@ def post_receive_one(ref_name, old_rev, new_rev, refs, submitter_email):
     )
 
     check_minimum_system_requirements()
+
+    # Do nothing if the reference is in the hooks.ignore-refs list.
+    ignore_refs_match = search_config_option_list("hooks.ignore-refs", ref_name)
+    if ignore_refs_match is not None:
+        debug(f"{ref_name} ignored due to hooks.ignore-refs" f" ({ignore_refs_match})")
+        return
 
     update = new_update(ref_name, old_rev, new_rev, refs, submitter_email)
     if update is None:

@@ -56,7 +56,7 @@ def maybe_update_hook(ref_name, old_rev, new_rev):
             raise InvalidUpdate(
                 "Update rejected by this repository's hooks.update-hook" " script",
                 "({}):".format(hook_exe),
-                *out.splitlines()
+                *out.splitlines(),
             )
         else:
             sys.stdout.write(out)
@@ -85,6 +85,12 @@ def check_update(ref_name, old_rev, new_rev):
     )
 
     check_minimum_system_requirements()
+
+    # Do nothing if the reference is in the hooks.ignore-refs list.
+    ignore_refs_match = utils.search_config_option_list("hooks.ignore-refs", ref_name)
+    if ignore_refs_match is not None:
+        debug(f"{ref_name} ignored due to hooks.ignore-refs" f" ({ignore_refs_match})")
+        return
 
     update_cls = new_update(
         ref_name, old_rev, new_rev, git_show_ref(), submitter_email=None

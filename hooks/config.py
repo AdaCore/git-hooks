@@ -19,6 +19,10 @@ from tempfile import mkstemp
 GERRIT_INTERNAL_REFS = (
     "refs/changes/.*",
     "refs/users/.*/edit-.*",
+    "refs/cache-automerge/.*",
+    "refs/sequences/.*",
+    "refs/groups/.*",
+    "refs/starred-changes/.*",
 )
 
 

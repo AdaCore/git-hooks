@@ -10,10 +10,12 @@ def test_push_commit_to_ignored_ref(testcase):
     # no emails).
 
     p = testcase.run("git push origin master:refs/changes/01/104201/meta".split())
-    expected_out = """\
+    expected_out = testcase.massage_git_output(
+        """\
 To ../bare/repo.git
  * [new reference]   master -> refs/changes/01/104201/meta
 """
+    )
 
     testcase.assertEqual(p.status, 0, p.image)
     testcase.assertRunOutputEqual(p, expected_out)

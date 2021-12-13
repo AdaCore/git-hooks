@@ -44,7 +44,7 @@ remote:
 remote: Diff:
 remote: ---
 remote:  a => b | 0
-remote:  1 file changed
+remote:  1 file changed, 0 insertions(+), 0 deletions(-)
 remote:
 remote: diff --git a/a b/b
 remote: similarity index 100%

@@ -6,9 +6,9 @@ This directory contains the AdaCore Git Hooks.
 The AdaCore Git Hooks project provides a set of scripts to be used as
 server-side hooks for git repositories.  In addition to those scripts,
 it also provides a testsuite to validate those scripts. Although
-initially developped to suit AdaCore's needs, these hooks have been
-designed to with flexibility in mind, so as to be easily usable
-outside of AdaCore.
+initially developed to suit AdaCore's needs, these hooks have been
+designed with flexibility in mind, so as to be easily usable outside
+of AdaCore.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by
@@ -222,11 +222,11 @@ The following config options are available for general use:
   to the script via standard input, as a JSON directory, with
   the following key/value pairs:
     - `"email_default_subject"`: The email subject to be used by default,
-      if not overriden by this script.
+      if not overridden by this script.
     - `"email_default_body"`: The email body to be used by default,
-      if not overriden by this script.
+      if not overridden by this script.
     - `"email_default_diff"`: The patch to include in the email, unless
-      overriden by this script.
+      overridden by this script.
     - The same key/value pairs as the ones provided to the
       `hooks.commit-extra-checker` script.
 
@@ -252,7 +252,7 @@ The following config options are available for general use:
 
   If the script returns a nonzero status code (indicating a failure),
   or returns data in an invalid format, the default email is sent out,
-  augmented with a warning showing the error that occured while calling
+  augmented with a warning showing the error that occurred while calling
   the script.
 
 * **`hooks.commit-extra-checker`**:
@@ -274,7 +274,7 @@ The following config options are available for general use:
   - `"ref_kind"`: The kind of **reference** we are updating; either:
     - `"branch"`: A branch;
     - `"notes"`: A Git Notes branch;
-    - `"tag"`: A tag. Note that annotated tags can be distiguished
+    - `"tag"`: A tag. Note that annotated tags can be distinguished
       from lightweight tags by checking the `"object_type"` (`"tag"`
       for annotated tags, and `"commit"` for lightweight tags).
       :warning: Note also that this `"ref_kind"` can be misleading:
@@ -342,7 +342,7 @@ The following config options are available for general use:
 
   A command called with each commit triggering a commit notification
   email. The purpose of this config variable is to allow the use of
-  an adhoc script when the filing of commits in bug tracking software
+  an ad hoc script when the filing of commits in bug tracking software
   cannot be done simply by just sending an email.
 
   This provided command is called as is, with the same contents as
@@ -513,7 +513,7 @@ The following config options are available for general use:
       no-emails = refs/heads/thirdparty
   ```
 
-  *:information_source: Note that this option takes precendence over
+  *:information_source: Note that this option takes precedence over
   the `hooks.email-new-commits-only` option.*
 
 * **`hooks.no-precommit-check`** [list]:
@@ -680,7 +680,7 @@ The following config options are available for general use:
 
 * **`hooks.tn-required`** (default value: **false**):
 
-  *[This is an AdaCore-specifc option]*
+  *[This is an AdaCore-specific option]*
 
   If set to `true`, the hooks verify that the revision history of all new
   commits contain a Ticket Number, and reject the update if it is not
@@ -987,7 +987,7 @@ as we want to prevent any replies from being sent there.
 For projects that want to use separate email addresses based on
 a commit or the name of the reference being updated, it is possible
 to use a script in place of an email address in the `hooks.mailinglist`
-config.  Script entries are indentified by the fact that the entry is
+config.  Script entries are identified by the fact that the entry is
 an **absolute filename**, and that this filename points to a file on
 the server which is **an executable**.
 
@@ -1048,7 +1048,7 @@ Rationale:
 
 * Tags:
 
-  Althought it might be tempting to say to say that the notification
+  Although it might be tempting to say to say that the notification
   should be same to the same list as the target's commit, this does not
   work: It is entirely possible that a tag for a given project point to a
   commit that only touches files for another project (Eg: a branchpoint
@@ -1103,7 +1103,7 @@ branch name. So, in our example, in our fork, we would call this branch
 
 From your repository:
 
-* Fetch from the official repositoy the branch you want to import;
+* Fetch from the official repository the branch you want to import;
 
   ```console
   $ git fetch upstream release-xyz

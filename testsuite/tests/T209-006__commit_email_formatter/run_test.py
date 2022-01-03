@@ -669,6 +669,10 @@ remote:    |     Provide information about the sky (no-diff-in-email)
 remote:
 remote: * email_default_diff: <multiline>
 remote:    |
+remote:    | For the record, the references containing the annotated commit above are:
+remote:    |
+remote:    |     refs/heads/master
+remote:    |
 remote:    | diff --git a/699356fb0903efbe73a18e2573a9ca67bc7c35a5 b/699356fb0903efbe73a18e2573a9ca67bc7c35a5
 remote:    | new file mode 100644
 remote:    | index 0000000..6314b20

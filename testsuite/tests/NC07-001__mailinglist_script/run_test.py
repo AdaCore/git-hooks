@@ -370,7 +370,7 @@ remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: bfd-cvs@example.com
 remote: Bcc: filer@example.com
-remote: Subject: [notes][repo] A binutils change.
+remote: Subject: [notes][repo/master,bfd-tag,...] A binutils change.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/notes/commits
@@ -393,6 +393,13 @@ remote:     This change introduces struct bfd.
 remote:
 remote: Diff:
 remote:
+remote: For the record, the references containing the annotated commit above are:
+remote:
+remote:     refs/heads/master
+remote:     refs/tags/bfd-tag
+remote:     refs/tags/common-tag
+remote:     refs/tags/gdb-tag
+remote:
 remote: diff --git a/4207b94cadc3c1be0edb4f6df5670f0311c267f3 b/4207b94cadc3c1be0edb4f6df5670f0311c267f3
 remote: new file mode 100644
 remote: index 0000000..70b6f6e
@@ -407,7 +414,7 @@ remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: gdb-cvs@example.com
 remote: Bcc: filer@example.com
-remote: Subject: [notes][repo] Add start_mainloop declaration in top.h.
+remote: Subject: [notes][repo/master,common-tag,...] Add start_mainloop declaration in top.h.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/notes/commits
@@ -428,6 +435,12 @@ remote:     Add start_mainloop declaration in top.h.
 remote:
 remote: Diff:
 remote:
+remote: For the record, the references containing the annotated commit above are:
+remote:
+remote:     refs/heads/master
+remote:     refs/tags/common-tag
+remote:     refs/tags/gdb-tag
+remote:
 remote: diff --git a/cd2f5d40776eee5a47dc821eddd9a7c6c0ed436d b/cd2f5d40776eee5a47dc821eddd9a7c6c0ed436d
 remote: new file mode 100644
 remote: index 0000000..273aed2
@@ -442,7 +455,7 @@ remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: bfd-cvs@example.com, gdb-cvs@example.com
 remote: Bcc: filer@example.com
-remote: Subject: [notes][repo] Add filename in struct bfd, and add README in GDB.
+remote: Subject: [notes][repo/master,common-tag,...] Add filename in struct bfd, and add README in GDB.
 remote: X-Act-Checkin: repo
 remote: X-Git-Author: Joel Brobecker <brobecker@adacore.com>
 remote: X-Git-Refname: refs/notes/commits
@@ -465,6 +478,12 @@ remote:     This is just to create a commit that combines changes in both binuti
 remote:     and GDB.
 remote:
 remote: Diff:
+remote:
+remote: For the record, the references containing the annotated commit above are:
+remote:
+remote:     refs/heads/master
+remote:     refs/tags/common-tag
+remote:     refs/tags/gdb-tag
 remote:
 remote: diff --git a/4c7588eee23d6d42e8d50ba05343e3d0f31dd286 b/4c7588eee23d6d42e8d50ba05343e3d0f31dd286
 remote: new file mode 100644

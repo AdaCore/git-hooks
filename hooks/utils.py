@@ -8,6 +8,7 @@ from tempfile import mkdtemp
 
 from config import git_config
 from errors import InvalidUpdate
+from git import split_ref_name
 
 ############################################################################
 #
@@ -204,6 +205,74 @@ def search_config_option_list(option_name, ref_name):
         if ref_matches_regexp(ref_name, ref_re):
             return ref_re
     return None
+
+
+def commit_email_subject_prefix(project_name, ref_names):
+    """Return a small prefix listing the project and branches.
+
+    This prefix is to be used in the subject of emails being sent.
+    For instance:
+
+        [project-name]
+        [project-name/branch-name]
+        [project-name(refs/users/feature)]
+
+    Note that, when the list of references only contains one element,
+    and that element is the master branch, then the branch name is
+    completely omitted.
+
+    When multiple reference names are given, the references are listed
+    in alphabetical order, with the refs/heads branches first, then
+    the refs/tags tags, and then all other references last. Examples:
+
+        [project-name/master,branch1]
+        [project-name/branch1,(refs/users/feature)]
+
+    If more than hooks.max-ref-names-in-subject-prefix references are
+    given, then only the first hooks.max-ref-names-in-subject-prefix
+    ones are listed, and the remaining ones are elided. Example:
+
+        [project-name/master,branch1,...]
+
+    PARAMETERS
+        project_name: The name of the project.
+        ref_names: An iterable of reference names. It is also possible
+            to pass a string directly, if only one reference name needs
+            to be passed.
+    """
+    if isinstance(ref_names, str):
+        ref_names = (ref_names,)
+
+    def ref_names_sort_key(ref_name):
+        if ref_name.startswith("refs/heads/"):
+            return (1, ref_name)
+        elif ref_name.startswith("refs/tags/"):
+            return (2, ref_name)
+        else:
+            return (3, ref_name)
+
+    sorted_ref_names = sorted(ref_names, key=ref_names_sort_key)
+
+    max_ref_names = git_config("hooks.max-ref-names-in-subject-prefix")
+    ref_names_img = ",".join(
+        [
+            split_ref_name(ref_name)[1]
+            if ref_name.startswith("refs/heads/") or ref_name.startswith("refs/tags/")
+            else f"({ref_name})"
+            for ref_name in sorted_ref_names[:max_ref_names]
+        ]
+    )
+    if len(sorted_ref_names) > max_ref_names:
+        ref_names_img += ",..."
+
+    if ref_names_img == "master":
+        ref_names_img = ""
+
+    return "[{project_name}{separator}{ref_names_img}]".format(
+        project_name=project_name,
+        separator="/" if ref_names_img and not ref_names_img.startswith("(") else "",
+        ref_names_img=ref_names_img,
+    )
 
 
 class FileLock(object):

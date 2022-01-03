@@ -458,6 +458,24 @@ The following config options are available for general use:
 
   Setting this config option to zero turns this check off entirely.
 
+* **`hooks.max-ref-names-in-subject-prefix`** (default value: 2):
+
+  For emails corresponding to operations that affect more than one
+  reference, the git-hooks try to list all the references in
+  the email's subject prefix. E.g.
+
+     [project-name/branch1,branch2]
+
+  This config option control the maximum number of references being
+  listed in that subject prefix. If the number of references exceeds
+  this config, only the first max-ref-names-in-subject-prefix are
+  listed, followed by and ellipsis indicating that the list of
+  references is incomplete.
+
+  One example where the configuration can be useful is for emails
+  associated to Git Notes updates. When pushing a note, the annotated
+  commit may be contained in several branches/references.
+
 * **`hooks.max-rh-line-length`** (default value: 76):
 
   The maximum length for each line in the revision log. If any line

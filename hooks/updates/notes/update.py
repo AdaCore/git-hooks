@@ -7,7 +7,7 @@ from updates import AbstractUpdate, RefKind
 from updates.commits import commit_info_list
 from updates.emails import Email
 from updates.notes import GitNotes
-from utils import indent
+from utils import indent, commit_email_subject_prefix
 
 # The template to be used as the body of the email to be sent
 # for a notes commit which either adds, or modifies a git notes.
@@ -28,6 +28,15 @@ DELETED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE = """\
 Git notes annotating the following commit have been deleted.
 
 %(annotated_rev_log)s
+"""
+
+
+# The template to be used to list all the references that contain
+# the annotated commit.
+REFS_CONTAINING_ANNOTATED_COMMIT_TEMPLATE = """
+For the record, the references containing the annotated commit above are:
+
+{annotated_commit_references}
 """
 
 
@@ -102,6 +111,18 @@ class NotesUpdate(AbstractUpdate):
             None if notes.contents is None else indent(notes.contents, " " * 4)
         )
 
+        # Get the list of references the annotated commit is contained in.
+        annotated_commit_ref_names = git.for_each_ref(
+            contains=annotated_commit.rev,
+            format="%(refname)",
+            _decode=True,
+            _split_lines=True,
+        )
+        subject_prefix = commit_email_subject_prefix(
+            project_name=self.email_info.project_name,
+            ref_names=annotated_commit_ref_names,
+        )
+
         # Determine subject tag based on ref name:
         #   * remove "refs/notes" prefix
         #   * remove entire tag if remaining component is "commits"
@@ -112,11 +133,7 @@ class NotesUpdate(AbstractUpdate):
         else:
             subject_tag = "(%s)" % notes_ref
 
-        subject = "[notes%s][%s] %s" % (
-            subject_tag,
-            self.email_info.project_name,
-            annotated_commit.subject,
-        )
+        subject = f"[notes{subject_tag}]{subject_prefix} {annotated_commit.subject}"
 
         body_template = (
             DELETED_NOTES_COMMIT_EMAIL_BODY_TEMPLATE
@@ -135,6 +152,14 @@ class NotesUpdate(AbstractUpdate):
         # by stripping it from the output.
         diff = git.show(commit.rev, pretty="format:|", p=True, _decode=True)[1:]
 
+        refs_containing_annotated_commit_section = (
+            REFS_CONTAINING_ANNOTATED_COMMIT_TEMPLATE.format(
+                annotated_commit_references="\n".join(
+                    [f"    {ref_name}" for ref_name in annotated_commit_ref_names]
+                )
+            )
+        )
+
         email_bcc = git_config("hooks.filer-email")
 
         return Email(
@@ -147,7 +172,10 @@ class NotesUpdate(AbstractUpdate):
             self.ref_name,
             commit.base_rev_for_display(),
             commit.rev,
-            diff,
+            # Place the refs_containing_annotated_commit_section inside
+            # the "Diff:" section to avoid having that section trigger
+            # some unexpected filing.
+            refs_containing_annotated_commit_section + diff,
         )
 
     def __ensure_fast_forward(self):

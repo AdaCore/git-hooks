@@ -33,6 +33,10 @@ remote:     Thought about doing something else, but not really necessary.
 remote:
 remote: Diff:
 remote:
+remote: For the record, the references containing the annotated commit above are:
+remote:
+remote:     refs/heads/master
+remote:
 remote: diff --git a/a60540361d47901d3fe254271779f380d94645f7 b/a60540361d47901d3fe254271779f380d94645f7
 remote: new file mode 100644
 remote: index 0000000..8bd95e8

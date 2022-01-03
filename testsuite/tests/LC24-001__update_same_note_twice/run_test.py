@@ -33,6 +33,10 @@ remote:     Thought about doing something else, but not really necessary.
 remote:
 remote: Diff:
 remote:
+remote: For the record, the references containing the annotated commit above are:
+remote:
+remote:     refs/heads/master
+remote:
 remote: diff --git a/a60540361d47901d3fe254271779f380d94645f7 b/a60540361d47901d3fe254271779f380d94645f7
 remote: index 8bd95e8..1d2e227 100644
 remote: --- a/a60540361d47901d3fe254271779f380d94645f7
@@ -72,6 +76,10 @@ remote:     Just added a little bit of text inside file a.
 remote:     Thought about doing something else, but not really necessary.
 remote:
 remote: Diff:
+remote:
+remote: For the record, the references containing the annotated commit above are:
+remote:
+remote:     refs/heads/master
 remote:
 remote: diff --git a/a60540361d47901d3fe254271779f380d94645f7 b/a60540361d47901d3fe254271779f380d94645f7
 remote: index 1d2e227..0c0185b 100644

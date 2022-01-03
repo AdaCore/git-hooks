@@ -29,6 +29,10 @@ remote:     New file: a.
 remote:
 remote: Diff:
 remote:
+remote: For the record, the references containing the annotated commit above are:
+remote:
+remote:     refs/heads/master
+remote:
 remote: diff --git a/d065089ff184d97934c010ccd0e7e8ed94cb7165 b/d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: new file mode 100644
 remote: index 0000000..0bf2266
@@ -68,6 +72,10 @@ remote:
 remote:     For TICK-ETT.
 remote:
 remote: Diff:
+remote:
+remote: For the record, the references containing the annotated commit above are:
+remote:
+remote:     refs/heads/master
 remote:
 remote: diff --git a/52abc3c195e80fa1713f2603290b6b202484694b b/52abc3c195e80fa1713f2603290b6b202484694b
 remote: new file mode 100644

@@ -27,6 +27,7 @@ from io_utils import safe_decode_by_line
 from updates.commits import commit_info_list
 from updates.emails import EmailCustomContents, EmailInfo, Email
 from updates.mailinglists import expanded_mailing_list
+from utils import commit_email_subject_prefix
 from utils import debug, warn, indent, search_config_option_list
 
 
@@ -364,21 +365,12 @@ class AbstractUpdate(object):
         PARAMETERS
             commit: A CommitInfo object.
         """
-        if self.ref_namespace in ("refs/heads", "refs/tags"):
-            if self.short_ref_name == "master":
-                branch = ""
-            else:
-                branch = "/%s" % self.short_ref_name
-        else:
-            # Unusual namespace for our reference. Use the reference
-            # name in full to label the branch name.
-            branch = "(%s)" % self.ref_name
+        subject_prefix = commit_email_subject_prefix(
+            self.email_info.project_name,
+            self.ref_name,
+        )
 
-        subject = "[%(repo)s%(branch)s] %(subject)s" % {
-            "repo": self.email_info.project_name,
-            "branch": branch,
-            "subject": commit.subject[:SUBJECT_MAX_SUBJECT_CHARS],
-        }
+        subject = f"{subject_prefix} {commit.subject[:SUBJECT_MAX_SUBJECT_CHARS]}"
 
         # Generate the body of the email in two pieces:
         #   1. The commit description without the patch;

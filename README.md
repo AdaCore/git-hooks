@@ -349,6 +349,27 @@ The following config options are available for general use:
   the commit email minus the "diff" part passed via the script's
   standard input.
 
+* **`hooks.force-precommit-checks`** [list]:
+
+   A list of regular expressions matching some reference names for which
+   precommit checks should be applied to all new commits being pushed
+   to the reference, even if those commits already existed in another
+   reference.
+
+   The exception to this rule is when creating a new branch, in which
+   case this option is ignored (for the avoidance of doubt, precommit
+   checks will continue to be applied to commits which are new to the
+   repository).
+
+   By default, precommit checks are only applied to commits which are
+   entirely new to the repository. The rationale is that commits which
+   are good for one branch are good for all branches.
+
+   This option allows projects to change that policy for the branches
+   of their choice, and have the precommit checks always be performed
+   against all new commits pushed to any of those branches, even for
+   the commits which already exist in another reference.
+
 * **`hooks.from-domain`**:
 
   The domain name of the email address used in the 'From:' field for all

@@ -79,6 +79,7 @@ GIT_CONFIG_OPTS = {
     "hooks.disable-merge-commit-checks": {"default": False, "type": bool},
     "hooks.file-commit-cmd": {"default": None},
     "hooks.filer-email": {"default": (), "type": tuple},
+    "hooks.force-precommit-checks": {"default": (), "type": tuple},
     "hooks.from-domain": {"default": None},
     "hooks.frozen-ref": {"default": (), "type": tuple},
     "hooks.ignore-refs": {"default": GERRIT_INTERNAL_REFS, "type": tuple},

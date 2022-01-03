@@ -1,0 +1,8 @@
+[hooks]
+        from-domain = adacore.com
+        mailinglist = git-hooks-ci@example.com
+        filer-email = filer@example.com
+
+        # Request that new commits on the following branches always
+        # be checked.
+        force-precommit-checks = refs/heads/always-.*

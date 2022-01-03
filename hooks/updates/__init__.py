@@ -806,8 +806,7 @@ class AbstractUpdate(object):
 
         return commit_list
 
-    @staticmethod
-    def __check_commit_p(commit):
+    def __check_commit_p(self, commit):
         """Return True if checks on the commit should be done; False if not.
 
         The purpose of this routine is to centralize the logic being used
@@ -818,14 +817,31 @@ class AbstractUpdate(object):
         """
         if commit.pre_existing_p:
             # This commit already exists in the repository, so we should
-            # not check it. Otherwise, we could run the risk of failing
-            # a check for a commit which was fine before but no longer
-            # follows more recent policies. This would cause problems
-            # when trying to create new branches, for instance.
+            # normally not check it. Otherwise, we could run the risk of
+            # failing a check for a commit which was fine before but no
+            # longer follows more recent policies. This would cause problems
+            # when trying to create new references, for instance.
             #
             # Also, if we started checking pre-existing commits, this could
             # add up very quickly in situation where new branches are created
             # from branches that already have many commits.
+
+            if is_null_rev(self.old_rev):
+                # It is possible that the user may have requested that all
+                # new commits in our reference be checked (see below) but,
+                # since this is a new branch, we ignore that option for
+                # pre-existing commits (otherwise, the same commits would be
+                # perpetually be re-checked each time a new branch is created).
+                return False
+
+            elif (
+                self.search_config_option_list("hooks.force-precommit-checks")
+                is not None
+            ):
+                # The user explicitly requested that all new commits on
+                # this reference much always be checked.
+                return True
+
             return False
 
         if commit.is_revert():

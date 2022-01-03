@@ -199,6 +199,41 @@ def empty_tree_rev():
     return empty_tree_rev.cached_rev
 
 
+def split_ref_name(ref_name):
+    """Split the given reference name into its namespace and its "short name".
+
+    This function returns a tuple consisting of two elements:
+        - The reference's namespace (which can be None);
+        - The reference's short name.
+
+    By convention, the reference's short name is obtained by removing
+    the "[...]/[...]/" prefix. For example, if ref_name is "refs/heads/master",
+    then its short name is "master". For non-standard reference names which
+    do not follow the convention above, the short name is the same as
+    the given reference name (no shortening).
+
+    The reference's namespace is the part of the reference name prior
+    to the "short" ref name (excluding the separating '/'). It can be None
+    if the "short" ref name is the same as the full reference name.
+
+    Note: Some experiments with non-standard reference names show that
+    it seems possible to locally create such references in a bare repository.
+    However, trying to push an update to such a non-standard reference name
+    is currently rejected. For instance, trying to push the reference named
+    'refs/no-namespace', one gets the following error:
+
+        error: refusing to create funny ref 'refs/no-namespace' remotely
+
+    (even when the reference 'refs/no-namespace' already exists in the remote
+    repository!).
+    """
+    m = re.match(r"(?P<namespace>[^/]+/[^/]+)/(?P<short_name>.+)", ref_name)
+    if m is None:
+        return (None, ref_name)
+    else:
+        return (m.group("namespace"), m.group("short_name"))
+
+
 def is_valid_commit(rev):
     """Return True if rev is a valid commit.
 

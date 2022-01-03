@@ -11,7 +11,7 @@ from copy import deepcopy
 from enum import Enum
 from errors import InvalidUpdate
 import json
-from git import git, is_null_rev, commit_parents, commit_rev
+from git import git, is_null_rev, commit_parents, commit_rev, split_ref_name
 from pre_commit_checks import (
     check_revision_history,
     style_check_commit,
@@ -140,11 +140,8 @@ class AbstractUpdate(object):
                 "Please contact your repository's administrator.",
             )
 
-        m = re.match(r"([^/]+/[^/]+)/(.+)", ref_name)
-
         self.ref_name = ref_name
-        self.short_ref_name = m.group(2) if m else ref_name
-        self.ref_namespace = m.group(1) if m else None
+        self.ref_namespace, self.short_ref_name = split_ref_name(ref_name)
         self.ref_kind = ref_kind
         self.object_type = object_type
         self.old_rev = old_rev

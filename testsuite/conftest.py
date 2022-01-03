@@ -63,7 +63,11 @@ def env_setup(request):
     # Unset various environment variables that the hooks respond to.
     # We do not want the user environment to influence the hooks' behavior
     # during testing.
-    for var_name in ("GIT_HOOKS_CVS_CHECK", "GIT_HOOKS_DEBUG_LEVEL"):
+    for var_name in (
+        "GIT_HOOKS_CVS_CHECK",
+        "GIT_HOOKS_DEBUG_LEVEL",
+        "GIT_HOOKS_EMAIL_REPLAY_REASON",
+    ):
         if var_name in os.environ:
             del os.environ[var_name]
 

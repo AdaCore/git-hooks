@@ -20,6 +20,17 @@ from utils import debug, get_user_name, get_user_full_name
 # one of them delivered in order.
 EMAIL_DELAY_IN_SECONDS = 5
 
+# A small warning banner to display when a user is calling
+# our hooks by hand in order to force the emails to be re-sent.
+EMAIL_REPLAY_WARNING_BANNER = """\
+======================================================================
+==  WARNING: THIS EMAIL WAS MANUALLY RE-SENT ({reason})]
+==
+==  The email's date is therefore NOT representative of when
+==  the corresponding update was actually pushed to the repository.
+======================================================================
+"""
+
 
 class EmailInfo(object):
     """Aggregates various pieces of info needed to send emails.
@@ -279,6 +290,29 @@ class Email(object):
         e_msg_charset.body_encoding = QP
 
         e_msg_body = self.__email_body_with_diff
+
+        # Handle the situation where we were manually called by a user
+        # (as opposed by Git itself) who would like us to re-send the emails,
+        # with a warning banner indicating that the emails were re-generated.
+        # The banner is added at the beginning of the email body.
+        #
+        # The main reason for adding the banner is that it helps prevent users
+        # from thinking the commit was pushed at the time the email was sent.
+        #
+        # Note that the option of allowing the user to use the banner
+        # of his choice was considered. In the end, we decided against it
+        # for now, because we wanted it to be very simple for the user
+        # to trigger the addition of the banner during the re-send,
+        # while at the same time keeping the code in the git-hooks
+        # as simple as possible also (i.e. we avoided the introduction
+        # of multiple environment variables, for instance).
+
+        manual_replay_reason = os.environ.get("GIT_HOOKS_EMAIL_REPLAY_REASON")
+        if manual_replay_reason is not None:
+            warning_banner = EMAIL_REPLAY_WARNING_BANNER.format(
+                reason=manual_replay_reason
+            )
+            e_msg_body = warning_banner + "\n" + e_msg_body
 
         e_msg = MIMEText(e_msg_body, _charset=e_msg_charset)
 

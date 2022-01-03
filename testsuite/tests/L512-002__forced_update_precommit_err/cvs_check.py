@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 """A dummy cvs_check that pretends that certain files fail the style check.
 
-It also prints a trace on stdout, in order to allow us to allow us
+It also prints a trace on stdout, in order to allow us
 to verify that the script was called with the correct arguments.
 """
 import sys

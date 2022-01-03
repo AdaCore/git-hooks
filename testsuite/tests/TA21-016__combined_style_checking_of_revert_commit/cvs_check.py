@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 """A dummy cvs_check program that passes all files.
 
-It also prints a trace on stdout, in order to allow us to allow us
+It also prints a trace on stdout, in order to allow us
 to verify when the script was called, and with what arguments."""
 import sys
 

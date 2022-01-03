@@ -302,6 +302,65 @@ class TestcaseFixture:
         version_str = out[0].replace("git version ", "")
         return LooseVersion(version_str)
 
+    def update_git_hooks_config(self, config_and_val_list):
+        """Update the git-hooks config to add the given config options.
+
+        :param config_and_val_list: An interable of two-element tuples.
+            Each two-element tuple consists of:
+                - The name of the config to add;
+                - The value of the config.
+            The same config name may be repeated multiple times if needed.
+        """
+        with tempfile.TemporaryDirectory() as tmp_repo_dir:
+            p = self.run(["git", "init"], cwd=tmp_repo_dir)
+            self.assertEqual(p.status, 0, p.image)
+
+            p = self.run(
+                ["git", "remote", "add", "origin", self.bare_repo_dir],
+                cwd=tmp_repo_dir,
+            )
+            self.assertEqual(p.status, 0, p.image)
+
+            p = self.run(
+                ["git", "fetch", "origin", "refs/meta/config"],
+                cwd=tmp_repo_dir,
+            )
+            self.assertEqual(p.status, 0, p.image)
+
+            p = self.run(["git", "checkout", "FETCH_HEAD"], cwd=tmp_repo_dir)
+            self.assertEqual(p.status, 0, p.image)
+
+            for config_name, config_value in config_and_val_list:
+                p = self.run(
+                    [
+                        "git",
+                        "config",
+                        "--add",
+                        "--file",
+                        "project.config",
+                        config_name,
+                        config_value,
+                    ],
+                    cwd=tmp_repo_dir,
+                )
+                self.assertEqual(p.status, 0, p.image)
+
+            p = self.run(
+                ["git", "commit", "-m", "Update hooks config", "project.config"],
+                cwd=tmp_repo_dir,
+            )
+            self.assertEqual(p.status, 0, p.image)
+
+            p = self.run(
+                ["git", "push", "origin", "HEAD:refs/meta/config"],
+                cwd=tmp_repo_dir,
+            )
+            self.assertEqual(p.status, 0, p.image)
+
+            # Check the last line that git printed, and verify that we have
+            # another piece of evidence that the change was succesfully pushed.
+            assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
+
     def massage_git_output(self, git_output):
         """Massage git_output as explained in class GitOutputMassager's documentation.
 

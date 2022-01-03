@@ -37,42 +37,16 @@ def test_push_commit_on_master(testcase):
     one day...
     """
     # First, update the git-hooks configuration to install
-    # the script we want to use as our commit-email-formatter.
+    # the script we want to use as our file-commit-cmd.
 
-    p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(["git", "checkout", "FETCH_HEAD"])
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(
+    testcase.update_git_hooks_config(
         [
-            "git",
-            "config",
-            "--file",
-            "project.config",
-            "hooks.file-commit-cmd",
-            os.path.join(testcase.work_dir, "commit-filer"),
+            (
+                "hooks.file-commit-cmd",
+                os.path.join(testcase.work_dir, "commit-filer"),
+            )
         ]
     )
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(
-        ["git", "commit", "-m", "Add hooks.file-commit-cmd", "project.config"]
-    )
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
-    testcase.assertEqual(p.status, 0, p.image)
-    # Check the last line that git printed, and verify that we have
-    # another piece of evidence that the change was succesfully pushed.
-    assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
-
-    # Return our current HEAD to branch "master". Not critical for
-    # our testing, but it helps the testcase be closer to the more
-    # typical scenarios.
-    p = testcase.run(["git", "checkout", "master"])
-    testcase.assertEqual(p.status, 0, p.image)
 
     # Push master to the `origin' remote.  The delta should be one
     # commit with one file being modified.
@@ -162,46 +136,14 @@ To ../bare/repo.git
         COMMIT_EMAIL_FORMATTER_FILENAME, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR
     )
 
-    p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(["git", "checkout", "FETCH_HEAD"])
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(
+    testcase.update_git_hooks_config(
         [
-            "git",
-            "config",
-            "--file",
-            "project.config",
-            "hooks.commit-email-formatter",
-            COMMIT_EMAIL_FORMATTER_FILENAME,
+            (
+                "hooks.commit-email-formatter",
+                COMMIT_EMAIL_FORMATTER_FILENAME,
+            )
         ]
     )
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(
-        [
-            "git",
-            "commit",
-            "-m",
-            "Add hooks.commit-email-formatter",
-            "project.config",
-        ]
-    )
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
-    testcase.assertEqual(p.status, 0, p.image)
-    # Check the last line that git printed, and verify that we have
-    # another piece of evidence that the change was succesfully pushed.
-    assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
-
-    # Return our current HEAD to branch "master". Not critical for
-    # our testing, but it helps the testcase be closer to the more
-    # typical scenarios.
-    p = testcase.run(["git", "checkout", "master"])
-    testcase.assertEqual(p.status, 0, p.image)
 
     # The subject of the email we expect to be sent during the push.
     # As we can see, this subject has some non-ascii characters in it...

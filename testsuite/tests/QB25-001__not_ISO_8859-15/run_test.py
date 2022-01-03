@@ -63,41 +63,7 @@ error: failed to push some refs to '../bare/repo.git'
     #
     ##############################################################
 
-    p = testcase.run("git fetch origin refs/meta/config".split())
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run("git checkout FETCH_HEAD".split())
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(
-        [
-            "git",
-            "config",
-            "-f",
-            "project.config",
-            "--add",
-            "hooks.no-rh-character-range-check",
-            "True",
-        ]
-    )
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(
-        [
-            "git",
-            "commit",
-            "-m",
-            "Set hooks.no-rh-character-range-check to True",
-            "project.config",
-        ]
-    )
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run("git push origin HEAD:refs/meta/config".split())
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run("git checkout master".split())
-    testcase.assertEqual(p.status, 0, p.image)
+    testcase.update_git_hooks_config([("hooks.no-rh-character-range-check", "True")])
 
     # Try pushing branch "master". It should succeed, now.
 

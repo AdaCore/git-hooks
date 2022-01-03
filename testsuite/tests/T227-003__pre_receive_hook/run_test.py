@@ -6,38 +6,14 @@ def test_push_commit_on_master(testcase):
     # First, adjust the project.config file to use a pre-receive-hook
     # script.  We can't do it any earlier, because we don't know
     # which temporary directory will be used when running this test.
-    p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
-    assert p.status == 0, p.image
-
-    p = testcase.run(["git", "checkout", "FETCH_HEAD"])
-    assert p.status == 0, p.image
-
-    p = testcase.run(
+    testcase.update_git_hooks_config(
         [
-            "git",
-            "config",
-            "-f",
-            "project.config",
-            "--add",
-            "hooks.pre-receive-hook",
-            os.path.join(testcase.work_dir, "pre-receive-hook"),
+            (
+                "hooks.pre-receive-hook",
+                os.path.join(testcase.work_dir, "pre-receive-hook"),
+            ),
         ]
     )
-    assert p.status == 0, p.image
-
-    p = testcase.run(
-        [
-            "git",
-            "commit",
-            "-m",
-            "add hooks.pre-receive-hook config",
-            "project.config",
-        ]
-    )
-    assert p.status == 0, p.image
-
-    p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
-    assert p.status == 0, p.image
 
     # Push master to the `origin' remote.  The pre-receive-hook
     # should be called (as evidenced by some debug output it prints),

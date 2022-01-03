@@ -102,40 +102,14 @@ error: failed to push some refs to '../bare/repo.git'
     #
     #################################################################
 
-    p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(["git", "checkout", "FETCH_HEAD"])
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(
+    testcase.update_git_hooks_config(
         [
-            "git",
-            "config",
-            "--file",
-            "project.config",
-            "hooks.max-filepath-length",
-            "0",
+            (
+                "hooks.max-filepath-length",
+                "0",
+            ),
         ]
     )
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(
-        [
-            "git",
-            "commit",
-            "-m",
-            "Set hooks.max-filepath-length to 0",
-            "project.config",
-        ]
-    )
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
-    testcase.assertEqual(p.status, 0, p.image)
-    # Check the last line that git printed, and verify that we have
-    # another piece of evidence that the change was succesfully pushed.
-    assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
 
     p = testcase.run(["git", "checkout", "master"])
     testcase.assertEqual(p.status, 0, p.image)

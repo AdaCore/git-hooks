@@ -29,39 +29,14 @@ def test_commit_checker_hook_on_branches(testcase):
     # First, update the git-hooks configuration to install our
     # the script we want to use as our commit-extra-checker.
 
-    p = testcase.run(["git", "fetch", "origin", "refs/meta/config"])
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(["git", "checkout", "FETCH_HEAD"])
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(
+    testcase.update_git_hooks_config(
         [
-            "git",
-            "config",
-            "--file",
-            "project.config",
-            "hooks.commit-extra-checker",
-            os.path.join(testcase.work_dir, "commit-extra-checker.py"),
+            (
+                "hooks.commit-extra-checker",
+                os.path.join(testcase.work_dir, "commit-extra-checker.py"),
+            ),
         ]
     )
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(
-        ["git", "commit", "-m", "Add hooks.commit-extra-checker", "project.config"]
-    )
-    testcase.assertEqual(p.status, 0, p.image)
-
-    p = testcase.run(["git", "push", "origin", "HEAD:refs/meta/config"])
-    testcase.assertEqual(p.status, 0, p.image)
-    # Check the last line that git printed, and verify that we have
-    # another piece of evidence that the change was succesfully pushed.
-    assert "HEAD -> refs/meta/config" in p.out.splitlines()[-1], p.image
-
-    # While at it, verify that the commit-extra-checker was called
-    # to check that commit. Our hooks generates some output so
-    # look for that.
-    assert "DEBUG: commit-extra-checker.py" in p.out, p.image
 
     # Push a branch which introduces a single new commit, which
     # we expect the commit-extra-checker to accept the commit.

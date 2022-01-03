@@ -4,9 +4,9 @@ def test_delete_lightweight_tag(testcase):
     testcase.assertEqual(p.status, 0, p.image)
 
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@example.com>
 remote: To: something-ci@example.com
 remote: Subject: [repo] Deleted tag 'some-tag'

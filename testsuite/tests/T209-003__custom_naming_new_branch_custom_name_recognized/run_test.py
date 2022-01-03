@@ -7,9 +7,9 @@ def test_create_branch_custom_name_recognized(testcase):
     p = testcase.run("git push origin master:refs/vendor/name/topic".split())
     expected_out = testcase.massage_git_output(
         """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Subject: [repo] Created branch 'name/topic' in namespace 'refs/vendor'

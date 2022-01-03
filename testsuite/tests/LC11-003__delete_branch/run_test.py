@@ -2,9 +2,9 @@ def test_delete_branch(testcase):
     """Try deleting a branch on the remote."""
     p = testcase.run("git push origin :old-branch".split())
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Subject: [repo] Deleted branch 'old-branch'
@@ -31,9 +31,9 @@ To ../bare/repo.git
 
     p = testcase.run("git push origin :refs/heads/other-old-branch".split())
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Subject: [repo] Deleted branch 'other-old-branch'

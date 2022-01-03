@@ -11,9 +11,9 @@ def test_push_commit_on_master(testcase):
     p = testcase.run("git push origin master".split())
     expected_out = """\
 remote: *** cvs_check: `repo' < `testsuite/tests/.gitattributes'
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -43,9 +43,9 @@ remote: +++ b/testsuite/tests/.gitattributes
 remote: @@ -0,0 +1 @@
 remote: +*/test.py       no-precommit-check
 remote: DEBUG: inter-email delay...
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com

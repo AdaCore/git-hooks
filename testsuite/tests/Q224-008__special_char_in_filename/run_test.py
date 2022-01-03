@@ -5,9 +5,9 @@ def test_push_commit_on_master(testcase):
     p = testcase.run("git push origin master".split())
     expected_out = r"""
 remote: *** cvs_check: `repo' < `"full-double"' `'full-single'' ``backtick`' `bad\dir/"two"' `bad\dir/'one'' `bad\dir/`lish' `bad\dir/nasa esa' `bad\dir/normal_filename' `bad\dir/one'two"3' `bad\dir/pet`ular' `front`tick' `one space' `subdir/"double"' `subdir/'single'' `subdir/another\bs.txt' `subdir/automa`' `subdir/hello:world' `subdir/sp ace' `subdir/time`tock' `weird:colon.h' `weird\backslash.c' `with"double-quote' `with'single-quote'
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com

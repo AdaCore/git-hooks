@@ -2,9 +2,9 @@ def test_delete_branch_with_std_name(testcase):
     """Push a branch deletion using a standard reference name."""
     p = testcase.run("git push origin :to-delete".split())
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Subject: [repo] Deleted branch 'to-delete'

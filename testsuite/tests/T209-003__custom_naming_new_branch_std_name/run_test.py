@@ -2,9 +2,9 @@ def test_create_branch_with_standard_name(testcase):
     """Create a new branch with a standard reference name."""
     p = testcase.run("git push origin master:new-master".split())
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Subject: [repo] Created branch 'new-master'

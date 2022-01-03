@@ -2,9 +2,9 @@ def test_push_notes(testcase):
     """Try pushing our notes."""
     p = testcase.run("git push origin notes/commits".split())
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -37,9 +37,9 @@ remote: +++ b/d065089ff184d97934c010ccd0e7e8ed94cb7165
 remote: @@ -0,0 +1 @@
 remote: +This is my new note.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com

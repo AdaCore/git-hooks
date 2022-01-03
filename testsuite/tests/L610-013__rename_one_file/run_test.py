@@ -22,9 +22,9 @@ remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=a60540361d47901d3fe254271779f380d94645f7
 remote:                         new_rev=6a48cdab9b100506a387a8398af4751b33a4bfd0)
 remote: DEBUG: update base: a60540361d47901d3fe254271779f380d94645f7
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com

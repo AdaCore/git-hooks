@@ -11,9 +11,9 @@ def test_submitter_email(testcase):
     )
 
     expected_out = """\
-DEBUG: MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
+DEBUG: Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 From: Dave Smith <ds@example.com>
 To: git-hooks-ci@example.com
 Bcc: filer@example.com

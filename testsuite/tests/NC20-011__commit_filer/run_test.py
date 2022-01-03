@@ -26,9 +26,9 @@ def test_push_branch_with_merge_commit(testcase):
     p = testcase.run("git push origin master".split())
     expected_out = """\
 remote: *** cvs_check: `repo' < `README' `a' `c'
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Subject: [repo] (3 commits) Merge topic branch fsf-head.
@@ -59,9 +59,9 @@ remote: (*) This commit exists in a branch whose name matches
 remote:     the hooks.noemail config option. No separate email
 remote:     sent.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com

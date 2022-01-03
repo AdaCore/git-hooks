@@ -1,6 +1,7 @@
 """Email helpers for sending update-related emails."""
 
 from config import git_config
+from email.charset import Charset, QP
 from email.header import Header
 from email.mime.text import MIMEText
 from email.utils import getaddresses, parseaddr
@@ -253,13 +254,33 @@ class Email(object):
         # available in UTF-8. Since UTF-8 is so widely used, we'll assume
         # for now that it's not necessary in practice to support this
         # scenario.
-        e_msg_charset = "UTF-8"
+        e_msg_charset = Charset("UTF-8")
+
+        # Force quoted-printable encoding for our emails.
+        #
+        # Using this encoding helps ensure that the email payload
+        # does not exceed any of the limitations that SMTP servers
+        # might have. In particular, while RFC 6152 now defines
+        # the "8bit" Content-Transfer-Encoding as being a legal
+        # extension, it also warns us of some limitations:
+        #
+        #        | Note that this extension does NOT eliminate
+        #        | the possibility of an SMTP server limiting line
+        #        | length; servers are free to implement this extension
+        #        | but nevertheless set a line length limit no lower
+        #        | than 1000 octets.
+        #
+        # We also prefer the quoted-printable encoding over the base64
+        # one because:
+        #
+        #    - The output that's generally easier for humans to read';
+        #    - The output is also usually smaller in size for typical
+        #      text.
+        e_msg_charset.body_encoding = QP
 
         e_msg_body = self.__email_body_with_diff
 
-        e_msg = MIMEText(e_msg_body)
-        if e_msg_charset is not None:
-            e_msg.set_charset(e_msg_charset)
+        e_msg = MIMEText(e_msg_body, _charset=e_msg_charset)
 
         # Create the email's header.
         e_msg["From"] = sanitized_email_address(self.email_info.email_from)

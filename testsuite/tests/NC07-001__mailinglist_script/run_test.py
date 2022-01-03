@@ -28,9 +28,9 @@ def test_pushes(testcase):
         ["git", "push", "origin", "4207b94cadc3c1be0edb4f6df5670f0311c267f3:master"]
     )
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: bfd-cvs@example.com
 remote: Bcc: filer@example.com
@@ -77,9 +77,9 @@ To ../bare/repo.git
         ["git", "push", "origin", "cd2f5d40776eee5a47dc821eddd9a7c6c0ed436d:master"]
     )
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: gdb-cvs@example.com
 remote: Bcc: filer@example.com
@@ -122,9 +122,9 @@ To ../bare/repo.git
         ["git", "push", "origin", "4c7588eee23d6d42e8d50ba05343e3d0f31dd286:master"]
     )
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: bfd-cvs@example.com, gdb-cvs@example.com
 remote: Bcc: filer@example.com
@@ -179,9 +179,9 @@ To ../bare/repo.git
         ["git", "push", "origin", "0ed035c4417a51987594586016b061bed362ec9b:master"]
     )
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: bfd-cvs@example.com, gdb-cvs@example.com
 remote: Bcc: filer@example.com
@@ -220,9 +220,9 @@ To ../bare/repo.git
     # pre-existing commit.
     p = testcase.run(["git", "push", "origin", "master"])
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: bfd-cvs@example.com, gdb-cvs@example.com
 remote: Subject: [repo] (2 commits) Merge new feature from branch contrib/new-feature.
@@ -252,9 +252,9 @@ remote: (*) This commit exists in a branch whose name matches
 remote:     the hooks.noemail config option. No separate email
 remote:     sent.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: gdb-cvs@example.com
 remote: Bcc: filer@example.com
@@ -285,9 +285,9 @@ To ../bare/repo.git
     # Push a tag to a bfd commit.
     p = testcase.run(["git", "push", "origin", "bfd-tag"])
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: bfd-cvs@example.com, gdb-cvs@example.com
 remote: Bcc: filer@example.com
@@ -315,9 +315,9 @@ To ../bare/repo.git
     # Push a tag to a GDB commit.
     p = testcase.run(["git", "push", "origin", "gdb-tag"])
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: bfd-cvs@example.com, gdb-cvs@example.com
 remote: Subject: [repo] Created tag 'gdb-tag'
@@ -339,9 +339,9 @@ To ../bare/repo.git
     # Push a tag to a common commit.
     p = testcase.run(["git", "push", "origin", "common-tag"])
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: bfd-cvs@example.com, gdb-cvs@example.com
 remote: Subject: [repo] Created tag 'common-tag'
@@ -364,9 +364,9 @@ To ../bare/repo.git
     p = testcase.run(["git", "push", "origin", "refs/notes/commits:refs/notes/commits"])
     expected_out = testcase.massage_git_output(
         """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: bfd-cvs@example.com
 remote: Bcc: filer@example.com
@@ -401,9 +401,9 @@ remote: +++ b/4207b94cadc3c1be0edb4f6df5670f0311c267f3
 remote: @@ -0,0 +1 @@
 remote: +A bfd note.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: gdb-cvs@example.com
 remote: Bcc: filer@example.com
@@ -436,9 +436,9 @@ remote: +++ b/cd2f5d40776eee5a47dc821eddd9a7c6c0ed436d
 remote: @@ -0,0 +1 @@
 remote: +A short GDB note.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: bfd-cvs@example.com, gdb-cvs@example.com
 remote: Bcc: filer@example.com

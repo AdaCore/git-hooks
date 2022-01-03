@@ -26,9 +26,9 @@ To ../bare/repo.git
 
     p = testcase.run("git push origin master-with-emails".split())
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@example.com>
 remote: To: commits@example.com
 remote: Bcc: filer@example.com

@@ -7,9 +7,9 @@ def test_push_annotated_tag(testcase):
 
     p = testcase.run("git push origin :full-tag".split())
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@example.com>
 remote: To: repo@example.com
 remote: Subject: [repo] Deleted tag 'full-tag'
@@ -36,9 +36,9 @@ To ../bare/repo.git
 
     p = testcase.run("git push origin :refs/tags/other-full-tag".split())
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@example.com>
 remote: To: repo@example.com
 remote: Subject: [repo] Deleted tag 'other-full-tag'
@@ -64,9 +64,9 @@ To ../bare/repo.git
 
     p = testcase.run("git push origin :refs/vendor/me/tags/v1".split())
     expected_out = """\
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@example.com>
 remote: To: repo@example.com
 remote: Subject: [repo] Deleted tag 'me/tags/v1' in namespace 'refs/vendor'

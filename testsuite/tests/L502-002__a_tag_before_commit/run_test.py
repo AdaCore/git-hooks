@@ -22,9 +22,9 @@ remote: DEBUG: post_receive_one(ref_name=refs/tags/version-0.1a
 remote:                         old_rev=0000000000000000000000000000000000000000
 remote:                         new_rev=b03c3952e1cd29c6ec0cad2590689c0b22d02197)
 remote: DEBUG: update base: 426fba3571947f6de7f967e885a3168b9df7004a
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -53,9 +53,9 @@ remote: -----------------------------------
 remote:
 remote:   4f0f08f... Minor modifications.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com
@@ -122,9 +122,9 @@ remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=426fba3571947f6de7f967e885a3168b9df7004a
 remote:                         new_rev=4f0f08f46daf6f5455cf90cdc427443fe3b32fa3)
 remote: DEBUG: update base: 426fba3571947f6de7f967e885a3168b9df7004a
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com

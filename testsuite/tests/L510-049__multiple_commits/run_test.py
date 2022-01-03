@@ -21,9 +21,9 @@ remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=426fba3571947f6de7f967e885a3168b9df7004a
 remote:                         new_rev=dd6165c96db712d3e918fb5c61088b171b5e7cab)
 remote: DEBUG: update base: 426fba3571947f6de7f967e885a3168b9df7004a
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com, user@example.com
 remote: Bcc: filer@example.com
@@ -72,9 +72,9 @@ remote: @@ -1,2 +1 @@
 remote:  hello world.
 remote: -ZZ
 remote: DEBUG: inter-email delay...
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com, user@example.com
 remote: Bcc: filer@example.com
@@ -112,9 +112,9 @@ remote: +++ b/d
 remote: @@ -0,0 +1 @@
 remote: +This is a new file.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com, user@example.com
 remote: Bcc: filer@example.com
@@ -155,9 +155,9 @@ remote:  hello world.
 remote: -This is file number C.
 remote: +This is file number c.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com, user@example.com
 remote: Bcc: filer@example.com

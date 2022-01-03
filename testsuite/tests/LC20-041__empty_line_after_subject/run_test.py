@@ -78,9 +78,9 @@ remote: DEBUG: post_receive_one(ref_name=refs/heads/master
 remote:                         old_rev=96cc4826ed3f82bee77514177ff3944601d1800d
 remote:                         new_rev=bd6c0a7343402a7a5d1e5b42e5d338e5c1e3cb35)
 remote: DEBUG: update base: 96cc4826ed3f82bee77514177ff3944601d1800d
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Subject: [repo] (2 commits) Merge changes from branch thirdparty.
@@ -110,9 +110,9 @@ remote: (*) This commit exists in a branch whose name matches
 remote:     the hooks.noemail config option. No separate email
 remote:     sent.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@adacore.com>
 remote: To: git-hooks-ci@example.com
 remote: Bcc: filer@example.com

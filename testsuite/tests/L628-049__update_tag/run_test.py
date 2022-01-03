@@ -29,9 +29,9 @@ remote: DEBUG: post_receive_one(ref_name=refs/tags/full-tag
 remote:                         old_rev=a69eaaba59ea6d7574a9c5437805a628ea652c8e
 remote:                         new_rev=17b9d4acf8505cd1da487ad62e37819b93779a27)
 remote: DEBUG: update base: 354383fa06047ef8053782410c221341e4b07ec4
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@example.com>
 remote: To: repo@example.com
 remote: Bcc: filer@example.com
@@ -62,9 +62,9 @@ remote: -----------------------------------
 remote:
 remote:   8c0b415... Added bar.c, and updated foo.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@example.com>
 remote: To: repo@example.com
 remote: Bcc: filer@example.com

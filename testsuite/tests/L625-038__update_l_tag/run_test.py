@@ -26,9 +26,9 @@ remote: DEBUG: post_receive_one(ref_name=refs/tags/some-tag
 remote:                         old_rev=8b9a0d6bf08d7a983affbee3c187adadaaedec9e
 remote:                         new_rev=8a567a0e4b4c1a13b2b5cba2fdaf981db9d356b5)
 remote: DEBUG: update base: 8b9a0d6bf08d7a983affbee3c187adadaaedec9e
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@example.com>
 remote: To: something-ci@example.com
 remote: Subject: [repo] Updated tag 'some-tag'
@@ -53,9 +53,9 @@ remote: -----------------------------------
 remote:
 remote:   8a567a0... Put some contents in file `a'.
 remote: DEBUG: inter-email delay...
-remote: DEBUG: MIME-Version: 1.0
-remote: Content-Transfer-Encoding: 7bit
-remote: Content-Type: text/plain; charset="utf-8"
+remote: DEBUG: Content-Type: text/plain; charset="utf-8"
+remote: MIME-Version: 1.0
+remote: Content-Transfer-Encoding: quoted-printable
 remote: From: Test Suite <testsuite@example.com>
 remote: To: something-ci@example.com
 remote: Bcc: filer@example.com

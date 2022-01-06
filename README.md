@@ -492,8 +492,27 @@ The following config options are available for general use:
 * **`hooks.no-emails`** [list]:
 
   A list of regular expressions matching some reference names for which
-  updates should not trigger any email notification. It includes the
-  following entries by default:
+  updates should not trigger any email notification.  More precisely,
+  this options behaves as follow:
+
+    - When pushing an update to a reference matching this configuration,
+      commit email notifications are turned completely off (an
+      information banner is printed to remind the user);
+
+    - When pushing an update to a reference which does not match
+      this configuration, **except for commits which are first parents
+      of the reference being updated**, commit email notifications
+      are turned off for all commits which are already contained
+      in other references matching this configuration.
+
+      :warning: As hinted above, for references which do not match
+      this configuration, we **always send commit emails for first
+      parent commits**. This avoids that changes first pushed to
+      "development" branches for which there is a no-emails
+      configuration and then later merged via a fast-forward merge
+      get silently pushed.
+
+  This configuration includes the following entries by default:
 
   ```
       # The reference that Gerrit uses for annotating commits which have

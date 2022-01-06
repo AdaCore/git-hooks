@@ -7,7 +7,7 @@ from updates import AbstractUpdate, RefKind
 from updates.commits import commit_info_list
 from updates.emails import Email
 from updates.notes import GitNotes
-from utils import indent, commit_email_subject_prefix
+from utils import indent, commit_email_subject_prefix, search_config_option_list
 
 # The template to be used as the body of the email to be sent
 # for a notes commit which either adds, or modifies a git notes.
@@ -118,6 +118,14 @@ class NotesUpdate(AbstractUpdate):
             _decode=True,
             _split_lines=True,
         )
+        # Strip from that list all the references which are to be ignored
+        # (typically, those are internal references).
+        annotated_commit_ref_names = [
+            ref_name
+            for ref_name in annotated_commit_ref_names
+            if search_config_option_list("hooks.ignore-refs", ref_name) is None
+        ]
+
         subject_prefix = commit_email_subject_prefix(
             project_name=self.email_info.project_name,
             ref_names=annotated_commit_ref_names,

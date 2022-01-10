@@ -1203,3 +1203,80 @@ standardizing the location where those tags are created.
 
 And the use of a tag allows everyone to determine the latest state of
 that branch prior to its retirement.
+
+Re-Sending the Commit Emails
+----------------------------
+
+In the situation where the commit emails were either not sent, or lost,
+the following procedure should allow the emails to be sent again.
+It simply consists in calling the post-receive script with the right
+environment and arguments, which emulates the hooks action at the end
+of a "push".
+
+One of the issues is that the author of the commit and the author of
+the email are two distinct pieces of information. Many times, the two
+will be the same, but not always. For the emails, the author is normally
+the user who is doing the push (that is, the user calling the hooks),
+while the author of the commit is provided as one of the elements of
+the commit email data. But he information about the author of the push
+is lost after the push has completed, and thus cannot be inferred again.
+
+When re-sending the commit emails, we should try as much as possible
+to use the correct email address as the sender, which means overriding
+the default sender. If there is one principal developer who did most of
+the pushes, you can override the default email sender by using the
+`--submitter-email` option when calling post-receive. See how
+this option can be used in the example below.
+
+Another option for overriding the default sender's email address
+which does not require the use of the command-line option is to define
+the following environment variables accordingly with their Unix user ID
+and full name:
+
+```console
+$ export GIT_HOOKS_USER_NAME=ds
+$ export GIT_HOOKS_USER_FULL_NAME='Dave Smith'
+```
+
+If none of these two alternatives for overriding the sender's email
+address, the user performing this procedure will be used as author of
+the commit emails.
+
+Unless the missing emails are re-sent very shortly after they were
+pushed, it is recommended to ask the hooks to add a warning banner
+in the emails being sent that the emails were manually re-sent.
+To do so, define the following environment variable, using the reason
+for resending:
+
+```console
+$ export GIT_HOOKS_EMAIL_REPLAY_REASON="<short reason> (XXXX-XXX)"
+```
+
+Assuming that we want to send emails for the commit in the range
+`SHA1_BEFORE..SHA1_AFTER` and that `BRANCH_NAME` is the name of
+the branch containing those commits, the following command should
+do the trick:
+
+```console
+$ cd /scmrepos/git/<git-repo>
+$ echo "SHA1_BEFORE SHA1_AFTER refs/heads/BRANCH_NAME" | \
+    ./hooks/post-receive --submitter-email='Dave Smith <ds@example.com>'
+```
+
+If you would like to do a dry-run before actually getting the emails
+sent, you can force the script into testsuite mode, which will cause
+emails to be printed on standard output rather than actually be sent:
+
+```console
+# Ask the testsuite to use our fake sendmail program instead of the system one.
+# This fake sendmail will dump the email on stdout rather than actually send
+# the email.
+$ export GIT_HOOKS_SENDMAIL=/path/to/git-hooks/testsuite/bin/stdout-sendmail
+
+# Ask the testsuite to stop redirecting stdout, so we can see the emails
+# being dumped by our fake sendmail above.
+$ export GIT_HOOKS_TESTSUITE_MODE=true
+```
+
+Once satisfied with the output, simply unset the environment variables
+above before re-running the same post-receive command above again.

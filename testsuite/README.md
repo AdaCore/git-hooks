@@ -33,8 +33,8 @@ the `GitOutputMassager` class in `conftest.py`).
 
 To run the testsuite, simply run the following script:
 
-```
-    $ ./run-validation-tests
+```console
+$ ./run-validation-tests
 ```
 
 By default, validation will include a style-checking phase followed
@@ -49,8 +49,8 @@ You can also request that a single testcase be run by simply passing
 its name as an argument on the command line (the name of a testcase
 is the name of the directory containing the testcase). For instance...
 
-```
-    $ ./run-validation-tests ZZZZ-999__xfail_check
+```console
+$ ./run-validation-tests ZZZZ-999__xfail_check
 ```
 ... will run the testcase located in `tests/ZZZZ-999__xfail_check/`.
 

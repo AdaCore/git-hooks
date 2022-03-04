@@ -18,7 +18,7 @@ from tempfile import mkstemp
 # being garbage-collected.
 GERRIT_INTERNAL_REFS = (
     "refs/changes/.*",
-    "refs/users/.*/edit-.*",
+    "refs/users/.*",
     "refs/cache-automerge/.*",
     "refs/sequences/.*",
     "refs/groups/.*",

@@ -2,6 +2,7 @@ import distutils.dir_util
 from e3.diff import diff
 import e3.os.process
 import os
+from packaging.version import Version
 import pytest
 import shutil
 import sys
@@ -291,16 +292,14 @@ class TestcaseFixture:
         self.assertRunOutputEqual(p, expected_out)
 
     def git_version(self):
-        """Return the git version number (a LooseVersion object)."""
-        from distutils.version import LooseVersion
-
+        """Return the git version number (a packaging.version.Version object)."""
         p = e3.os.process.Run(["git", "--version"])
         assert p.status == 0
         out = p.out.splitlines()
         assert len(out) > 0
         assert out[0].startswith("git version ")
         version_str = out[0].replace("git version ", "")
-        return LooseVersion(version_str)
+        return Version(version_str)
 
     def update_git_hooks_config(self, config_and_val_list):
         """Update the git-hooks config to add the given config options.
@@ -488,7 +487,7 @@ class GitOutputMassager:
         """
         result = git_output
 
-        if self.git_version < "2.29":
+        if self.git_version < Version("2.29"):
             # When pushing new references which are not branches (such as
             # refs/notes/commits, more recent versions of Git now print...
             #

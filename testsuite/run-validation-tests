@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 from argparse import ArgumentParser
-from distutils.version import StrictVersion
+from packaging.version import Version
 from e3.os.process import command_line_image, PIPE, Run
 import json
 import os
@@ -77,8 +77,8 @@ def check_dependencies(args):
         required_packages.append("flake8")
 
     # First, check that the Python being used is recent enough.
-    python_version = StrictVersion("{v.major}.{v.minor}".format(v=sys.version_info))
-    if python_version < MINIMUM_PYTHON_VERSION:
+    python_version = Version("{v.major}.{v.minor}".format(v=sys.version_info))
+    if python_version < Version(MINIMUM_PYTHON_VERSION):
         print(
             "ERROR: Your version of Python is too old: "
             "({v.major}.{v.minor}.{v.micro}-{v.releaselevel})".format(

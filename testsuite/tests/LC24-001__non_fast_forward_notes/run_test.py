@@ -1,3 +1,6 @@
+from packaging.version import Version
+
+
 def test_push_notes(testcase):
     """Try pushing our notes."""
     p = testcase.run("git push origin notes/commits".split())
@@ -11,7 +14,7 @@ hint: to the same ref. You may want to first integrate the remote changes
 hint: (e.g., 'git pull ...') before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 """
-    if testcase.git_version() < "1.7.10":
+    if testcase.git_version() < Version("1.7.10"):
         # Older versions of git generate the same error message
         # for current branches as they do for non-current branches,
         # whereas 1.7.10.4 generates two different outputs.
@@ -26,7 +29,7 @@ hint: its remote counterpart. Merge the remote changes (e.g. 'git pull')
 hint: before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 """
-    elif testcase.git_version() < "1.8":
+    elif testcase.git_version() < Version("1.8"):
         # Slight differences in output...
         expected_out = """\
 To ../bare/repo.git
@@ -37,7 +40,7 @@ hint: counterpart. Check out this branch and merge the remote changes
 hint: (e.g. 'git pull') before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 """
-    elif testcase.git_version() < "1.9":
+    elif testcase.git_version() < Version("1.9"):
         # Slight differences in output...
         expected_out = """\
 To ../bare/repo.git

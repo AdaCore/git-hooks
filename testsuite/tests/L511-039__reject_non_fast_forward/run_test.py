@@ -1,3 +1,6 @@
+from packaging.version import Version
+
+
 def test_push_commit_on_master(testcase):
     """Try non-fast-forward push on master."""
     p = testcase.run("git push origin master".split())
@@ -11,7 +14,7 @@ hint: 'git pull ...') before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 """
 
-    if testcase.git_version() < "1.9":
+    if testcase.git_version() < Version("1.9"):
         # Slight differences in output...
         expected_out = """\
 To ../bare/repo.git

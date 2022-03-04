@@ -1,3 +1,6 @@
+from packaging.version import Version
+
+
 def test_push_commit_on_master(testcase):
     """Try pushing one single-file commit on master."""
     # Push master to the `origin' remote.  The delta should be one
@@ -48,7 +51,7 @@ To ../bare/repo.git
     # section of the diff, causing the truncation to occur at
     # a different location when using older versions of git
     # (1.7.8.2 in our case). Adjust the expected output accordingly.
-    if testcase.git_version() < "1.7.10":
+    if testcase.git_version() < Version("1.7.10"):
         expected_out = expected_out.replace("remote: -Se", "remote: -")
 
     testcase.assertEqual(p.status, 0, p.image)
